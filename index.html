@@ -1,0 +1,740 @@
+<title>MicroLab Quest</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: lab bench. Sticky status bar (level, XP, combo), tab rail, one working surface below. */
+:root{
+  --bg:#f3f5f1; --surface:#ffffff; --surface2:#e9ede6; --line:#cfd6cc;
+  --fg:#1b2420; --muted:#5b6861;
+  --accent:#b1232e; --accent-fg:#ffffff;        /* beta-hemolysis red */
+  --good:#237a4a; --good-bg:#def3e5;            /* alpha-green */
+  --bad:#b1232e;  --bad-bg:#fbe3e5;
+  --xp:#cf8a15;   --xp-bg:#fbeccc;              /* agar amber */
+  --l3:#2d5fa6;   --l3-bg:#dfe8f8;              /* lecture tags */
+  --l4:#7a3d9a;   --l4-bg:#eee1f6;
+  --display:"Outfit",system-ui,sans-serif;
+  --body:"Atkinson Hyperlegible",system-ui,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#182019; --surface2:#222c26; --line:#33403a;
+  --fg:#e7ece8; --muted:#9aa89f;
+  --accent:#ff5c66; --accent-fg:#1a0a0c;
+  --good:#5fd08c; --good-bg:#15301f;
+  --bad:#ff7a82;  --bad-bg:#3a1a1e;
+  --xp:#f2b64f;   --xp-bg:#3a2a10;
+  --l3:#7fa9ea;   --l3-bg:#172741;
+  --l4:#c79be0;   --l4-bg:#2c1a3a;
+  color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#182019; --surface2:#222c26; --line:#33403a;
+  --fg:#e7ece8; --muted:#9aa89f;
+  --accent:#ff5c66; --accent-fg:#1a0a0c;
+  --good:#5fd08c; --good-bg:#15301f;
+  --bad:#ff7a82;  --bad-bg:#3a1a1e;
+  --xp:#f2b64f;   --xp-bg:#3a2a10;
+  --l3:#7fa9ea;   --l3-bg:#172741;
+  --l4:#c79be0;   --l4-bg:#2c1a3a;
+  color-scheme:dark }
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--xp);outline-offset:2px}
+.wrap{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:16px 48px}
+
+/* status bar */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .in{max-width:900px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lvl{display:flex;align-items:center;gap:10px;min-width:0}
+.lvl .badge{width:42px;height:42px;border-radius:50%;background:var(--xp);color:#1a1200;font-family:var(--display);font-weight:800;font-size:18px;display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 3px var(--surface),0 0 0 2px var(--xp)}
+.lvl .name{font-family:var(--display);font-weight:700;font-size:15px;white-space:nowrap}
+.lvl .sub{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.xpwrap{flex:1 1 180px;min-width:120px}
+.xpbar{height:10px;border-radius:5px;background:var(--xp-bg);overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--xp);border-radius:5px;transition:width .5s ease}
+.combo{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap}
+.combo b{color:var(--accent);font-size:16px}
+
+/* tabs */
+.tabs{display:flex;gap:6px;margin-block:14px 18px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-family:var(--display);font-weight:700;font-size:14px}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.view[hidden]{display:none}
+
+/* generic */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stack{display:grid;gap:14px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px}
+.tag.l3{background:var(--l3-bg);color:var(--l3)} .tag.l4{background:var(--l4-bg);color:var(--l4)}
+.btn{border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:10px 16px;font-family:var(--display);font-weight:700;font-size:15px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)}
+.btn.ghost{background:transparent}
+.btn:disabled{opacity:.5;cursor:default}
+.muted{color:var(--muted)} .small{font-size:13px} .mono{font-family:var(--mono)}
+.hero{display:grid;gap:8px;margin-bottom:16px}
+.hero h1{font-size:clamp(28px,5vw,40px);font-weight:800}
+.hero p{margin:0;max-width:62ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .v{font-family:var(--display);font-weight:800;font-size:26px;font-variant-numeric:tabular-nums}
+.kpi .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+
+/* learn */
+.topic{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.topic>button{width:100%;text-align:left;background:none;border:0;padding:14px 16px;display:flex;align-items:center;gap:12px}
+.topic>button h3{font-size:17px;flex:1;min-width:0}
+.topic .chev{font-family:var(--mono);color:var(--muted)}
+.topic .body{padding:0 16px 16px;border-top:1px dashed var(--line);display:grid;gap:10px}
+.topic .body ul{margin:8px 0 0;padding-left:20px} .topic .body li{margin:3px 0}
+.topic .body p{margin:8px 0 0}
+.topic .body table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px}
+.topic .body th,.topic .body td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+.topic .body th{background:var(--surface2);font-family:var(--display)}
+.tscroll{overflow-x:auto}
+.hl{background:var(--xp-bg);padding:0 4px;border-radius:4px}
+.mastery{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.mastery.good{color:var(--good)} .mastery.bad{color:var(--bad)}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none}
+.dot.on{background:var(--good)}
+
+/* flashcards */
+.fc{perspective:1200px;min-height:220px}
+.fcard{position:relative;min-height:220px;border-radius:16px;transform-style:preserve-3d;transition:transform .45s;cursor:pointer}
+.fcard.flip{transform:rotateY(180deg)}
+.fcard .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--line);background:var(--surface);padding:22px;display:grid;place-items:center;text-align:center;font-size:19px;line-height:1.4}
+.fcard .face.back{transform:rotateY(180deg);background:var(--surface2);font-size:17px}
+.fcard .face .lbl{position:absolute;top:10px;left:14px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+@media (prefers-reduced-motion: reduce){.fcard{transition:none}.xpbar i{transition:none}}
+
+/* quiz */
+.q{font-size:19px;font-weight:700;font-family:var(--display)}
+.opts{display:grid;gap:8px;margin-top:14px}
+.opt{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:12px 14px;text-align:left;font-size:15.5px;display:flex;gap:10px;align-items:flex-start}
+.opt .k{font-family:var(--mono);color:var(--muted);flex:none;font-weight:700}
+.opt:not(:disabled):hover{border-color:var(--fg)}
+.opt.right{background:var(--good-bg);border-color:var(--good)}
+.opt.wrong{background:var(--bad-bg);border-color:var(--bad)}
+.opt.dim{opacity:.55}
+.ex{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:15px}
+.ex b{font-family:var(--display)}
+.prog{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-bottom:12px}
+.prog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.lives{font-size:18px;letter-spacing:2px}
+.flash{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,44px);color:var(--xp);pointer-events:none;opacity:0;text-shadow:0 2px 0 var(--bg);z-index:20}
+.flash.go{animation:pop .9s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
+@media (prefers-reduced-motion: reduce){.flash.go{animation:none;opacity:1}}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
+
+/* boss */
+.boss{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px}
+.boss .card{display:grid;gap:8px}
+.boss .emoji{font-size:34px;line-height:1}
+.boss .card.beaten{border-color:var(--good)}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.bdg{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);display:grid;gap:4px;opacity:.45}
+.bdg.on{opacity:1;border-color:var(--xp);background:var(--xp-bg)}
+.bdg .e{font-size:26px} .bdg b{font-family:var(--display)} .bdg span{font-size:12px;color:var(--muted)}
+.weak li{margin:4px 0}
+</style>
+
+<div class="bar"><div class="in">
+  <div class="lvl"><div class="badge" id="lvlNum">1</div><div><div class="name" id="lvlName">Fresher</div><div class="sub" id="lvlSub">0 XP</div></div></div>
+  <div class="xpwrap"><div class="xpbar"><i id="xpFill" style="width:0%"></i></div></div>
+  <div class="combo">combo <b id="comboN">×0</b></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>MicroLab Quest</h1>
+    <p>Lecture 3 (bacterial genetics &amp; antimicrobials) and Lecture 4 (Gram-positive cocci &amp; bacilli), turned into a game. Read a topic, drill the cards, run quiz rounds for XP, then take down the three bosses. Everything you answer feeds the weak-spot tracker.</p>
+  </div>
+
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="learn" aria-selected="true">Learn</button>
+    <button role="tab" data-tab="cards">Flashcards</button>
+    <button role="tab" data-tab="quiz">Quiz</button>
+    <button role="tab" data-tab="boss">Bosses</button>
+    <button role="tab" data-tab="progress">Progress</button>
+  </div>
+
+  <section class="view" id="view-learn">
+    <div class="row" style="margin-bottom:12px">
+      <button class="btn" data-filter="all" aria-pressed="true">All topics</button>
+      <button class="btn" data-filter="3"><span class="tag l3">L3</span>&nbsp;Genetics &amp; antibiotics</button>
+      <button class="btn" data-filter="4"><span class="tag l4">L4</span>&nbsp;Gram-positive bugs</button>
+      <span class="small muted">Mark a topic as studied for +15 XP. Mastery % comes from your quiz answers.</span>
+    </div>
+    <div class="stack" id="topics"></div>
+  </section>
+
+  <section class="view" id="view-cards" hidden>
+    <div class="card stack">
+      <div class="row">
+        <label for="deckSel"><b>Deck</b></label>
+        <select id="deckSel" class="btn"></select>
+        <button class="btn" id="deckStart">Start deck</button>
+        <span class="small muted" id="deckInfo"></span>
+      </div>
+      <div id="fcArea" hidden>
+        <div class="fc"><div class="fcard" id="fcard" tabindex="0">
+          <div class="face front"><span class="lbl">QUESTION · tap to flip</span><div id="fcFront"></div></div>
+          <div class="face back"><span class="lbl">ANSWER</span><div id="fcBack"></div></div>
+        </div></div>
+        <div class="row" style="margin-top:12px;justify-content:space-between">
+          <span class="mono small" id="fcCount"></span>
+          <div class="row">
+            <button class="btn" id="fcAgain">Again ↩</button>
+            <button class="btn primary" id="fcGot">Got it +5 XP</button>
+          </div>
+        </div>
+      </div>
+      <div id="fcDone" hidden class="stack"></div>
+    </div>
+  </section>
+
+  <section class="view" id="view-quiz" hidden>
+    <div class="card stack" id="quizLobby">
+      <h2>Quiz rounds</h2>
+      <p class="muted" style="margin:0">10 questions per round. +10 XP per correct answer, and your combo adds up to +10 more. A flawless round earns a badge.</p>
+      <div class="row">
+        <button class="btn primary" data-run="all">Mixed round</button>
+        <button class="btn" data-run="3"><span class="tag l3">L3</span>&nbsp;round</button>
+        <button class="btn" data-run="4"><span class="tag l4">L4</span>&nbsp;round</button>
+        <button class="btn" data-run="weak">Train weak spots</button>
+      </div>
+    </div>
+    <div class="card" id="quizRun" hidden></div>
+  </section>
+
+  <section class="view" id="view-boss" hidden>
+    <div class="boss" id="bossList"></div>
+    <div class="card" id="bossRun" hidden style="margin-top:14px"></div>
+  </section>
+
+  <section class="view" id="view-progress" hidden>
+    <div class="stack">
+      <div class="kpis">
+        <div class="kpi"><div class="v" id="kAcc">–</div><div class="k">Quiz accuracy</div></div>
+        <div class="kpi"><div class="v" id="kAns">0</div><div class="k">Questions answered</div></div>
+        <div class="kpi"><div class="v" id="kBest">0</div><div class="k">Best combo</div></div>
+        <div class="kpi"><div class="v" id="kCards">0</div><div class="k">Cards cleared</div></div>
+      </div>
+      <div class="card"><h2 style="font-size:20px;margin-bottom:8px">Weak spots</h2><ol class="weak" id="weakList"></ol></div>
+      <div class="card"><h2 style="font-size:20px;margin-bottom:10px">Badges</h2><div class="badges" id="badgeList"></div></div>
+      <div class="row"><button class="btn ghost" id="resetBtn">Reset all progress</button><span class="small muted" id="resetMsg"></span></div>
+    </div>
+  </section>
+</div>
+<div class="flash" id="flash"></div>
+<canvas id="confetti"></canvas>
+
+<script>
+/* ========== CONTENT ========== */
+const TOPICS = [
+ {id:"gen", lec:3, name:"Genetic elements of bacteria", html:`
+  <p>Four structures carry bacterial properties: <b>chromosome, plasmids, transposons, bacteriophages</b>.</p>
+  <div class="tscroll"><table><tr><th>Plasmids</th><th>Transposons</th><th>Bacteriophages</th></tr>
+  <tr><td>Circular, <b>double-stranded</b>, <b>extrachromosomal</b> DNA, smaller than the chromosome. Transferred by conjugation, transformation, transduction.</td>
+  <td><b>Jumping genes</b>. Move (1) within the same chromosome or (2) chromosome ↔ plasmid.</td>
+  <td>Viruses that infect bacteria. <b>Head</b> = protein capsid with DNA or RNA. <b>Tail</b> = hollow core + contractile sheath; <b>base plate</b> with tail fibers that adhere to specific cell-wall receptors.</td></tr></table></div>
+  <p><b>Functions of plasmids</b></p><ul>
+  <li><b>F plasmids</b>: sex pilus formation and gene transfer by <span class="hl">conjugation</span>.</li>
+  <li><b>Bacteriocins</b>: antibiotic-like substances made by bacteria to kill other bacteria.</li>
+  <li><b>Antibiotic production</b>: Streptomyces plasmids → <span class="hl">streptomycin</span>.</li>
+  <li><b>Virulence plasmids</b>: <b>R plasmids</b> = antibiotic resistance; <b>Tox plasmids</b> = toxin production.</li></ul>`},
+ {id:"var", lec:3, name:"Variation, mutation & gene transfer", html:`
+  <div class="tscroll"><table><tr><th>Phenotypic variation</th><th>Genotypic variation</th></tr>
+  <tr><td>Environmental change, no change in genes. <b>Reversible, not heritable</b>. Examples: L-forms; loss of flagella on exposure to phenol.</td>
+  <td>Change in genetic constitution. <b>Irreversible, heritable</b>. Causes: mutation; gene transfer (transformation, transduction, conjugation).</td></tr></table></div>
+  <p><b>Mutation</b> = change in DNA nucleotide sequence. <b>Spontaneous</b> (replication error) or <b>induced</b> (radiation, chemicals).</p>
+  <p><b>Gene transfer</b></p><ul>
+  <li><b>Conjugation</b>: DNA (plasmid) passes cell to cell through the <span class="hl">sex pilus</span>.</li>
+  <li><b>Transformation</b>: <span class="hl">dying bacteria release DNA</span>, taken up by a recipient. Chromosomal or plasmid origin.</li>
+  <li><b>Transduction</b>: by <span class="hl">bacteriophages</span>. <b>Lytic cycle</b> ends with lysis, death of host, release of new phages. <b>Lysogenic cycle</b>: phage DNA integrates into the chromosome (= <b>prophage</b>) and divides with it; the bacterium gains new properties, e.g. <b>diphtheria bacilli make toxin only when lysogenized</b>.</li></ul>`},
+ {id:"mech", lec:3, name:"Antimicrobials: definitions & mechanisms", html:`
+  <ul><li><b>Bactericidal</b> = kill; <b>bacteriostatic</b> = inhibit multiplication.</li>
+  <li><b>Antibiotics</b> are natural: from molds (<b>Penicillium</b>) and bacteria (<b>Streptomyces</b>). <b>Chemotherapeutic agents</b> are chemically synthesized.</li>
+  <li><b>Broad spectrum</b> = Gram + and Gram −. <b>Narrow</b> = only one of them.</li></ul>
+  <div class="tscroll"><table><tr><th>Target</th><th>Drugs</th><th>Key point</th></tr>
+  <tr><td>Cell wall synthesis</td><td><b>Penicillin, cephalosporins</b></td><td>Bactericidal, minimal toxicity: human cells have <span class="hl">no cell wall</span></td></tr>
+  <tr><td>Cell membrane</td><td><b>Polymyxins</b></td><td><span class="hl">Narrow margin</span> of selective toxicity</td></tr>
+  <tr><td>Protein synthesis (ribosome)</td><td><b>Aminoglycosides, tetracycline</b></td><td>Bacteria <span class="hl">70S</span>, human <span class="hl">80S</span></td></tr>
+  <tr><td>Nucleic acid synthesis</td><td><b>Ciprofloxacin</b> / <b>Metronidazole</b></td><td>Cipro inhibits <span class="hl">DNA gyrase</span>; metronidazole <span class="hl">directly breaks DNA</span></td></tr></table></div>`},
+ {id:"use", lec:3, name:"Ideal antibiotic, combinations, prophylaxis, empiric therapy", html:`
+  <p><b>Ideal antibiotic (7)</b>: selective toxicity · bactericidal rather than bacteriostatic · <b>narrow spectrum</b> (less induction of resistance) · easily administered · effective level in all body fluids · no allergy · safe for children, pregnant and lactating women.</p>
+  <p><b>Combinations</b>: a single agent is always better (fewer side effects). Two or more when: serious infection (sepsis in immunocompromised) · synergistic effect · prevent emergence of resistance · mixed infections.</p>
+  <p><b>Chemoprophylaxis</b> = antibiotic given to prevent infection:</p><ul>
+  <li><b>Penicillin</b> → recurrent pharyngitis in patients who had <span class="hl">rheumatic fever</span>.</li>
+  <li><b>Amoxicillin</b> → endocarditis by <span class="hl">viridans streptococci</span> in <b>damaged heart valves</b> undergoing dental surgery.</li>
+  <li><b>Ampicillin</b> → implant surgery; neonatal sepsis/meningitis in babies of mothers carrying <span class="hl">group B streptococci</span>.</li>
+  <li><b>Rifampin</b> → <span class="hl">meningococcal meningitis</span> in close contacts.</li></ul>
+  <p><b>Empiric therapy</b> = "best guess" antibiotic <b>before sensitivity results</b>. Based on likely bacteria at that site. Indicated for <b>severe oral and dental infections</b> (risk of spread via lymph/blood → septicemia). Start <span class="hl">without delay, but after collecting specimens for culture</span>.</p>`},
+ {id:"comp", lec:3, name:"Complications of antibiotics", html:`
+  <ol><li><b>Toxicity</b>: <b>tetracycline</b> → teeth staining in infants · <b>streptomycin</b> → 8th cranial nerve → deafness · <b>aminoglycosides</b> → nephrotoxicity · <b>chloramphenicol</b> → bone marrow depression.</li>
+  <li><b>Allergy</b>: <b>penicillin</b> → urticaria, anaphylactic shock, serum sickness · local <b>sulphonamides</b> → contact dermatitis.</li>
+  <li><b>Resistant strains</b> from <b>abuse</b>: low dose, interrupted course, no real indication, improper choice → resistant mutants overgrow. Hence: do in-vitro susceptibility testing.</li>
+  <li><b>Superinfection</b>: resistant normal flora overgrow when sensitive flora are killed. <b>Pseudomembranous colitis</b> (<span class="hl">Clostridium difficile</span>) · <b>oral thrush</b> (<span class="hl">Candida</span>).</li></ol>`},
+ {id:"tox", lec:3, name:"Exotoxin vs endotoxin", html:`
+  <div class="tscroll"><table><tr><th></th><th>Exotoxin</th><th>Endotoxin</th></tr>
+  <tr><td>Source</td><td>Secreted by living organisms, mainly Gm+ (also Gm−)</td><td>Part of <b>Gm− cell wall</b>, released on cell disintegration</td></tr>
+  <tr><td>Coding gene</td><td><b>Plasmids or bacteriophages</b></td><td><b>Chromosome</b></td></tr>
+  <tr><td>Antigenicity</td><td>Highly antigenic</td><td>Poorly antigenic</td></tr>
+  <tr><td>Nature</td><td>Protein</td><td><b>LPS (lipid A)</b></td></tr>
+  <tr><td>Heat</td><td>Unstable</td><td>Stable</td></tr>
+  <tr><td>Toxoid</td><td>Can be converted</td><td>Cannot</td></tr>
+  <tr><td>Specificity</td><td>Specific action per toxin</td><td>Non-specific: all give fever and shock</td></tr>
+  <tr><td>Toxicity</td><td>High</td><td>Low</td></tr></table></div>`},
+ {id:"ss", lec:4, name:"Staphylococcus vs Streptococcus", html:`
+  <div class="tscroll"><table><tr><th>Staphylococcus</th><th>Streptococcus</th></tr>
+  <tr><td>Grape-like <b>clusters</b></td><td><b>Chains</b> or pairs</td></tr>
+  <tr><td><b>Catalase +</b></td><td><b>Catalase −</b></td></tr>
+  <tr><td>Facultative anaerobes</td><td>Obligate &amp; facultative anaerobes, grow in 5–10% CO₂</td></tr>
+  <tr><td>Grow on ordinary medium (nutrient agar)</td><td><b>Fastidious</b>: need enriched medium (blood agar)</td></tr>
+  <tr><td>Normal flora of skin, nose, mucosa</td><td>Normal flora of throat, colon, female genital tract</td></tr>
+  <tr><td><b>Localized</b> infections</td><td>Infections tend to <b>spread</b></td></tr>
+  <tr><td>Resistant to drying and penicillin</td><td>Delicate, <b>penicillin sensitive</b></td></tr></table></div>
+  <p>The <b>catalase test</b> separates the two genera. The <b>coagulase test</b> splits staphylococci into coagulase-positive (<b>S. aureus</b>) and coagulase-negative (<b>S. epidermidis, S. saprophyticus</b>).</p>`},
+ {id:"aur", lec:4, name:"Staphylococcus aureus", html:`
+  <p>Most virulent, most medically important staph; commonest cause of bacterial infections, food poisoning, toxic shock syndrome. <b>Beta hemolytic</b>, heat resistant, <b>salt tolerant (10–15% NaCl)</b>, tolerates drying, <b>golden yellow pigment</b>, non-spore, non-motile.</p>
+  <p><b>Toxins</b></p><ul>
+  <li><b>Hemolysins</b> lyse RBCs · <b>Leucocidins</b> kill leucocytes.</li>
+  <li><b>Enterotoxins A–E</b>: heat and acid resistant → <span class="hl">food poisoning</span>.</li>
+  <li><b>TSST (enterotoxin F)</b> → toxic shock syndrome: rash, desquamation, multi-organ failure.</li>
+  <li><b>Epidermolytic (exfoliative) toxin A &amp; B</b> → <span class="hl">scalded skin syndrome</span> in young children.</li></ul>
+  <p><b>Enzymes</b>: catalase · coagulase · <b>hyaluronidase</b> and <b>fibrinolysin (staphylokinase)</b> = spreading factors · <b>β-lactamase</b> (β-lactam resistance) · nuclease · lipase.</p>
+  <p><b>Cell-associated</b>: <b>Protein A</b> (antiphagocytic) · <b>clumping factor</b> (clumping in plasma, inhibits phagocytosis) · <b>slime layer / capsule</b> (inhibits chemotaxis and phagocytosis; attaches to artificial surfaces).</p>
+  <p><b>Diseases</b>: non-invasive = food poisoning · cutaneous = SSSS, impetigo, folliculitis, furuncles (boils), abscess · systemic = TSS, bacteremia, endocarditis, pneumonia, osteomyelitis.</p>
+  <p><b>Lab</b>: wound swab/pus/blood → Gram stain → culture: <b>beta hemolysis</b> on blood agar, <b>golden pigment</b> on nutrient agar, <b>catalase +, coagulase +, mannitol fermentation</b>.</p>`},
+ {id:"cons", lec:4, name:"Coagulase-negative staphylococci", html:`
+  <ul><li><b>S. epidermidis</b>: major skin flora. <b>Nosocomial, device/implant infections</b> (shunts, catheters, artificial valves and joints, pacemakers).</li>
+  <li><b>S. saprophyticus</b>: occasionally on skin, GI and GU tracts. <b>UTI in young women</b>.</li></ul>`},
+ {id:"scl", lec:4, name:"Genus Streptococcus & classification", html:`
+  <p>Gram + spherical cocci in <b>chains</b>, <b>catalase −</b>, facultative anaerobe. Classified by <b>oxygen requirement</b>, <b>hemolysis on blood agar</b>, and <b>Lancefield</b> (cell-wall <b>C carbohydrate</b> antigen; groups A and B are the main human pathogens).</p>
+  <ul><li><b>Aerobes</b> (grow on blood agar): <b>α</b> = incomplete, <b>green</b> → Strep. viridans, Strep. pneumoniae · <b>β</b> = complete → Lancefield grouping, <b>groups A–U (21 groups)</b> · <b>γ</b> = no hemolysis → <b>Enterococcus faecalis</b>.</li>
+  <li><b>Anaerobes</b>: <b>Peptostreptococci</b>.</li></ul>`},
+ {id:"gas", lec:4, name:"Streptococcus pyogenes (group A) & scarlet fever", html:`
+  <p>Complete <b>beta</b> hemolysis. <b>Virulence</b>: <b>M protein</b> (adherence to skin, inhibits phagocytosis) · <b>pyrogenic exotoxins SPE A, B, C</b> = scarlet fever toxin · enzymes <b>streptokinase, hyaluronidase</b> (spreading).</p>
+  <ul><li><b>Respiratory</b>: pharyngitis ("strep throat"), tonsillitis, scarlet fever, otitis media, sinusitis.</li>
+  <li><b>Skin</b>: pyoderma (impetigo), erysipelas, cellulitis, <b>necrotizing fasciitis</b> (flesh-eating, invasive).</li>
+  <li><b>Late non-suppurative</b>: <b>acute rheumatic fever</b> after <span class="hl">pharyngitis</span> · <b>acute glomerulonephritis</b> after <span class="hl">pyoderma</span>.</li></ul>
+  <p><b>Lab</b>: throat swab/pus/blood · GPC in chains · beta hemolytic on BA · <b>catalase −, bacitracin sensitive, penicillin sensitive, ASO titre</b>.</p>
+  <p><b>Scarlet fever</b>: systemic toxin action → fever, generalized rash, desquamation. Oral signs: <b>strawberry tongue</b> (deep-red raised papillae), <b>Forchheimer spots</b> (fleeting red spots on soft palate), inflamed uvula.</p>`},
+ {id:"gbs", lec:4, name:"Group B strep & pneumococcus", html:`
+  <p><b>S. agalactiae (group B)</b>: flora of lower GIT and female genital tract. Causes <b>neonatal meningitis, puerperal sepsis, pneumonia</b>. Specimens: CSF, blood, vaginal smear, urine. GPC chains, beta hemolytic, catalase −, <b>bacitracin resistant</b>, <b>CAMP test +</b>.</p>
+  <p><b>S. pneumoniae</b>: <b>capsulated Gram + diplococci</b>, <b>alpha</b> hemolytic. <b>Otitis media and sinusitis (most common)</b>, pneumococcal pneumonia, meningitis; pericarditis, conjunctivitis, arthritis, peritonitis.</p>`},
+ {id:"vir", lec:4, name:"Viridans streptococci & enterococci", html:`
+  <p><b>Viridans</b>: on teeth, throat, colon, female genital tract. <b>No group-specific carbohydrate → not Lancefield-groupable</b>. Green pigment on blood agar (alpha). Cause <b>endocarditis, dental caries, pulpitis</b>. Commonest agents of pulpitis: <b>α-hemolytic strep + Peptostreptococci</b> (Gram + anaerobic cocci).</p>
+  <p><b>Enterococci (gamma)</b>: <b>E. faecalis, E. faecium</b>. Flora of GIT and lower genital tract. Nosocomial/opportunistic: <b>UTI, wound infection, endocarditis</b>. <b>E. faecalis</b> inside the root canal is the main reason for <span class="hl">endodontic failure</span>; resistant to disinfectants → persistent intra/extra-radicular infection.</p>`},
+ {id:"bac", lec:4, name:"Gram-positive bacilli: Bacillus & Lactobacillus", html:`
+  <div class="tscroll"><table><tr><th></th><th>Sporing</th><th>Non-sporing</th></tr>
+  <tr><td>Aerobes / facultative</td><td><b>Bacillus</b></td><td><b>Lactobacillus, Corynebacterium</b></td></tr>
+  <tr><td>Anaerobes</td><td><b>Clostridium</b></td><td><b>Actinomyces</b></td></tr></table></div>
+  <p><b>Bacillus anthracis</b>: Gram + aerobic bacilli, endospores. <b>Anthrax</b> (enzootic; bioterrorism agent). Transmission: direct contact with animal products (wool, bone, hair); inoculation of spores through abrasions; inhalation (less common). Virulence: <b>capsule</b> + <b>lethal toxin</b> (tissue necrosis) + <b>edema toxin</b>.</p>
+  <ul><li><b>Cutaneous</b>: papule → <b>painless, black, swollen malignant pustule</b>; may invade lymph/blood → fatal septicemia.</li>
+  <li><b>Pulmonary (wool sorter's disease)</b>: hemorrhagic lymphadenitis and mediastinitis.</li></ul>
+  <p><b>Lactobacillus</b>: commensal of mucous membranes. Makes lots of lactic acid (<b>acidogenic</b>), survives very low pH (<b>aciduric</b>). Important in <b>advanced dental caries, especially dentine</b>.</p>`},
+ {id:"cor", lec:4, name:"Corynebacterium diphtheriae", html:`
+  <p>Gram + small slender <b>pleomorphic</b> rods, non-sporing, clumps like <b>Chinese characters</b>. Spread by <b>droplets</b>, respiratory route.</p>
+  <ul><li>Pathogenic strains are <b>lysogenized by bacteriophage</b> → powerful <b>A-B exotoxin</b> → massive tissue necrosis.</li>
+  <li><b>Pseudomembrane</b> in the throat may extend → <b>suffocation</b>.</li>
+  <li><b>Toxaemia, not invasion</b>: toxin spreads via blood to <b>heart, muscle, peripheral nerves</b>; neuritis of cranial/peripheral nerves → paralysis, difficulty speaking and swallowing.</li></ul>
+  <p><b>Prevention</b>: <b>DPT at 2, 4, 6 months</b>; boosters at 1.5 and 5 years. <b>Treatment (immediate!)</b>: <b>antitoxin early</b>, penicillin, respiratory support.</p>`},
+ {id:"clo", lec:4, name:"Clostridium & Actinomycetes", html:`
+  <p><b>Clostridium</b>: Gram + rods, <b>spores</b>, <b>obligate anaerobes</b>; habitat soil and intestine of animals/humans.</p>
+  <ul><li><b>C. perfringens</b>: <b>myonecrosis (gas gangrene)</b>, anaerobic cellulitis. Most important toxin: <b>α toxin (lecithinase)</b> → lyses endothelial cells, RBCs, leucocytes, platelets. Enzymes <b>DNase, collagenase</b> liquefy tissue → spread.</li>
+  <li><b>C. tetani</b>: <b>tetanus</b> = spastic paralysis, <b>trismus (lock jaw)</b>, painful spasms, convulsions; death by respiratory muscle paralysis. Toxin <b>tetanospasmin</b> (neurotoxin), <b>plasmid-encoded</b>.</li></ul>
+  <p><b>Actinomycetes</b>: branching filaments like fungi but <b>true bacteria</b>: Gram + type wall; no nuclear membrane or mitochondria; sensitive to antibacterials, not antifungals. Oral: <b>cervicofacial actinomycosis</b>, caries, plaque, implant infections.</p>
+  <p><b>Cervicofacial actinomycosis</b>: <b>endogenous</b> (normal oral flora). Risk: untreated caries, extractions, trauma. Face/neck/mandible swelling, fibrosis, <b>draining sinus tracts</b>; pus with <b>yellow sulfur granules</b>.</p>`}
+];
+
+const CARDS = [
+ ["gen","Four genetic structures carrying bacterial properties","Chromosome, plasmids, transposons, bacteriophages"],
+ ["gen","Plasmid: structure","Circular, double-stranded, extrachromosomal DNA; smaller than chromosome"],
+ ["gen","Three ways a plasmid moves between cells","Conjugation, transformation, transduction"],
+ ["gen","F plasmid function","Sex pilus formation + gene transfer by conjugation"],
+ ["gen","Bacteriocins","Antibiotic-like substances made by bacteria to kill other bacteria"],
+ ["gen","Streptomycin is encoded by plasmids of…","Streptomyces"],
+ ["gen","R plasmid vs Tox plasmid","R = antibiotic resistance; Tox = toxin production"],
+ ["gen","'Jumping gene'","Transposon: moves within a chromosome or chromosome ↔ plasmid"],
+ ["gen","Phage head / tail / base plate","Head = capsid with DNA or RNA; tail = hollow core + contractile sheath; base plate = tail fibers binding cell-wall receptors"],
+ ["var","Phenotypic variation: 2 examples","L-forms; loss of flagella on exposure to phenol"],
+ ["var","Phenotypic vs genotypic: heritability","Phenotypic = reversible, not heritable; genotypic = irreversible, heritable"],
+ ["var","Mutation: two origins","Spontaneous (replication error); induced (radiation, chemicals)"],
+ ["var","Conjugation","DNA transfer cell-to-cell by plasmids through the sex pilus"],
+ ["var","Transformation","Dying bacteria release DNA, taken up by a recipient cell"],
+ ["var","Transduction","Gene transfer by bacteriophages (lytic or lysogenic cycle)"],
+ ["var","Lytic cycle ends with…","Lysis and death of host, release of new phages"],
+ ["var","Prophage","Phage DNA integrated into the bacterial chromosome (lysogenic cycle)"],
+ ["var","Classic example of lysogenic conversion","Diphtheria bacilli produce toxin only when lysogenized"],
+ ["mech","Bactericidal vs bacteriostatic","Kill vs inhibit multiplication"],
+ ["mech","Natural antibiotic sources","Molds (Penicillium) and bacteria (Streptomyces)"],
+ ["mech","Broad vs narrow spectrum","Broad = Gm+ and Gm−; narrow = only one"],
+ ["mech","Cell wall inhibitors","Penicillin, cephalosporins: bactericidal, minimal toxicity (human cells lack cell wall)"],
+ ["mech","Polymyxins","Interfere with cell membrane; narrow margin of selective toxicity"],
+ ["mech","Aminoglycosides & tetracycline: target and why selective","Ribosomes; bacteria 70S vs human 80S"],
+ ["mech","Ciprofloxacin","Inhibits DNA gyrase"],
+ ["mech","Metronidazole","Directly breaks bacterial DNA"],
+ ["use","Why narrow spectrum is ideal","Reduces induction of resistance"],
+ ["use","Four indications for antibiotic combinations","Serious infection (sepsis in immunocompromised); synergism; prevent resistance; mixed infections"],
+ ["use","Penicillin prophylaxis","Recurrent pharyngitis in patients who had rheumatic fever"],
+ ["use","Amoxicillin prophylaxis","Endocarditis by viridans strep in damaged heart valves before dental surgery"],
+ ["use","Ampicillin prophylaxis","Implant surgery; neonatal sepsis/meningitis in babies of GBS-carrier mothers"],
+ ["use","Rifampin prophylaxis","Meningococcal meningitis in close contacts"],
+ ["use","Empiric therapy","Best-guess antibiotic before sensitivity results; start without delay but after collecting specimens"],
+ ["use","Why empiric therapy in severe oral/dental infection","Spread via lymph and blood → septicemia"],
+ ["comp","Tetracycline toxicity","Teeth staining in infants"],
+ ["comp","Streptomycin toxicity","8th cranial nerve damage → deafness"],
+ ["comp","Aminoglycoside toxicity","Nephrotoxicity"],
+ ["comp","Chloramphenicol toxicity","Bone marrow depression"],
+ ["comp","Penicillin allergy forms","Urticaria, anaphylactic shock, serum sickness"],
+ ["comp","Local sulphonamides","Contact dermatitis"],
+ ["comp","Four kinds of antibiotic abuse","Low dose, interrupted course, no real indication, improper choice"],
+ ["comp","Two superinfections","Pseudomembranous colitis (C. difficile); oral thrush (Candida)"],
+ ["tox","Endotoxin: nature and source","LPS (lipid A); Gm− cell wall, released on disintegration"],
+ ["tox","Exotoxin coding gene","Plasmids or bacteriophages (endotoxin = chromosome)"],
+ ["tox","Which toxin becomes a toxoid?","Exotoxin only"],
+ ["tox","Heat stability","Exotoxin unstable; endotoxin stable"],
+ ["tox","Endotoxin specificity","Non-specific: all give fever and shock"],
+ ["ss","Catalase test result","Staph + ; Strep −"],
+ ["ss","Staph arrangement vs Strep","Grape-like clusters vs chains/pairs"],
+ ["ss","Which genus is fastidious and needs blood agar + 5–10% CO₂?","Streptococcus"],
+ ["ss","Which genus resists drying and penicillin?","Staphylococcus"],
+ ["ss","Which genus's infections tend to spread?","Streptococcus (staph = localized)"],
+ ["ss","Coagulase test splits staph into…","Coagulase + (S. aureus) and coagulase − (S. epidermidis, S. saprophyticus)"],
+ ["aur","S. aureus salt tolerance","Grows in 10–15% NaCl"],
+ ["aur","S. aureus pigment","Golden yellow (on nutrient agar)"],
+ ["aur","Enterotoxins A–E","Heat and acid resistant → food poisoning"],
+ ["aur","TSST alternative name","Enterotoxin F"],
+ ["aur","Scalded skin syndrome toxin","Epidermolytic (exfoliative) toxin A & B"],
+ ["aur","Two spreading factors of S. aureus","Hyaluronidase; fibrinolysin (staphylokinase)"],
+ ["aur","Protein A","Antiphagocytic"],
+ ["aur","Slime layer roles","Inhibits chemotaxis & phagocytosis; attaches to artificial surfaces"],
+ ["aur","Lab confirmation of S. aureus","Beta hemolysis, golden pigment, catalase +, coagulase +, mannitol fermentation"],
+ ["aur","Osteomyelitis","Inflammation of bone marrow and surrounding bone"],
+ ["cons","S. epidermidis causes…","Nosocomial device/implant infections (shunts, catheters, valves, joints, pacemakers)"],
+ ["cons","S. saprophyticus causes…","UTI in young women"],
+ ["scl","Lancefield classification is based on…","Cell-wall C carbohydrate antigen; groups A–U (21)"],
+ ["scl","Alpha hemolysis","Incomplete, green: viridans, S. pneumoniae"],
+ ["scl","Gamma hemolytic strep","Enterococcus faecalis"],
+ ["scl","Anaerobic streptococci","Peptostreptococci"],
+ ["gas","M protein","Adherence/colonization + inhibits phagocytosis"],
+ ["gas","Scarlet fever toxin","Streptococcal pyrogenic exotoxins SPE A, B, C"],
+ ["gas","Rheumatic fever follows…","Streptococcal pharyngitis"],
+ ["gas","Glomerulonephritis follows…","Pyoderma (impetigo)"],
+ ["gas","GAS identification tests","Catalase −, bacitracin sensitive, penicillin sensitive, ASO titre"],
+ ["gas","Oral signs of scarlet fever","Strawberry tongue, Forchheimer spots (soft palate), inflamed uvula"],
+ ["gbs","GBS diseases","Neonatal meningitis, puerperal sepsis, pneumonia"],
+ ["gbs","GBS lab","Bacitracin resistant, CAMP test +"],
+ ["gbs","S. pneumoniae morphology","Capsulated Gram + diplococci, alpha hemolytic"],
+ ["gbs","Most common pneumococcal infections","Otitis media and sinusitis"],
+ ["vir","Why viridans can't be Lancefield grouped","Lack group-specific carbohydrates"],
+ ["vir","Viridans diseases","Endocarditis, dental caries, pulpitis"],
+ ["vir","Commonest agents of pulpitis","α-hemolytic strep + Peptostreptococci"],
+ ["vir","Main reason for endodontic failure","E. faecalis in the root canal (resists disinfectants)"],
+ ["vir","Two enterococcus species","E. faecalis, E. faecium"],
+ ["bac","GP bacilli: aerobic sporing / anaerobic sporing","Bacillus / Clostridium"],
+ ["bac","GP bacilli: aerobic non-sporing / anaerobic non-sporing","Lactobacillus, Corynebacterium / Actinomyces"],
+ ["bac","Anthrax toxins","Lethal toxin (necrosis) + edema toxin; plus capsule"],
+ ["bac","Cutaneous anthrax lesion","Painless black swollen malignant pustule"],
+ ["bac","Wool sorter's disease","Pulmonary anthrax: hemorrhagic lymphadenitis + mediastinitis"],
+ ["bac","Lactobacillus: two words","Acidogenic and aciduric → advanced caries (dentine)"],
+ ["cor","C. diphtheriae microscopy","Pleomorphic rods in Chinese-character clumps"],
+ ["cor","Diphtheria toxin origin","Phage-lysogenized strains make an A-B exotoxin"],
+ ["cor","Diphtheria toxin targets","Heart, muscle, peripheral nerves"],
+ ["cor","DPT schedule","2, 4, 6 months; boosters 1.5 and 5 years"],
+ ["cor","Diphtheria treatment","Antitoxin early, penicillin, respiratory support"],
+ ["clo","Clostridium: oxygen & habitat","Obligate anaerobe; soil and intestine"],
+ ["clo","C. perfringens key toxin","α toxin (lecithinase)"],
+ ["clo","C. perfringens tissue-liquefying enzymes","DNase, collagenase"],
+ ["clo","Tetanus toxin","Tetanospasmin, neurotoxin, plasmid-encoded"],
+ ["clo","Tetanus clinical picture","Spastic paralysis, trismus, spasms, convulsions; death by respiratory failure"],
+ ["clo","Why actinomycetes are bacteria, not fungi","Gm+ type wall; no nuclear membrane/mitochondria; antibacterials work, antifungals don't"],
+ ["clo","Sulfur granules","Yellow granules in pus of cervicofacial actinomycosis"],
+ ["clo","Actinomycosis risk factors","Untreated caries, extractions, local trauma (endogenous infection)"]
+];
+
+/* q: question, c: correct, w: wrong options, t: topic, ex: explanation */
+const QS = [
+ ["gen","Which is NOT one of the four genetic structures that carry bacterial properties?","Ribosomes",["Plasmids","Transposons","Bacteriophages"],"The four are chromosome, plasmids, transposons and bacteriophages."],
+ ["gen","Plasmids are best described as:","Circular, double-stranded, extrachromosomal DNA smaller than the chromosome",["Linear single-stranded RNA","Part of the bacterial chromosome","Protein capsids that infect bacteria"],""],
+ ["gen","'Jumping genes' is another name for:","Transposons",["Plasmids","Prophages","R factors"],"Transposons move within a chromosome or between chromosome and plasmid."],
+ ["gen","F plasmids are responsible for:","Sex pilus formation and gene transfer by conjugation",["Antibiotic resistance","Toxin production","Bacteriocin production"],""],
+ ["gen","Bacteriocins are:","Antibiotic-like substances produced by bacteria to kill other bacteria",["Toxins that kill human leucocytes","Enzymes that destroy penicillin","Phage tail proteins"],""],
+ ["gen","Streptomycin production is encoded by plasmids of:","Streptomyces",["Penicillium","Staphylococcus","Bacillus"],""],
+ ["gen","R plasmids carry genes for:","Resistance to antibiotics",["Toxin production","Sex pilus formation","Capsule formation"],"Tox plasmids carry toxin genes."],
+ ["gen","The bacteriophage base plate ends in tail fibers that:","Adhere to specific cell-wall receptors",["Inject RNA into the nucleus","Form the contractile sheath","Contain the viral genome"],""],
+ ["gen","The phage head is:","A protein capsid containing DNA or RNA",["A hollow core with a contractile sheath","A lipid envelope","The bacterial chromosome"],""],
+ ["var","Loss of flagella upon exposure to phenol is an example of:","Phenotypic variation",["Genotypic variation","Mutation","Transduction"],"Environmental, reversible, not heritable."],
+ ["var","Genotypic variation is:","Irreversible and heritable",["Reversible and not heritable","Caused by the environment only","Seen in L-forms"],""],
+ ["var","A mutation is:","A change in the nucleotide sequence of DNA",["An environmental change without genetic change","Plasmid transfer by sex pilus","Uptake of free DNA"],""],
+ ["var","Spontaneous mutations occur by:","Replication error",["Radiation","Chemicals","Phage infection"],"Radiation and chemicals induce mutations."],
+ ["var","Transfer of DNA through a sex pilus is called:","Conjugation",["Transformation","Transduction","Lysogeny"],""],
+ ["var","Uptake of DNA released by dying bacteria is:","Transformation",["Conjugation","Transduction","Mutation"],""],
+ ["var","Gene transfer by bacteriophages is:","Transduction",["Transformation","Conjugation","Transposition"],""],
+ ["var","The lytic cycle ends with:","Lysis and death of the host cell with release of new phages",["Integration of phage DNA into the chromosome","Formation of a prophage","Sex pilus formation"],""],
+ ["var","The phage genome integrated into the bacterial chromosome is called a:","Prophage",["Plasmid","Transposon","Capsid"],""],
+ ["var","Diphtheria bacilli produce toxin only when:","Lysogenized by a bacteriophage",["Grown on blood agar","Carrying an R plasmid","Exposed to phenol"],"Classic example of the lysogenic cycle giving new properties."],
+ ["mech","Bacteriostatic agents:","Inhibit multiplication of bacteria",["Kill bacteria","Break DNA directly","Lyse the cell wall"],""],
+ ["mech","Antibiotics from molds come from:","Penicillium",["Streptomyces","Bacillus","Candida"],"Streptomyces is the bacterial source."],
+ ["mech","'Broad spectrum' means the drug affects:","Both Gram-positive and Gram-negative bacteria",["Only Gram-positive bacteria","Only Gram-negative bacteria","Fungi and bacteria"],""],
+ ["mech","Penicillin and cephalosporins act by:","Inhibiting cell wall synthesis",["Inhibiting protein synthesis","Inhibiting DNA gyrase","Damaging the cell membrane"],""],
+ ["mech","Cell-wall inhibitors cause minimal tissue toxicity because:","Human cells have no cell wall",["Human ribosomes are 70S","They never enter the blood","They are bacteriostatic"],""],
+ ["mech","Polymyxins:","Interfere with cell membrane function and have a narrow margin of selective toxicity",["Inhibit cell wall synthesis","Inhibit DNA gyrase","Bind 70S ribosomes"],""],
+ ["mech","Aminoglycosides and tetracycline are selectively toxic because:","Bacterial ribosomes are 70S while human ribosomes are 80S",["Bacteria have a cell wall","Bacteria lack DNA gyrase","Bacteria have LPS"],""],
+ ["mech","Ciprofloxacin:","Inhibits DNA gyrase",["Directly breaks bacterial DNA","Inhibits cell wall synthesis","Binds the 70S ribosome"],""],
+ ["mech","Metronidazole:","Directly breaks bacterial DNA",["Inhibits DNA gyrase","Inhibits cell wall synthesis","Damages the cell membrane"],""],
+ ["use","An ideal antibiotic should be:","Bactericidal rather than bacteriostatic",["Broad spectrum to cover everything","Bacteriostatic","Given intravenously only"],"It should also be narrow spectrum."],
+ ["use","Narrow-spectrum activity is an ideal-antibiotic criterion because it:","Reduces induction of resistance",["Is cheaper","Reaches more body fluids","Avoids allergy"],""],
+ ["use","Which is NOT an indication for combining antibiotics?","A mild uncomplicated infection in a healthy patient",["Sepsis in an immunocompromised patient","Achieving a synergistic effect","Mixed infections"],"A single agent is always preferred when possible."],
+ ["use","Penicillin chemoprophylaxis is used to:","Prevent recurrent pharyngitis in patients who had rheumatic fever",["Prevent endocarditis during dental surgery","Prevent meningococcal meningitis in contacts","Prevent neonatal sepsis"],""],
+ ["use","Amoxicillin before dental surgery in a patient with damaged heart valves prevents endocarditis caused by:","Viridans streptococci",["Staphylococcus aureus","Enterococci","Group B streptococci"],""],
+ ["use","Ampicillin prophylaxis is indicated for:","Implant surgery and preventing neonatal sepsis/meningitis in babies of mothers carrying group B streptococci",["Close contacts of meningococcal meningitis","Patients who had rheumatic fever","Prevention of pseudomembranous colitis"],""],
+ ["use","Rifampin prophylaxis is given to:","Close contacts of a meningococcal meningitis case",["Patients with damaged heart valves","Patients who had rheumatic fever","Children of GBS-carrier mothers"],""],
+ ["use","Empiric therapy means:","Antibiotic therapy started before sensitivity results are available",["Therapy chosen after culture results","Prophylactic antibiotics","Always using a combination"],""],
+ ["use","Empiric therapy should be started:","Without delay but after collecting specimens for culture",["Only after culture results","Before any specimen is taken","Only in mild infections"],""],
+ ["use","Empiric therapy is indicated in severe oral and dental infections because of:","Possible spread via lymph and blood with development of septicemia",["Low cost","Allergy risk","Lack of culture facilities"],""],
+ ["comp","Tetracycline in infants causes:","Staining of teeth",["Deafness","Nephrotoxicity","Bone marrow depression"],""],
+ ["comp","Streptomycin toxicity:","8th cranial nerve damage leading to deafness",["Teeth staining","Bone marrow depression","Contact dermatitis"],""],
+ ["comp","Chloramphenicol can cause:","Bone marrow depression",["Nephrotoxicity","Deafness","Oral thrush"],""],
+ ["comp","Aminoglycosides may cause:","Nephrotoxicity",["Teeth staining","Serum sickness","Colitis"],""],
+ ["comp","Local application of sulphonamides causes:","Contact dermatitis",["Anaphylactic shock","Serum sickness","Urticaria"],"Those three are penicillin reactions."],
+ ["comp","Penicillin hypersensitivity includes:","Urticaria, anaphylactic shock or serum sickness",["Contact dermatitis","Deafness","Teeth staining"],""],
+ ["comp","Pseudomembranous colitis is caused by outgrowth of:","Clostridium difficile",["Candida","Clostridium perfringens","Staphylococcus aureus"],""],
+ ["comp","Oral thrush as a superinfection is caused by:","Candida",["Clostridium difficile","Lactobacillus","Actinomyces"],""],
+ ["comp","Superinfection is due to:","Outgrowth of resistant normal flora when sensitive members are eradicated",["Drug allergy","Direct drug toxicity","Mutation of host cells"],""],
+ ["comp","Antibiotic abuse leading to resistance includes all EXCEPT:","Performing in-vitro susceptibility testing",["Low dosage","Interrupted course","No real indication"],"Susceptibility testing is the recommendation, not the abuse."],
+ ["tox","Endotoxin is chemically:","LPS (lipid A)",["Protein","Peptidoglycan","Teichoic acid"],""],
+ ["tox","Which toxin can be converted into a toxoid?","Exotoxin",["Endotoxin","Both","Neither"],""],
+ ["tox","Endotoxin is:","Part of the Gram-negative cell wall, liberated on cell disintegration",["Secreted by living Gram-positive organisms","Coded on plasmids","Coded by bacteriophages"],""],
+ ["tox","Exotoxins are coded by:","Plasmids or bacteriophages",["The chromosome","Transposons only","Ribosomes"],"Endotoxin is chromosomal."],
+ ["tox","Heat stability of toxins:","Endotoxin stable, exotoxin unstable",["Both stable","Exotoxin stable, endotoxin unstable","Both unstable"],""],
+ ["tox","Endotoxin action is:","Non-specific: all give fever and shock",["Specific for each toxin","Highly antigenic","Highly toxic"],""],
+ ["ss","Catalase test results:","Staphylococci positive, streptococci negative",["Staphylococci negative, streptococci positive","Both positive","Both negative"],""],
+ ["ss","Grape-like clusters are typical of:","Staphylococcus",["Streptococcus","Enterococcus","Bacillus"],""],
+ ["ss","Fastidious, needs enriched medium and 5–10% CO₂:","Streptococcus",["Staphylococcus","Bacillus","Lactobacillus"],"Staph grows on ordinary nutrient agar."],
+ ["ss","Delicate, penicillin-sensitive, infections tend to spread:","Streptococcus",["Staphylococcus","Bacillus anthracis","Clostridium"],""],
+ ["ss","Resistant to drying and to penicillin:","Staphylococcus",["Streptococcus","Peptostreptococcus","Corynebacterium"],""],
+ ["ss","Normal flora of the skin, nose and mucosa:","Staphylococcus",["Streptococcus","Clostridium","Actinomyces"],"Strep is flora of throat, colon, female genital tract."],
+ ["aur","The coagulase test divides staphylococci into:","Coagulase-positive (S. aureus) and coagulase-negative species",["Alpha and beta hemolytic","Lancefield groups","Aerobes and anaerobes"],""],
+ ["aur","Salt tolerance of S. aureus:","Grows in 10–15% NaCl",["Grows only in 1–2% NaCl","Grows in 50% NaCl","Cannot tolerate salt"],""],
+ ["aur","Pigment of S. aureus on nutrient agar:","Golden yellow",["Green","Red","None"],""],
+ ["aur","Staphylococcal enterotoxins A–E are:","Heat and acid resistant and cause food poisoning",["Heat labile","The cause of scalded skin syndrome","The cause of toxic shock syndrome"],""],
+ ["aur","Toxic shock syndrome toxin (TSST) is also called:","Enterotoxin F",["Enterotoxin A","Exfoliative toxin A","Leucocidin"],""],
+ ["aur","Scalded skin syndrome in young children is caused by:","Epidermolytic (exfoliative) toxin A and B",["TSST","Enterotoxin","Hemolysin"],""],
+ ["aur","Leucocidins:","Kill leucocytes",["Lyse RBCs","Clot plasma","Spread infection"],""],
+ ["aur","Spreading factors of S. aureus are:","Hyaluronidase and fibrinolysin (staphylokinase)",["Coagulase and catalase","Protein A and clumping factor","Lipase and nuclease"],""],
+ ["aur","β-lactamase:","Mediates resistance to β-lactam antibiotics",["Is a spreading factor","Is antiphagocytic","Lyses RBCs"],""],
+ ["aur","Protein A of S. aureus is:","Antiphagocytic",["A spreading factor","A plasma-clotting enzyme","A leucocyte killer"],""],
+ ["aur","The slime layer (capsule) of S. aureus:","Inhibits chemotaxis and phagocytosis and attaches to artificial surfaces",["Forms spores","Enables motility","Gives salt tolerance"],""],
+ ["aur","Staphylococcal food poisoning is:","A non-invasive disease from ingestion of enterotoxin-contaminated food",["A cutaneous disease","A systemic invasive disease","Caused by TSST"],""],
+ ["aur","Osteomyelitis is:","Inflammation of the bone marrow and surrounding bone",["Inflammation of the heart lining","Inflammation of the lungs","A skin infection"],""],
+ ["aur","Lab diagnosis of S. aureus shows:","Beta hemolysis, golden pigment, catalase +, coagulase +, mannitol fermentation",["Alpha hemolysis and catalase −","Bacitracin sensitivity","Positive CAMP test"],""],
+ ["aur","Toxic shock syndrome presents with:","Rash, desquamation and multi-organ failure",["Black painless pustule","Pseudomembrane","Lock jaw"],""],
+ ["cons","S. epidermidis typically causes:","Nosocomial device/implant-associated infections",["UTI in young women","Food poisoning","Scarlet fever"],""],
+ ["cons","S. saprophyticus typically causes:","Urinary tract infection in young women",["Prosthetic implant infections","Osteomyelitis","Toxic shock syndrome"],""],
+ ["scl","Lancefield classification is based on:","Cell-wall C carbohydrate antigens",["Type of hemolysis","Oxygen requirement","Catalase reaction"],""],
+ ["scl","Lancefield groups run from:","A to U (21 groups)",["A to D","A to Z (26 groups)","1 to 10"],""],
+ ["scl","Alpha hemolysis is:","Incomplete hemolysis with green colour",["Complete clear hemolysis","No hemolysis","Golden pigment"],""],
+ ["scl","A gamma-hemolytic streptococcus is:","Enterococcus faecalis",["Streptococcus pyogenes","Streptococcus pneumoniae","Viridans streptococci"],""],
+ ["scl","Anaerobic streptococci are:","Peptostreptococci",["Enterococci","Viridans streptococci","Group B streptococci"],""],
+ ["scl","Lancefield grouping is applied to:","Beta-hemolytic streptococci",["Alpha-hemolytic streptococci","Gamma-hemolytic streptococci","Anaerobic streptococci"],""],
+ ["gas","M protein of S. pyogenes:","Enables adherence/colonization and inhibits phagocytosis",["Is the scarlet fever toxin","Is a spreading factor","Lyses RBCs"],""],
+ ["gas","The scarlet fever toxin is:","Streptococcal pyrogenic exotoxins (SPE A, B, C)",["M protein","Streptokinase","TSST"],""],
+ ["gas","Acute rheumatic fever usually follows:","Streptococcal pharyngitis",["Pyoderma","Cellulitis","Erysipelas"],""],
+ ["gas","Acute glomerulonephritis usually follows:","Pyoderma",["Pharyngitis","Otitis media","Tonsillitis"],""],
+ ["gas","Necrotizing fasciitis is:","An invasive group A streptococcal skin infection ('flesh-eating')",["A late non-suppurative complication","A coagulase-negative staph infection","A pneumococcal infection"],""],
+ ["gas","Identification of S. pyogenes:","Catalase −, bacitracin sensitive, penicillin sensitive, ASO titre",["Catalase +, coagulase +","Bacitracin resistant, CAMP +","Alpha hemolytic diplococci"],""],
+ ["gas","Strawberry tongue and Forchheimer spots are seen in:","Scarlet fever",["Diphtheria","Toxic shock syndrome","Anthrax"],""],
+ ["gas","Forchheimer spots are:","Fleeting small red spots on the soft palate",["Raised papillae on the tongue","A throat pseudomembrane","A black skin pustule"],""],
+ ["gbs","Streptococcus agalactiae (group B) causes:","Neonatal meningitis, puerperal sepsis and pneumonia",["Scarlet fever","Dental caries","Anthrax"],""],
+ ["gbs","Lab features of group B strep:","Bacitracin resistant and CAMP test positive",["Bacitracin sensitive","Catalase positive","Alpha hemolytic"],""],
+ ["gbs","Group B strep is normal flora of:","Lower GIT and female genital tract",["Skin","Teeth","Soil"],""],
+ ["gbs","Streptococcus pneumoniae appears as:","Capsulated Gram-positive diplococci, alpha hemolytic",["Chains, beta hemolytic","Grape-like clusters","Gram-positive bacilli"],""],
+ ["gbs","Most common pneumococcal infections:","Otitis media and sinusitis",["Meningitis","Endocarditis","Pericarditis"],""],
+ ["vir","Viridans streptococci cannot be Lancefield-grouped because they:","Lack group-specific carbohydrates",["Are anaerobic","Are catalase positive","Are gamma hemolytic"],""],
+ ["vir","Viridans streptococci cause:","Endocarditis, dental caries and pulpitis",["Neonatal meningitis","Scarlet fever","Gas gangrene"],""],
+ ["vir","The most common causative agents of pulpitis are:","Alpha-hemolytic streptococci and Peptostreptococci",["S. aureus and GBS","Clostridia","Bacillus species"],""],
+ ["vir","The two important enterococcal species:","E. faecalis and E. faecium",["E. coli and E. faecalis","S. pyogenes and S. agalactiae","E. faecium and S. pneumoniae"],""],
+ ["vir","The main reason for endodontic failure is:","Enterococcus faecalis inside the root canal system",["Viridans streptococci","Lactobacillus","Actinomyces"],"It resists disinfectants, causing persistent infection."],
+ ["vir","Enterococci are:","Nosocomial/opportunistic pathogens causing UTI, wound infection and endocarditis",["Strict aerobes causing anthrax","Beta hemolytic group A","Spore formers"],""],
+ ["bac","Gram-positive, aerobic, spore-forming bacilli:","Bacillus",["Clostridium","Lactobacillus","Corynebacterium"],""],
+ ["bac","Gram-positive anaerobic spore-forming bacilli:","Clostridium",["Bacillus","Actinomyces","Lactobacillus"],""],
+ ["bac","Gram-positive anaerobic NON-sporing bacilli:","Actinomyces",["Clostridium","Bacillus","Corynebacterium"],""],
+ ["bac","Anthrax is mainly transmitted by:","Direct skin contact with infected animal products (wool, bone, hair)",["Inhalation","Droplets","Contaminated food"],"Inhalation is less common."],
+ ["bac","Toxins of Bacillus anthracis:","Lethal toxin (necrosis) and edema toxin (severe edema)",["Tetanospasmin","Alpha toxin (lecithinase)","A-B diphtheria toxin"],""],
+ ["bac","The cutaneous anthrax lesion is:","A painless, black, severely swollen malignant pustule",["A painful red boil","A pseudomembrane","A sinus with sulfur granules"],""],
+ ["bac","Wool sorter's disease is:","Pulmonary anthrax with hemorrhagic lymphadenitis and mediastinitis",["Cutaneous anthrax","Tetanus","Gas gangrene"],""],
+ ["bac","Lactobacilli are:","Acidogenic and aciduric, important in advanced dental caries",["Spore-forming aerobes","Obligate anaerobes causing gas gangrene","Toxin producers"],""],
+ ["cor","Clumps resembling Chinese characters are seen with:","Corynebacterium diphtheriae",["Bacillus anthracis","Actinomyces","Clostridium tetani"],""],
+ ["cor","Diphtheria toxin is:","An A-B exotoxin produced by phage-lysogenized strains",["An endotoxin","A plasmid-coded neurotoxin","Lecithinase"],""],
+ ["cor","Diphtheria bacilli:","Do not invade tissues; disease is toxaemia",["Invade the blood","Form spores","Are obligate anaerobes"],""],
+ ["cor","Target tissues of diphtheria toxin:","Heart, muscle and peripheral nerves",["Kidney","Liver","Bone"],""],
+ ["cor","DPT vaccine schedule:","2, 4, 6 months with boosters at 1.5 and 5 years",["Birth, 1 and 2 months","6, 12 and 18 months","Yearly"],""],
+ ["cor","Immediate treatment of diphtheria:","Early antitoxin, penicillin and respiratory support",["Vaccine alone","Rifampin","Amoxicillin only"],""],
+ ["cor","The diphtheria pseudomembrane is dangerous because it:","May extend and cause suffocation",["Causes paralysis","Causes shock","Causes a rash"],""],
+ ["clo","Natural habitat of Clostridium:","Soil and the intestinal tract of animals and humans",["Skin","Water only","Teeth"],""],
+ ["clo","Clostridia are:","Obligate anaerobes",["Strict aerobes","Facultative anaerobes","Microaerophilic"],""],
+ ["clo","Gas gangrene (myonecrosis) is caused by:","Clostridium perfringens",["Clostridium tetani","Clostridium difficile","Bacillus anthracis"],""],
+ ["clo","The most important toxin of C. perfringens:","Alpha toxin (lecithinase)",["Tetanospasmin","TSST","Lethal toxin"],""],
+ ["clo","C. perfringens enzymes that liquefy tissue:","DNase and collagenase",["Hyaluronidase and streptokinase","Coagulase","Catalase"],""],
+ ["clo","Tetanus toxin is:","Tetanospasmin, a plasmid-encoded neurotoxin",["Lecithinase","A phage-encoded A-B toxin","Chromosomal endotoxin"],""],
+ ["clo","Clinical features of tetanus:","Spastic paralysis, trismus (lock jaw), convulsions",["Flaccid paralysis","Generalized rash","Pseudomembrane"],""],
+ ["clo","Death in tetanus is due to:","Respiratory muscle paralysis causing respiratory failure",["Shock","Septicemia","Renal failure"],""],
+ ["clo","Actinomycetes are true bacteria because they:","Have a Gram-positive type wall, no nuclear membrane or mitochondria, and respond to antibacterials not antifungals",["Grow as branching filaments","Produce spores","Have hyphae"],""],
+ ["clo","Cervicofacial actinomycosis is:","Endogenous: the organism is normal oral flora",["Exogenous from soil","Droplet-spread","From animal contact"],""],
+ ["clo","Yellow sulfur granules in pus are typical of:","Actinomycosis",["Anthrax","Diphtheria","Tetanus"],""],
+ ["clo","Risk factors for actinomycosis:","Untreated caries, dental extractions, local trauma",["Contact with wool","Antibiotic abuse","Contaminated food"],""]
+];
+
+const LEVELS=["Fresher","Lab Assistant","Resident","Registrar","Microbiologist","Consultant","Avicenna"];
+const XP_PER=150;
+const BADGES=[
+ ["first","🩸","First Blood","Answer your first question correctly"],
+ ["combo5","🔥","On Fire","Reach a combo of 5"],
+ ["combo10","☄️","Unstoppable","Reach a combo of 10"],
+ ["flawless","💎","Flawless","Finish a quiz round 10/10"],
+ ["deck","🃏","Deck Cleared","Clear a full flashcard deck"],
+ ["studied","📖","Bookworm","Mark every topic as studied"],
+ ["boss3","🧬","Plasmid Slayer","Defeat the Lecture 3 boss"],
+ ["boss4","🦠","Coccus Crusher","Defeat the Lecture 4 boss"],
+ ["final","🏆","Avicenna's Seal","Pass the final exam boss"],
+ ["lvl5","⚗️","Microbiologist","Reach level 5"]
+];
+const BOSSES=[
+ {id:"boss3",lec:3,emoji:"🧬",name:"The R-Plasmid",desc:"Lecture 3 only. 20 questions, 4 lives.",n:20,lives:4},
+ {id:"boss4",lec:4,emoji:"🦠",name:"Staphylococcus Rex",desc:"Lecture 4 only. 20 questions, 4 lives.",n:20,lives:4},
+ {id:"final",lec:"all",emoji:"🏆",name:"Avicenna's Exam",desc:"Everything. 30 questions, 3 lives. Beat both other bosses first.",n:30,lives:3}
+];
+
+/* ========== STATE ========== */
+const DEF=()=>({xp:0,combo:0,best:0,answered:0,correct:0,cards:0,studied:[],badges:[],bosses:[],stats:{}});
+let S=DEF();
+function load(){try{const r=localStorage.getItem("mlq");if(r)S=Object.assign(DEF(),JSON.parse(r));}catch(e){}}
+function save(){try{localStorage.setItem("mlq",JSON.stringify(S));}catch(e){}}
+load();
+
+const $=s=>document.querySelector(s);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const topicOf=id=>TOPICS.find(t=>t.id===id);
+const level=()=>Math.min(LEVELS.length,Math.floor(S.xp/XP_PER)+1);
+
+function flash(txt){const f=$("#flash");f.textContent=txt;f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}
+function renderBar(){
+  const L=level();$("#lvlNum").textContent=L;$("#lvlName").textContent=LEVELS[L-1];
+  const into=S.xp-(L-1)*XP_PER;const pct=L>=LEVELS.length?100:Math.min(100,into/XP_PER*100);
+  $("#lvlSub").textContent=L>=LEVELS.length?`${S.xp} XP · max level`:`${S.xp} XP · ${XP_PER-into} to next`;
+  $("#xpFill").style.width=pct+"%";$("#comboN").textContent="×"+S.combo;
+}
+function addXP(n){const before=level();S.xp+=n;renderBar();save();
+  if(level()>before){flash("LEVEL UP · "+LEVELS[level()-1]);confetti();if(level()>=5)award("lvl5");}}
+function award(id){if(S.badges.includes(id))return;S.badges.push(id);save();const b=BADGES.find(x=>x[0]===id);setTimeout(()=>flash(b[1]+" "+b[2]),700);renderProgress();}
+function recordAnswer(t,ok){const s=S.stats[t]||(S.stats[t]={a:0,c:0});s.a++;S.answered++;if(ok){s.c++;S.correct++;S.combo++;S.best=Math.max(S.best,S.combo);award("first");if(S.combo>=5)award("combo5");if(S.combo>=10)award("combo10");}else S.combo=0;save();renderBar();}
+function mastery(t){const s=S.stats[t];if(!s||s.a<3)return null;return Math.round(s.c/s.a*100);}
+
+/* ========== CONFETTI ========== */
+function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const c=$("#confetti"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;
+  const cols=[getComputedStyle(document.documentElement).getPropertyValue("--xp"),getComputedStyle(document.documentElement).getPropertyValue("--accent"),getComputedStyle(document.documentElement).getPropertyValue("--good")];
+  const P=Array.from({length:120},()=>({x:innerWidth/2,y:innerHeight*.4,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,r:Math.random()*5+3,c:cols[Math.random()*3|0],a:1}));
+  let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.a-=.012;x.globalAlpha=Math.max(0,p.a);x.fillStyle=p.c;x.fillRect(p.x,p.y,p.r,p.r);});if(++t<90)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);})();}
+
+/* ========== TABS ========== */
+document.querySelectorAll('[role="tab"]').forEach(b=>b.addEventListener("click",()=>{
+  document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute("aria-selected",x===b));
+  document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+b.dataset.tab);
+  if(b.dataset.tab==="progress")renderProgress();if(b.dataset.tab==="boss")renderBosses();if(b.dataset.tab==="learn")renderTopics();
+}));
+
+/* ========== LEARN ========== */
+let filter="all";
+function renderTopics(){const host=$("#topics");host.innerHTML="";
+  TOPICS.filter(t=>filter==="all"||String(t.lec)===filter).forEach(t=>{
+    const m=mastery(t.id);const st=S.studied.includes(t.id);
+    const el=document.createElement("div");el.className="topic";
+    el.innerHTML=`<button aria-expanded="false"><span class="dot ${st?"on":""}"></span><span class="tag l${t.lec}">L${t.lec}</span><h3>${t.name}</h3><span class="mastery ${m===null?"":m>=80?"good":m<60?"bad":""}">${m===null?"not tested":m+"% mastery"}</span><span class="chev">+</span></button>
+    <div class="body" hidden>${t.html}<div class="row"><button class="btn ${st?"":"primary"}" data-study="${t.id}" ${st?"disabled":""}>${st?"Studied ✓":"Mark as studied +15 XP"}</button><button class="btn ghost" data-quiztopic="${t.id}">Quiz this topic</button></div></div>`;
+    const btn=el.querySelector("button"),body=el.querySelector(".body");
+    btn.addEventListener("click",()=>{const o=body.hidden;body.hidden=!o;btn.setAttribute("aria-expanded",o);el.querySelector(".chev").textContent=o?"−":"+";});
+    el.querySelector("[data-study]").addEventListener("click",e=>{S.studied.push(t.id);addXP(15);e.target.textContent="Studied ✓";e.target.disabled=true;e.target.classList.remove("primary");el.querySelector(".dot").classList.add("on");if(S.studied.length>=TOPICS.length)award("studied");save();});
+    el.querySelector("[data-quiztopic]").addEventListener("click",()=>{document.querySelector('[data-tab="quiz"]').click();startRun({pool:QS.filter(q=>q[0]===t.id),n:Math.min(10,QS.filter(q=>q[0]===t.id).length),title:"Topic round · "+t.name,host:$("#quizRun"),lobby:$("#quizLobby")});});
+    host.appendChild(el);
+  });
+}
+document.querySelectorAll("[data-filter]").forEach(b=>b.addEventListener("click",()=>{filter=b.dataset.filter;document.querySelectorAll("[data-filter]").forEach(x=>x.setAttribute("aria-pressed",x===b));renderTopics();}));
+renderTopics();
+
+/* ========== FLASHCARDS ========== */
+const sel=$("#deckSel");
+[["all","All cards"],["3","Lecture 3 · genetics & antibiotics"],["4","Lecture 4 · Gram-positive bugs"],...TOPICS.map(t=>[t.id,"Topic · "+t.name])].forEach(([v,l])=>{const o=document.createElement("option");o.value=v;o.textContent=l;sel.appendChild(o);});
+let deck=[],cur=null,deckTotal=0,deckCleared=0;
+function deckCards(v){return CARDS.filter(c=>v==="all"||(v==="3"||v==="4"?String(topicOf(c[0]).lec)===v:c[0]===v));}
+sel.addEventListener("change",()=>$("#deckInfo").textContent=deckCards(sel.value).length+" cards");
+$("#deckInfo").textContent=deckCards("all").length+" cards";
+$("#deckStart").addEventListener("click",()=>{deck=shuffle(deckCards(sel.value));deckTotal=deck.length;deckCleared=0;$("#fcDone").hidden=true;$("#fcArea").hidden=false;nextCard();});
+function nextCard(){const fc=$("#fcard");fc.classList.remove("flip");
+  if(!deck.length){$("#fcArea").hidden=true;$("#fcDone").hidden=false;$("#fcDone").innerHTML=`<h2>Deck cleared 🃏</h2><p class="muted" style="margin:0">${deckTotal} cards done. Run it again tomorrow, or move to a quiz round.</p><div class="row"><button class="btn primary" id="deckAgain">Run again</button></div>`;$("#deckAgain").addEventListener("click",()=>$("#deckStart").click());if(deckTotal>=10)award("deck");return;}
+  cur=deck[0];$("#fcFront").textContent=cur[1];$("#fcBack").textContent=cur[2];$("#fcCount").textContent=`${deckCleared}/${deckTotal} cleared · ${deck.length} left`;
+}
+$("#fcard").addEventListener("click",()=>$("#fcard").classList.toggle("flip"));
+$("#fcard").addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();$("#fcard").classList.toggle("flip");}});
+$("#fcGot").addEventListener("click",()=>{deck.shift();deckCleared++;S.cards++;addXP(5);setTimeout(nextCard,150);});
+$("#fcAgain").addEventListener("click",()=>{deck.push(deck.shift());setTimeout(nextCard,150);});
+
+/* ========== QUIZ ENGINE ========== */
+let run=null;
+function pickWeak(){const scored=TOPICS.map(t=>{const s=S.stats[t.id];return {id:t.id,acc:s&&s.a?s.c/s.a:0,a:s?s.a:0};}).sort((a,b)=>a.acc-b.acc||a.a-b.a).slice(0,5).map(x=>x.id);return QS.filter(q=>scored.includes(q[0]));}
+function startRun(o){run={qs:shuffle(o.pool).slice(0,o.n),i:0,score:0,lives:o.lives??null,maxLives:o.lives??null,title:o.title,boss:o.boss||null,host:o.host,lobby:o.lobby,xpStart:S.xp};o.lobby.hidden=true;o.host.hidden=false;renderQ();}
+function renderQ(){const r=run,q=r.qs[r.i];const opts=shuffle([q[2],...q[3]]);
+  r.host.innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:8px"><span class="mono small">${r.title} · Q${r.i+1}/${r.qs.length}</span>${r.lives!==null?`<span class="lives" aria-label="${r.lives} lives">${"❤️".repeat(r.lives)}${"🖤".repeat(r.maxLives-r.lives)}</span>`:`<span class="mono small">score ${r.score}</span>`}</div>
+  <div class="prog"><i style="width:${r.i/r.qs.length*100}%"></i></div>
+  <span class="tag l${topicOf(q[0]).lec}">${topicOf(q[0]).name}</span>
+  <p class="q" style="margin:10px 0 0">${q[1]}</p>
+  <div class="opts">${opts.map((o,k)=>`<button class="opt" data-v="${k}"><span class="k">${"ABCD"[k]}</span><span>${o}</span></button>`).join("")}</div>
+  <div id="after"></div>`;
+  r.host.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>answer(b,opts[+b.dataset.v]===q[2],q,opts)));
+}
+function answer(btn,ok,q,opts){const r=run;r.host.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const v=opts[+b.dataset.v];if(v===q[2])b.classList.add("right");else if(b===btn)b.classList.add("wrong");else b.classList.add("dim");});
+  recordAnswer(q[0],ok);let gain=0;
+  if(ok){r.score++;gain=10+Math.min(10,S.combo*2);addXP(gain);flash(S.combo>=3?`+${gain} XP · combo ×${S.combo}`:`+${gain} XP`);}
+  else{if(r.lives!==null)r.lives--;flash("✗");}
+  const last=r.i===r.qs.length-1,dead=r.lives!==null&&r.lives<=0;
+  r.host.querySelector("#after").innerHTML=`<div class="ex"><b>${ok?"Correct.":"Not quite."}</b> ${ok?"":"Answer: "+q[2]+". "}${q[4]||""}</div><div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn primary" id="nextQ">${dead?"See result":last?"Finish":"Next →"}</button></div>`;
+  const nb=r.host.querySelector("#nextQ");nb.focus();nb.addEventListener("click",()=>{if(dead||last)finish();else{r.i++;renderQ();}});
+}
+function finish(){const r=run;const n=r.qs.length,pct=Math.round(r.score/n*100),gained=S.xp-r.xpStart;let title,msg,won=false;
+  if(r.boss){won=r.lives>0&&r.i===n-1;title=won?`${r.boss.emoji} ${r.boss.name} defeated!`:`${r.boss.emoji} ${r.boss.name} wins this time`;msg=won?`You survived with ${r.lives} ${r.lives===1?"life":"lives"} and scored ${r.score}/${n}.`:`You scored ${r.score}/${r.i+1} before running out of lives. Check the weak spots on the Progress tab, then try again.`;
+    if(won){if(!S.bosses.includes(r.boss.id))S.bosses.push(r.boss.id);award(r.boss.id);addXP(100);confetti();save();}}
+  else{title=pct===100?"Flawless round 💎":pct>=80?"Strong round":pct>=60?"Decent round":"Rough round";msg=`${r.score}/${n} correct (${pct}%).`;if(pct===100&&n>=10)award("flawless");}
+  r.host.innerHTML=`<h2>${title}</h2><p>${msg}</p><div class="kpis" style="margin:12px 0"><div class="kpi"><div class="v">${r.score}/${n}</div><div class="k">Score</div></div><div class="kpi"><div class="v">+${gained+(r.boss&&won?100:0)}</div><div class="k">XP earned</div></div><div class="kpi"><div class="v">×${S.best}</div><div class="k">Best combo</div></div></div><div class="row"><button class="btn primary" id="againBtn">${r.boss?(won?"Fight again":"Rematch"):"Another round"}</button><button class="btn" id="backBtn">Back</button></div>`;
+  const opts={pool:r.pool,n};$("#againBtn").addEventListener("click",()=>startRun(Object.assign({},r.cfg)));$("#backBtn").addEventListener("click",()=>{r.host.hidden=true;r.lobby.hidden=false;if(r.boss)renderBosses();});
+  renderProgress();
+}
+/* wrap startRun so it remembers its config for "again" */
+const _startRun=startRun;startRun=function(o){_startRun(o);run.cfg=o;run.pool=o.pool;};
+document.querySelectorAll("[data-run]").forEach(b=>b.addEventListener("click",()=>{const v=b.dataset.run;let pool=v==="all"?QS:v==="weak"?pickWeak():QS.filter(q=>String(topicOf(q[0]).lec)===v);
+  startRun({pool,n:10,title:v==="weak"?"Weak-spot round":v==="all"?"Mixed round":"Lecture "+v+" round",host:$("#quizRun"),lobby:$("#quizLobby")});}));
+
+/* ========== BOSSES ========== */
+function renderBosses(){const host=$("#bossList");host.innerHTML="";
+  BOSSES.forEach(b=>{const beaten=S.bosses.includes(b.id);const locked=b.id==="final"&&!(S.bosses.includes("boss3")&&S.bosses.includes("boss4"));
+    const el=document.createElement("div");el.className="card"+(beaten?" beaten":"");
+    el.innerHTML=`<div class="emoji">${locked?"🔒":b.emoji}</div><h3>${b.name}</h3><p class="muted small" style="margin:0">${b.desc}</p><div class="row"><button class="btn ${beaten?"":"primary"}" ${locked?"disabled":""}>${beaten?"Defeated · fight again":locked?"Locked":"Fight"}</button>${beaten?`<span class="mono small" style="color:var(--good)">✓ beaten</span>`:""}</div>`;
+    el.querySelector("button").addEventListener("click",()=>{const pool=b.lec==="all"?QS:QS.filter(q=>topicOf(q[0]).lec===b.lec);startRun({pool,n:b.n,lives:b.lives,title:b.name,boss:b,host:$("#bossRun"),lobby:$("#bossList")});$("#bossRun").scrollIntoView({behavior:"smooth",block:"start"});});
+    host.appendChild(el);});
+}
+renderBosses();
+
+/* ========== PROGRESS ========== */
+function renderProgress(){$("#kAcc").textContent=S.answered?Math.round(S.correct/S.answered*100)+"%":"–";$("#kAns").textContent=S.answered;$("#kBest").textContent="×"+S.best;$("#kCards").textContent=S.cards;
+  const weak=TOPICS.map(t=>({t,s:S.stats[t.id]})).filter(x=>x.s&&x.s.a>=2).map(x=>({t:x.t,acc:Math.round(x.s.c/x.s.a*100),a:x.s.a})).sort((a,b)=>a.acc-b.acc).slice(0,6);
+  $("#weakList").innerHTML=weak.length?weak.map(w=>`<li><span class="tag l${w.t.lec}">L${w.t.lec}</span> ${w.t.name} <span class="mono small ${w.acc<60?"":""}" style="color:${w.acc<60?"var(--bad)":w.acc>=80?"var(--good)":"var(--muted)"}">${w.acc}% over ${w.a} answers</span></li>`).join(""):`<li class="muted">Answer a few quiz questions and your weakest topics will appear here.</li>`;
+  $("#badgeList").innerHTML=BADGES.map(b=>`<div class="bdg ${S.badges.includes(b[0])?"on":""}"><div class="e">${b[1]}</div><b>${b[2]}</b><span>${b[3]}</span></div>`).join("");
+}
+let resetArmed=false;
+$("#resetBtn").addEventListener("click",()=>{if(!resetArmed){resetArmed=true;$("#resetMsg").textContent="Click again to confirm. This wipes XP, badges and stats.";return;}S=DEF();save();resetArmed=false;$("#resetMsg").textContent="Progress reset.";renderBar();renderProgress();renderTopics();renderBosses();});
+renderBar();renderProgress();
+</script>
