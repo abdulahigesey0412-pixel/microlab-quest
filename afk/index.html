@@ -106,6 +106,13 @@ textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:1
 .flash.go{animation:pop .9s ease-out forwards}
 @keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
 @media (prefers-reduced-motion: reduce){.flash.go{animation:none;opacity:1}.fcard{transition:none}.xpbar i{transition:none}}
+.opt.sel{border-color:var(--fg);background:var(--surface2);font-weight:700}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(38px,1fr));gap:4px;margin-top:10px}
+.qgrid button{border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:5px 0;font-family:var(--mono);font-size:12px}
+.qgrid button.ans{background:var(--surface2)} .qgrid button.flag{border-color:var(--xp);box-shadow:inset 0 0 0 1px var(--xp)} .qgrid button.cur{border-color:var(--fg);box-shadow:inset 0 0 0 1px var(--fg)}
+.timer{font-family:var(--mono);font-weight:700;font-size:18px;font-variant-numeric:tabular-nums} .timer.low{color:var(--bad)}
+.tbl{border-collapse:collapse;width:100%;font-size:14px} .tbl th,.tbl td{border-bottom:1px solid var(--line);padding:7px 6px;text-align:left} .tbl th{font-family:var(--display)} .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums;font-family:var(--mono)}
+input[type=number]{font:inherit;color:inherit;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 10px;width:90px}
 canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-family:var(--display);font-weight:700;z-index:21;opacity:0;transition:opacity .2s;max-width:90vw} .toast.on{opacity:1}
 </style>
@@ -126,6 +133,7 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
     <button role="tab" data-tab="path" aria-selected="true">Path</button>
     <button role="tab" data-tab="study">Study</button>
     <button role="tab" data-tab="review">Review</button>
+    <button role="tab" data-tab="exams">Exams</button>
     <button role="tab" data-tab="ready">Readiness</button>
     <button role="tab" data-tab="progress">Progress</button>
   </div>
@@ -133,6 +141,7 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
   <section class="view" id="view-path"><div id="pathHost"></div></section>
   <section class="view" id="view-study" hidden><div id="studyHost" class="card">Pick a node from the Path to start.</div></section>
   <section class="view" id="view-review" hidden><div id="reviewHost" class="stack"></div><div class="card" id="runHost" hidden style="margin-top:14px"></div></section>
+  <section class="view" id="view-exams" hidden><div id="examHost" class="stack"></div></section>
   <section class="view" id="view-ready" hidden><div id="readyHost" class="stack"></div></section>
   <section class="view" id="view-progress" hidden><div id="progHost" class="stack"></div></section>
 </div>
@@ -144,15 +153,24 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
 <script src="content/m01.js"></script>
 <script src="content/m02a.js"></script>
 <script src="content/m02b.js"></script>
+<script src="content/m03a.js"></script>
+<script src="content/m03b.js"></script>
 <script src="content/m04.js"></script>
+<script src="content/m04b.js"></script>
+<script src="content/m06a.js"></script>
+<script src="content/m06b.js"></script>
 <script src="content/m07.js"></script>
+<script src="content/m08a.js"></script>
+<script src="content/m08b.js"></script>
+<script src="content/m08c.js"></script>
 <script>
 /* ===== data access ===== */
 const C=window.CURRICULUM, CONTENT=window.CONTENT||{};
 const NODES=C.nodes, MODS=C.modules, AREAS=C.areas;
 const nodeById=id=>NODES.find(n=>n.id===id); const modById=id=>MODS.find(m=>m.id===id);
 const modNodes=mid=>NODES.filter(n=>n.m===mid);
-const built=id=>!!CONTENT[id];
+const isExamNode=id=>id.indexOf("m25-")===0;
+const built=id=>isExamNode(id)||!!CONTENT[id];
 const MT=window.MICRO_TOPICS||[], MC=window.MICRO_CARDS||[], MQ=window.MICRO_QS||[];
 function nodeQs(id){const c=CONTENT[id];if(!c)return[];let out=(c.questions||[]).map(x=>({q:x[0],c:x[1],w:x[2],ex:x[3]||"",n:id}));
   if(c.topics)out=out.concat(MQ.filter(q=>c.topics.includes(q[0])).map(x=>({q:x[1],c:x[2],w:x[3],ex:x[4]||"",n:id})));return out;}
@@ -161,8 +179,8 @@ function nodeNotes(id){const c=CONTENT[id];if(!c)return"";let h=c.notes||"";if(c
 
 /* ===== state ===== */
 const LEVELS=["Fresher","Lab Assistant","Resident","Registrar","Microbiologist","Consultant","Avicenna"]; const XP_PER=200;
-const BADGES=[["first","🩸","First Blood","First correct answer"],["combo5","🔥","On Fire","Combo of 5"],["combo10","☄️","Unstoppable","Combo of 10"],["flawless","💎","Flawless","10/10 on a node test"],["teach","🗣️","Teacher","Three teach-backs graded 'nailed it'"],["master","🧠","First Mastery","Master a node (80%+ on its test)"],["module","📚","Module Done","Master every built node in a module"],["calib","🎯","Calibrated","20+ 'sure' answers at 90%+ accuracy"],["lvl5","⚗️","Level 5","Reach level 5"],["review","🔁","Reviewer","Clear a day's due list"]];
-const DEF=()=>({xp:0,combo:0,best:0,answered:0,correct:0,sureA:0,sureC:0,badges:[],nodes:{},teach3:0,cur:null});
+const BADGES=[["first","🩸","First Blood","First correct answer"],["combo5","🔥","On Fire","Combo of 5"],["combo10","☄️","Unstoppable","Combo of 10"],["flawless","💎","Flawless","10/10 on a node test"],["teach","🗣️","Teacher","Three teach-backs graded 'nailed it'"],["master","🧠","First Mastery","Master a node (80%+ on its test)"],["module","📚","Module Done","Master every built node in a module"],["calib","🎯","Calibrated","20+ 'sure' answers at 90%+ accuracy"],["lvl5","⚗️","Level 5","Reach level 5"],["review","🔁","Reviewer","Clear a day's due list"],["area","🧬","Area Cleared","80%+ on an area exam"],["mock","🏆","Full Mock","Finish a 200-question mock"],["mock80","🎓","Exam Ready","80%+ on a full mock"]];
+const DEF=()=>({xp:0,combo:0,best:0,answered:0,correct:0,sureA:0,sureC:0,badges:[],nodes:{},teach3:0,cur:null,exam:null,examLog:[],seen:[],ndebSelf:null});
 let S=DEF();
 function load(){try{const r=localStorage.getItem("afkq");if(r)S=Object.assign(DEF(),JSON.parse(r));}catch(e){}}
 function save(){try{localStorage.setItem("afkq",JSON.stringify(S));}catch(e){}}
@@ -171,7 +189,7 @@ const NS=id=>S.nodes[id]||(S.nodes[id]={steps:{},teach:0,a:0,c:0,last:null,tests
 const $=s=>document.querySelector(s); const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
 const level=()=>Math.min(LEVELS.length,Math.floor(S.xp/XP_PER)+1);
 const today=()=>Math.floor(Date.now()/864e5);
-const status=id=>{const n=S.nodes[id];if(!n)return"new";if(n.last!==null&&n.last>=80)return"mastered";return(n.a||Object.keys(n.steps).length)?"started":"new";};
+const status=id=>{if(isExamNode(id))return examNodeStatus(id);const n=S.nodes[id];if(!n)return"new";if(n.last!==null&&n.last>=80)return"mastered";return(n.a||Object.keys(n.steps).length)?"started":"new";};
 const isDue=id=>{const n=S.nodes[id];return n&&n.due!==null&&n.due<=today();};
 
 function flash(t){const f=$("#flash");f.textContent=t;f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}
@@ -183,7 +201,7 @@ function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)re
 
 /* ===== tabs ===== */
 function showTab(t){document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===t));document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+t);
-  if(t==="path")renderPath();if(t==="review")renderReview();if(t==="ready")renderReady();if(t==="progress")renderProgress();if(t==="study"&&S.cur)renderNode(S.cur);window.scrollTo({top:0});}
+  if(t==="path")renderPath();if(t==="review")renderReview();if(t==="exams")renderExams();if(t==="ready")renderReady();if(t==="progress")renderProgress();if(t==="study"&&S.cur)renderNode(S.cur);window.scrollTo({top:0});}
 document.querySelectorAll('[role="tab"]').forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
 
 /* ===== path ===== */
@@ -207,7 +225,7 @@ function renderPath(){const host=$("#pathHost");host.innerHTML="";
 
 /* ===== study ===== */
 let step="u";
-function openNode(id){if(!built(id)){toast("This node is not built yet.");return;}S.cur=id;save();step="u";showTab("study");location.hash=id;}
+function openNode(id){if(isExamNode(id)){showTab("exams");return;}if(!built(id)){toast("This node is not built yet.");return;}S.cur=id;save();step="u";showTab("study");location.hash=id;}
 function renderNode(id){const n=nodeById(id),m=modById(n.m),c=CONTENT[id],ns=NS(id);const host=$("#studyHost");
   const done=k=>ns.steps[k]?'<span class="ok">✓</span>':"";
   host.innerHTML=`<div class="row" style="justify-content:space-between"><div><span class="tag">${m.area}</span> <span class="small muted">${m.title}</span></div><span class="mono small ${status(id)==="mastered"?"":"muted"}" style="${status(id)==="mastered"?"color:var(--good)":""}">${status(id)==="mastered"?"mastered · "+ns.last+"%":ns.last!==null?"last test "+ns.last+"%":"not tested"}</span></div>
@@ -280,7 +298,7 @@ function renderReview(){const host=$("#reviewHost");const builtN=NODES.filter(n=
 
 /* ===== readiness ===== */
 function renderReady(){const host=$("#readyHost");let est=0;const rows=Object.entries(AREAS).filter(([k,a])=>a.pct).map(([k,a])=>{const ms=MODS.filter(m=>m.area===k);const ns=ms.flatMap(m=>modNodes(m.id));const b=ns.filter(n=>built(n.id)).length,mst=ns.filter(n=>status(n.id)==="mastered").length;const tested=ns.map(n=>S.nodes[n.id]).filter(s=>s&&s.last!==null);const acc=tested.length?Math.round(tested.reduce((x,s)=>x+s.last,0)/tested.length):null;const cov=ns.length?mst/ns.length:0;est+=a.pct*cov;return{k,a,ns:ns.length,b,mst,acc,cov};});
-  host.innerHTML=`<div class="card"><h2 style="font-size:20px">Estimated readiness: ${Math.round(est)} / 100</h2><p class="small muted" style="margin:4px 0 0">Blueprint weight × share of that area's nodes mastered. The pass mark is an equated 75, so treat 85+ here as the target before sitting. This number only rises as nodes are built and mastered.</p></div>
+  host.innerHTML=`<div class="card"><h2 style="font-size:20px">Estimated readiness: ${Math.round(est)} / 100</h2><p class="small muted" style="margin:4px 0 0">Blueprint weight × share of that area's nodes mastered. This is a coverage measure, not a predicted score. NDEB's pass mark is a test-equated 75, which no outside app can reproduce. Aim for 85+ here and 80%+ on full mocks before sitting.</p>${(()=>{const m=S.examLog.filter(e=>e.kind==="mock").slice(-1)[0];return m?`<p class="small" style="margin:8px 0 0"><b>Latest full mock:</b> ${m.score}/${m.n} (${Math.round(m.score/m.n*100)}%).</p>`:"";})()}</div>
   <div class="card">${rows.map(r=>`<div class="area"><span class="n">${r.a.name}</span><span class="s">${r.a.pct}% of exam</span><span class="s">${r.mst}/${r.ns} nodes mastered · ${r.b} built${r.acc!==null?" · avg last test "+r.acc+"%":""}</span><span></span><div class="prog"><i style="width:${r.cov*100}%"></i></div></div>`).join("")}</div>
   <div class="card"><h3 style="font-size:16px">Exam facts</h3><ul class="small" style="margin:6px 0 0;padding-left:20px"><li>200 single-answer MCQs, two 2-hour parts, one day. No negative marking.</li><li>Pass: test-equated score of 75 or higher. Maximum three attempts.</li><li>Items are written from the 47 KSAs; FDI tooth numbering throughout.</li><li>Next sitting listed by NDEB: 5 February 2027. Check the registration deadline on ndeb-bned.ca.</li><li>Free official 100-question self-assessment: ndeb-bned.ca/quiz (score only, no answers).</li></ul></div>`;
 }
@@ -297,11 +315,87 @@ function renderProgress(){const host=$("#progHost");host.innerHTML=`<div class="
   let armed=false;$("#resetBtn").addEventListener("click",()=>{if(!armed){armed=true;$("#resetMsg").textContent="Click again to confirm. This wipes everything.";return;}S=DEF();save();renderBar();renderProgress();$("#resetMsg").textContent="Reset.";});
 }
 
+
+/* ===== exams: area exams and full mocks ===== */
+const AREA_KEYS=Object.keys(AREAS).filter(k=>AREAS[k].pct);
+const SEC_PER_Q=72; /* 200 questions in 240 minutes */
+const AREA_N=40, PASS=80;
+const qHash=t=>{let h=5381;for(let i=0;i<t.length;i++)h=((h*33)^t.charCodeAt(i))>>>0;return h;};
+const areaNodes=k=>NODES.filter(n=>!isExamNode(n.id)&&modById(n.m).area===k&&CONTENT[n.id]);
+const areaPool=k=>areaNodes(k).flatMap(n=>nodeQs(n.id).map((q,i)=>({id:n.id,i,h:qHash(q.q)})));
+const itemQ=it=>nodeQs(it.id)[it.i];
+const areaBest=k=>S.examLog.filter(e=>e.kind==="area"&&e.key===k).reduce((b,e)=>Math.max(b,Math.round(e.score/e.n*100)),-1);
+const areaPassed=k=>areaBest(k)>=PASS;
+const allAreasPassed=()=>AREA_KEYS.every(areaPassed);
+const mocksDone=()=>S.examLog.filter(e=>e.kind==="mock").length;
+function examNodeStatus(id){const map={"m25-n01":allAreasPassed(),"m25-n02":mocksDone()>=1,"m25-n03":mocksDone()>=2,"m25-n04":mocksDone()>=3,"m25-n05":S.ndebSelf!==null};if(map[id])return"mastered";return S.examLog&&S.examLog.length?"started":"new";}
+/* prefer questions not yet seen in an exam, so repeat exams stay honest */
+function draw(pool,n){const seen=new Set(S.seen);const fresh=shuffle(pool.filter(x=>!seen.has(x.h))),old=shuffle(pool.filter(x=>seen.has(x.h)));return fresh.concat(old).slice(0,n);}
+function makeItem(x){const q=nodeQs(x.id)[x.i];return{id:x.id,i:x.i,h:x.h,a:null,fl:0,o:shuffle([q.c,...q.w])};}
+function startAreaExam(k){const pool=areaPool(k);const picks=draw(pool,Math.min(AREA_N,pool.length));S.exam={kind:"area",key:k,title:AREAS[k].name,items:picks.map(makeItem),split:[picks.length],part:0,cur:0,ends:Date.now()+picks.length*SEC_PER_Q*1000,onBreak:false};save();renderExams();}
+function startMock(){let picks=[];AREA_KEYS.forEach(k=>{picks=picks.concat(draw(areaPool(k),AREAS[k].pct*2));});picks=shuffle(picks);const half=Math.ceil(picks.length/2);S.exam={kind:"mock",key:"mock"+(mocksDone()+1),title:"Full mock "+(mocksDone()+1),items:picks.map(makeItem),split:[half,picks.length],part:0,cur:0,ends:Date.now()+half*SEC_PER_Q*1000,onBreak:false};save();renderExams();}
+const partStart=e=>e.part===0?0:e.split[e.part-1];
+const partEnd=e=>e.split[e.part];
+let examTimer=null,endArmed=false;
+function fmt(sec){sec=Math.max(0,Math.floor(sec));const h=Math.floor(sec/3600),m=Math.floor(sec%3600/60),x=sec%60;return(h?h+":":"")+String(m).padStart(2,"0")+":"+String(x).padStart(2,"0");}
+function tick(){const e=S.exam;if(!e||e.onBreak){clearInterval(examTimer);examTimer=null;return;}const left=(e.ends-Date.now())/1000;const t=document.getElementById("examClock");if(t){t.textContent=fmt(left);t.classList.toggle("low",left<300);}if(left<=0)endPart();}
+function endPart(){const e=S.exam;if(!e)return;clearInterval(examTimer);examTimer=null;endArmed=false;if(e.part+1<e.split.length){e.onBreak=true;save();renderExams();}else finishExam();}
+function renderExams(){if(S.exam)renderExamRun();else renderExamLobby();}
+function renderExamRun(){const host=document.getElementById("examHost"),e=S.exam;if(host.closest(".view").hidden)return;
+  if(e.onBreak){const answered=e.items.slice(0,e.split[e.part]).filter(x=>x.a!==null).length;host.innerHTML=`<div class="card stack"><h2 style="font-size:22px">Part ${e.part+1} submitted</h2><p style="margin:0">You answered ${answered} of ${e.split[e.part]}. This is your scheduled break, and the clock is stopped. Part ${e.part+1} answers are now locked, as they are on exam day.</p><div class="row"><button class="btn primary" id="startNext">Start part ${e.part+2}: 2 hours</button></div></div>`;
+    document.getElementById("startNext").addEventListener("click",()=>{e.part++;e.onBreak=false;e.cur=partStart(e);e.ends=Date.now()+(partEnd(e)-partStart(e))*SEC_PER_Q*1000;save();renderExamRun();});return;}
+  if((e.ends-Date.now())<=0){endPart();return;}
+  const it=e.items[e.cur],q=itemQ(it),a=partStart(e),b=partEnd(e),done=e.items.slice(a,b).filter(x=>x.a!==null).length;
+  host.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><span class="mono small">${e.title}${e.split.length>1?" · part "+(e.part+1)+" of 2":""}</span><span class="timer" id="examClock">--:--</span></div>
+   <div class="prog acc" style="margin:8px 0 12px"><i style="width:${done/(b-a)*100}%"></i></div>
+   <div class="mono small muted">Question ${e.cur-a+1} of ${b-a}</div><p class="q" style="margin:6px 0 0">${q?q.q:"This question is no longer in the bank. Skip it."}</p>
+   <div class="opts">${it.o.map((o,k)=>`<button class="opt ${it.a===o?"sel":""}" data-k="${k}"><span class="k">${"ABCDE"[k]}</span><span>${o}</span></button>`).join("")}</div>
+   <div class="row" style="margin-top:14px;justify-content:space-between"><div class="row"><button class="btn" id="prevQ" ${e.cur<=a?"disabled":""}>← Back</button><button class="btn" id="flagQ">${it.fl?"Unflag":"Flag"}</button></div><button class="btn primary" id="nextQ2" ${e.cur>=b-1?"disabled":""}>Next →</button></div>
+   <div class="qgrid">${e.items.slice(a,b).map((x,j)=>`<button data-j="${a+j}" class="${x.a!==null?"ans":""} ${x.fl?"flag":""} ${a+j===e.cur?"cur":""}" aria-label="Question ${j+1}">${j+1}</button>`).join("")}</div>
+   <div class="row" style="margin-top:14px"><button class="btn ghost" id="endPartBtn">${endArmed?"Click again to submit this part":"Submit this part"}</button><span class="small muted">${done}/${b-a} answered. No feedback until the end. Blank scores zero, so answer everything.</span></div></div>`;
+  host.querySelectorAll(".opt").forEach(x=>x.addEventListener("click",()=>{it.a=it.o[+x.dataset.k];save();renderExamRun();}));
+  host.querySelectorAll(".qgrid button").forEach(x=>x.addEventListener("click",()=>{e.cur=+x.dataset.j;endArmed=false;save();renderExamRun();}));
+  document.getElementById("prevQ").addEventListener("click",()=>{e.cur--;endArmed=false;save();renderExamRun();});
+  document.getElementById("nextQ2").addEventListener("click",()=>{e.cur++;endArmed=false;save();renderExamRun();});
+  document.getElementById("flagQ").addEventListener("click",()=>{it.fl=it.fl?0:1;save();renderExamRun();});
+  document.getElementById("endPartBtn").addEventListener("click",()=>{if(!endArmed){endArmed=true;renderExamRun();return;}endPart();});
+  tick();if(!examTimer)examTimer=setInterval(tick,1000);
+}
+function finishExam(){const e=S.exam;const byArea={};let score=0;const missed=[];
+  e.items.forEach(it=>{const q=itemQ(it);if(!q)return;const k=modById(nodeById(it.id).m).area;byArea[k]=byArea[k]||[0,0];byArea[k][1]++;const ok=it.a===q.c;const ns=NS(it.id);ns.a++;S.answered++;if(ok){ns.c++;S.correct++;score++;byArea[k][0]++;}else missed.push([it.id,it.i,it.a]);if(S.seen.indexOf(it.h)<0)S.seen.push(it.h);});
+  const n=e.items.filter(it=>itemQ(it)).length,pct=n?Math.round(score/n*100):0;const log={kind:e.kind,key:e.key,title:e.title,date:Date.now(),score,n,byArea,missed};S.examLog.push(log);if(S.examLog.length>40)S.examLog.shift();S.exam=null;save();
+  addXP(score*5+(pct>=PASS?100:0));if(e.kind==="area"&&pct>=PASS)award("area");if(e.kind==="mock"){award("mock");if(pct>=PASS)award("mock80");}if(pct>=PASS)confetti();
+  renderExamResult(log);
+}
+function renderExamResult(log){const host=document.getElementById("examHost"),pct=Math.round(log.score/log.n*100);
+  const rows=Object.keys(log.byArea).sort((x,y)=>AREAS[y].pct-AREAS[x].pct).map(k=>{const v=log.byArea[k],p=Math.round(v[0]/v[1]*100);return `<tr><td>${AREAS[k].name}</td><td class="num">${v[0]}/${v[1]}</td><td class="num" style="color:${p>=PASS?"var(--good)":p<60?"var(--bad)":"inherit"}">${p}%</td></tr>`;}).join("");
+  host.innerHTML=`<div class="card stack"><h2 style="font-size:22px">${log.title}: ${log.score}/${log.n} (${pct}%)</h2><p style="margin:0">${pct>=PASS?"That clears the 80% target for this app.":"Below the 80% target. Work the areas in red, then sit it again; repeat exams use unseen questions first."} This is a raw percentage on this app's questions. It is not NDEB's equated score and does not predict one.</p>
+  <div class="tscroll"><table class="tbl"><tr><th>Area</th><th class="num">Score</th><th class="num">%</th></tr>${rows}</table></div>
+  <h3 style="font-size:17px">Questions you missed (${log.missed.length})</h3>
+  <div class="stack" style="gap:8px">${log.missed.map(m=>{const q=nodeQs(m[0])[m[1]],nd=nodeById(m[0]);if(!q)return"";return `<div class="ex" style="margin:0"><b>${q.q}</b><div class="small" style="margin-top:6px">Your answer: ${m[2]===null?"blank":m[2]}</div><div class="small"><b>Correct:</b> ${q.c}</div><div class="small" style="margin-top:4px">${q.ex||""}</div><button class="btn sm" style="margin-top:8px" data-open="${m[0]}">Open node: ${nd.t}</button></div>`;}).join("")||"<p class='muted' style='margin:0'>None.</p>"}</div>
+  <div class="row"><button class="btn primary" id="examBack">Back to exams</button></div></div>`;
+  host.querySelectorAll("[data-open]").forEach(b=>b.addEventListener("click",()=>openNode(b.dataset.open)));
+  document.getElementById("examBack").addEventListener("click",renderExamLobby);window.scrollTo({top:0});
+}
+function renderExamLobby(){const host=document.getElementById("examHost");const unlocked=allAreasPassed();const nm=mocksDone();
+  const areaRows=AREA_KEYS.map(k=>{const pool=areaPool(k),ns=NODES.filter(n=>!isExamNode(n.id)&&modById(n.m).area===k),mst=ns.filter(n=>status(n.id)==="mastered").length,best=areaBest(k),can=pool.length>=20;
+    return `<div class="area"><span class="n">${AREAS[k].name}</span><button class="btn sm ${best>=PASS?"":"primary"}" data-area="${k}" ${can?"":"disabled"}>${can?(best>=PASS?"Retake":"Start"):"Needs more questions"}</button><span class="s">${AREAS[k].pct}% of exam · ${pool.length} questions · ${mst}/${ns.length} nodes mastered${best>=0?" · best "+best+"%":""}</span><span>${best>=PASS?'<span class="tag good">cleared</span>':""}</span></div>`;}).join("");
+  const log=S.examLog.slice().reverse().slice(0,12);
+  host.innerHTML=`<div class="card"><h2 style="font-size:20px">Area exams</h2><p class="small muted" style="margin:4px 0 8px">One exam per blueprint area: up to ${AREA_N} questions at exam pace (72 seconds each), no feedback until the end. Best taken once most of the area's nodes are mastered. Score ${PASS}%+ on all nine to unlock the full mocks.</p>${areaRows}</div>
+  <div class="card stack"><h2 style="font-size:20px">Full mocks</h2><p class="small muted" style="margin:0">200 questions drawn to the official blueprint, in two 2-hour parts with a scheduled break, the same shape as the real AFK. Part 1 answers lock when you start part 2. ${nm} of 3 planned mocks done.</p>${unlocked?"":`<p class="small" style="margin:0"><span class="tag warn">locked</span> Clear all nine area exams first (${AREA_KEYS.filter(areaPassed).length}/9 done).</p>`}<div class="row"><button class="btn ${unlocked?"primary":""}" id="mockGo" ${unlocked?"":"disabled"}>Start full mock ${nm+1}</button></div></div>
+  <div class="card stack"><h2 style="font-size:20px">NDEB's official self-assessment</h2><p class="small muted" style="margin:0">NDEB offers a free 100-question practice test at ndeb-bned.ca/quiz. It gives a score only, with no answers. Take it after your second mock and record the score here.</p><div class="row"><label for="ndebScore" class="small">Score out of 100</label><input type="number" id="ndebScore" min="0" max="100" value="${S.ndebSelf===null?"":S.ndebSelf}"><button class="btn" id="ndebSave">Save</button></div></div>
+  ${log.length?`<div class="card"><h2 style="font-size:20px;margin-bottom:6px">History</h2><div class="tscroll"><table class="tbl"><tr><th>Exam</th><th class="num">Score</th><th class="num">Date</th></tr>${log.map((l,i)=>`<tr><td><button class="btn sm ghost" data-log="${S.examLog.length-1-i}">${l.title}</button></td><td class="num">${l.score}/${l.n} (${Math.round(l.score/l.n*100)}%)</td><td class="num">${new Date(l.date).toLocaleDateString()}</td></tr>`).join("")}</table></div></div>`:""}`;
+  host.querySelectorAll("[data-area]").forEach(b=>b.addEventListener("click",()=>startAreaExam(b.dataset.area)));
+  host.querySelectorAll("[data-log]").forEach(b=>b.addEventListener("click",()=>renderExamResult(S.examLog[+b.dataset.log])));
+  const mg=document.getElementById("mockGo");if(unlocked)mg.addEventListener("click",startMock);
+  document.getElementById("ndebSave").addEventListener("click",()=>{const v=parseInt(document.getElementById("ndebScore").value,10);if(isNaN(v)||v<0||v>100){toast("Enter a score from 0 to 100.");return;}S.ndebSelf=v;save();toast("Saved.");});
+}
+
 /* ===== boot ===== */
 renderBar();
 const h=location.hash.replace("#","");
-if(h&&nodeById(h)&&built(h)){S.cur=h;showTab("study");}else{renderPath();}
-addEventListener("hashchange",()=>{const h=location.hash.replace("#","");if(h&&nodeById(h)&&built(h)&&S.cur!==h){S.cur=h;step="u";showTab("study");}});
+if(h&&nodeById(h)&&CONTENT[h]){S.cur=h;showTab("study");}else{renderPath();}
+addEventListener("hashchange",()=>{const h=location.hash.replace("#","");if(h&&nodeById(h)&&CONTENT[h]&&S.cur!==h){S.cur=h;step="u";showTab("study");}});
 </script>
 </body>
 </html>

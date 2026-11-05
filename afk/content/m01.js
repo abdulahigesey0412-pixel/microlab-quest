@@ -10,13 +10,13 @@ window.CONTENT["m01-n01"] = {
  <p><b>The pump is why cells have a voltage.</b> Inside is K+-rich, outside Na+-rich. K+ leaks out through open channels, leaving the inside negative: the resting potential, about -70 mV in a neuron. Nerves signal by briefly opening Na+ channels. Local anaesthetics cross the membrane as the uncharged base, become charged inside, and plug the Na+ channel from within. That one idea explains why anaesthesia fails in an acidic abscess: low pH leaves more drug charged and stuck outside.</p>
  <p><b>Organelles are departments.</b> The <b>nucleus</b> holds DNA. <b>Rough endoplasmic reticulum</b> makes proteins for export; odontoblasts, ameloblasts and fibroblasts are packed with it. <b>Smooth ER</b> makes lipids and, in the liver, detoxifies drugs. The <b>Golgi</b> sorts and packages. <b>Mitochondria</b> make ATP. <b>Lysosomes</b> hold acid hydrolases that digest worn-out material; osteoclasts use them, and a proton pump at their ruffled border, to dissolve bone.</p>
  <p><b>Cells hold hands through junctions.</b> <b>Tight junctions</b> seal the gap between epithelial cells. <b>Desmosomes</b> rivet cell to cell; <b>hemidesmosomes</b> rivet cell to basement membrane. <b>Gap junctions</b> are ion channels between neighbours. Two blistering diseases are junction failures: pemphigus vulgaris is autoantibody against desmosomes (desmoglein), so the epithelium splits within itself; mucous membrane pemphigoid is autoantibody against hemidesmosomes, so the epithelium lifts off whole. The junctional epithelium clings to enamel by hemidesmosomes and a basal lamina, which is why it is the weak point of the gingival seal.</p>
- <p><b>Why the exam cares.</b> The AFK rarely asks you to name an organelle. It asks why anaesthesia failed, why an avulsed tooth died in water, why hypoxic cells swell (the pump stops, Na+ and water pour in), and which junction an autoimmune blister attacks. Every answer is membrane biology.</p>`,
+ <p><b>Why the exam cares.</b> The AFK rarely asks you to name an organelle. It asks why anaesthesia failed, why water is a poor storage medium for an avulsed tooth, why hypoxic cells swell (the pump stops, Na+ and water pour in), and which junction an autoimmune blister attacks. Every answer is membrane biology.</p>`,
  connect: [
   {to:"m03-n03", why:"The Na+/K+ gradient built here is what a nerve spends on every action potential; conduction and pain pathways are this node in motion."},
   {to:"m12-n01", why:"Local anaesthetics are weak bases that cross the membrane unionised and block the Na+ channel from inside; pKa, pH and inflamed tissue are membrane questions."},
   {to:"m05-n01", why:"The first reversible sign of cell injury is swelling because the ATP-starved Na+/K+ pump stops; the irreversible signs are membrane rupture."},
   {to:"m10-n03", why:"Pemphigus and pemphigoid are desmosome and hemidesmosome failures; the level of the split decides the clinical and histological picture."},
-  {to:"m20-n06", why:"IADT storage media for an avulsed tooth are chosen by osmosis: isotonic milk or saline keep PDL cells alive, hypotonic water bursts them."}
+  {to:"m20-n06", why:"IADT storage media for an avulsed tooth are chosen by osmosis: near-isotonic milk or saline preserve PDL cells, while hypotonic water damages them, which is why IADT 2020 ranks it as a poor medium, better only than dry storage."}
  ],
  apply: {
   vignette: "A 32-year-old presents with a two-day history of pain and buccal swelling from tooth 4.6, which has a deep carious lesion. An inferior alveolar nerve block plus buccal infiltration with 2% lidocaine and 1:100,000 adrenaline gives only partial anaesthesia, and the buccal infiltration is least effective. Which of the following best explains the poor anaesthesia?",
@@ -32,7 +32,7 @@ window.CONTENT["m01-n01"] = {
   ]
  },
  teach: {
-  prompt: "Explain, to someone who has never studied a cell, why a local anaesthetic works less well in an abscess and why an avulsed tooth dies in tap water, using only membrane biology.",
+  prompt: "Explain, to someone who has never studied a cell, why a local anaesthetic works less well in an abscess and why tap water is a poor storage medium for an avulsed tooth, using only membrane biology.",
   model: "The membrane is an oily layer, so only uncharged, lipid-soluble molecules pass through it on their own. A local anaesthetic is a weak base: at normal pH enough of it is uncharged to cross into the nerve, where it becomes charged and blocks the sodium channel from inside. An abscess is acidic, so more of the drug is charged and trapped outside, and less reaches the channel. Water, by contrast, crosses membranes freely by osmosis toward the saltier side: a periodontal ligament cell in tap water is saltier than its surroundings, so water floods in and the cell bursts. Milk or saline are roughly isotonic, so no net water moves and the cells survive."
  },
  cards: [
@@ -40,7 +40,7 @@ window.CONTENT["m01-n01"] = {
   ["Which molecules cross the bilayer without a protein?","Small non-polar or lipid-soluble ones: O2, CO2, steroids, the unionised local anaesthetic base"],
   ["Facilitated vs active transport","Both use a protein; facilitated is downhill with no ATP, active is uphill and costs energy"],
   ["Secondary active transport example","SGLT in the gut: the Na+ gradient drags glucose in"],
-  ["Why never store an avulsed tooth in tap water?","Hypotonic: water enters PDL cells by osmosis and they lyse"],
+  ["Why is tap water a poor storage medium for an avulsed tooth?","Hypotonic: water enters PDL cells by osmosis and they swell and lyse. Milk, HBSS, saliva or saline are preferred (IADT 2020)"],
   ["Organelle packed in odontoblasts and fibroblasts","Rough ER (synthesis of secreted protein)"],
   ["What gives osteoclasts their digestive power?","Lysosomal acid hydrolases plus a ruffled-border proton pump"],
   ["Pemphigus vs pemphigoid: which junction?","Pemphigus: desmosome (desmoglein), split within epithelium. Pemphigoid: hemidesmosome, split below epithelium"],
