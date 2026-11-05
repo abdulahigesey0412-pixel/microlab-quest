@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AFK Quest</title>
+<meta name="description" content="Zero-to-NDEB-AFK study path: understand, connect, apply, test, with spaced review and a readiness map against the exam blueprint.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+:root{
+  --bg:#f3f5f1; --surface:#ffffff; --surface2:#e9ede6; --line:#cfd6cc; --fg:#1b2420; --muted:#5b6861;
+  --accent:#b1232e; --accent-fg:#ffffff; --good:#237a4a; --good-bg:#def3e5; --bad:#b1232e; --bad-bg:#fbe3e5;
+  --xp:#cf8a15; --xp-bg:#fbeccc; --info:#2d5fa6; --info-bg:#dfe8f8; --warn:#8a5a00; --warn-bg:#fff1cc;
+  --display:"Outfit",system-ui,sans-serif; --body:"Atkinson Hyperlegible",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0f1513; --surface:#182019; --surface2:#222c26; --line:#33403a; --fg:#e7ece8; --muted:#9aa89f;
+  --accent:#ff5c66; --accent-fg:#1a0a0c; --good:#5fd08c; --good-bg:#15301f; --bad:#ff7a82; --bad-bg:#3a1a1e;
+  --xp:#f2b64f; --xp-bg:#3a2a10; --info:#7fa9ea; --info-bg:#172741; --warn:#f0c060; --warn-bg:#3a2e10; color-scheme:dark }}
+:root[data-theme="dark"]{
+  --bg:#0f1513; --surface:#182019; --surface2:#222c26; --line:#33403a; --fg:#e7ece8; --muted:#9aa89f;
+  --accent:#ff5c66; --accent-fg:#1a0a0c; --good:#5fd08c; --good-bg:#15301f; --bad:#ff7a82; --bad-bg:#3a1a1e;
+  --xp:#f2b64f; --xp-bg:#3a2a10; --info:#7fa9ea; --info-bg:#172741; --warn:#f0c060; --warn-bg:#3a2e10; color-scheme:dark }
+*{box-sizing:border-box} [hidden]{display:none!important} img{max-width:100%}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+h1,h2,h3{font-family:var(--display);line-height:1.15;text-wrap:balance;margin:0}
+button{font:inherit;color:inherit;cursor:pointer} textarea,select{font:inherit;color:inherit}
+button:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--xp);outline-offset:2px}
+a{color:var(--info)}
+.wrap{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:14px 56px}
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.bar .in{max-width:920px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:10px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.lvl{display:flex;align-items:center;gap:10px;min-width:0}
+.lvl .badge{width:42px;height:42px;border-radius:50%;background:var(--xp);color:#1a1200;font-family:var(--display);font-weight:800;font-size:18px;display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 3px var(--surface),0 0 0 2px var(--xp)}
+.lvl .name{font-family:var(--display);font-weight:700;font-size:15px;white-space:nowrap}
+.lvl .sub{font-size:12px;color:var(--muted);font-family:var(--mono)}
+.xpwrap{flex:1 1 160px;min-width:110px}
+.xpbar{height:10px;border-radius:5px;background:var(--xp-bg);overflow:hidden}
+.xpbar i{display:block;height:100%;background:var(--xp);border-radius:5px;transition:width .5s ease}
+.combo{font-family:var(--mono);font-size:13px;color:var(--muted);white-space:nowrap} .combo b{color:var(--accent);font-size:16px}
+.tabs{display:flex;gap:6px;margin-block:12px 16px;flex-wrap:wrap}
+.tabs button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-family:var(--display);font-weight:700;font-size:14px}
+.tabs button[aria-selected="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.stack{display:grid;gap:14px} .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:6px;background:var(--info-bg);color:var(--info)}
+.tag.warn{background:var(--warn-bg);color:var(--warn)} .tag.good{background:var(--good-bg);color:var(--good)} .tag.xp{background:var(--xp-bg);color:var(--xp)} .tag.bad{background:var(--bad-bg);color:var(--bad)}
+.btn{border:1px solid var(--line);background:var(--surface2);border-radius:10px;padding:10px 16px;font-family:var(--display);font-weight:700;font-size:15px}
+.btn.primary{background:var(--accent);color:var(--accent-fg);border-color:var(--accent)} .btn.ghost{background:transparent} .btn.sm{padding:6px 10px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:default}
+.muted{color:var(--muted)} .small{font-size:13px} .mono{font-family:var(--mono)}
+.hero{display:grid;gap:8px;margin-bottom:14px} .hero h1{font-size:clamp(28px,5vw,40px);font-weight:800} .hero p{margin:0;max-width:66ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.kpi .v{font-family:var(--display);font-weight:800;font-size:26px;font-variant-numeric:tabular-nums} .kpi .k{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+.prog{height:8px;background:var(--surface2);border-radius:4px;overflow:hidden} .prog i{display:block;height:100%;background:var(--good);transition:width .3s}
+.prog.acc i{background:var(--accent)}
+/* path */
+.phase{margin-top:18px} .phase h2{font-size:20px} .phase p{margin:4px 0 10px;color:var(--muted);max-width:70ch}
+.mods{display:grid;gap:10px}
+.mod{border:1px solid var(--line);border-radius:12px;background:var(--surface);overflow:hidden}
+.mod>button{width:100%;text-align:left;background:none;border:0;padding:12px 14px;display:grid;grid-template-columns:1fr auto;gap:6px 12px;align-items:center}
+.mod>button h3{font-size:16px} .mod .meta{font-family:var(--mono);font-size:12px;color:var(--muted);grid-column:1/-1;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.mod .meta .prog{flex:1 1 120px;min-width:80px}
+.mod .nodes{border-top:1px dashed var(--line);padding:6px 8px 10px;display:grid;gap:2px}
+.node{display:flex;gap:10px;align-items:center;padding:8px 8px;border-radius:8px;border:0;background:none;text-align:left;width:100%}
+.node:not(:disabled):hover{background:var(--surface2)} .node:disabled{opacity:.55;cursor:default}
+.node .t{flex:1;min-width:0} .node .h{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.dot{width:10px;height:10px;border-radius:50%;background:var(--line);flex:none} .dot.started{background:var(--xp)} .dot.mastered{background:var(--good)}
+.cont{display:grid;gap:6px;border-left:4px solid var(--accent)}
+/* study */
+.steps{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0}
+.steps button{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:7px 12px;font-family:var(--display);font-weight:700;font-size:14px;display:flex;gap:6px;align-items:center}
+.steps button[aria-selected="true"]{background:var(--surface2);border-color:var(--fg)}
+.steps .ok{color:var(--good)}
+.prose p{margin:8px 0} .prose ul,.prose ol{margin:6px 0;padding-left:22px} .prose li{margin:3px 0}
+.prose table{border-collapse:collapse;width:100%;font-size:14px;margin-top:8px} .prose th,.prose td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top} .prose th{background:var(--surface2);font-family:var(--display)}
+.tscroll{overflow-x:auto} .hl{background:var(--xp-bg);padding:0 4px;border-radius:4px}
+textarea{width:100%;min-height:90px;border:1px solid var(--line);border-radius:10px;padding:10px;background:var(--surface);resize:vertical}
+.model{background:var(--surface2);border-radius:10px;padding:12px 14px;margin-top:10px}
+.link{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--surface);text-align:left;width:100%;display:grid;gap:3px} .link b{font-family:var(--display)}
+.link:not(:disabled):hover{border-color:var(--fg)} .link:disabled{opacity:.6;cursor:default}
+.q{font-size:18px;font-weight:700;font-family:var(--display)}
+.opts{display:grid;gap:8px;margin-top:12px}
+.opt{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:11px 14px;text-align:left;font-size:15.5px;display:flex;gap:10px;align-items:flex-start}
+.opt .k{font-family:var(--mono);color:var(--muted);flex:none;font-weight:700}
+.opt:not(:disabled):hover{border-color:var(--fg)} .opt.right{background:var(--good-bg);border-color:var(--good)} .opt.wrong{background:var(--bad-bg);border-color:var(--bad)} .opt.dim{opacity:.55}
+.ex{margin-top:12px;padding:12px 14px;border-radius:10px;background:var(--surface2);font-size:15px} .ex b{font-family:var(--display)}
+.conf{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap} .conf .btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);border-color:var(--fg)}
+.err{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.stepbox{border-left:3px solid var(--info);padding:6px 12px;margin:8px 0;background:var(--surface)}
+.fc{perspective:1200px;min-height:200px}
+.fcard{position:relative;min-height:200px;border-radius:16px;transform-style:preserve-3d;transition:transform .45s;cursor:pointer} .fcard.flip{transform:rotateY(180deg)}
+.fcard .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;border:1px solid var(--line);background:var(--surface);padding:22px;display:grid;place-items:center;text-align:center;font-size:18px;line-height:1.4}
+.fcard .face.back{transform:rotateY(180deg);background:var(--surface2);font-size:16px}
+.fcard .face .lbl{position:absolute;top:10px;left:14px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.08em}
+.area{display:grid;grid-template-columns:1fr auto;gap:4px 12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)} .area:last-child{border-bottom:0}
+.area .n{font-family:var(--display);font-weight:700} .area .s{font-family:var(--mono);font-size:12px;color:var(--muted)} .area .prog{grid-column:1/-1}
+.badges{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.bdg{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--surface);display:grid;gap:4px;opacity:.45} .bdg.on{opacity:1;border-color:var(--xp);background:var(--xp-bg)} .bdg .e{font-size:26px} .bdg b{font-family:var(--display)} .bdg span{font-size:12px;color:var(--muted)}
+.flash{position:fixed;left:50%;top:40%;transform:translate(-50%,-50%);font-family:var(--display);font-weight:800;font-size:clamp(22px,6vw,44px);color:var(--xp);pointer-events:none;opacity:0;text-shadow:0 2px 0 var(--bg);z-index:20}
+.flash.go{animation:pop .9s ease-out forwards}
+@keyframes pop{0%{opacity:0;transform:translate(-50%,-50%) scale(.6)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.1)}100%{opacity:0;transform:translate(-50%,-90%) scale(1)}}
+@media (prefers-reduced-motion: reduce){.flash.go{animation:none;opacity:1}.fcard{transition:none}.xpbar i{transition:none}}
+canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 16px;border-radius:10px;font-family:var(--display);font-weight:700;z-index:21;opacity:0;transition:opacity .2s;max-width:90vw} .toast.on{opacity:1}
+</style>
+</head>
+<body>
+<div class="bar"><div class="in">
+  <div class="lvl"><div class="badge" id="lvlNum">1</div><div><div class="name" id="lvlName">Fresher</div><div class="sub" id="lvlSub">0 XP</div></div></div>
+  <div class="xpwrap"><div class="xpbar"><i id="xpFill" style="width:0%"></i></div></div>
+  <div class="combo">combo <b id="comboN">×0</b></div>
+</div></div>
+
+<div class="wrap">
+  <div class="hero">
+    <h1>AFK Quest</h1>
+    <p>A zero-to-exam path for the NDEB Assessment of Fundamental Knowledge. Every node runs the same loop: understand the mechanism, connect it to its neighbours, apply it on a worked case, then test with confidence ratings and error labels. Spaced review brings weak nodes back. Readiness is scored against the official blueprint.</p>
+  </div>
+  <div class="tabs" role="tablist">
+    <button role="tab" data-tab="path" aria-selected="true">Path</button>
+    <button role="tab" data-tab="study">Study</button>
+    <button role="tab" data-tab="review">Review</button>
+    <button role="tab" data-tab="ready">Readiness</button>
+    <button role="tab" data-tab="progress">Progress</button>
+  </div>
+
+  <section class="view" id="view-path"><div id="pathHost"></div></section>
+  <section class="view" id="view-study" hidden><div id="studyHost" class="card">Pick a node from the Path to start.</div></section>
+  <section class="view" id="view-review" hidden><div id="reviewHost" class="stack"></div><div class="card" id="runHost" hidden style="margin-top:14px"></div></section>
+  <section class="view" id="view-ready" hidden><div id="readyHost" class="stack"></div></section>
+  <section class="view" id="view-progress" hidden><div id="progHost" class="stack"></div></section>
+</div>
+<div class="flash" id="flash"></div><div class="toast" id="toast"></div><canvas id="confetti"></canvas>
+
+<script src="curriculum.js"></script>
+<script src="content/micro-data.js"></script>
+<script src="content/m00.js"></script>
+<script src="content/m04.js"></script>
+<script>
+/* ===== data access ===== */
+const C=window.CURRICULUM, CONTENT=window.CONTENT||{};
+const NODES=C.nodes, MODS=C.modules, AREAS=C.areas;
+const nodeById=id=>NODES.find(n=>n.id===id); const modById=id=>MODS.find(m=>m.id===id);
+const modNodes=mid=>NODES.filter(n=>n.m===mid);
+const built=id=>!!CONTENT[id];
+const MT=window.MICRO_TOPICS||[], MC=window.MICRO_CARDS||[], MQ=window.MICRO_QS||[];
+function nodeQs(id){const c=CONTENT[id];if(!c)return[];let out=(c.questions||[]).map(x=>({q:x[0],c:x[1],w:x[2],ex:x[3]||"",n:id}));
+  if(c.topics)out=out.concat(MQ.filter(q=>c.topics.includes(q[0])).map(x=>({q:x[1],c:x[2],w:x[3],ex:x[4]||"",n:id})));return out;}
+function nodeCards(id){const c=CONTENT[id];if(!c)return[];let out=(c.cards||[]).slice();if(c.topics)out=out.concat(MC.filter(x=>c.topics.includes(x[0])).map(x=>[x[1],x[2]]));return out;}
+function nodeNotes(id){const c=CONTENT[id];if(!c)return"";let h=c.notes||"";if(c.topics)h+=MT.filter(t=>c.topics.includes(t.id)).map(t=>`<h3 style="margin-top:14px;font-size:16px">${t.name}</h3>${t.html}`).join("");return h;}
+
+/* ===== state ===== */
+const LEVELS=["Fresher","Lab Assistant","Resident","Registrar","Microbiologist","Consultant","Avicenna"]; const XP_PER=200;
+const BADGES=[["first","🩸","First Blood","First correct answer"],["combo5","🔥","On Fire","Combo of 5"],["combo10","☄️","Unstoppable","Combo of 10"],["flawless","💎","Flawless","10/10 on a node test"],["teach","🗣️","Teacher","Three teach-backs graded 'nailed it'"],["master","🧠","First Mastery","Master a node (80%+ on its test)"],["module","📚","Module Done","Master every built node in a module"],["calib","🎯","Calibrated","20+ 'sure' answers at 90%+ accuracy"],["lvl5","⚗️","Level 5","Reach level 5"],["review","🔁","Reviewer","Clear a day's due list"]];
+const DEF=()=>({xp:0,combo:0,best:0,answered:0,correct:0,sureA:0,sureC:0,badges:[],nodes:{},teach3:0,cur:null});
+let S=DEF();
+function load(){try{const r=localStorage.getItem("afkq");if(r)S=Object.assign(DEF(),JSON.parse(r));}catch(e){}}
+function save(){try{localStorage.setItem("afkq",JSON.stringify(S));}catch(e){}}
+load();
+const NS=id=>S.nodes[id]||(S.nodes[id]={steps:{},teach:0,a:0,c:0,last:null,tests:0,iv:0,due:null,err:{dk:0,mr:0,rs:0,cs:0}});
+const $=s=>document.querySelector(s); const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+const level=()=>Math.min(LEVELS.length,Math.floor(S.xp/XP_PER)+1);
+const today=()=>Math.floor(Date.now()/864e5);
+const status=id=>{const n=S.nodes[id];if(!n)return"new";if(n.last!==null&&n.last>=80)return"mastered";return(n.a||Object.keys(n.steps).length)?"started":"new";};
+const isDue=id=>{const n=S.nodes[id];return n&&n.due!==null&&n.due<=today();};
+
+function flash(t){const f=$("#flash");f.textContent=t;f.classList.remove("go");void f.offsetWidth;f.classList.add("go");}
+let toastT;function toast(t){const e=$("#toast");e.textContent=t;e.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>e.classList.remove("on"),2200);}
+function renderBar(){const L=level();$("#lvlNum").textContent=L;$("#lvlName").textContent=LEVELS[L-1];const into=S.xp-(L-1)*XP_PER;$("#lvlSub").textContent=L>=LEVELS.length?`${S.xp} XP · max`:`${S.xp} XP · ${XP_PER-into} to next`;$("#xpFill").style.width=(L>=LEVELS.length?100:into/XP_PER*100)+"%";$("#comboN").textContent="×"+S.combo;}
+function addXP(n){const b=level();S.xp+=n;renderBar();save();if(level()>b){flash("LEVEL UP · "+LEVELS[level()-1]);confetti();if(level()>=5)award("lvl5");}}
+function award(id){if(S.badges.includes(id))return;S.badges.push(id);save();const b=BADGES.find(x=>x[0]===id);setTimeout(()=>flash(b[1]+" "+b[2]),700);}
+function confetti(){if(matchMedia("(prefers-reduced-motion: reduce)").matches)return;const c=$("#confetti"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;const cs=getComputedStyle(document.documentElement);const cols=[cs.getPropertyValue("--xp"),cs.getPropertyValue("--accent"),cs.getPropertyValue("--good")];const P=Array.from({length:120},()=>({x:innerWidth/2,y:innerHeight*.4,vx:(Math.random()-.5)*14,vy:-Math.random()*12-4,r:Math.random()*5+3,c:cols[Math.random()*3|0],a:1}));let t=0;(function f(){x.clearRect(0,0,c.width,c.height);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.35;p.a-=.012;x.globalAlpha=Math.max(0,p.a);x.fillStyle=p.c;x.fillRect(p.x,p.y,p.r,p.r);});if(++t<90)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);})();}
+
+/* ===== tabs ===== */
+function showTab(t){document.querySelectorAll('[role="tab"]').forEach(x=>x.setAttribute("aria-selected",x.dataset.tab===t));document.querySelectorAll(".view").forEach(v=>v.hidden=v.id!=="view-"+t);
+  if(t==="path")renderPath();if(t==="review")renderReview();if(t==="ready")renderReady();if(t==="progress")renderProgress();if(t==="study"&&S.cur)renderNode(S.cur);window.scrollTo({top:0});}
+document.querySelectorAll('[role="tab"]').forEach(b=>b.addEventListener("click",()=>showTab(b.dataset.tab)));
+
+/* ===== path ===== */
+const openMods=new Set();
+function modStats(mid){const ns=modNodes(mid);const b=ns.filter(n=>built(n.id)).length;const m=ns.filter(n=>status(n.id)==="mastered").length;const h=ns.reduce((s,n)=>s+n.h,0);return{total:ns.length,built:b,mastered:m,hours:h};}
+function nextNode(){for(const m of MODS){for(const n of modNodes(m.id)){if(built(n.id)&&status(n.id)!=="mastered")return n;}}return null;}
+function renderPath(){const host=$("#pathHost");host.innerHTML="";
+  const nx=nextNode();const due=NODES.filter(n=>built(n.id)&&isDue(n.id)).length;
+  const totalH=NODES.reduce((s,n)=>s+n.h,0),doneH=NODES.filter(n=>status(n.id)==="mastered").reduce((s,n)=>s+n.h,0);
+  const top=document.createElement("div");top.className="stack";top.innerHTML=`<div class="kpis"><div class="kpi"><div class="v">${NODES.filter(n=>status(n.id)==="mastered").length}/${NODES.length}</div><div class="k">Nodes mastered</div></div><div class="kpi"><div class="v">${NODES.filter(n=>built(n.id)).length}</div><div class="k">Nodes built so far</div></div><div class="kpi"><div class="v">${Math.round(doneH)}/${Math.round(totalH)}</div><div class="k">Study hours covered</div></div><div class="kpi"><div class="v">${due}</div><div class="k">Due for review</div></div></div>
+  ${nx?`<div class="card cont"><span class="tag">Continue</span><h3>${nx.t}</h3><div class="small muted">${modById(nx.m).title} · about ${nx.h} h · ${nx.ref}</div><div class="row"><button class="btn primary" id="goNext">Open node</button>${due?`<button class="btn" id="goDue">Review ${due} due</button>`:""}</div></div>`:""}`;
+  host.appendChild(top);if(nx)$("#goNext").addEventListener("click",()=>openNode(nx.id));if(due&&$("#goDue"))$("#goDue").addEventListener("click",()=>showTab("review"));
+  C.phases.forEach(p=>{const ph=document.createElement("div");ph.className="phase";ph.innerHTML=`<h2>${p.title}</h2><p>${p.blurb}</p><div class="mods"></div>`;const ms=ph.querySelector(".mods");
+    MODS.filter(m=>m.phase===p.id).forEach(m=>{const st=modStats(m.id);const el=document.createElement("div");el.className="mod";const pct=st.total?Math.round(st.mastered/st.total*100):0;
+      el.innerHTML=`<button aria-expanded="${openMods.has(m.id)}"><h3>${m.title}</h3><span class="tag ${st.built?"":"warn"}">${st.built?(st.built===st.total?"built":st.built+"/"+st.total+" built"):"coming"}</span><div class="meta"><span class="tag" style="background:var(--surface2);color:var(--muted)">${m.area}${AREAS[m.area].pct?" · "+AREAS[m.area].pct+"%":""}</span><span>${st.hours} h</span><span>${st.mastered}/${st.total} mastered</span><div class="prog"><i style="width:${pct}%"></i></div></div></button><div class="nodes" ${openMods.has(m.id)?"":"hidden"}><div class="small muted" style="padding:4px 8px">${m.desc}${m.ksas.length?` <span class="mono">KSA ${m.ksas.join(", ")}</span>`:""}</div></div>`;
+      const nl=el.querySelector(".nodes");modNodes(m.id).forEach(n=>{const b=document.createElement("button");b.className="node";b.disabled=!built(n.id);const s=status(n.id);b.innerHTML=`<span class="dot ${s}"></span><span class="t">${n.t}${isDue(n.id)?' <span class="tag xp">due</span>':""}${S.nodes[n.id]&&S.nodes[n.id].last!==null?` <span class="mono small muted">${S.nodes[n.id].last}%</span>`:""}</span><span class="h">${n.h} h</span>`;b.addEventListener("click",()=>openNode(n.id));nl.appendChild(b);});
+      el.querySelector("button").addEventListener("click",()=>{const o=nl.hidden;nl.hidden=!o;openMods[o?"add":"delete"](m.id);el.querySelector("button").setAttribute("aria-expanded",o);});
+      ms.appendChild(el);});
+    host.appendChild(ph);});
+}
+
+/* ===== study ===== */
+let step="u";
+function openNode(id){if(!built(id)){toast("This node is not built yet.");return;}S.cur=id;save();step="u";showTab("study");location.hash=id;}
+function renderNode(id){const n=nodeById(id),m=modById(n.m),c=CONTENT[id],ns=NS(id);const host=$("#studyHost");
+  const done=k=>ns.steps[k]?'<span class="ok">✓</span>':"";
+  host.innerHTML=`<div class="row" style="justify-content:space-between"><div><span class="tag">${m.area}</span> <span class="small muted">${m.title}</span></div><span class="mono small ${status(id)==="mastered"?"":"muted"}" style="${status(id)==="mastered"?"color:var(--good)":""}">${status(id)==="mastered"?"mastered · "+ns.last+"%":ns.last!==null?"last test "+ns.last+"%":"not tested"}</span></div>
+  <h2 style="margin-top:6px;font-size:24px">${n.t}</h2><div class="small muted">About ${n.h} h · Reference: ${n.ref}</div>
+  <div class="steps" role="tablist"><button data-s="u" aria-selected="${step==="u"}">1 Understand ${done("u")}</button><button data-s="c" aria-selected="${step==="c"}">2 Connect ${done("c")}</button><button data-s="a" aria-selected="${step==="a"}">3 Apply ${done("a")}</button><button data-s="t" aria-selected="${step==="t"}">4 Test ${done("t")}</button><button data-s="n" aria-selected="${step==="n"}">Notes</button><button data-s="f" aria-selected="${step==="f"}">Cards</button></div><div id="stepHost"></div>`;
+  host.querySelectorAll(".steps button").forEach(b=>b.addEventListener("click",()=>{step=b.dataset.s;renderNode(id);}));
+  const sh=$("#stepHost");
+  if(step==="u"){sh.innerHTML=`<div class="prose">${c.understand||"<p class='muted'>No mechanism card yet.</p>"}</div><div class="card" style="margin-top:14px"><b style="font-family:var(--display)">Teach-back</b><p class="small muted" style="margin:4px 0 8px">${c.teach?c.teach.prompt:"Explain this node in your own words."}</p><textarea id="tb" placeholder="Write it as if explaining to a classmate. Two to five sentences."></textarea><div class="row" style="margin-top:8px"><button class="btn" id="tbReveal">Reveal model answer</button><span class="small muted">${ns.teach?"Your last self-grade: "+["","shaky","mostly","nailed it"][ns.teach]:""}</span></div><div id="tbModel" hidden></div></div>`;
+    if(!ns.steps.u){ns.steps.u=1;addXP(5);save();}
+    $("#tbReveal").addEventListener("click",()=>{const md=$("#tbModel");md.hidden=false;md.innerHTML=`<div class="model">${c.teach?c.teach.model:"Compare with the mechanism card above."}</div><div class="row" style="margin-top:8px"><span class="small">Grade yourself:</span><button class="btn sm" data-g="1">Shaky +5</button><button class="btn sm" data-g="2">Mostly +10</button><button class="btn sm primary" data-g="3">Nailed it +15</button></div>`;
+      md.querySelectorAll("[data-g]").forEach(b=>b.addEventListener("click",()=>{const g=+b.dataset.g;const first=!ns.teach;ns.teach=g;if(first)addXP(g*5);if(g===3){S.teach3=(S.teach3||0)+1;if(S.teach3>=3)award("teach");}save();toast("Graded: "+["","shaky","mostly","nailed it"][g]+". "+(g<3?"Re-read the card and try again tomorrow.":"Move to Connect."));renderNode(id);}));});}
+  else if(step==="c"){const links=c.connect||[];sh.innerHTML=`<p class="small muted">Exam questions live at the joins. Each link says why these two nodes belong together. Open any that is built.</p><div class="stack">${links.map((l,i)=>{const t=nodeById(l.to);const b=t&&built(l.to);return `<button class="link" data-to="${l.to}" ${b?"":"disabled"}><b>${t?t.t:l.to} ${b?"":'<span class="tag warn">coming</span>'}</b><span class="small">${l.why}</span><span class="mono small muted">${t?modById(t.m).title:""}</span></button>`;}).join("")||"<p class='muted'>No links yet.</p>"}</div>`;
+    if(!ns.steps.c){ns.steps.c=1;addXP(5);save();renderNode(id);return;}
+    sh.querySelectorAll(".link").forEach(b=>b.addEventListener("click",()=>openNode(b.dataset.to)));}
+  else if(step==="a"){const ap=c.apply;if(!ap){sh.innerHTML="<p class='muted'>No worked case yet.</p>";return;}
+    sh.innerHTML=`<p class="small muted">Worked case. Pick what you think, then watch the elimination routine run.</p><p class="q">${ap.vignette}</p><div class="opts">${ap.options.map((o,k)=>`<button class="opt" data-v="${k}"><span class="k">${"ABCDE"[k]}</span><span>${o}</span></button>`).join("")}</div><div id="apSteps"></div>`;
+    sh.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>{sh.querySelectorAll(".opt").forEach(x=>{x.disabled=true;const v=ap.options[+x.dataset.v];if(v===ap.answer)x.classList.add("right");else if(x===b)x.classList.add("wrong");else x.classList.add("dim");});
+      let i=0;const st=$("#apSteps");const more=()=>{if(i<ap.steps.length){st.insertAdjacentHTML("beforeend",`<div class="stepbox"><span class="mono small muted">Step ${i+1}</span><div>${ap.steps[i]}</div></div>`);i++;if(i<ap.steps.length)st.insertAdjacentHTML("beforeend",`<div class="row"><button class="btn sm" id="moreStep">Next step →</button></div>`),$("#moreStep").addEventListener("click",()=>{$("#moreStep").parentElement.remove();more();});else{if(!ns.steps.a){ns.steps.a=1;addXP(10);save();}st.insertAdjacentHTML("beforeend",`<div class="row" style="margin-top:8px"><button class="btn primary" id="toTest">Go to Test →</button></div>`);$("#toTest").addEventListener("click",()=>{step="t";renderNode(id);});}}};more();}));}
+  else if(step==="t"){const pool=nodeQs(id);sh.innerHTML=`<p class="small muted">${pool.length} questions on this node. A test is up to 10 of them, shuffled. Say how sure you are before each answer; label every miss. 80% or better marks the node mastered and schedules it for spaced review.</p><div class="row"><button class="btn primary" id="startT">Start node test</button></div><div id="tHost" style="margin-top:12px"></div>`;
+    $("#startT").addEventListener("click",()=>startRun({pool,n:Math.min(10,pool.length),title:n.t,host:$("#tHost"),node:id}));}
+  else if(step==="n"){const h=nodeNotes(id);sh.innerHTML=`<div class="prose">${h||"<p class='muted'>No extra reference notes for this node. The Understand card is the full content.</p>"}</div>`;}
+  else if(step==="f"){const cards=nodeCards(id);sh.innerHTML=`<p class="small muted">${cards.length} cards. Tap to flip. 'Got it' earns 2 XP; 'Again' sends it to the back.</p><div id="fcHost"></div>`;runCards(cards,$("#fcHost"));}
+}
+function runCards(cards,host){let deck=shuffle(cards),total=deck.length,done=0;const draw=()=>{if(!deck.length){host.innerHTML=`<div class="card"><b>Deck cleared.</b> ${total} cards.</div>`;return;}const c=deck[0];host.innerHTML=`<div class="fc"><div class="fcard" id="fcard" tabindex="0"><div class="face front"><span class="lbl">QUESTION · tap to flip</span><div>${c[0]}</div></div><div class="face back"><span class="lbl">ANSWER</span><div>${c[1]}</div></div></div></div><div class="row" style="margin-top:10px;justify-content:space-between"><span class="mono small">${done}/${total} cleared</span><div class="row"><button class="btn" id="fcA">Again ↩</button><button class="btn primary" id="fcG">Got it +2</button></div></div>`;
+  const fc=$("#fcard");fc.addEventListener("click",()=>fc.classList.toggle("flip"));fc.addEventListener("keydown",e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();fc.classList.toggle("flip");}});
+  $("#fcG").addEventListener("click",()=>{deck.shift();done++;addXP(2);draw();});$("#fcA").addEventListener("click",()=>{deck.push(deck.shift());draw();});};draw();}
+
+/* ===== quiz engine (node tests and mixed rounds) ===== */
+let run=null;
+function startRun(o){run={qs:shuffle(o.pool).slice(0,o.n),i:0,score:0,title:o.title,host:o.host,node:o.node||null,cfg:o,xp0:S.xp,sure:null};renderQ();}
+function renderQ(){const r=run,q=r.qs[r.i],opts=shuffle([q.c,...q.w]);r.sure=null;const nn=nodeById(q.n);
+  r.host.innerHTML=`<div class="row" style="justify-content:space-between;margin-bottom:6px"><span class="mono small">${r.title} · Q${r.i+1}/${r.qs.length}</span><span class="mono small">score ${r.score}</span></div><div class="prog acc" style="margin-bottom:10px"><i style="width:${r.i/r.qs.length*100}%"></i></div>${r.node?"":`<span class="tag">${nn?nn.t:q.n}</span>`}<p class="q" style="margin:8px 0 0">${q.q}</p>
+  <div class="conf"><span class="small">How sure are you?</span><button class="btn sm" data-c="1">Sure</button><button class="btn sm" data-c="0">Unsure</button></div>
+  <div class="opts">${opts.map((o,k)=>`<button class="opt" data-v="${k}" disabled><span class="k">${"ABCDE"[k]}</span><span>${o}</span></button>`).join("")}</div><div id="after"></div>`;
+  r.host.querySelectorAll("[data-c]").forEach(b=>b.addEventListener("click",()=>{r.sure=+b.dataset.c;r.host.querySelectorAll("[data-c]").forEach(x=>x.setAttribute("aria-pressed",x===b));r.host.querySelectorAll(".opt").forEach(x=>x.disabled=false);}));
+  r.host.querySelectorAll(".opt").forEach(b=>b.addEventListener("click",()=>answer(b,opts[+b.dataset.v]===q.c,q,opts)));
+}
+function answer(btn,ok,q,opts){const r=run;r.host.querySelectorAll(".opt").forEach(b=>{b.disabled=true;const v=opts[+b.dataset.v];if(v===q.c)b.classList.add("right");else if(b===btn)b.classList.add("wrong");else b.classList.add("dim");});r.host.querySelectorAll("[data-c]").forEach(b=>b.disabled=true);
+  const ns=NS(q.n);ns.a++;S.answered++;if(r.sure){S.sureA++;if(ok)S.sureC++;}
+  let gain=0;if(ok){ns.c++;S.correct++;S.combo++;S.best=Math.max(S.best,S.combo);r.score++;gain=10+Math.min(10,S.combo*2);addXP(gain);award("first");if(S.combo>=5)award("combo5");if(S.combo>=10)award("combo10");flash(S.combo>=3?`+${gain} XP · combo ×${S.combo}`:`+${gain} XP`);}else{S.combo=0;flash("✗");}
+  if(S.sureA>=20&&S.sureC/S.sureA>=.9)award("calib");save();renderBar();
+  const last=r.i===r.qs.length-1;const af=r.host.querySelector("#after");
+  af.innerHTML=`<div class="ex"><b>${ok?"Correct.":"Not quite."}</b> ${ok?"":"Answer: "+q.c+". "}${q.ex||""}${r.sure&&!ok?' <span class="tag bad">sure but wrong</span>':""}</div>${ok?"":`<div class="small" style="margin-top:10px">What happened?</div><div class="err"><button class="btn sm" data-e="dk">Didn't know</button><button class="btn sm" data-e="mr">Misread</button><button class="btn sm" data-e="rs">Reasoning slip</button><button class="btn sm" data-e="cs">Canadian-standard gap</button></div>`}<div class="row" style="margin-top:12px;justify-content:flex-end"><button class="btn primary" id="nextQ" ${ok?"":"disabled"}>${last?"Finish":"Next →"}</button></div>`;
+  af.querySelectorAll("[data-e]").forEach(b=>b.addEventListener("click",()=>{ns.err[b.dataset.e]=(ns.err[b.dataset.e]||0)+1;save();af.querySelectorAll("[data-e]").forEach(x=>x.setAttribute("aria-pressed",x===b));af.querySelector("#nextQ").disabled=false;}));
+  const nb=af.querySelector("#nextQ");nb.focus();nb.addEventListener("click",()=>{if(last)finish();else{r.i++;renderQ();}});
+}
+function finish(){const r=run,n=r.qs.length,pct=Math.round(r.score/n*100),gained=S.xp-r.xp0;let msg="";
+  if(r.node){const ns=NS(r.node);ns.last=pct;ns.tests++;ns.steps.t=1;if(pct>=80){ns.iv=ns.iv?Math.min(60,Math.round(ns.iv*2.2)):3;award("master");}else ns.iv=pct>=60?2:1;ns.due=today()+ns.iv;msg=pct>=80?`Mastered. Back for review in ${ns.iv} day${ns.iv>1?"s":""}.`:pct>=60?"Close. Re-read the Understand card; this node returns in 2 days.":"Knowledge gap. Redo Understand and the teach-back; retest tomorrow.";
+    if(pct===100&&n>=10)award("flawless");const m=modById(nodeById(r.node).m);if(modNodes(m.id).filter(x=>built(x.id)).every(x=>status(x.id)==="mastered"))award("module");}
+  else msg=`${r.score}/${n} correct.`;
+  save();
+  r.host.innerHTML=`<h3 style="font-size:20px">${pct===100?"Flawless 💎":pct>=80?"Strong":pct>=60?"Getting there":"Rough one"}</h3><p>${msg}</p><div class="kpis" style="margin:12px 0"><div class="kpi"><div class="v">${r.score}/${n}</div><div class="k">Score</div></div><div class="kpi"><div class="v">+${gained}</div><div class="k">XP</div></div><div class="kpi"><div class="v">×${S.best}</div><div class="k">Best combo</div></div></div><div class="row"><button class="btn primary" id="again">Again</button><button class="btn" id="back">${r.node?"Back to node":"Back"}</button></div>`;
+  r.host.querySelector("#again").addEventListener("click",()=>startRun(r.cfg));r.host.querySelector("#back").addEventListener("click",()=>{if(r.node)renderNode(r.node);else{r.host.hidden=true;renderReview();}});
+}
+
+/* ===== review ===== */
+function renderReview(){const host=$("#reviewHost");const builtN=NODES.filter(n=>built(n.id));const due=builtN.filter(n=>isDue(n.id));const started=builtN.filter(n=>status(n.id)!=="new");
+  const weak=builtN.map(n=>({n,s:S.nodes[n.id]})).filter(x=>x.s&&x.s.a>=5).map(x=>({n:x.n,acc:Math.round(x.s.c/x.s.a*100),a:x.s.a,err:x.s.err})).filter(x=>x.acc<75).sort((a,b)=>a.acc-b.acc).slice(0,6);
+  const errTot={dk:0,mr:0,rs:0,cs:0};Object.values(S.nodes).forEach(s=>{if(s.err)for(const k in errTot)errTot[k]+=s.err[k]||0;});const errN=Object.values(errTot).reduce((a,b)=>a+b,0);
+  const cal=S.sureA?Math.round(S.sureC/S.sureA*100):null;const unsA=S.answered-S.sureA,unsC=S.correct-S.sureC;const calU=unsA?Math.round(unsC/unsA*100):null;
+  host.innerHTML=`<div class="card"><h2 style="font-size:20px">Due today</h2>${due.length?`<div class="stack" style="margin-top:8px">${due.map(n=>`<button class="link" data-n="${n.id}"><b>${n.t}</b><span class="small muted">${modById(n.m).title} · last ${S.nodes[n.id].last}%</span></button>`).join("")}</div>`:`<p class="muted" style="margin:6px 0 0">Nothing due. ${started.length?"Good. Open the next node on the Path.":"Test a node and it will be scheduled here."}</p>`}</div>
+  <div class="card"><h2 style="font-size:20px">Mixed rounds</h2><p class="small muted" style="margin:4px 0 10px">Ten questions drawn across every node you have started, because the exam never tells you the topic.</p><div class="row"><button class="btn primary" id="mixAll" ${started.length?"":"disabled"}>Mixed round</button><button class="btn" id="mixWeak" ${weak.length?"":"disabled"}>Train weak spots</button></div></div>
+  <div class="card"><h2 style="font-size:20px">Weak spots</h2>${weak.length?`<ol style="margin:8px 0 0;padding-left:20px">${weak.map(w=>{const top=Object.entries(w.err).sort((a,b)=>b[1]-a[1])[0];return `<li>${w.n.t} <span class="mono small" style="color:var(--bad)">${w.acc}% over ${w.a}</span>${top&&top[1]?` <span class="tag">${({dk:"didn't know",mr:"misread",rs:"reasoning",cs:"Canadian standard"})[top[0]]}</span>`:""}</li>`;}).join("")}</ol>`:`<p class="muted" style="margin:6px 0 0">Nodes under 75% after at least five answers appear here, with the error type that dominates.</p>`}</div>
+  <div class="card"><h2 style="font-size:20px">Calibration</h2><p class="small muted" style="margin:4px 0 8px">Accuracy when you said 'sure' vs 'unsure'. Target: sure 90%+. A big gap between confidence and accuracy is the first thing to fix.</p><div class="kpis"><div class="kpi"><div class="v">${cal===null?"–":cal+"%"}</div><div class="k">Sure (${S.sureA})</div></div><div class="kpi"><div class="v">${calU===null?"–":calU+"%"}</div><div class="k">Unsure (${unsA})</div></div></div>
+  <h3 style="font-size:16px;margin-top:14px">Error types</h3>${errN?`<div class="stack" style="margin-top:6px;gap:6px">${Object.entries(errTot).map(([k,v])=>`<div class="row"><span style="width:170px" class="small">${({dk:"Didn't know",mr:"Misread",rs:"Reasoning slip",cs:"Canadian-standard gap"})[k]}</span><div class="prog" style="flex:1"><i style="width:${v/errN*100}%;background:var(--accent)"></i></div><span class="mono small">${v}</span></div>`).join("")}</div><p class="small muted" style="margin:8px 0 0">Didn't know → re-read and teach back. Misread → read the ask first. Reasoning → redo the worked case. Canadian standard → open node 'Canadian standards the exam assumes'.</p>`:`<p class="muted small">Label your misses during tests and the pattern appears here.</p>`}</div>`;
+  host.querySelectorAll("[data-n]").forEach(b=>b.addEventListener("click",()=>{openNode(b.dataset.n);step="t";renderNode(b.dataset.n);}));
+  const rh=$("#runHost");$("#mixAll").addEventListener("click",()=>{const pool=started.flatMap(n=>nodeQs(n.id));rh.hidden=false;startRun({pool,n:Math.min(10,pool.length),title:"Mixed round",host:rh});rh.scrollIntoView({behavior:"smooth"});});
+  $("#mixWeak").addEventListener("click",()=>{const pool=weak.flatMap(w=>nodeQs(w.n.id));rh.hidden=false;startRun({pool,n:Math.min(10,pool.length),title:"Weak-spot round",host:rh});rh.scrollIntoView({behavior:"smooth"});});
+}
+
+/* ===== readiness ===== */
+function renderReady(){const host=$("#readyHost");let est=0;const rows=Object.entries(AREAS).filter(([k,a])=>a.pct).map(([k,a])=>{const ms=MODS.filter(m=>m.area===k);const ns=ms.flatMap(m=>modNodes(m.id));const b=ns.filter(n=>built(n.id)).length,mst=ns.filter(n=>status(n.id)==="mastered").length;const tested=ns.map(n=>S.nodes[n.id]).filter(s=>s&&s.last!==null);const acc=tested.length?Math.round(tested.reduce((x,s)=>x+s.last,0)/tested.length):null;const cov=ns.length?mst/ns.length:0;est+=a.pct*cov;return{k,a,ns:ns.length,b,mst,acc,cov};});
+  host.innerHTML=`<div class="card"><h2 style="font-size:20px">Estimated readiness: ${Math.round(est)} / 100</h2><p class="small muted" style="margin:4px 0 0">Blueprint weight × share of that area's nodes mastered. The pass mark is an equated 75, so treat 85+ here as the target before sitting. This number only rises as nodes are built and mastered.</p></div>
+  <div class="card">${rows.map(r=>`<div class="area"><span class="n">${r.a.name}</span><span class="s">${r.a.pct}% of exam</span><span class="s">${r.mst}/${r.ns} nodes mastered · ${r.b} built${r.acc!==null?" · avg last test "+r.acc+"%":""}</span><span></span><div class="prog"><i style="width:${r.cov*100}%"></i></div></div>`).join("")}</div>
+  <div class="card"><h3 style="font-size:16px">Exam facts</h3><ul class="small" style="margin:6px 0 0;padding-left:20px"><li>200 single-answer MCQs, two 2-hour parts, one day. No negative marking.</li><li>Pass: test-equated score of 75 or higher. Maximum three attempts.</li><li>Items are written from the 47 KSAs; FDI tooth numbering throughout.</li><li>Next sitting listed by NDEB: 5 February 2027. Check the registration deadline on ndeb-bned.ca.</li><li>Free official 100-question self-assessment: ndeb-bned.ca/quiz (score only, no answers).</li></ul></div>`;
+}
+
+/* ===== progress ===== */
+function renderProgress(){const host=$("#progHost");host.innerHTML=`<div class="kpis"><div class="kpi"><div class="v">${S.answered?Math.round(S.correct/S.answered*100)+"%":"–"}</div><div class="k">Accuracy</div></div><div class="kpi"><div class="v">${S.answered}</div><div class="k">Answered</div></div><div class="kpi"><div class="v">×${S.best}</div><div class="k">Best combo</div></div><div class="kpi"><div class="v">${S.xp}</div><div class="k">XP</div></div></div>
+  <div class="card"><h2 style="font-size:20px;margin-bottom:10px">Badges</h2><div class="badges">${BADGES.map(b=>`<div class="bdg ${S.badges.includes(b[0])?"on":""}"><div class="e">${b[1]}</div><b>${b[2]}</b><span>${b[3]}</span></div>`).join("")}</div></div>
+  <div class="card"><h2 style="font-size:20px">Share progress with your coach</h2><p class="small muted" style="margin:4px 0 8px">Copy this code and send it. It contains only your scores, no personal data. Paste a code to restore progress on another device.</p><textarea id="expo" readonly style="min-height:60px;font-family:var(--mono);font-size:12px"></textarea><div class="row" style="margin-top:8px"><button class="btn" id="copyBtn">Copy code</button><button class="btn" id="impBtn">Paste a code to import</button><span class="small muted" id="ioMsg"></span></div><textarea id="impo" hidden placeholder="Paste code here" style="margin-top:8px;min-height:60px;font-family:var(--mono);font-size:12px"></textarea><div class="row" id="impRow" hidden style="margin-top:8px"><button class="btn primary" id="impGo">Import</button></div></div>
+  <div class="row"><button class="btn ghost" id="resetBtn">Reset all progress</button><span class="small muted" id="resetMsg"></span></div>`;
+  const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));$("#expo").value=code;
+  $("#copyBtn").addEventListener("click",()=>{navigator.clipboard.writeText(code).then(()=>$("#ioMsg").textContent="Copied.").catch(()=>{$("#expo").select();$("#ioMsg").textContent="Select and copy the text above.";});});
+  $("#impBtn").addEventListener("click",()=>{$("#impo").hidden=false;$("#impRow").hidden=false;});
+  $("#impGo").addEventListener("click",()=>{try{const o=JSON.parse(decodeURIComponent(escape(atob($("#impo").value.trim()))));S=Object.assign(DEF(),o);save();renderBar();renderProgress();$("#ioMsg").textContent="Imported.";}catch(e){$("#ioMsg").textContent="That code did not parse.";}});
+  let armed=false;$("#resetBtn").addEventListener("click",()=>{if(!armed){armed=true;$("#resetMsg").textContent="Click again to confirm. This wipes everything.";return;}S=DEF();save();renderBar();renderProgress();$("#resetMsg").textContent="Reset.";});
+}
+
+/* ===== boot ===== */
+renderBar();
+const h=location.hash.replace("#","");
+if(h&&nodeById(h)&&built(h)){S.cur=h;showTab("study");}else{renderPath();}
+addEventListener("hashchange",()=>{const h=location.hash.replace("#","");if(h&&nodeById(h)&&built(h)&&S.cur!==h){S.cur=h;step="u";showTab("study");}});
+</script>
+</body>
+</html>
