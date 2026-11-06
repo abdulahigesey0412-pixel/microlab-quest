@@ -1,0 +1,405 @@
+/* Module m22: Orthodontics. Written for a learner starting from zero.
+   References: Proffit, Fields, Larson & Sarver, Contemporary Orthodontics 7th ed; Graber, Vanarsdall & Vig, Orthodontics: Current Principles and Techniques;
+   Nanda, Biomechanics and Esthetic Strategies in Clinical Orthodontics; Dean, McDonald & Avery's Dentistry for the Child and Adolescent;
+   AAPD Best Practices: Management of the Developing Dentition and Occlusion in Pediatric Dentistry (revised 2024).
+   Builds on m06b (growth, eruption ages, growth spurt) and m07 (Angle classes, overjet/overbite, leeway space). */
+window.CONTENT = window.CONTENT || {};
+
+window.CONTENT["m22-n01"] = {
+ understand: `
+ <p><b>A malocclusion is a mismatch between teeth, jaws, or both.</b> The first question in every orthodontic case is not "which Angle class?" but "is this <b>dental</b> or <b>skeletal</b>?" A dental problem means normal jaws carrying teeth that are tipped, rotated, crowded or drifted. A skeletal problem means the maxilla or mandible is the wrong size or in the wrong place. Most real cases are a mix. Teeth sitting on a skeletal discrepancy tend to tip to hide it, called <b>dental compensation</b>: in a skeletal Class III the upper incisors procline and the lower incisors retrocline, so the overjet looks better than the jaws really are.</p>
+ <p><b>Three ways to describe the same mouth.</b></p>
+ <ul>
+ <li><b>Angle molar class</b> (m07-n05): Class I, the mesiobuccal cusp of 1.6 sits in the buccal groove of 4.6; Class II, the lower molar is distal; Class III, it is mesial. Its weakness: it records teeth, not jaws, and only front-to-back. A molar can become "Class II" simply because 2.6 drifted forward after early loss of 6.5.</li>
+ <li><b>Incisor classification</b> (British Standards): Class I, the lower incisal edge occludes with or lies directly below the cingulum plateau of the upper central incisors; Class II, it lies behind the plateau (division 1: upper incisors proclined or average with increased overjet; division 2: upper centrals retroclined); Class III, it lies in front, with reduced or reversed overjet.</li>
+ <li><b>Canine class</b>: Class I when the upper canine cusp tip sits in the embrasure between the lower canine and first premolar.</li>
+ </ul>
+ <p><b>Norms to measure against.</b> Overjet (horizontal) is about 2 to 3 mm; overbite (vertical) about 2 to 4 mm. Vertical problems are <b>deep bite</b> and <b>anterior open bite</b>. Transverse problems are <b>crossbite</b> (upper teeth palatal to the lowers) and <b>scissors bite</b> (upper posterior teeth wholly buccal to the lowers). Proffit's scheme lists the face, alignment, and each of the three planes of space separately, because a Class I molar can still hide an open bite or a crossbite.</p>
+ <p><b>Aetiology: genes set the jaws, environment shapes the teeth.</b> Jaw size and shape are strongly inherited; mandibular prognathism runs in families. Specific causes include clefts, syndromes, a childhood condylar fracture (the injured side grows less, so the chin deviates toward it), hypodontia, supernumerary teeth and early loss of primary teeth. Habits act through the <b>equilibrium theory</b>: tooth position is set by light pressures that last for hours (lips, cheeks, tongue at rest, a thumb), not by heavy chewing forces that last seconds. That is why a lower lip trapped behind the upper incisors keeps increasing an overjet, and why a thumb held in the mouth for hours a day can move teeth while hard chewing does not.</p>
+ <p><b>Why the exam cares.</b> Items give a molar relationship, an overjet, a profile and a history, then ask what the problem is or what caused it. The trap is to treat Angle class as the diagnosis. Separate teeth from jaws, check all three planes, and ask whether a local cause such as space loss or a habit explains the finding.</p>`,
+ connect: [
+  {to:"m07-n05", why:"Angle classes, overjet and overbite are defined in occlusion; this node turns those descriptions into a diagnosis of dental versus skeletal cause."},
+  {to:"m06-n07", why:"Skeletal Class II and III are growth patterns: which jaw grew less, in which direction, and whether growth has finished."},
+  {to:"m06-n06", why:"Cleft lip and palate is a specific cause of malocclusion, typically with a constricted, retrusive maxilla, crossbites and missing or malformed lateral incisors."},
+  {to:"m21-n07", why:"A condylar fracture in childhood can stunt growth on that side and produce a mandibular asymmetry years later."},
+  {to:"m20-n06", why:"A large overjet with incompetent lips leaves the upper incisors exposed and is an occlusal risk factor for incisor trauma."}
+ ],
+ apply: {
+  vignette: "A 10-year-old boy has a Class II molar relationship on both sides, a 9 mm overjet with proclined 1.1 and 2.1, incompetent lips with the lower lip resting behind the upper incisors, and a convex profile with a retrusive chin. He sucked his thumb until age 8. Which finding most strongly suggests a skeletal rather than a purely dental component?",
+  options: ["The convex profile with a retrusive chin","The 9 mm overjet","The bilateral Class II molar relationship","The lower lip resting behind the upper incisors"],
+  answer: "The convex profile with a retrusive chin",
+  steps: [
+   "The ask: which single finding points to the jaws rather than the teeth.",
+   "Facts that matter: large overjet, proclined incisors, Class II molars, a lip trap, a thumb habit, and a convex face with a weak chin.",
+   "Cross out the overjet: proclined incisors from a thumb habit or a lip trap can create a 9 mm overjet on normal jaws.",
+   "Cross out the Class II molars: Angle class describes teeth, and molars can be Class II from drift or dental position alone.",
+   "Cross out the lip trap: it is a consequence that worsens the overjet, not evidence about jaw size.",
+   "The profile reflects where the jaws and chin sit in the face; a retrusive chin points to a small or retruded mandible, which is skeletal."
+  ]
+ },
+ teach: {
+  prompt: "A parent asks why their child is 'Class II' when the dentist also says the jaws are normal. Explain how a Class II molar relationship can occur with normal jaws, and how you would tell a skeletal Class II from a dental one at the chair.",
+  model: "Angle class only describes where the upper and lower first molars meet; it says nothing directly about the jaws. On normal jaws the upper molar can drift forward after early loss of a primary molar, or upper incisors can be proclined by a thumb habit or a trapped lower lip, giving Class II teeth on Class I jaws. A skeletal Class II shows in the face: a convex profile, a retrusive chin, and on a cephalogram an increased ANB. If the face is straight and the jaw relationship is normal, the problem is dental and usually simpler to treat."
+ },
+ cards: [
+  ["First diagnostic question in any malocclusion","Dental, skeletal, or both?"],
+  ["Angle Class II molar","Lower first molar distal: the upper mesiobuccal cusp lies mesial to the lower buccal groove"],
+  ["Incisor Class II div 2","Lower incisal edge behind the upper cingulum plateau, upper centrals retroclined, usually deep overbite"],
+  ["Incisor Class III","Lower incisal edge in front of the upper cingulum plateau; overjet reduced or reversed"],
+  ["Normal overjet and overbite","Overjet about 2 to 3 mm; overbite about 2 to 4 mm"],
+  ["Dental compensation in skeletal Class III","Upper incisors proclined, lower incisors retroclined, masking the jaw discrepancy"],
+  ["Equilibrium theory in one line","Light pressures lasting hours (lips, tongue, cheeks, thumb) set tooth position; brief heavy chewing forces do not"],
+  ["Scissors bite","Upper posterior teeth entirely buccal to the lower teeth"],
+  ["Childhood condylar fracture, late effect","Reduced growth on the injured side; chin deviates toward that side"],
+  ["Main limitation of Angle's system","Describes teeth only, front-to-back only; ignores jaws, face, vertical and transverse planes"]
+ ],
+ questions: [
+  ["In an Angle Class II molar relationship, the mesiobuccal cusp of 1.6 occludes:","Mesial to the buccal groove of 4.6",["In the buccal groove of 4.6","Distal to the buccal groove of 4.6","On the distal cusp of 4.5"],"In Class II the lower molar sits distal, so the upper mesiobuccal cusp lands mesial to the lower buccal groove; occluding in the groove is Class I."],
+  ["A 12-year-old has retroclined 1.1 and 2.1, flared 1.2 and 2.2, a 6 mm overbite and a 2 mm overjet. The lower incisal edges lie behind the upper cingulum plateau. The incisor relationship is:","Class II division 2",["Class II division 1","Class I with deep bite","Class III"],"The lower edge behind the cingulum plateau is Class II, and retroclined centrals with a deep bite are the division 2 pattern; division 1 needs proclined or average incisors with an increased overjet."],
+  ["The incisor relationship is classified as Class I when the lower incisal edge:","Occludes with or lies directly below the cingulum plateau of the upper central incisors",["Lies behind the cingulum plateau of the upper central incisors","Lies in front of the cingulum plateau of the upper central incisors","Touches the incisal edge of the upper central incisors"],"British Standards incisor classification is defined against the cingulum plateau; behind it is Class II and in front is Class III."],
+  ["The normal overjet in a permanent dentition is about:","2 to 3 mm",["0 to 1 mm","5 to 6 mm","8 to 9 mm"],"Overjet is the horizontal distance from the labial surface of the lower incisor to the upper incisal edge; 0 to 1 mm is edge-to-edge territory and above about 5 mm is increased."],
+  ["A 25-year-old with a skeletal Class III jaw relationship has only a 0 mm overjet. The incisor inclinations most likely seen are:","Upper incisors proclined and lower incisors retroclined",["Upper incisors retroclined and lower incisors proclined","Both upper and lower incisors proclined","Both upper and lower incisors upright"],"Dental compensation tips teeth to hide the skeletal discrepancy, so upper incisors procline and lowers retrocline; the reverse would worsen the reverse overjet."],
+  ["According to the equilibrium theory, the factor with the greatest effect on the long-term position of the teeth is:","Light resting pressure of the lips, cheeks and tongue",["Heavy forces of mastication","Forces during swallowing","Occlusal forces during bruxism"],"Pressure that lasts for hours a day moves teeth; chewing and swallowing forces are heavy but last only a short time each day, so they have little effect on position."],
+  ["An 11-year-old has a Class II molar relationship on the left side only and Class I canines on both sides. 6.5 was extracted at age 5 and no space maintainer was placed. The most likely cause of the left molar relationship is:","Mesial drift of 2.6 into the space left by 6.5",["A retrognathic mandible","A thumb-sucking habit","Congenital absence of 2.5"],"A one-sided Class II molar with Class I canines points to a local cause; early loss of the second primary molar lets the first permanent molar drift forward, whereas a retrusive mandible would affect both sides and the canines."],
+  ["A 14-year-old has a mandibular asymmetry with the chin deviated to the right. She fell on her chin at age 4. The most likely explanation is:","Reduced growth after a right condylar fracture",["Overgrowth of the right condyle","A left condylar fracture","Unilateral thumb sucking"],"An early condylar fracture can reduce growth on the injured side, so that side of the mandible is shorter and the chin swings toward it; condylar hyperplasia pushes the chin away from the affected side."],
+  ["Which of the following malocclusions has the strongest inherited component?","Skeletal Class III from mandibular prognathism",["Anterior open bite from digit sucking","Molar Class II from early loss of a primary molar","Crowding from a retained primary tooth"],"Jaw size and shape are strongly inherited, and mandibular prognathism runs in families; the other options have clear local, environmental causes."],
+  ["The main limitation of Angle's classification is that it:","Describes only the anteroposterior relationship of the teeth, not the jaws",["Cannot be applied to the permanent dentition","Requires a lateral cephalogram","Is defined by the canine relationship"],"Angle used the first molars and only the front-to-back plane, so it misses skeletal, vertical and transverse problems and the face; it needs no radiograph."],
+  ["A 9-year-old has a 10 mm overjet and the lower lip rests behind the upper incisors at rest. The most likely effect of the lip position is to:","Procline the upper incisors further and increase the overjet",["Retrocline the upper incisors and reduce the overjet","Produce an anterior open bite","Cause a posterior crossbite"],"The lower lip trapped palatal to the upper incisors pushes them forward for hours a day, so by the equilibrium theory it maintains and worsens the overjet."],
+  ["A 16-year-old has the palatal cusps of 2.4 and 2.5 occluding wholly buccal to the buccal cusps of 3.4 and 3.5. This is best described as:","A scissors bite",["A posterior crossbite","An anterior open bite","A Class III molar relationship"],"When the upper posterior teeth sit entirely outside the lowers, it is a scissors (buccal) bite; a crossbite is the opposite, with upper teeth palatal to the lowers."],
+  ["A 13-year-old with a 9 mm overjet and incompetent lips is at greatest risk of:","Trauma to the maxillary incisors",["Caries of the mandibular incisors","Gingival recession on the maxillary incisors","Ankylosis of the maxillary incisors"],"Prominent upper incisors that the lips do not cover take the impact in falls; caries and ankylosis are not caused by overjet."]
+ ]
+};
+
+window.CONTENT["m22-n02"] = {
+ understand: `
+ <p><b>Orthodontic diagnosis is a problem list, not a gadget.</b> Proffit's method is to gather a database (history, clinical examination, records), list every problem, then rank them. The key questions are the same each time: what does the patient want changed, is the problem dental or skeletal, in which planes, and how much growth is left?</p>
+ <p><b>History and examination.</b> Ask the chief complaint in the patient's words, the medical history, habits, previous trauma, and stage of growth (a growth spurt or menarche, m06-n07). Examine the face from the front (symmetry, vertical thirds, lip competence) and the side (profile: <b>convex</b> suggests Class II, <b>concave</b> suggests Class III, straight suggests Class I). Then examine the teeth: molar, canine and incisor relationships, overjet, overbite, crossbites, centrelines, crowding or spacing. Always guide the mandible into its retruded contact and compare with the bite the patient chooses: a <b>functional shift</b> between the two changes the diagnosis and the urgency (m22-n04).</p>
+ <p><b>Records.</b> Study models (physical or digital), photographs, a panoramic radiograph for missing, extra or ectopic teeth, and a <b>lateral cephalogram</b> when the skeletal relationship matters. Every radiograph must change a decision: justification is the first step of ALARA (m09-n02).</p>
+ <p><b>Cephalometrics in plain language.</b> A cephalogram is a standardised lateral skull radiograph. Landmarks include <b>S</b> (centre of sella turcica), <b>N</b> (nasion, the front of the frontonasal suture), <b>A point</b> (deepest point on the curved front of the maxilla, above the upper incisor roots) and <b>B point</b> (the same on the mandible). <b>Frankfort horizontal</b> runs from porion to orbitale.</p>
+ <ul>
+ <li><b>SNA</b> tells you how far forward the maxilla sits under the cranial base: about 82 degrees (Steiner).</li>
+ <li><b>SNB</b> does the same for the mandible: about 80 degrees.</li>
+ <li><b>ANB</b> = SNA minus SNB: about 2 degrees. Larger (above about 4) suggests skeletal Class II; zero or negative suggests skeletal Class III.</li>
+ </ul>
+ <p><b>The limits of ANB.</b> ANB is an angle measured from nasion, so it depends on things that are not the jaw relationship. If nasion sits further forward or back, or the cranial base is steep or short, SNA and SNB both change and ANB changes with them. If the jaws rotate (a long, high-angle face rotates the mandible down and back), ANB increases even when the jaws have not moved forward or back relative to each other. That is why it is cross-checked with the <b>Wits appraisal</b>, which drops perpendiculars from A and B onto the functional occlusal plane and measures the gap in millimetres. Both should be read alongside the profile, not alone.</p>
+ <p><b>Vertical and dental measures.</b> A steep mandibular plane and increased lower face height mean a <b>high-angle</b>, long face, which tends to an open bite; a flat mandibular plane means a <b>low-angle</b>, short face, which tends to a deep bite. Incisor angles to the maxillary and mandibular planes show whether the incisors are tipped, which separates dental compensation from skeletal pattern.</p>
+ <p><b>Why the exam cares.</b> Expect a set of ceph values and a question asking which jaw is at fault, or a stem in which ANB and the face disagree. Name the jaw from SNA and SNB, remember why ANB can mislead, and look for a functional shift before calling anything skeletal.</p>`,
+ connect: [
+  {to:"m09-n02", why:"A cephalogram or CBCT is justified only when it will change the diagnosis or treatment plan, which is the justification principle of ALARA."},
+  {to:"m09-n04", why:"Panoramic imaging screens for missing, supernumerary and ectopic teeth, and CBCT localises impacted canines when two-dimensional views are not enough."},
+  {to:"m06-n07", why:"Whether growth remains decides between growth modification, camouflage and surgery, so maturation stage is part of every diagnosis."},
+  {to:"m21-n08", why:"The examination of mandibular movement and the retruded contact position overlaps with TMD screening, and a functional shift is recorded in both."}
+ ],
+ apply: {
+  vignette: "A 12-year-old girl has a Class II molar relationship and a 7 mm overjet. Her cephalogram shows SNA 82 degrees, SNB 75 degrees and ANB 7 degrees, with upper incisor inclination within normal limits. Which of the following is the most likely interpretation?",
+  options: ["Skeletal Class II due mainly to a retrusive mandible","Skeletal Class II due mainly to a prognathic maxilla","Skeletal Class I with proclined upper incisors","Skeletal Class III masked by dental compensation"],
+  answer: "Skeletal Class II due mainly to a retrusive mandible",
+  steps: [
+   "The ask: which jaw explains the Class II problem.",
+   "Facts that matter: SNA is normal (about 82), SNB is low (about 80 expected), ANB is raised to 7, and the upper incisors are not proclined.",
+   "Cross out a prognathic maxilla: that would need a raised SNA, and SNA here is normal.",
+   "Cross out skeletal Class I with proclined incisors: ANB of 7 is well above normal and the incisors are of normal inclination, so the overjet is not a tipping problem.",
+   "Cross out masked Class III: an ANB of 7 is the opposite of Class III.",
+   "The survivor fits: normal maxilla, mandible set back, so the Class II is skeletal and mandibular, which is also the jaw a functional appliance targets during the growth spurt."
+  ]
+ },
+ teach: {
+  prompt: "Explain why two patients with the same ANB of 6 degrees might have different jaw problems, and why ANB might overstate a Class II in a long-faced patient.",
+  model: "ANB is the difference between SNA and SNB, so the same 6 degrees can come from a forward maxilla with a normal mandible or a normal maxilla with a retruded mandible; SNA and SNB tell you which. Because both angles are measured from nasion, a nasion that sits unusually forward or back changes them without any change in the jaws. In a long, high-angle face the mandible rotates down and back, which swings B point backward and raises ANB even if the jaw bases are not far apart front-to-back. A linear check on the occlusal plane, such as the Wits appraisal, and the soft tissue profile help decide."
+ },
+ cards: [
+  ["Steiner norms SNA, SNB, ANB","About 82, 80 and 2 degrees"],
+  ["ANB above about 4 degrees suggests","Skeletal Class II"],
+  ["ANB zero or negative suggests","Skeletal Class III"],
+  ["A point","Deepest point on the anterior concavity of the maxilla, between anterior nasal spine and the alveolar crest"],
+  ["Frankfort horizontal","Porion to orbitale"],
+  ["Two reasons ANB can mislead","Position of nasion or the cranial base, and rotation of the jaws (vertical pattern)"],
+  ["Wits appraisal","Perpendiculars from A and B to the functional occlusal plane; distance between them in mm"],
+  ["High-angle face tends toward","Anterior open bite, increased lower face height"],
+  ["Profile clues","Convex: Class II; concave: Class III; straight: Class I"],
+  ["Why check retruded contact against habitual bite?","To detect a functional mandibular shift"]
+ ],
+ questions: [
+  ["The normal ANB angle in Steiner's analysis is about:","2 degrees",["0 degrees","6 degrees","10 degrees"],"Steiner's norms are SNA about 82 and SNB about 80, giving ANB about 2; 6 degrees indicates a skeletal Class II."],
+  ["A 13-year-old has SNA 82 degrees and SNB 74 degrees. The skeletal problem is best described as:","Class II from mandibular retrusion",["Class II from maxillary prognathism","Class III from maxillary retrusion","Class I with bimaxillary protrusion"],"SNA is normal and SNB is reduced, so the mandible is the jaw at fault; a prognathic maxilla would raise SNA."],
+  ["A 14-year-old has SNA 76 degrees, SNB 80 degrees and a concave profile. The most likely skeletal pattern is:","Class III with maxillary retrusion",["Class II with mandibular retrusion","Class I with dental compensation","Class III with a normal maxilla and prognathic mandible"],"ANB is minus 4, a Class III value, and the low SNA with a normal SNB places the problem in the maxilla; a prognathic mandible would show a raised SNB."],
+  ["ANB may give a misleading picture of the sagittal jaw relationship mainly because it is affected by:","The position of nasion and rotation of the jaws",["The patient's age at the time of the radiograph","The inclination of the incisors","Magnification of the cephalogram"],"Both angles are measured from nasion, so a displaced nasion or a rotated jaw changes ANB without a true change in the jaw bases; angles are not altered by uniform magnification."],
+  ["The Wits appraisal relates points A and B to the:","Functional occlusal plane",["Frankfort horizontal","Sella-nasion line","Mandibular plane"],"Wits drops perpendiculars from A and B onto the functional occlusal plane, which avoids nasion and so checks ANB independently."],
+  ["A point is located at the:","Deepest point of the concavity on the anterior maxilla above the incisor roots",["Most anterior point of the bony chin","Tip of the anterior nasal spine","Junction of the frontal and nasal bones"],"A point sits in the maxillary concavity between the anterior nasal spine and the alveolar crest; the most anterior point of the chin is pogonion and the frontonasal suture is nasion."],
+  ["Frankfort horizontal is constructed between:","Porion and orbitale",["Sella and nasion","Anterior and posterior nasal spines","Gonion and menton"],"Porion (top of the ear rod or external auditory meatus) to orbitale (lowest point on the orbital rim) is Frankfort; sella-nasion is the cranial base line and ANS-PNS the palatal plane."],
+  ["A 10-year-old with a Class II malocclusion is being assessed. The best justification for taking a lateral cephalogram is that it will:","Help decide between growth modification and dental camouflage",["Replace the need for study models","Detect interproximal caries","Show the root length of all permanent teeth"],"Under ALARA a radiograph is justified only when it changes management; whether the problem is skeletal and whether growth can be used is that decision."],
+  ["A 15-year-old has increased lower anterior face height, a steep mandibular plane and incompetent lips. The incisor relationship most likely associated is:","Anterior open bite",["Deep overbite","Scissors bite","Class II division 2"],"A long, high-angle face rotates the mandible down and back and opens the bite anteriorly; low-angle, short faces go with deep bites and Class II division 2."],
+  ["An 8-year-old appears to have a Class III incisor relationship in his usual bite, but when the mandible is guided back the incisors meet edge to edge. The most appropriate interpretation is:","An anterior crossbite with a forward functional shift",["A true skeletal Class III","A Class II division 2 malocclusion","A normal incisor relationship for his age"],"If the incisors can reach edge to edge in retruded contact, much of the Class III is a forward shift (pseudo-Class III), which is better treated early; a true skeletal Class III cannot be guided back this way."],
+  ["A 12-year-old has ANB 3 degrees, upper incisors proclined well beyond normal and an 8 mm overjet. The overjet is best explained as:","Dental, from proclined upper incisors",["Skeletal, from a retrusive mandible","Skeletal, from a prognathic maxilla","Functional, from a mandibular shift"],"An ANB of 3 is within the normal range, so the jaws are Class I, and the large overjet comes from incisor tipping; this is usually simpler to correct than a skeletal Class II."],
+  ["A convex facial profile in a 12-year-old is most consistent with:","Skeletal Class II",["Skeletal Class III","Bimaxillary retrusion","Maxillary deficiency"],"A convex profile means the chin sits back relative to the forehead and upper lip, which fits a Class II pattern; Class III and maxillary deficiency give a straight to concave profile."],
+  ["In the Index of Orthodontic Treatment Need dental health component, an overjet greater than 9 mm is graded as:","Grade 5, very great need",["Grade 1, no need","Grade 2, little need","Grade 3, borderline need"],"IOTN grades the worst feature; an overjet greater than 9 mm is grade 5 (very great need) and 6.1 to 9 mm is grade 4 (great need)."]
+ ]
+};
+
+window.CONTENT["m22-n03"] = {
+ understand: `
+ <p><b>Space analysis asks: will the permanent teeth fit?</b> Space required is the summed width of the teeth. Space available is the measured arch length. Available minus required is the <b>discrepancy</b>: negative means crowding, positive means spacing. In the mixed dentition the unerupted canine and premolar widths must be predicted.</p>
+ <p><b>Two prediction methods both start from the four lower permanent incisors.</b> They erupt early, are easy to measure, and their size correlates with the unerupted teeth.</p>
+ <ul>
+ <li><b>Moyers</b> uses probability tables: look up the summed lower incisor width and read off the predicted canine-plus-premolar width at the <b>75th percentile</b>, which errs slightly large so crowding is less likely to be missed.</li>
+ <li><b>Tanaka-Johnston</b> needs no table. Per quadrant: <b>mandibular canine + premolars = half the four lower incisors + 10.5 mm</b>; <b>maxillary = half the four lower incisors + 11.0 mm</b>. It approximates the Moyers 75 percent values.</li>
+ </ul>
+ <p><b>Worked example 1 (mandible).</b> The four lower incisors measure 23 mm. Predicted lower canine + premolars per side = 23 / 2 + 10.5 = 11.5 + 10.5 = 22 mm, so 44 mm for both sides. Space required = 23 + 44 = 67 mm. Space available measured from the mesial of 3.6 round to the mesial of 4.6 is 64 mm. Discrepancy = 64 minus 67 = minus 3 mm: mild crowding.</p>
+ <p><b>Worked example 2 (maxilla).</b> Same child: predicted upper canine + premolars per side = 11.5 + 11.0 = 22.5 mm. If the space available from the distal of 1.2 to the mesial of 1.6 measures 23.5 mm, that side has 1 mm to spare.</p>
+ <p><b>Why leeway space matters.</b> The space available above includes the primary molars, which are wider than the premolars. That surplus, the <b>leeway space</b> (m07-n03: about 2.5 mm per side in the mandible, 1.5 mm in the maxilla), is normally taken up by first molar drift once the second primary molars shed. A <b>lower lingual holding arch</b> placed beforehand stops the drift, so the leeway space can relieve mild incisor crowding. Proffit's rough guide is that crowding up to about 4 mm can usually be resolved without extraction, 10 mm or more almost always needs extractions, and 5 to 9 mm can go either way.</p>
+ <p><b>Space maintenance after early loss of a primary tooth.</b> Neighbours drift into the gap, fastest in the first months after extraction. The appliance depends on which tooth is lost and what has erupted:</p>
+ <div class="tscroll"><table>
+ <tr><th>Situation</th><th>Appliance</th></tr>
+ <tr><td>One primary molar lost, first permanent molar erupted</td><td>Band and loop (or crown and loop)</td></tr>
+ <tr><td>Second primary molar lost before the first permanent molar erupts</td><td>Distal shoe, guiding the molar into place</td></tr>
+ <tr><td>Bilateral loss in the lower arch, permanent incisors erupted</td><td>Lower lingual holding arch</td></tr>
+ <tr><td>Bilateral loss in the upper arch</td><td>Nance appliance or transpalatal arch</td></tr>
+ </table></div>
+ <p>A maintainer is usually <b>not</b> needed when the successor will erupt soon, when the successor is absent and space closure is planned, or after loss of a primary incisor once the primary canines have erupted. The distal shoe is subgingival, so avoid it in patients at high risk from bacteraemia. Review every maintainer until the successor erupts (AAPD).</p>
+ <p><b>Why the exam cares.</b> Expect a Tanaka-Johnston calculation and a choice of maintainer: halve the incisors, add 10.5 or 11, compare with space available, and choose the appliance from what has erupted.</p>`,
+ connect: [
+  {to:"m07-n03", why:"Leeway space, primate spaces and terminal planes are the primary-dentition facts that every mixed dentition analysis relies on."},
+  {to:"m06-n08", why:"Eruption ages and root development of the successor decide whether a maintainer is needed and which type fits the moment."},
+  {to:"m23-n04", why:"Restoring a carious primary molar to its full contour is the first form of space maintenance; under-contoured restorations and extractions both lose arch length."},
+  {to:"m13-n10", why:"Immunosuppressed and high-risk medical patients change the choice of appliance, because a distal shoe has a subgingival extension."}
+ ],
+ apply: {
+  vignette: "An 8-year-old has all four lower permanent incisors erupted and aligned, with no crowding or spacing. The incisors sum to 24 mm. On the study model the space available from the distal of 3.2 to the mesial of 3.6 is 21.5 mm and from the distal of 4.2 to the mesial of 4.6 is 22.0 mm. Using Tanaka-Johnston, which of the following is most appropriate?",
+  options: ["Predict a 1.5 mm total deficit and place a lower lingual holding arch before the primary second molars exfoliate","Predict a 1.5 mm total surplus and review without treatment","Predict an 8 mm deficit and plan extraction of four premolars","Predict a 3.5 mm deficit and extract both lower primary canines now"],
+  answer: "Predict a 1.5 mm total deficit and place a lower lingual holding arch before the primary second molars exfoliate",
+  steps: [
+   "The ask: do the arithmetic, then choose management.",
+   "Tanaka-Johnston lower: 24 / 2 + 10.5 = 22.5 mm per side for canine plus premolars.",
+   "Left: 21.5 minus 22.5 = minus 1.0 mm. Right: 22.0 minus 22.5 = minus 0.5 mm. Total = minus 1.5 mm, a small deficit.",
+   "Cross out the surplus and the 8 mm or 3.5 mm figures: they do not follow from the numbers given.",
+   "Cross out extractions: a 1.5 mm deficit is mild crowding, well below the 5 to 10 mm range where extraction is considered.",
+   "The space available was measured across the wider primary canine and molars, so it already counts the leeway space. If 3.6 and 4.6 drift forward when the second primary molars shed, they take up that leeway (about 2.5 mm per side in the mandible) and the deficit grows to several millimetres; a lower lingual holding arch prevents the drift and keeps the shortfall small."
+  ]
+ },
+ teach: {
+  prompt: "Explain why a mixed dentition space analysis uses the lower incisors to predict canine and premolar size, why Moyers uses the 75th percentile, and why the answer only holds if the first permanent molars stay where they are.",
+  model: "The lower incisors erupt first, can be measured directly, and their size correlates with the unerupted canine and premolars, so they are the best available predictor. Any prediction has an error range; using the 75th percentile makes the predicted teeth slightly larger than average, so the clinician is less likely to miss crowding. The space available is measured across the primary canine and molars, which are wider than their successors. If the first permanent molars drift forward after the second primary molars are shed, they use up this leeway space, so a holding arch is needed to keep the space the analysis counted."
+ },
+ cards: [
+  ["Tanaka-Johnston, mandibular canine + premolars per quadrant","Half the sum of the four lower incisors + 10.5 mm"],
+  ["Tanaka-Johnston, maxillary canine + premolars per quadrant","Half the sum of the four lower incisors + 11.0 mm"],
+  ["Which teeth predict unerupted canine and premolar size?","The four mandibular permanent incisors"],
+  ["Why Moyers uses the 75th percentile","Slight overestimate, so crowding is less likely to be missed"],
+  ["Discrepancy formula","Space available minus space required; negative = crowding"],
+  ["Loss of E before the first permanent molar erupts","Distal shoe"],
+  ["Unilateral primary molar loss, 6 erupted","Band and loop"],
+  ["Bilateral lower posterior loss, incisors erupted","Lower lingual holding arch"],
+  ["Bilateral upper posterior loss","Nance appliance or transpalatal arch"],
+  ["Leeway space per side (Proffit)","About 2.5 mm mandible, 1.5 mm maxilla"],
+  ["Distal shoe caution","Subgingival extension; avoid in patients at high risk from bacteraemia"]
+ ],
+ questions: [
+  ["Using Tanaka-Johnston, the predicted width of the mandibular canine and premolars in one quadrant equals:","Half the sum of the four mandibular incisors plus 10.5 mm",["Half the sum of the four mandibular incisors plus 11.0 mm","The sum of the four maxillary incisors minus 10.5 mm","Half the sum of the four maxillary incisors plus 10.5 mm"],"The mandibular equation adds 10.5 mm and the maxillary one 11.0 mm, and both start from the lower incisors, not the uppers."],
+  ["The four mandibular permanent incisors of a 9-year-old sum to 22 mm. The predicted width of 4.3, 4.4 and 4.5 combined is:","21.5 mm",["22.0 mm","32.5 mm","11.0 mm"],"22 / 2 = 11, plus 10.5 = 21.5 mm per quadrant; adding 11.0 instead gives the maxillary value of 22.0 mm."],
+  ["The four mandibular incisors of an 8-year-old sum to 24 mm. The predicted width of 1.3, 1.4 and 1.5 combined is:","23.0 mm",["22.5 mm","35.0 mm","24.0 mm"],"The maxillary Tanaka-Johnston prediction is half the lower incisors (12) plus 11.0 mm, which gives 23.0 mm; 22.5 mm is the mandibular result."],
+  ["In a 9-year-old, the four lower incisors sum to 23 mm, the predicted lower canine and premolars are 22 mm per side, and the total lower space available is 68 mm. The analysis shows:","1 mm of excess space",["1 mm of crowding","3 mm of crowding","45 mm of excess space"],"Space required is 23 + 22 + 22 = 67 mm; 68 minus 67 = plus 1 mm, a small surplus. Subtracting only the incisors (68 minus 23) gives the nonsense 45 mm answer, and 1 mm of crowding is the same arithmetic with the sign reversed."],
+  ["Mixed dentition analyses use the mandibular permanent incisors to predict canine and premolar size mainly because they:","Erupt early, can be measured accurately and correlate with the unerupted teeth",["Are the largest teeth in the arch","Never vary in size between individuals","Are visible on every bitewing radiograph"],"The lower incisors are in place by about 7 to 8, are easy to measure on a model, and their size predicts the canine and premolars; the upper incisors vary more, especially the laterals."],
+  ["The Moyers analysis recommends using predicted values at the 75th percentile because this:","Makes underestimating crowding less likely",["Gives the exact width of the unerupted teeth","Allows radiographs to be avoided altogether","Corrects for the leeway space automatically"],"Any prediction has error; the 75th percentile errs toward larger teeth, so less crowding is missed. It is still a prediction, not a measurement."],
+  ["A 5-year-old has 7.5 extracted because of an abscess. 3.6 has not yet erupted. The most appropriate space maintainer is:","Distal shoe",["Band and loop on 3.6","Lower lingual holding arch","No appliance, review in a year"],"Without an erupted first permanent molar there is nothing to band behind the gap, and the unerupted 3.6 would drift mesially; the distal shoe guides it into place."],
+  ["A 7-year-old has 5.4 extracted. 1.6 is erupted, 5.5 is present, and 1.4 is covered by bone with little root formed. The most appropriate appliance is:","Band and loop",["Distal shoe","Nance appliance","Removable partial denture with a labial bow"],"A single primary molar lost on one side with the first permanent molar erupted is the classic band and loop situation; a distal shoe is for loss of the second primary molar before the first molar erupts."],
+  ["A 9-year-old has lost 7.4 and 8.4 to caries. The permanent lower incisors have erupted. The most appropriate space maintainer is:","Lower lingual holding arch",["Two distal shoes","Nance appliance","Transpalatal arch"],"Bilateral lower posterior loss after the incisors erupt is managed with a lower lingual holding arch; placed earlier, it can obstruct incisors that erupt lingually. Nance and transpalatal arches are upper appliances."],
+  ["A space maintainer is least likely to be needed when:","The successor premolar is about to erupt with little bone covering it",["A second primary molar is lost before the first permanent molar erupts","Both lower first primary molars are lost at age 7","A primary first molar is lost in a crowded arch at age 6"],"If the successor is close to emergence with little bone over it, space loss before it erupts will be minimal; early loss with a long wait ahead is when space is lost."],
+  ["A 4-year-old loses 5.1 after trauma. The primary canines are fully erupted. Regarding space, the most appropriate advice is that:","Significant space loss is unlikely and a maintainer is not needed for space",["A Nance appliance is needed to prevent space loss","A distal shoe is needed to guide 1.1","Space loss is certain and 1.1 will be impacted"],"Once the primary canines have erupted, the anterior segment rarely loses space after loss of a primary incisor; replacement is an aesthetic or speech choice, not a space need."],
+  ["A distal shoe space maintainer is relatively contraindicated in a child who:","Is at high risk from bacteraemia",["Has a Class I molar relationship","Has erupted permanent incisors","Has a crowded maxillary arch"],"The distal shoe extends below the gingiva into the extraction site, creating a permanent pathway for bacteria; children with a high bacteraemia risk need an alternative."],
+  ["A lower lingual holding arch is placed in an 11-year-old with 3 mm of incisor crowding just before 7.5 and 8.5 exfoliate. Which of the following best explains how it relieves the crowding?","It stops the first permanent molars drifting into the leeway space",["It expands the mandibular intercanine width","It moves the lower incisors labially by 5 mm","It slows the eruption of the second premolars"],"The primary second molars are wider than the second premolars; holding 3.6 and 4.6 back keeps that leeway space for the incisors and canines instead of losing it to molar drift."],
+  ["Premature unilateral loss of 7.3 in a crowded 8-year-old is most likely to cause:","Shift of the lower centreline toward the side of the loss",["Shift of the lower centreline away from the side of the loss","Anterior open bite","Posterior crossbite on the opposite side"],"The crowded incisors drift into the gap, moving the centreline toward the loss; a balancing extraction of the contralateral primary canine or a holding arch is considered to prevent it."]
+ ]
+};
+
+window.CONTENT["m22-n04"] = {
+ understand: `
+ <p><b>Interceptive orthodontics treats a developing problem early, when a small intervention stops it becoming a large one.</b> The test: will early treatment remove a cause or prevent damage that waiting would not? If yes, intervene; if not, monitor.</p>
+ <p><b>Posterior crossbite with a mandibular shift.</b> Most unilateral posterior crossbites in children are really a <b>bilaterally narrow maxilla</b>. When the child closes, the cusps meet tip to tip, so the mandible slides to one side to find a full bite. The midline is centred at first contact and moves on full closure. A shift during growth can lead to asymmetric growth and positional changes in the condyles, so AAPD advises removing functional shifts as early as possible. Treatment expands the maxilla on <b>both</b> sides (quad helix, W-arch, removable split plate, or rapid maxillary expansion in the older child while the midpalatal suture is still open). Sometimes grinding interfering primary canines removes the shift.</p>
+ <p><b>Digit and pacifier habits.</b> Sucking is normal in infants. By the equilibrium theory the effect depends more on <b>hours per day</b> than force. A thumb held in the mouth for many hours proclines the upper incisors, retroclines the lowers, creates an <b>anterior open bite</b> and increased overjet, and lowers the tongue while the cheeks press in, narrowing the maxilla into a <b>posterior crossbite</b>. Changes in the primary dentition usually resolve if the habit stops before the permanent incisors erupt. AAPD suggests anticipatory guidance to help children stop by about 36 months. Start with counselling and positive reinforcement; a fixed habit appliance (palatal crib or rake) is for an older, willing child whose habit persists into the mixed dentition.</p>
+ <p><b>Anterior crossbite in the mixed dentition.</b> First decide if it is <b>dental</b> or <b>skeletal</b>. A dental crossbite of one or two incisors, with Class I molars and a forward shift (the child can bring the incisors edge to edge in retruded contact), is a <b>pseudo-Class III</b> and should be corrected early. Left alone, the trapped lower incisor is pushed labially, which can cause gingival recession and mobility, and the incisal edges wear. A removable appliance with a <b>Z-spring</b> and posterior bite planes works if there is space and enough overbite to hold the result. A skeletal Class III with maxillary deficiency is referred for early facemask treatment (m06-n07).</p>
+ <p><b>Ectopic maxillary canines.</b> The upper canine travels furthest and erupts at about 11 to 12. It is impacted in about 1 to 3 percent of people, more often in females, and palatal displacement is linked to small or missing upper lateral incisors. Palpate for the canine bulge in the buccal sulcus from about age 10; it should be palpable by about 10 to 11 (m07). If it is absent or asymmetric, localise with radiographs: parallax uses the rule <b>same lingual, opposite buccal</b>, and CBCT helps when roots of the incisors may be resorbing. If the canine overlaps the lateral incisor root in the mixed dentition, AAPD supports <b>extracting the primary canine</b>: in published studies the permanent canine improved in about 67 to 69 percent of cases versus about 39 to 42 percent of untreated controls.</p>
+ <p><b>Why the exam cares.</b> The AFK tests timing: which crossbite needs treatment now, when a habit matters, which crossbite is dental, and when to extract a primary canine. Intervene only where early treatment changes the outcome.</p>`,
+ connect: [
+  {to:"m06-n08", why:"Normal eruption ages tell you when a canine bulge should be palpable and whether a delay is abnormal."},
+  {to:"m23-n06", why:"Ectopic eruption of first molars and canines, supernumeraries and ankylosis are the paediatric eruption problems that interceptive treatment addresses."},
+  {to:"m09-n03", why:"The parallax (tube shift) technique that localises an impacted canine is an intraoral radiography skill: same lingual, opposite buccal."},
+  {to:"m19-n07", why:"An untreated anterior crossbite pushes the lower incisor labially and is a recognised cause of localised gingival recession in children."},
+  {to:"m06-n07", why:"Facemask treatment for maxillary deficiency and functional appliances for mandibular retrusion depend on the timing of sutural and condylar growth."}
+ ],
+ apply: {
+  vignette: "An 8-year-old has a posterior crossbite of 5.3, 5.4, 5.5 and 1.6 on the right side. At first contact the dental midlines coincide, but on full closure the lower midline moves 2 mm to the right. The maxillary arch is narrow on both sides. Which of the following is the most appropriate management?",
+  options: ["Bilateral expansion of the maxillary arch now, for example with a quad helix","Expansion of the right side of the maxillary arch only","Review until the permanent dentition is complete","Selective grinding of 4.6 and the lower right primary molars"],
+  answer: "Bilateral expansion of the maxillary arch now, for example with a quad helix",
+  steps: [
+   "The ask: management of a unilateral posterior crossbite.",
+   "Facts that matter: midlines coincide at first contact, then the mandible shifts right on closure, and the maxilla is narrow on both sides.",
+   "Cross out right-side-only expansion: the narrowing is bilateral; the crossbite only appears one-sided because the mandible shifts.",
+   "Cross out waiting: a functional shift during growth risks asymmetric growth and should be removed early, as AAPD advises.",
+   "Cross out grinding the lower teeth: the problem is a narrow upper arch, and grinding lower permanent and primary molars does not widen it.",
+   "Bilateral maxillary expansion widens the arch so the teeth meet without the slide, which removes the shift and the crossbite together."
+  ]
+ },
+ teach: {
+  prompt: "Explain to a parent why their 8-year-old's crossbite on one side is treated by widening both sides of the upper jaw, and why it is worth doing now rather than waiting until all the adult teeth are in.",
+  model: "The upper jaw is slightly narrow on both sides, so when your child closes the back teeth meet cusp to cusp and the lower jaw slides to one side to find a comfortable bite. That slide is why the crossbite looks one-sided. Widening the upper arch on both sides lets the teeth meet without sliding, so the jaw closes straight. Treating now matters because a jaw that closes off-centre while it is growing can grow unevenly, and the expansion is easier and more stable while the palate is still developing."
+ },
+ cards: [
+  ["Most unilateral posterior crossbites in children are","Bilateral maxillary narrowing with a functional mandibular shift"],
+  ["Treatment of crossbite with shift","Early bilateral maxillary expansion (quad helix, W-arch, split plate, RME)"],
+  ["What determines whether a digit habit moves teeth?","Duration in hours per day more than force"],
+  ["Classic thumb-sucking effects","Proclined upper incisors, retroclined lowers, anterior open bite, increased overjet, posterior crossbite"],
+  ["AAPD anticipatory guidance target for stopping sucking habits","By about 36 months"],
+  ["Pseudo-Class III clue","Incisors can be brought edge to edge in retruded contact; Class I molars"],
+  ["Removable appliance for a single incisor in crossbite","Z-spring with posterior bite planes; needs space and adequate overbite"],
+  ["Parallax rule","Same lingual, opposite buccal (SLOB)"],
+  ["Association with palatally displaced canines","Small, peg-shaped or missing upper lateral incisors"],
+  ["Primary canine extraction for ectopic canine (AAPD)","Canine improved in about 67 to 69 percent versus 39 to 42 percent of controls"]
+ ],
+ questions: [
+  ["A 7-year-old has a unilateral posterior crossbite on the left. The midlines coincide when the teeth first touch, but the lower midline shifts left on full closure. The most likely underlying problem is:","Bilateral maxillary constriction with a functional shift",["Unilateral constriction of the left maxilla","Mandibular asymmetry from condylar overgrowth","Skeletal Class III with mandibular prognathism"],"Centred midlines at first contact that move on closure show a functional shift from a symmetrically narrow maxilla; a true unilateral constriction or asymmetry would not centre at first contact."],
+  ["A 9-year-old who sucks her thumb for several hours a day is most likely to show:","Anterior open bite with proclined upper incisors",["Deep overbite with retroclined upper incisors","Class III incisor relationship with reverse overjet","Scissors bite of the premolars"],"The thumb holds the incisors apart and pushes the uppers forward; retroclined uppers and deep bite are the Class II division 2 pattern."],
+  ["The severity of tooth movement caused by a digit-sucking habit depends mainly on the:","Number of hours per day the digit is in the mouth",["Force of the sucking","Age at which the habit started","Which hand is used"],"By the equilibrium theory, light pressure sustained for hours moves teeth; brief intense sucking has far less effect."],
+  ["A 4-year-old sucks a pacifier and has a small anterior open bite. The most appropriate management is:","Counselling and positive reinforcement to help the child stop",["A fixed palatal crib cemented now","Referral for orthognathic assessment","Selective grinding of the primary incisors"],"Effects in the primary dentition usually resolve when the habit stops; supportive counselling comes first, and a crib is reserved for an older, cooperative child with a persistent habit."],
+  ["A posterior crossbite is a recognised effect of thumb sucking mainly because:","The tongue sits low and the cheek muscles narrow the maxillary arch",["The thumb pushes the maxillary molars buccally","The habit causes the mandible to grow forward","Sucking accelerates eruption of the primary molars"],"With the thumb in place the tongue drops away from the palate, so the buccinator pressure is unopposed and the upper arch narrows; nothing pushes the molars buccally."],
+  ["An 8-year-old has 1.1 in crossbite with 4.1. Molars are Class I, the overbite is positive, and there is enough space in the arch. The most appropriate treatment is:","A removable appliance with a Z-spring and posterior bite planes",["Review until the permanent canines erupt","Facemask protraction of the maxilla","Extraction of 4.1"],"A single dental anterior crossbite with space and overbite is corrected early with a spring; delay risks recession on 4.1, and a facemask is for skeletal maxillary deficiency."],
+  ["A 9-year-old has an anterior crossbite of 1.1 and 2.1 but can bring the incisors edge to edge when the mandible is guided back. Molars are Class I. This is best described as:","A pseudo-Class III malocclusion",["A true skeletal Class III malocclusion","A Class II division 2 malocclusion","A scissors bite"],"An edge-to-edge position in retruded contact with Class I molars shows a dental crossbite with a forward shift, which responds well to early correction; a skeletal Class III cannot be guided back like this."],
+  ["An untreated anterior crossbite of 2.1 with 3.1 in an 8-year-old is most likely to cause:","Labial gingival recession and mobility of 3.1",["Palatal displacement of 2.3","Root resorption of 2.2","Ankylosis of 2.1"],"Each closure pushes the lower incisor labially through thin bone, causing recession and mobility; this is one of the main reasons to correct it early."],
+  ["An 11-year-old girl has no palpable canine bulge on the right and has a peg-shaped 1.2. 5.3 is firm. The most appropriate next step is:","Radiographic localisation of 1.3",["Reassurance and review in two years","Immediate extraction of 1.2","Surgical exposure of 1.3 without imaging"],"An absent bulge at this age with a peg lateral suggests a palatally displaced canine, so locate it first; no treatment is chosen before the canine's position and the incisor roots are known."],
+  ["On two periapical radiographs, the tube is moved mesially for the second view and the image of an impacted 2.3 also moves mesially relative to the incisor roots. The canine is:","Palatal to the incisor roots",["Buccal to the incisor roots","In the same plane as the incisor roots","Within the nasal cavity"],"Same lingual, opposite buccal: an object that moves in the same direction as the tube lies lingual (palatal); a buccal object moves the opposite way."],
+  ["A 10-year-old has a palatally displaced 1.3 overlapping the root of 1.2 on the panoramic film, with adequate arch space and no incisor root resorption. The most appropriate interceptive treatment is:","Extraction of 5.3",["Extraction of 1.2","Extraction of 5.4 and 5.5","Placement of a lower lingual holding arch"],"Extracting the primary canine improves the path of the permanent canine in about two thirds of cases in the mixed dentition (AAPD); 1.2 is a healthy tooth and the holding arch is a lower appliance."],
+  ["A 7-year-old has 1.6 impacted under the distal surface of 5.5 with mild resorption of 5.5. The most appropriate initial management is:","Place an orthodontic separator between 1.6 and 5.5 and monitor",["Extract 5.5 immediately","Extract 1.6","Place a Nance appliance"],"A mild ectopic first molar can be freed by wedging it distally with a separator; many self-correct, and extracting 5.5 would allow 1.6 to drift forward and lose space."],
+  ["An 8-year-old has a 2 mm midline diastema between 1.1 and 2.1, with 1.2 and 2.2 erupting and their crowns flared distally. No supernumerary is seen. The most appropriate management is:","Reassure and review as the canines erupt",["Frenectomy now","Close the space with a fixed appliance now","Extract the primary canines to close the space"],"This is the normal 'ugly duckling' stage: the unerupted canines tip the lateral roots, and the space often reduces as the canines erupt; act only if it persists or a cause such as a mesiodens is found."]
+ ]
+};
+
+window.CONTENT["m22-n05"] = {
+ understand: `
+ <p><b>Teeth move because bone remodels, and bone remodels because the periodontal ligament (PDL) is squeezed and stretched.</b> This is the <b>pressure-tension theory</b>. Push a tooth: on the side it moves toward (pressure side) the PDL is compressed, its blood flow falls, and chemical signals (prostaglandins, cytokines, RANKL) recruit <b>osteoclasts</b> that resorb the bone wall. On the opposite side (tension side) the PDL is stretched and <b>osteoblasts</b> lay down new bone. The tooth travels with its socket.</p>
+ <p><b>Light force versus heavy force.</b> With a <b>light, continuous force</b> the PDL is compressed but still perfused, so osteoclasts work directly on the adjacent socket wall: <b>frontal (direct) resorption</b>, and the tooth moves smoothly. With a <b>heavy force</b> the PDL vessels are crushed shut. The cells in that area die and the tissue turns glassy under the microscope: <b>hyalinisation</b>, a sterile, cell-free zone. Osteoclasts cannot work from the dead side, so they attack from the marrow spaces behind the socket wall: <b>undermining resorption</b>. The tooth stalls, then jumps. Heavy force therefore moves teeth more slowly, hurts more, and raises the risk of root resorption. The ideal is the lightest force that produces movement.</p>
+ <p><b>Where the force goes: tipping versus bodily movement.</b> Every tooth has a <b>centre of resistance</b> on its root, below the alveolar crest. Brackets sit on the crown, so a single force at the crown produces <b>uncontrolled tipping</b>: the crown moves one way and the apex the other, rotating around a point near the centre of resistance. Pressure piles up at the crest on one side and near the apex on the other, so tipping needs little force. To move a tooth <b>bodily</b> (translation), the root must move with the crown. That needs a <b>couple</b>, two equal and opposite forces that create a rotational moment to cancel the tipping moment of the force. Pressure is then spread along the whole root, so bodily movement needs roughly twice the force of tipping. Proffit lists about 35 to 60 g for tipping and 70 to 120 g for bodily movement, against about 10 to 20 g for intrusion. <b>Intrusion</b> needs the lightest force of all, because it concentrates the load at the apex.</p>
+ <p><b>Anchorage: every action has an equal and opposite reaction.</b> When a spring pulls a canine back, it pulls the anchor teeth forward with the same force. Unwanted movement of the anchor teeth is <b>anchorage loss</b>. Ways to reinforce anchorage: group more teeth in the anchor unit, add a transpalatal arch or Nance button, use headgear, or place a <b>temporary anchorage device</b> (mini-screw) in bone, which gives near-absolute anchorage.</p>
+ <p><b>Appliances in one line each.</b> Removable appliances (springs on a baseplate) touch a crown at one point, so they are essentially limited to tipping. Fixed appliances (brackets and archwires) control tipping, rotation, torque and bodily movement. <b>Nickel-titanium</b> wires are superelastic, giving light, nearly constant force over a wide deflection, ideal for early alignment; stainless steel is stiff for later stages. Functional appliances (for example a Twin Block) posture the mandible forward in a growing Class II child; most of the overjet correction is dentoalveolar (upper incisors tip back, lower incisors tip forward), with only a modest skeletal effect on mandibular growth.</p>
+ <p><b>Why the exam cares.</b> Stems describe a tooth that has not moved, an anchor tooth that moved instead, or a root that must move. Each answer comes from the PDL: light force, couples for roots, anchorage for reactions.</p>`,
+ connect: [
+  {to:"m06-n04", why:"The PDL, cementum and alveolar bone described in histology are the tissues the pressure-tension theory acts on."},
+  {to:"m05-n03", why:"Hyalinisation is a local sterile necrosis cleared by cells from neighbouring marrow spaces, an applied example of injury and repair."},
+  {to:"m11-n04", why:"NSAIDs block prostaglandin synthesis, a mediator of orthodontic bone resorption, so analgesic choice during treatment can matter."},
+  {to:"m18-n01", why:"Temporary anchorage devices rely on mechanical stability in bone, a cousin of the osseointegration that holds implants still."}
+ ],
+ apply: {
+  vignette: "A 14-year-old has a heavy force applied to retract 1.3. At the three-week review the tooth has not moved and is tender. Four weeks later it has suddenly moved 1.5 mm. Which of the following best explains the delay?",
+  options: ["Hyalinisation of the compressed PDL followed by undermining resorption","Frontal resorption of the socket wall on the pressure side","Bone deposition on the tension side blocking movement","Ankylosis of 1.3 that later released"],
+  answer: "Hyalinisation of the compressed PDL followed by undermining resorption",
+  steps: [
+   "The ask: why a tooth under heavy force paused and then jumped.",
+   "Facts that matter: heavy force, no movement for weeks, tenderness, then sudden movement.",
+   "Cross out frontal resorption: that is what light force produces and it gives steady movement without a lag.",
+   "Cross out tension-side deposition: new bone forms behind a moving tooth; it follows movement and does not block it.",
+   "Cross out ankylosis: an ankylosed tooth does not move under orthodontic force at all and does not release itself.",
+   "Heavy force crushes PDL vessels, the area hyalinises, and osteoclasts must resorb from the marrow side before the tooth can move, which explains both the delay and the sudden jump."
+  ]
+ },
+ teach: {
+  prompt: "Using the periodontal ligament, explain why orthodontists prefer light continuous forces, and why moving a root needs more force and a different wire setup than tipping a crown.",
+  model: "Force on a tooth compresses the PDL on one side and stretches it on the other; osteoclasts resorb bone where it is compressed and osteoblasts build where it is stretched. A light force keeps the PDL alive, so resorption happens directly at the socket wall and the tooth moves steadily. A heavy force crushes the blood supply, the area dies (hyalinises), and the tooth stalls until bone is removed from behind, so it moves more slowly and more painfully. A single force on the crown tips the tooth around a point on the root, concentrating pressure in two small areas; moving the root needs a couple to cancel that tipping and spreads the pressure along the whole root, so more total force is needed for the same pressure per unit area."
+ },
+ cards: [
+  ["Pressure side events","PDL compressed, blood flow reduced, osteoclasts resorb bone"],
+  ["Tension side events","PDL stretched, osteoblasts deposit bone"],
+  ["Hyalinisation","Sterile, cell-free necrotic zone in PDL under heavy force"],
+  ["Undermining resorption","Osteoclasts resorb from marrow spaces behind a hyalinised zone; causes a lag then a jump"],
+  ["Frontal resorption","Direct resorption of the socket wall under light force; smooth movement"],
+  ["Single force at the crown produces","Uncontrolled tipping around a point near the centre of resistance"],
+  ["What is needed for bodily movement?","A couple to cancel the tipping moment; about twice the force of tipping"],
+  ["Lowest force movement","Intrusion: load concentrates at the apex"],
+  ["Absolute anchorage","Temporary anchorage device (mini-screw) in bone"],
+  ["Nickel-titanium archwire property","Superelasticity: light, nearly constant force over a large deflection"]
+ ],
+ questions: [
+  ["On the pressure side of a tooth under light orthodontic force, the main event is:","Osteoclastic resorption of the alveolar bone",["Osteoblastic deposition of new bone","Cementum deposition on the root","Increased width of the PDL"],"Compression of the PDL triggers osteoclasts to remove the socket wall; deposition occurs on the tension side, where the PDL is stretched."],
+  ["Hyalinisation of the PDL during orthodontic treatment is caused by:","Heavy force that occludes PDL blood vessels",["Light continuous force","Tension on the PDL fibres","Bacterial infection of the PDL"],"Heavy force crushes the vessels, so the compressed area dies without infection; light force keeps the PDL perfused and avoids it."],
+  ["Undermining resorption is best described as resorption that:","Starts in the marrow spaces behind the socket wall",["Starts directly on the PDL surface of the socket wall","Removes cementum from the apical third","Occurs only on the tension side"],"Osteoclasts cannot work from a hyalinised zone, so they attack from behind; direct socket-wall resorption is frontal resorption."],
+  ["Compared with tipping, bodily movement of a canine requires:","About twice the force, spread along the whole root",["About half the force, concentrated at the apex","The same force applied for a shorter time","No force if a removable appliance is used"],"Tipping concentrates pressure at the crest and apex, so less force reaches the threshold; translation spreads it along the root, needing about double the force (Proffit: 35 to 60 g versus 70 to 120 g)."],
+  ["Which type of tooth movement needs the lightest force?","Intrusion",["Bodily movement","Root uprighting","Extrusion"],"Intrusion concentrates the whole load on a small area at the apex, so only a very light force is safe; bodily movement needs the most."],
+  ["A force applied to the bracket of 2.1, with no couple, will most likely produce:","Uncontrolled tipping, with crown and apex moving in opposite directions",["Bodily movement of the whole tooth","Pure intrusion of the tooth","Pure rotation around the long axis"],"The bracket is far from the centre of resistance, so a single force creates a moment that tips the tooth; a couple is needed to translate it."],
+  ["To move the root of 1.1 palatally while keeping the crown in place, the appliance must deliver:","A couple (torque) acting through a rectangular wire",["A single light force at the incisal edge","An extrusive force only","A removable appliance spring on the labial surface"],"Moving a root needs a moment from a couple, which a rectangular wire in a rectangular slot can deliver; a single force or a removable spring only tips the crown."],
+  ["During retraction of 1.3 and 2.3 into first premolar spaces, 1.6 and 2.6 move mesially by 3 mm. This is best described as:","Anchorage loss",["Hyalinisation","Root resorption","Relapse"],"By Newton's third law the anchor molars receive the reaction force; their unwanted mesial movement is anchorage loss, which a transpalatal arch, headgear or mini-screw can prevent."],
+  ["The most effective way to obtain near-absolute anchorage when retracting upper incisors is:","A temporary anchorage device (mini-screw)",["Adding the second premolars to the anchor unit","A removable appliance","Using a stiffer archwire"],"A mini-screw sits in bone and does not move under the reaction force; adding teeth only spreads the load and still allows some anchorage loss."],
+  ["A 15-year-old in fixed appliances is in pain after an adjustment. Which analgesic is generally preferred so as not to interfere with tooth movement?","Acetaminophen",["Ibuprofen","Naproxen","Acetylsalicylic acid"],"NSAIDs inhibit prostaglandin synthesis, and prostaglandins mediate orthodontic bone resorption, so acetaminophen, which does not affect tooth movement, is the usual recommendation for routine orthodontic pain. For most other acute dental pain NSAIDs remain first line (m11a), and the clinical effect of a short NSAID course on tooth movement is uncertain."],
+  ["Nickel-titanium archwires are used for initial alignment mainly because they:","Deliver light, nearly constant force over a large deflection",["Are stiffer than stainless steel","Can be soldered easily","Produce heavy force for rapid movement"],"Superelasticity gives a long range of light force, matching the biology of frontal resorption; stainless steel is stiffer and used later."],
+  ["Apical root resorption during orthodontic treatment is most commonly seen in the:","Maxillary incisors",["Mandibular first molars","Maxillary first molars","Mandibular canines"],"Maxillary incisors are most often affected, especially with heavy force, long treatment, torque or intrusion; molars are rarely affected."],
+  ["A removable appliance with a palatal finger spring can achieve:","Tipping of a tooth",["Bodily movement of a tooth","Torque of an incisor root","Controlled rotation of a molar"],"A spring touching the crown at one point applies a single force and can only tip; bodily movement and torque need a couple from a bracket."],
+  ["A heavy orthodontic force is more likely than a light force to cause pain and root resorption mainly because it:","Creates hyalinised zones that must be removed by resorption that can also involve the root",["Stimulates faster frontal bone resorption","Causes the PDL to widen immediately","Prevents osteoblasts from forming on the tension side"],"Clearing hyalinised tissue brings osteoclastic activity close to the root surface, which can resorb cementum and dentine as well; pain comes from the ischaemia and inflammation."]
+ ]
+};
+
+window.CONTENT["m22-n06"] = {
+ understand: `
+ <p><b>A tooth that has been moved wants to go back.</b> <b>Relapse</b> is the return toward the original position after treatment. <b>Retention</b> holds the teeth while the tissues adapt, and in practice for as long as stability is wanted. Proffit names three reasons for relapse, and each one suggests its own fix.</p>
+ <ol>
+ <li><b>The fibres have not caught up.</b> PDL fibres reorganise in about 3 to 4 months. The collagen fibres of the gingiva take about 4 to 6 months, and the elastic supracrestal fibres remodel so slowly that they can still pull on a tooth a year after the appliance is removed. Those stretched fibres pull a <b>derotated</b> tooth back toward its old position. Fixes: retainer wear, overcorrection of rotations, and <b>circumferential supracrestal fiberotomy</b> (cutting the supracrestal fibres) for severe rotations.</li>
+ <li><b>The soft tissues still push.</b> By the equilibrium theory, lips, cheeks and tongue set where teeth are stable. Lower incisors pushed forward beyond the lip-tongue balance, or a lower intercanine width that has been expanded, tend to relapse. The safest rule is to keep the original lower arch form and intercanine width. An open bite with a tongue posture problem relapses for the same reason.</li>
+ <li><b>Growth continues.</b> Growth goes on in the pattern that caused the problem. A Class III or long-face case keeps growing toward it. Late mandibular growth after the maxilla stops is a cause of late lower incisor crowding in the late teens (m06-n07); third molars are no longer considered the main culprit.</li>
+ </ol>
+ <p><b>Retention protocols.</b> A common approach is full-time wear of removable retainers for the first few months, then night-time wear, often long term; trials suggest night-only wear of vacuum-formed retainers can work about as well, so protocols vary. Options are <b>Hawley</b> retainers (acrylic plate with a labial bow), <b>vacuum-formed</b> retainers (clear plastic shells), and <b>bonded lingual retainers</b> (a wire bonded to the lingual surfaces, usually canine to canine). Bonded retainers do not depend on compliance but can debond partially; a tooth on a loose or distorted wire can move or be torqued, so every recall should check the wire. Retainers need cleaning; white spot lesions and gingival inflammation are common after fixed appliances and are managed with fluoride and hygiene (m08-n02).</p>
+ <p><b>The GP's role and when to refer.</b> The general dentist screens growth and development at every visit, manages simple problems such as space maintenance and habit counselling, and refers when timing or complexity matters. Refer when there is:</p>
+ <ul>
+ <li>a skeletal discrepancy, especially Class III with maxillary deficiency (early facemask) or Class II with a large overjet before the growth spurt;</li>
+ <li>an impacted or ectopic canine, or incisor root resorption;</li>
+ <li>a crossbite that is not simple, or an anterior crossbite with a skeletal pattern;</li>
+ <li>hypodontia, supernumeraries, cleft or a syndrome;</li>
+ <li>poor-prognosis first permanent molars, where extraction timing affects how the second molars come forward;</li>
+ <li>a patient who wants treatment and has a clear need on an index such as IOTN.</li>
+ </ul>
+ <p><b>Why the exam cares.</b> Stems describe a tooth that rotated back, crowding that appeared years after treatment, or a broken retainer, and ask why or what next. Others describe a child and ask whether to refer, monitor or treat. Match relapse to its cause, and refer when the problem is skeletal, involves an impacted tooth, or needs growth timing.</p>`,
+ connect: [
+  {to:"m06-n04", why:"Relapse of rotations is explained by the slow remodelling of supracrestal gingival fibres compared with the PDL."},
+  {to:"m06-n07", why:"Continued mandibular growth after treatment is the leading explanation for late lower incisor crowding and Class III relapse."},
+  {to:"m08-n02", why:"White spot lesions after fixed appliances are early enamel demineralisation, managed by fluoride and remineralisation rather than restoration."},
+  {to:"m14-n07", why:"Retention is a lifelong commitment, so informed consent for orthodontics must include the need for long-term retainers and the risk of relapse."}
+ ],
+ apply: {
+  vignette: "A 15-year-old has just finished fixed appliance treatment. Before treatment 1.2 was rotated by 60 degrees, and the rotation has been fully corrected. Which of the following is most likely to reduce relapse of 1.2?",
+  options: ["Circumferential supracrestal fiberotomy combined with a retainer","Removing the retainer after three months","Extracting 1.8 and 2.8","Expanding the intercanine width to give 1.2 more space"],
+  answer: "Circumferential supracrestal fiberotomy combined with a retainer",
+  steps: [
+   "The ask: how to stop a corrected rotation coming back.",
+   "Facts that matter: a severe rotation, fully corrected, and treatment just completed.",
+   "Cross out removing the retainer at three months: the PDL may have reorganised by then, but the supracrestal fibres have not.",
+   "Cross out third molar extraction: third molars are not the main cause of incisor relapse and have nothing to do with rotation.",
+   "Cross out intercanine expansion: expanded intercanine width tends to relapse itself and does not release the stretched fibres.",
+   "The supracrestal fibres stay stretched for many months and pull the tooth back; cutting them and holding the tooth with a retainer treats the cause."
+  ]
+ },
+ teach: {
+  prompt: "A patient finished braces two years ago, stopped wearing retainers, and now has lower front teeth that are crowding again. Explain the three reasons this happens and what each implies for retention.",
+  model: "First, the fibres around the teeth remodel slowly; the gum fibres in particular stay stretched for months and pull teeth, especially rotated ones, back toward where they were. Second, the lips, cheeks and tongue keep pressing, so if the lower teeth or arch were moved outside that balance, they drift back. Third, growth continues, and the lower jaw often grows a little after the upper jaw has stopped, which crowds the lower front teeth in the late teens. Because growth and soft tissue pressure never fully stop, long-term retention, often night-time removable or bonded retainers, is the most reliable way to keep the result."
+ },
+ cards: [
+  ["Three causes of relapse (Proffit)","Gingival and PDL fibres, soft tissue pressures, continued growth"],
+  ["Slowest fibres to remodel","Supracrestal elastic gingival fibres; can still pull on the tooth a year after debond"],
+  ["PDL reorganisation time","About 3 to 4 months"],
+  ["Circumferential supracrestal fiberotomy","Cutting supracrestal fibres to reduce rotational relapse"],
+  ["Lower intercanine width rule","Keep the original width; expansion tends to relapse"],
+  ["Late lower incisor crowding main cause","Continued mandibular growth after the maxilla stops"],
+  ["Bonded lingual retainer risk","Partial debond or wire distortion, leading to unwanted tooth movement"],
+  ["Three retainer types","Hawley, vacuum-formed, bonded lingual"],
+  ["Refer early for Class III with","Maxillary deficiency: facemask in the mixed dentition"],
+  ["White spot lesions after braces","Demineralisation; fluoride and hygiene, not immediate restoration"]
+ ],
+ questions: [
+  ["Relapse of a corrected rotation is most closely linked to:","Stretched supracrestal gingival fibres",["Reorganisation of the PDL","Cementum resorption","Deposition of bone on the tension side"],"The supracrestal fibres remodel far more slowly than the PDL and pull the tooth back; the PDL reorganises within a few months."],
+  ["The PDL fibres usually reorganise after orthodontic tooth movement within about:","3 to 4 months",["2 weeks","2 years","5 years"],"The PDL adapts within months; the elastic supracrestal fibres can still pull on a tooth a year after debond, which is why rotations need longer retention."],
+  ["The procedure most likely to reduce relapse of a severely rotated 2.1 is:","Circumferential supracrestal fiberotomy",["Apical root resection","Gingivectomy of the attached gingiva","Interproximal reduction of 2.2"],"Cutting the supracrestal fibres removes the pull that returns the rotated tooth; gingivectomy and resection do not address those fibres."],
+  ["A 24-year-old who had braces at 13 and stopped wearing retainers at 16 now has crowding of 3.1, 3.2, 4.1 and 4.2. The most likely explanation is:","Late mandibular growth and natural changes in the arch",["Eruption pressure from the third molars","Reorganisation of the PDL","Root resorption of the incisors"],"Continued mandibular growth and age changes crowd the lower incisors after the maxilla stops growing; third molars are no longer considered the main cause."],
+  ["During treatment the lower intercanine width of a 13-year-old was increased by 3 mm. After retention is stopped, this width is most likely to:","Return toward its original value",["Stay at the new width permanently","Increase further with growth","Decrease well below the original value"],"Lower intercanine width is set by soft tissue balance and tends to go back after expansion, so the safest plan is to keep the original width."],
+  ["A patient with a bonded lower lingual retainer from 3.3 to 4.3 shows a new rotation of 4.2 at recall. The most likely cause is:","Partial debonding or distortion of the wire",["Overcorrection during treatment","Growth of the maxilla","Hyalinisation of the PDL"],"A loose or distorted wire can let a tooth move or actively torque it, which is why bonded retainers must be checked at every recall."],
+  ["An anterior open bite corrected in a 14-year-old with a forward tongue posture at rest is most likely to relapse because of:","Persistent soft tissue pressure from the tongue",["Slow remodelling of the PDL","Continued maxillary growth","Root resorption of the incisors"],"Resting tongue posture is a long-duration pressure that, by the equilibrium theory, pushes the teeth back apart; PDL changes are complete within months."],
+  ["After removal of fixed appliances, a 16-year-old has white opaque areas around the bracket sites on 1.1 and 2.1. The most appropriate initial management is:","Topical fluoride and hygiene instruction to promote remineralisation",["Composite restoration of each lesion","Extraction of the affected teeth","No action, as they are developmental"],"These are early demineralisation lesions that can arrest and remineralise; restorations are for cavitated lesions, and they are acquired, not developmental."],
+  ["An 8-year-old has a concave profile, a reverse overjet on 1.1 and 2.1 that cannot be brought edge to edge, and SNA below normal. The most appropriate action by a general dentist is:","Refer now for orthodontic assessment for early maxillary protraction",["Wait until growth is complete and then refer for surgery","Correct the incisors with a removable Z-spring appliance","Extract the lower primary canines"],"A skeletal Class III with maxillary deficiency responds best to facemask treatment before the sutures mature, so timing makes early referral important; a Z-spring is for a dental crossbite only."],
+  ["A 9-year-old has an 8 mm overjet, a retrusive mandible and incompetent lips. The most appropriate reason to refer now rather than later is to:","Allow growth modification and assess incisor trauma risk",["Extract the upper first premolars at once","Place a lower lingual holding arch","Avoid any need for retention"],"Early referral lets the orthodontist time a functional appliance to the growth spurt and consider early treatment to protect prominent incisors; retention is still needed after any treatment."],
+  ["A 9-year-old has 3.6 and 4.6 with large carious lesions and a poor long-term prognosis. The most appropriate action is to:","Refer for an orthodontic opinion on the timing of extraction",["Extract both molars immediately without assessment","Restore both molars with amalgam and review in five years","Place a lower lingual holding arch"],"The timing of first molar extraction, judged against second molar development, decides whether the second molars come forward well, so an orthodontic opinion should be sought before extraction."],
+  ["Which of the following is the most important part of consent for orthodontic treatment?","Explaining that retainers will be needed long term to limit relapse",["Guaranteeing that the teeth will remain straight once braces are removed","Advising that third molar removal prevents relapse","Stating that relapse only occurs if treatment was poor"],"Relapse is expected from fibres, soft tissue and growth, so long-term retention must be part of informed consent; no clinician can guarantee stability."],
+  ["A vacuum-formed retainer differs from a bonded lingual retainer mainly in that it:","Depends on the patient wearing it as instructed",["Cannot be removed by the patient","Is bonded to the lingual surfaces","Prevents all relapse without compliance"],"Removable retainers work only when worn; bonded retainers remove the compliance problem but need monitoring for debonding."]
+ ]
+};

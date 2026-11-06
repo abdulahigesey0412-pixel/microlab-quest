@@ -160,7 +160,7 @@ window.CONTENT["m00-n03"] = {
    "Facts that matter: permanent tooth (1.1, age 10), 20 minutes dry already, and a lay person on the phone. Most periodontal ligament cells are non-viable after 30 minutes dry, so every minute counts.",
    "Tap water is hypotonic and a poor medium: IADT rates it better only than air-drying, so it loses to milk. Scrubbing the root destroys the ligament: wrong. Keeping it dry adds more dry time: wrong.",
    "IADT 2020: if replantation is not possible, store in milk, HBSS, saliva or saline, in that order of preference. Milk is first and is usually at hand.",
-   "If the child had allowed it, immediate replantation (holding the crown, after a gentle rinse in milk, saline or saliva if dirty) would be the first choice. Here milk is the best advice."
+   "If the child had allowed it, immediate replantation (holding the crown, after rinsing briefly, at most about 10 seconds, under cold running water if dirty, per IADT 2020) would be the first choice. Here milk is the best advice."
   ]
  },
  teach: {
