@@ -4,6 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>AFK Quest</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="AFK Quest">
+<meta name="theme-color" content="#b1232e">
 <meta name="description" content="Zero-to-NDEB-AFK study path: understand, connect, apply, test, with spaced review and a readiness map against the exam blueprint.">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;700;800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
 <style>
@@ -151,33 +156,51 @@ canvas#confetti{position:fixed;inset:0;pointer-events:none;z-index:19}
 <script src="content/micro-data.js"></script>
 <script src="content/m00.js"></script>
 <script src="content/m01.js"></script>
+<script src="content/m01z.js"></script>
 <script src="content/m02a.js"></script>
 <script src="content/m02b.js"></script>
+<script src="content/m02z.js"></script>
 <script src="content/m03a.js"></script>
 <script src="content/m03b.js"></script>
+<script src="content/m03z.js"></script>
 <script src="content/m04.js"></script>
 <script src="content/m04b.js"></script>
+<script src="content/m04z.js"></script>
 <script src="content/m05.js"></script>
+<script src="content/m05z.js"></script>
 <script src="content/m06a.js"></script>
 <script src="content/m06b.js"></script>
+<script src="content/m06z.js"></script>
 <script src="content/m07.js"></script>
+<script src="content/m07z.js"></script>
 <script src="content/m08a.js"></script>
 <script src="content/m08b.js"></script>
 <script src="content/m08c.js"></script>
+<script src="content/m08z.js"></script>
 <script src="content/m09.js"></script>
+<script src="content/m09z.js"></script>
 <script src="content/m10a.js"></script>
 <script src="content/m10b.js"></script>
+<script src="content/m10z.js"></script>
 <script src="content/m11a.js"></script>
 <script src="content/m11b.js"></script>
+<script src="content/m11z.js"></script>
 <script src="content/m12.js"></script>
+<script src="content/m12z.js"></script>
 <script src="content/m13a.js"></script>
 <script src="content/m13b.js"></script>
+<script src="content/m13z.js"></script>
 <script src="content/m14.js"></script>
 <script src="content/m15.js"></script>
+<script src="content/m15z.js"></script>
 <script src="content/m16.js"></script>
+<script src="content/m16z.js"></script>
 <script src="content/m17.js"></script>
+<script src="content/m17z.js"></script>
 <script src="content/m18.js"></script>
+<script src="content/m18z.js"></script>
 <script src="content/m19.js"></script>
+<script src="content/m19z.js"></script>
 <script src="content/m20.js"></script>
 <script src="content/m21.js"></script>
 <script src="content/m22.js"></script>
@@ -417,5 +440,6 @@ const h=location.hash.replace("#","");
 if(h&&nodeById(h)&&CONTENT[h]){S.cur=h;showTab("study");}else{renderPath();}
 addEventListener("hashchange",()=>{const h=location.hash.replace("#","");if(h&&nodeById(h)&&CONTENT[h]&&S.cur!==h){S.cur=h;step="u";showTab("study");}});
 </script>
+<script src="features.js"></script>
 </body>
 </html>

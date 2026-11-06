@@ -23,30 +23,30 @@ phases: [
 ],
 modules: [
  {id:"m00",phase:"P0",area:"ORI",title:"How the AFK thinks",ksas:[],hours:6,prereq:[],desc:"Question anatomy, elimination, FDI numbering, Canadian standards, and the study loop you will use for everything."},
- {id:"m01",phase:"P1",area:"BIO",title:"Cell biology & biochemistry",ksas:[5],hours:22,prereq:["m00"],desc:"Cells, enzymes, metabolism and nutrition at the depth the exam uses: the vocabulary behind pathology and pharmacology."},
- {id:"m02",phase:"P1",area:"BIO",title:"Head & neck anatomy",ksas:[2,4,35],hours:30,prereq:["m00"],desc:"Skull, TMJ, muscles, nerves, vessels, spaces and glands. Local anaesthesia and surgery are applied anatomy."},
- {id:"m03",phase:"P1",area:"BIO",title:"Physiology",ksas:[5,19],hours:24,prereq:["m01"],desc:"Cardiovascular, respiratory, nervous, endocrine, blood and renal systems: what goes wrong in a medical emergency and why."},
+ {id:"m01",phase:"P1",area:"BIO",title:"Cell biology & biochemistry",ksas:[5],hours:26,prereq:["m00"],desc:"Cells, enzymes, metabolism and nutrition at the depth the exam uses: the vocabulary behind pathology and pharmacology."},
+ {id:"m02",phase:"P1",area:"BIO",title:"Head & neck anatomy",ksas:[2,4,35],hours:34,prereq:["m00"],desc:"Skull, TMJ, muscles, nerves, vessels, spaces and glands. Local anaesthesia and surgery are applied anatomy."},
+ {id:"m03",phase:"P1",area:"BIO",title:"Physiology",ksas:[5,19],hours:30,prereq:["m01"],desc:"Cardiovascular, respiratory, nervous, endocrine, blood and renal systems: what goes wrong in a medical emergency and why."},
  {id:"m04",phase:"P1",area:"BIO",title:"Microbiology & immunology",ksas:[16,22],hours:24,prereq:["m01"],desc:"Bacteria, viruses, fungi, biofilm and the immune response. The basis of infection, antibiotics and infection control."},
- {id:"m05",phase:"P1",area:"BIO",title:"General pathology",ksas:[4,5,6],hours:20,prereq:["m01","m04"],desc:"Injury, inflammation, healing, haemodynamics and neoplasia: the grammar of every disease you will diagnose."},
- {id:"m06",phase:"P1",area:"BIO",title:"Oral histology, embryology & growth",ksas:[4,29],hours:18,prereq:["m01"],desc:"How teeth, bone, mucosa and the face are built, and how the face grows. Orthodontics and paediatrics depend on it."},
- {id:"m07",phase:"P1",area:"BIO",title:"Dental anatomy & occlusion",ksas:[2,21],hours:18,prereq:["m00"],desc:"Tooth morphology, primary dentition, pulp anatomy and occlusion. The map every restorative and endodontic question is drawn on."},
- {id:"m08",phase:"P1",area:"BIO",title:"Cariology & dental materials",ksas:[3,13,14,30],hours:22,prereq:["m04","m07"],desc:"Why caries happens and how materials behave. Half the restorative paper is materials science in disguise."},
- {id:"m09",phase:"P2",area:"OMR",title:"Oral radiology",ksas:[25],hours:18,prereq:["m02","m07"],desc:"Physics, protection, technique, and interpretation of intraoral, panoramic and CBCT images."},
- {id:"m10",phase:"P2",area:"OMR",title:"Oral medicine & pathology",ksas:[4,6,24],hours:34,prereq:["m05","m06"],desc:"Mucosal, bone, salivary and malignant disease. The largest single pathology block on the exam."},
- {id:"m11",phase:"P2",area:"PHA",title:"Pharmacology & therapeutics",ksas:[22],hours:26,prereq:["m01","m03"],desc:"How drugs move and act, the dental prescribing set, interactions, and Canadian prescription rules."},
+ {id:"m05",phase:"P1",area:"BIO",title:"General pathology",ksas:[4,5,6],hours:24,prereq:["m01","m04"],desc:"Injury, inflammation, healing, haemodynamics and neoplasia: the grammar of every disease you will diagnose."},
+ {id:"m06",phase:"P1",area:"BIO",title:"Oral histology, embryology & growth",ksas:[4,29],hours:21,prereq:["m01"],desc:"How teeth, bone, mucosa and the face are built, and how the face grows. Orthodontics and paediatrics depend on it."},
+ {id:"m07",phase:"P1",area:"BIO",title:"Dental anatomy & occlusion",ksas:[2,21],hours:21,prereq:["m00"],desc:"Tooth morphology, primary dentition, pulp anatomy and occlusion. The map every restorative and endodontic question is drawn on."},
+ {id:"m08",phase:"P1",area:"BIO",title:"Cariology & dental materials",ksas:[3,13,14,30],hours:27,prereq:["m04","m07"],desc:"Why caries happens and how materials behave. Half the restorative paper is materials science in disguise."},
+ {id:"m09",phase:"P2",area:"OMR",title:"Oral radiology",ksas:[25],hours:21,prereq:["m02","m07"],desc:"Physics, protection, technique, and interpretation of intraoral, panoramic and CBCT images."},
+ {id:"m10",phase:"P2",area:"OMR",title:"Oral medicine & pathology",ksas:[4,6,24],hours:40,prereq:["m05","m06"],desc:"Mucosal, bone, salivary and malignant disease. The largest single pathology block on the exam."},
+ {id:"m11",phase:"P2",area:"PHA",title:"Pharmacology & therapeutics",ksas:[22],hours:30,prereq:["m01","m03"],desc:"How drugs move and act, the dental prescribing set, interactions, and Canadian prescription rules."},
  {id:"m12",phase:"P2",area:"PHA",title:"Local anaesthesia",ksas:[35],hours:12,prereq:["m02","m11"],desc:"Agents, vasoconstrictors, maximum doses, techniques and complications."},
- {id:"m13",phase:"P2",area:"PHA",title:"Medical emergencies & the medically compromised patient",ksas:[15,19,23],hours:22,prereq:["m03","m11"],desc:"Risk assessment, the emergency algorithms, and dental management of cardiac, endocrine, bleeding and other conditions."},
- {id:"m14",phase:"P2",area:"EBD",title:"Infection control, evidence, prevention, ethics & law",ksas:[13,14,16,38,40,41,42,43,44,45,46,47],hours:19,prereq:["m04"],desc:"Sterilisation, epidemiology and appraisal, community prevention, and Canadian consent, records and professional obligations."},
+ {id:"m13",phase:"P2",area:"PHA",title:"Medical emergencies & the medically compromised patient",ksas:[15,19,23],hours:25,prereq:["m03","m11"],desc:"Risk assessment, the emergency algorithms, and dental management of cardiac, endocrine, bleeding and other conditions."},
+ {id:"m14",phase:"P2",area:"EBD",title:"Infection control, evidence, prevention, ethics & law",ksas:[13,14,16,38,40,41,42,43,44,45,46,47],hours:29,prereq:["m04"],desc:"Sterilisation, epidemiology and appraisal, community prevention, and Canadian consent, records and professional obligations."},
  {id:"m15",phase:"P3",area:"RPI",title:"Operative dentistry",ksas:[30],hours:22,prereq:["m07","m08"],desc:"Cavity design, amalgam, adhesive composite, deep caries and pulp protection, non-carious loss, esthetics."},
  {id:"m16",phase:"P3",area:"RPI",title:"Fixed prosthodontics",ksas:[28,30],hours:18,prereq:["m15"],desc:"Crown preparation, impressions, provisionals, bridges, posts and cementation."},
- {id:"m17",phase:"P3",area:"RPI",title:"Removable prosthodontics",ksas:[28],hours:20,prereq:["m07","m08"],desc:"Complete dentures from impression to delivery, and partial denture classification and design."},
- {id:"m18",phase:"P3",area:"RPI",title:"Implant dentistry",ksas:[26,28],hours:8,prereq:["m16","m19"],desc:"Osseointegration, selection, prosthetic options and peri-implant disease."},
+ {id:"m17",phase:"P3",area:"RPI",title:"Removable prosthodontics",ksas:[28],hours:24,prereq:["m07","m08"],desc:"Complete dentures from impression to delivery, and partial denture classification and design."},
+ {id:"m18",phase:"P3",area:"RPI",title:"Implant dentistry",ksas:[26,28],hours:11,prereq:["m16","m19"],desc:"Osseointegration, selection, prosthetic options and peri-implant disease."},
  {id:"m19",phase:"P3",area:"PER",title:"Periodontics",ksas:[26],hours:22,prereq:["m04","m05","m06"],desc:"Periodontium, pathogenesis, the 2017 classification, diagnosis, non-surgical and surgical therapy, maintenance."},
  {id:"m20",phase:"P3",area:"END",title:"Endodontics",ksas:[27,36],hours:20,prereq:["m07","m09","m10"],desc:"Pulp and periapical diagnosis, canal anatomy, treatment, emergencies, trauma guidelines, vital pulp therapy."},
- {id:"m21",phase:"P3",area:"OSX",title:"Oral surgery, trauma & orofacial pain",ksas:[18,20,31,36,37],hours:24,prereq:["m02","m12","m13"],desc:"Extractions, impactions, complications, infections and spaces, MRONJ, dentoalveolar and jaw trauma, TMD."},
- {id:"m22",phase:"P3",area:"OPG",title:"Orthodontics",ksas:[29],hours:16,prereq:["m06","m07"],desc:"Growth, classification, diagnosis, space analysis, interceptive treatment, biomechanics, retention."},
+ {id:"m21",phase:"P3",area:"OSX",title:"Oral surgery, trauma & orofacial pain",ksas:[18,20,31,36,37],hours:33,prereq:["m02","m12","m13"],desc:"Extractions, impactions, complications, infections and spaces, MRONJ, dentoalveolar and jaw trauma, TMD."},
+ {id:"m22",phase:"P3",area:"OPG",title:"Orthodontics",ksas:[29],hours:19,prereq:["m06","m07"],desc:"Growth, classification, diagnosis, space analysis, interceptive treatment, biomechanics, retention."},
  {id:"m23",phase:"P3",area:"OPG",title:"Pediatric dentistry",ksas:[32,44],hours:18,prereq:["m06","m15","m20"],desc:"Behaviour, caries risk, pulp therapy for primary teeth, restorations, trauma in the primary dentition, anomalies, abuse."},
- {id:"m24",phase:"P3",area:"OPG",title:"Geriatric & special-needs dentistry",ksas:[33,34],hours:8,prereq:["m13"],desc:"Ageing, polypharmacy, xerostomia, root caries, capacity, accommodation."},
+ {id:"m24",phase:"P3",area:"OPG",title:"Geriatric & special-needs dentistry",ksas:[33,34],hours:11,prereq:["m13"],desc:"Ageing, polypharmacy, xerostomia, root caries, capacity, accommodation."},
  {id:"m25",phase:"P4",area:"ORI",title:"Mixed practice & mocks",ksas:[],hours:40,prereq:["m09","m10","m11","m13","m15","m17","m19","m20","m21","m22","m23"],desc:"Area exams, three full 200-question mocks in two timed halves, error review."}
 ],
 nodes: [
@@ -61,6 +61,7 @@ nodes: [
  {id:"m01-n03",m:"m01",t:"Carbohydrate, lipid & protein metabolism",h:5,ref:"Baynes"},
  {id:"m01-n04",m:"m01",t:"Vitamins, minerals & nutrition in oral health",h:4,ref:"Thompson nutrition; Baynes"},
  {id:"m01-n05",m:"m01",t:"DNA, protein synthesis & genetics essentials",h:5,ref:"Lehninger; Robbins basic pathology"},
+ {id:"m01-n06",m:"m01",t:"General histology: tissues, glands & lymphoid organs",h:4,ref:"Ross histology; Wheater's"},
  /* m02 */
  {id:"m02-n01",m:"m02",t:"Skull, maxilla & mandible",h:4,ref:"Liebgott; Gray's for students"},
  {id:"m02-n02",m:"m02",t:"TMJ & muscles of mastication",h:3,ref:"Liebgott; Okeson"},
@@ -72,6 +73,7 @@ nodes: [
  {id:"m02-n08",m:"m02",t:"Salivary glands & their ducts",h:2,ref:"Liebgott; Berkovitz"},
  {id:"m02-n09",m:"m02",t:"Oral cavity, tongue, palate & pharynx",h:3,ref:"Liebgott; Berkovitz"},
  {id:"m02-n10",m:"m02",t:"Landmarks for local anaesthesia",h:2,ref:"Malamed LA"},
+ {id:"m02-n11",m:"m02",t:"Neuroanatomy: brainstem, cranial nerves, cortex & pathways",h:4,ref:"Crossman; Haines; Nolte"},
  /* m03 */
  {id:"m03-n01",m:"m03",t:"Cardiovascular physiology & blood pressure",h:4,ref:"Guyton & Hall; AHA BP"},
  {id:"m03-n02",m:"m03",t:"Respiratory physiology & gas exchange",h:3,ref:"Guyton & Hall"},
@@ -81,6 +83,8 @@ nodes: [
  {id:"m03-n06",m:"m03",t:"Blood, haemostasis & coagulation",h:3,ref:"Guyton & Hall; Robbins"},
  {id:"m03-n07",m:"m03",t:"Renal physiology, fluids & acid-base",h:2,ref:"Guyton & Hall"},
  {id:"m03-n08",m:"m03",t:"Saliva: formation, composition & function",h:1,ref:"Berkovitz; Nanci"},
+ {id:"m03-n09",m:"m03",t:"Muscle physiology, mastication & swallowing",h:3,ref:"Guyton & Hall; Okeson"},
+ {id:"m03-n10",m:"m03",t:"GI, liver & nutrition physiology",h:3,ref:"Guyton & Hall; Thompson nutrition"},
  /* m04 */
  {id:"m04-n01",m:"m04",t:"Bacterial structure, genetics & gene transfer",h:2,ref:"Samaranayake; Murray"},
  {id:"m04-n02",m:"m04",t:"Antimicrobials: mechanisms, choice & complications",h:3,ref:"Samaranayake; Dowd"},
@@ -101,6 +105,7 @@ nodes: [
  {id:"m05-n04",m:"m05",t:"Haemodynamics: oedema, thrombosis, embolism, shock",h:3,ref:"Robbins"},
  {id:"m05-n05",m:"m05",t:"Neoplasia: nomenclature, behaviour, carcinogenesis",h:4,ref:"Robbins"},
  {id:"m05-n06",m:"m05",t:"Systemic disease overview for dentists",h:3,ref:"Cecil essentials; Scully"},
+ {id:"m05-n07",m:"m05",t:"Haematology: anaemias, leukaemias, bleeding & blood counts",h:4,ref:"Robbins; Little & Falace"},
  /* m06 */
  {id:"m06-n01",m:"m06",t:"Tooth development: bud to root",h:3,ref:"Ten Cate (Nanci); Chiego"},
  {id:"m06-n02",m:"m06",t:"Enamel: structure & clinical correlates",h:2,ref:"Ten Cate"},
@@ -110,6 +115,7 @@ nodes: [
  {id:"m06-n06",m:"m06",t:"Face, palate & tongue development; clefts",h:2,ref:"Langman; Persaud"},
  {id:"m06-n07",m:"m06",t:"Craniofacial growth patterns",h:2,ref:"Proffit"},
  {id:"m06-n08",m:"m06",t:"Eruption, shedding & chronology tables",h:2,ref:"McDonald & Avery; Wheeler's"},
+ {id:"m06-n09",m:"m06",t:"General embryology: germ layers, neural crest & teratogens",h:3,ref:"Langman; Persaud"},
  /* m07 */
  {id:"m07-n01",m:"m07",t:"Permanent incisors & canines",h:3,ref:"Wheeler's; Woelfel's"},
  {id:"m07-n02",m:"m07",t:"Permanent premolars & molars",h:4,ref:"Wheeler's; Woelfel's"},
@@ -117,6 +123,7 @@ nodes: [
  {id:"m07-n04",m:"m07",t:"Pulp chamber & canal anatomy by tooth",h:3,ref:"Cohen's pathways"},
  {id:"m07-n05",m:"m07",t:"Occlusion: Angle classes, curves, guidance",h:3,ref:"Wheeler's; Okeson; Dawson"},
  {id:"m07-n06",m:"m07",t:"Mandibular movements & determinants",h:2,ref:"Okeson"},
+ {id:"m07-n07",m:"m07",t:"Managing occlusal function: bruxism, splints & occlusal trauma",h:3,ref:"Okeson; Newman & Carranza"},
  /* m08 */
  {id:"m08-n01",m:"m08",t:"Caries aetiology: biofilm, sugar, time, host",h:3,ref:"Marsh; Limeback"},
  {id:"m08-n02",m:"m08",t:"Demineralisation, remineralisation & fluoride",h:3,ref:"Limeback; Sturdevant"},
@@ -127,6 +134,7 @@ nodes: [
  {id:"m08-n07",m:"m08",t:"Impression materials & gypsum",h:2,ref:"Craig's; Phillips'"},
  {id:"m08-n08",m:"m08",t:"Ceramics, metals & alloys",h:2,ref:"Craig's; Phillips'"},
  {id:"m08-n09",m:"m08",t:"Polymers, denture bases & biocompatibility",h:2,ref:"Craig's; Phillips'"},
+ {id:"m08-n10",m:"m08",t:"Properties of materials: mechanics, alloys, waxes & investments",h:5,ref:"Craig's; Phillips'; Powers & Wataha"},
  /* m09 */
  {id:"m09-n01",m:"m09",t:"X-ray physics & image formation",h:3,ref:"White & Pharoah"},
  {id:"m09-n02",m:"m09",t:"Radiation biology & protection (ALARA)",h:3,ref:"White & Pharoah; ADA"},
@@ -134,6 +142,7 @@ nodes: [
  {id:"m09-n04",m:"m09",t:"Panoramic & CBCT imaging",h:3,ref:"White & Pharoah"},
  {id:"m09-n05",m:"m09",t:"Radiographic anatomy & normal variants",h:3,ref:"White & Pharoah"},
  {id:"m09-n06",m:"m09",t:"Interpreting caries, periodontal & periapical disease",h:3,ref:"White & Pharoah; Langlais"},
+ {id:"m09-n07",m:"m09",t:"Describing, differentiating & reporting a radiographic lesion",h:3,ref:"White & Pharoah"},
  /* m10 */
  {id:"m10-n01",m:"m10",t:"White lesions",h:3,ref:"Neville; Cawson"},
  {id:"m10-n02",m:"m10",t:"Red lesions, potentially malignant disorders & oral cancer",h:4,ref:"Neville; Burket's"},
@@ -147,6 +156,8 @@ nodes: [
  {id:"m10-n10",m:"m10",t:"Oral manifestations of systemic disease",h:3,ref:"Burket's; Little & Falace"},
  {id:"m10-n11",m:"m10",t:"Developmental anomalies of teeth & jaws",h:2,ref:"Neville"},
  {id:"m10-n12",m:"m10",t:"Biopsy, diagnostic tests & referral triggers",h:2,ref:"Burket's; Stefanac"},
+ {id:"m10-n13",m:"m10",t:"Oral swellings & reactive lesions",h:3,ref:"Neville; Regezi"},
+ {id:"m10-n14",m:"m10",t:"History taking & the clinical examination",h:3,ref:"Stefanac; Bates' guide; Burket's"},
  /* m11 */
  {id:"m11-n01",m:"m11",t:"Pharmacokinetics: absorption to elimination",h:3,ref:"Katzung; Dowd"},
  {id:"m11-n02",m:"m11",t:"Pharmacodynamics: receptors, dose-response, therapeutic index",h:2,ref:"Katzung; Dowd"},
@@ -157,6 +168,7 @@ nodes: [
  {id:"m11-n07",m:"m11",t:"Anxiolytics, sedation & nitrous oxide",h:3,ref:"Malamed sedation; Dowd"},
  {id:"m11-n08",m:"m11",t:"Medically important drug classes & interactions",h:3,ref:"Little & Falace; CPS"},
  {id:"m11-n09",m:"m11",t:"Writing a prescription in Canada",h:2,ref:"CPS; Lexidrug"},
+ {id:"m11-n10",m:"m11",t:"CNS drugs & general anaesthesia",h:4,ref:"Katzung; Dowd; Malamed sedation"},
  /* m12 */
  {id:"m12-n01",m:"m12",t:"How local anaesthetics work",h:2,ref:"Malamed LA"},
  {id:"m12-n02",m:"m12",t:"Agents, vasoconstrictors & maximum doses",h:3,ref:"Malamed LA"},
@@ -173,6 +185,7 @@ nodes: [
  {id:"m13-n08",m:"m13",t:"Pregnancy, lactation & the dental patient",h:2,ref:"Little & Falace"},
  {id:"m13-n09",m:"m13",t:"Infective endocarditis & joint prophylaxis (AHA 2021)",h:2,ref:"AHA 2021; AAPD prophylaxis"},
  {id:"m13-n10",m:"m13",t:"Cancer therapy, transplant & immunosuppressed patients",h:1,ref:"Little & Falace"},
+ {id:"m13-n11",m:"m13",t:"Office emergency preparedness, stroke & paediatric CPR",h:3,ref:"Malamed emergencies; Heart & Stroke 2025; Red Cross"},
  /* m14 */
  {id:"m14-n01",m:"m14",t:"Sterilisation, disinfection & instrument reprocessing",h:3,ref:"Miller infection control; ODQ"},
  {id:"m14-n02",m:"m14",t:"Standard precautions, exposures & occupational hazards",h:2,ref:"Miller infection control"},
@@ -182,6 +195,9 @@ nodes: [
  {id:"m14-n06",m:"m14",t:"Ethics principles & professional conduct",h:2,ref:"ACD ethics handbook; Ozar"},
  {id:"m14-n07",m:"m14",t:"Consent, records & privacy in Canada",h:2,ref:"RCDSO consent; Picard"},
  {id:"m14-n08",m:"m14",t:"Abuse, neglect & social determinants",h:1,ref:"KSA 44, 46; Burt & Eklund"},
+ {id:"m14-n09",m:"m14",t:"From diagnosis to a sequenced treatment plan",h:4,ref:"Stefanac; KSA 6-12"},
+ {id:"m14-n10",m:"m14",t:"Communication, referral letters & health-promotion counselling",h:3,ref:"KSA 8, 13, 39; Burt & Eklund"},
+ {id:"m14-n11",m:"m14",t:"Practice administration, insurance & professional wellbeing",h:3,ref:"Finkbeiner; KSA 41, 45; CDCP"},
  /* m15 */
  {id:"m15-n01",m:"m15",t:"Principles of cavity preparation & nomenclature",h:3,ref:"Sturdevant; Summitt"},
  {id:"m15-n02",m:"m15",t:"Amalgam restorations",h:3,ref:"Sturdevant"},
@@ -202,10 +218,12 @@ nodes: [
  {id:"m17-n03",m:"m17",t:"Tooth arrangement & denture occlusion",h:3,ref:"Zarb"},
  {id:"m17-n04",m:"m17",t:"Denture delivery, problems & relines",h:3,ref:"Zarb"},
  {id:"m17-n05",m:"m17",t:"RPD classification, components & design",h:6,ref:"McCracken's; Stewart's"},
+ {id:"m17-n06",m:"m17",t:"RPD design sequence, mouth preparation, immediate dentures & overdentures",h:4,ref:"McCracken's; Zarb"},
  /* m18 */
  {id:"m18-n01",m:"m18",t:"Osseointegration & implant biology",h:2,ref:"Misch; Lindhe"},
  {id:"m18-n02",m:"m18",t:"Patient selection, planning & surgical basics",h:3,ref:"Misch"},
  {id:"m18-n03",m:"m18",t:"Prosthetic options & peri-implant disease",h:3,ref:"Misch; AAP 2017"},
+ {id:"m18-n04",m:"m18",t:"Implant prosthodontics: components, retention, occlusion & complications",h:3,ref:"Misch; Lindhe"},
  /* m19 */
  {id:"m19-n01",m:"m19",t:"Anatomy of the periodontium",h:2,ref:"Newman & Carranza"},
  {id:"m19-n02",m:"m19",t:"Aetiology & pathogenesis of periodontitis",h:3,ref:"Newman & Carranza; Lindhe"},
@@ -234,6 +252,9 @@ nodes: [
  {id:"m21-n07",m:"m21",t:"Mandibular & midface fractures",h:2,ref:"Hupp; Fonseca"},
  {id:"m21-n08",m:"m21",t:"TMD & orofacial pain (DC/TMD)",h:3,ref:"Okeson; DC/TMD 2014; AAOM pain"},
  {id:"m21-n09",m:"m21",t:"Biopsy technique & dental emergency triage",h:3,ref:"Hupp; Stefanac"},
+ {id:"m21-n10",m:"m21",t:"Non-odontogenic orofacial pain & headache",h:3,ref:"AAOM orofacial pain; Sharav & Benoliel; Okeson"},
+ {id:"m21-n11",m:"m21",t:"Dental emergencies by presentation & triage",h:3,ref:"Hupp; IADT 2020; KSA 18"},
+ {id:"m21-n12",m:"m21",t:"Pre-prosthetic, adjunctive & orthognathic surgery; sleep apnoea",h:3,ref:"Hupp; Fonseca; Miloro"},
  /* m22 */
  {id:"m22-n01",m:"m22",t:"Malocclusion classification & aetiology",h:3,ref:"Proffit"},
  {id:"m22-n02",m:"m22",t:"Orthodontic diagnosis & cephalometric basics",h:3,ref:"Proffit"},
@@ -241,6 +262,7 @@ nodes: [
  {id:"m22-n04",m:"m22",t:"Interceptive orthodontics & habits",h:3,ref:"Proffit"},
  {id:"m22-n05",m:"m22",t:"Biomechanics, appliances & tooth movement biology",h:3,ref:"Proffit; Graber"},
  {id:"m22-n06",m:"m22",t:"Retention, relapse & referral",h:1,ref:"Proffit"},
+ {id:"m22-n07",m:"m22",t:"Serial extraction, surgical orthodontics & cleft team care",h:3,ref:"Proffit; AAPD"},
  /* m23 */
  {id:"m23-n01",m:"m23",t:"Child development & behaviour management",h:3,ref:"McDonald & Avery; AAPD"},
  {id:"m23-n02",m:"m23",t:"Caries risk & prevention in children",h:3,ref:"AAPD caries risk; Nowak"},
@@ -253,6 +275,7 @@ nodes: [
  {id:"m24-n01",m:"m24",t:"Ageing changes in the mouth & body",h:2,ref:"AAOM geriatric guide"},
  {id:"m24-n02",m:"m24",t:"Polypharmacy, xerostomia & root caries",h:3,ref:"AAOM geriatric; Little & Falace"},
  {id:"m24-n03",m:"m24",t:"Capacity, dementia & special-needs accommodation",h:3,ref:"KSA 33, 34; RCDSO consent"},
+ {id:"m24-n04",m:"m24",t:"Special-needs conditions in the dental chair",h:3,ref:"AAOM geriatric; Little & Falace; KSA 34"},
  /* m25 */
  {id:"m25-n01",m:"m25",t:"Area exams (one per blueprint area)",h:12,ref:"AFK Quest"},
  {id:"m25-n02",m:"m25",t:"Full mock 1: 200 questions in two timed halves",h:8,ref:"AFK Quest"},
