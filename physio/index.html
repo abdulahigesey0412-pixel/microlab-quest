@@ -1,0 +1,1619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Physiology study game: blood pressure, pituitary and thyroid (Lectures 4–6). Study guide, MCQs, true/false, case files, boss battles and a 15-question mock.">
+<meta property="og:title" content="Feedback Loop · Physiology L4–L6">
+<meta property="og:description" content="Study guide, quizzes, case files and games for blood pressure, the pituitary and the thyroid.">
+<meta name="theme-color" content="#6B3FB0">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 34'%3E%3Cpath d='M20 5 A12 12 0 1 1 8.5 22' fill='none' stroke='%236B3FB0' stroke-width='4.5' stroke-linecap='round'/%3E%3Ccircle cx='20' cy='17' r='4' fill='%232A63C9'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+<title>Feedback Loop</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a histology bench. Sticky header with the XP bar, tab rail, one panel at a time; wax pink is the single loud colour, die-stone yellow marks XP. */
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --sunk:#E3E8EE; --ink:#18212C; --muted:#5A6676; --line:#D3DAE2;
+  --wax:#6B3FB0; --wax-soft:#EEE6FA; --blue:#2A63C9; --blue-soft:#E2ECFB; --stone:#D9A420; --stone-soft:#FBF1D6;
+  --good:#1E8F5E; --good-soft:#DDF4E9; --bad:#C8333A; --bad-soft:#FBE2E3;
+  --f-display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body:"Atkinson Hyperlegible", "Helvetica Neue", Arial, system-ui, sans-serif;
+  --f-mono:"IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#10161E; --surface:#18212C; --sunk:#202B38; --ink:#E7ECF2; --muted:#98A5B6; --line:#2C3847;
+  --wax:#B392F0; --wax-soft:#2A2140; --blue:#79A9F5; --blue-soft:#1C2B42; --stone:#F0C24E; --stone-soft:#3A3120;
+  --good:#4CC98E; --good-soft:#163428; --bad:#F27378; --bad-soft:#3D1D21; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#10161E; --surface:#18212C; --sunk:#202B38; --ink:#E7ECF2; --muted:#98A5B6; --line:#2C3847;
+  --wax:#B392F0; --wax-soft:#2A2140; --blue:#79A9F5; --blue-soft:#1C2B42; --stone:#F0C24E; --stone-soft:#3A3120;
+  --good:#4CC98E; --good-soft:#163428; --bad:#F27378; --bad-soft:#3D1D21; color-scheme:dark}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.wrap{max-width:980px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+h2{font-size:1.65rem;font-weight:800}
+h3{font-size:1.2rem;font-weight:800}
+h4{font-size:1rem;font-weight:600}
+p{margin:0}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--surface);border-bottom:1px solid var(--line)}
+.topbar{display:flex;align-items:center;gap:14px;padding-block:10px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand svg{flex:none}
+.brand h1{font-size:1.25rem;font-weight:800;letter-spacing:-.01em}
+.brand small{display:block;font-size:.75rem;color:var(--muted);font-family:var(--f-body);font-weight:400;letter-spacing:.02em}
+.lvl{margin-left:auto;display:flex;align-items:center;gap:10px;min-width:220px;flex:1 1 220px;max-width:360px}
+.lvl .name{font-size:.8rem;font-weight:700;white-space:nowrap}
+.bar{flex:1;height:10px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--stone);border-radius:99px;transition:width .4s}
+.xp{font-size:.8rem;color:var(--muted)}
+nav.tabs{display:flex;gap:4px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none}
+nav.tabs::-webkit-scrollbar{display:none}
+nav.tabs button{background:none;border:0;padding:8px 12px;border-radius:8px;font-weight:700;color:var(--muted);white-space:nowrap}
+nav.tabs button[aria-selected="true"]{background:var(--ink);color:var(--surface)}
+nav.tabs button:hover:not([aria-selected="true"]){background:var(--sunk);color:var(--ink)}
+
+main{padding-block:22px 60px}
+section.panel{display:flex;flex-direction:column;gap:18px}
+.lede{color:var(--muted);max-width:68ch}
+.eyebrow{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--wax)}
+
+/* learn */
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:5px 12px;font-size:.85rem;font-weight:700}
+.chip[aria-pressed="true"]{background:var(--wax);border-color:var(--wax);color:#fff}
+.chapter{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px clamp(16px,3vw,28px);display:flex;flex-direction:column;gap:14px;scroll-margin-top:130px}
+.chapter>header{display:flex;flex-direction:column;gap:4px;border-bottom:1px solid var(--line);padding-bottom:12px}
+.chapter h3{margin-top:6px}
+.chapter ul,.chapter ol{margin:0;padding-left:1.25em;display:flex;flex-direction:column;gap:4px}
+.chapter p,.chapter li{max-width:72ch}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r)}
+table{border-collapse:collapse;width:100%;font-size:.92rem;min-width:520px}
+th,td{padding:8px 10px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+thead th{background:var(--sunk);font-family:var(--f-display);font-weight:600}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{font-weight:700}
+.hook{background:var(--wax-soft);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:4px}
+.hook b.k{font-family:var(--f-display);font-size:1.05rem;color:var(--wax)}
+.trap{background:var(--stone-soft);border-radius:var(--r);padding:12px 14px}
+.trap::before{content:"Exam trap";display:block;font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--ink);opacity:.75;margin-bottom:2px}
+.note{background:var(--blue-soft);border-radius:var(--r);padding:12px 14px;font-size:.92rem}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.two>*{min-width:0}
+.box{border:1px solid var(--line);border-radius:var(--r);padding:12px 14px;display:flex;flex-direction:column;gap:6px}
+.box h4{color:var(--blue)}
+kbd{font-family:var(--f-mono);font-size:.8em;background:var(--sunk);border-radius:4px;padding:1px 5px}
+
+/* memory */
+.mem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.mem{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:6px}
+.mem .t{font-size:.72rem;text-transform:uppercase;letter-spacing:.09em;font-weight:700;color:var(--muted)}
+.mem .big{font-family:var(--f-display);font-weight:800;font-size:1.3rem;color:var(--wax);line-height:1.15}
+.mem p{font-size:.93rem}
+.numgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:8px}
+.num{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.num b{font-family:var(--f-mono);font-size:1.25rem;color:var(--blue)}
+.num span{font-size:.85rem;color:var(--muted)}
+
+/* game shells */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px clamp(16px,3vw,26px);display:flex;flex-direction:column;gap:14px}
+.modes{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.mode{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;text-align:left;display:flex;flex-direction:column;gap:4px}
+.mode:hover{border-color:var(--wax)}
+.mode b{font-family:var(--f-display);font-size:1.05rem}
+.mode span{font-size:.85rem;color:var(--muted)}
+.mode .meta{font-family:var(--f-mono);font-size:.75rem;color:var(--wax)}
+.btn{background:var(--ink);color:var(--surface);border:0;border-radius:9px;padding:10px 18px;font-weight:700}
+.btn.wax{background:var(--wax);color:#fff}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.hud{display:flex;gap:16px;flex-wrap:wrap;font-size:.85rem;color:var(--muted);align-items:center}
+.hud b{color:var(--ink);font-family:var(--f-mono)}
+.combo{color:var(--wax)!important}
+.stem{font-size:1.12rem;font-weight:700;line-height:1.4}
+.tag{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;font-weight:700;color:var(--blue)}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;background:var(--surface);border:1.5px solid var(--line);border-radius:10px;padding:11px 13px;width:100%}
+.opt:hover:not(:disabled){border-color:var(--blue)}
+.opt .L{font-family:var(--f-mono);font-weight:600;color:var(--muted);flex:none;width:1.2em}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.pick{border-color:var(--blue);background:var(--blue-soft)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.opts.tf{flex-direction:row}
+.opts.tf .opt{flex:1;justify-content:center;font-weight:700;font-size:1.05rem;padding:16px 10px}
+.fb{border-radius:10px;padding:12px 14px;font-size:.95rem}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.fb b{display:block;margin-bottom:2px}
+.progress{height:6px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.progress>i{display:block;height:100%;background:var(--wax);transition:width .3s}
+.score{font-family:var(--f-display);font-weight:800;font-size:3rem;line-height:1;color:var(--wax)}
+.pop{animation:pop .35s ease}
+@keyframes pop{0%{transform:scale(.96)}60%{transform:scale(1.02)}100%{transform:scale(1)}}
+
+/* flashcards */
+.flash{perspective:1000px;min-height:220px}
+.flash-in{position:relative;min-height:220px;transition:transform .45s;transform-style:preserve-3d}
+.flash.flipped .flash-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;gap:8px;border:1px solid var(--line);background:var(--surface);overflow:auto}
+.face.back{transform:rotateY(180deg);background:var(--wax-soft)}
+.face .q{font-family:var(--f-display);font-size:1.3rem;font-weight:600}
+.face .a{font-size:1.05rem}
+
+/* sorter */
+.buckets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.bucket{border:1.5px dashed var(--line);background:var(--surface);border-radius:10px;padding:14px 10px;font-weight:700;min-height:64px}
+.bucket:hover{border-color:var(--wax);border-style:solid}
+.bucket.ok{border:1.5px solid var(--good);background:var(--good-soft)}
+.bucket.no{border:1.5px solid var(--bad);background:var(--bad-soft)}
+.item{font-family:var(--f-display);font-size:1.4rem;font-weight:600;text-align:center;padding:18px 10px;background:var(--sunk);border-radius:12px}
+
+/* mock */
+.qnav{display:flex;flex-wrap:wrap;gap:6px}
+.qnav button{width:36px;height:36px;border-radius:8px;border:1px solid var(--line);background:var(--surface);font-family:var(--f-mono);font-size:.85rem}
+.qnav button.ans{background:var(--blue-soft);border-color:var(--blue)}
+.qnav button.cur{outline:2px solid var(--ink)}
+.qnav button.flag{border-color:var(--stone);box-shadow:inset 0 -4px 0 var(--stone)}
+.qnav button.r-ok{background:var(--good-soft);border-color:var(--good)}
+.qnav button.r-no{background:var(--bad-soft);border-color:var(--bad)}
+.timer{font-family:var(--f-mono);font-size:1.1rem;font-weight:600}
+.timer.low{color:var(--bad)}
+
+/* progress tab */
+.tbars{display:flex;flex-direction:column;gap:10px}
+.tbar{display:grid;grid-template-columns:minmax(120px,220px) 1fr 70px;gap:10px;align-items:center;font-size:.9rem}
+.tbar .bar>i{background:var(--wax)}
+.badges{display:flex;flex-wrap:wrap;gap:8px}
+.badge{border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:.85rem;font-weight:700;color:var(--muted);background:var(--surface)}
+.badge.on{border-color:var(--stone);background:var(--stone-soft);color:var(--ink)}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--surface);padding:10px 16px;border-radius:10px;font-weight:700;z-index:20;max-width:calc(100% - 32px)}
+.muted{color:var(--muted)}
+.small{font-size:.85rem}
+@media (max-width:560px){
+  .tbar{grid-template-columns:1fr 60px}.tbar .bar{grid-column:1/-1;grid-row:2}
+  .score{font-size:2.4rem}
+  .lvl{max-width:none}
+}
+
+.duepill{border:1px solid var(--line);background:var(--sunk);color:var(--muted);border-radius:99px;padding:5px 11px;font-weight:700;font-size:.78rem;white-space:nowrap}
+.duepill.hot{background:var(--stone-soft);border-color:var(--stone);color:var(--ink)}
+.new7{background:var(--wax-soft);border:0}
+.new7grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.n7{text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 12px;display:flex;flex-direction:column;gap:3px}
+.n7:hover{border-color:var(--wax)}.n7 b{font-family:var(--f-display);font-size:.98rem}.n7 span{font-size:.82rem;color:var(--muted)}
+.pill{display:inline-block;background:var(--wax-soft);color:var(--wax);border-radius:99px;padding:2px 10px;font-size:.75rem;font-weight:700}
+.conf{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.conf .chip{padding:4px 11px;font-size:.8rem}
+.note2{margin-top:6px;font-size:.9rem;font-weight:700}
+.readlink{display:inline-block;margin-top:6px;font-weight:700;color:var(--blue);text-decoration:none}
+.readlink:hover{text-decoration:underline}
+.mode.due{border-color:var(--stone);background:var(--stone-soft)}
+.mode.danger{border-color:var(--bad);background:var(--bad-soft)}
+.mode.bossmode{border-color:var(--wax)}
+.story{background:var(--sunk);border-radius:10px;padding:12px 14px;font-size:.98rem}
+.pathlist{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:6px}
+.pathlist li{background:var(--good-soft);border-radius:8px;padding:6px 10px}
+.pathlist li.ghost{background:transparent;color:var(--muted)}
+.pathchips{display:flex;flex-wrap:wrap;gap:8px}
+.pchip{border:1.5px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;text-align:left;font-size:.92rem}
+.pchip:hover{border-color:var(--blue)}.pchip.no{border-color:var(--bad);background:var(--bad-soft)}
+.shake{animation:shake .4s}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.arrows{display:flex;flex-direction:column;gap:8px}
+.arow{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;flex-wrap:wrap}
+.arow.ok{border-color:var(--good);background:var(--good-soft)}.arow.no{border-color:var(--bad);background:var(--bad-soft)}
+.abtns{display:flex;gap:6px}
+.abtn{width:46px;height:40px;border-radius:9px;border:1.5px solid var(--line);background:var(--surface);font-size:1.25rem;font-weight:700}
+.abtn.sel{border-color:var(--blue);background:var(--blue-soft)}.abtn.right{box-shadow:inset 0 0 0 2px var(--good)}
+.bossname{display:flex;justify-content:space-between;align-items:baseline;font-family:var(--f-display)}
+.bossname b{font-size:1.2rem}
+.hp{height:14px;background:var(--sunk);border-radius:99px;overflow:hidden}
+.hp>i{display:block;height:100%;background:var(--bad);transition:width .35s}
+.hearts{color:var(--bad);font-size:1.15rem;letter-spacing:2px}.hearts .lost{opacity:.25}
+#lkInput{width:100%;font:inherit;font-size:1.05rem;padding:10px 12px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink)}
+.gl{border-bottom:1px solid var(--line);padding:10px 0;display:flex;flex-direction:column;gap:4px}
+.gl:last-child{border-bottom:0}.glh{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:baseline}
+@media (max-width:560px){.duepill{order:3}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <svg width="40" height="34" viewBox="0 0 40 34" aria-hidden="true">
+          <path d="M20 5 A12 12 0 1 1 8.5 22" fill="none" stroke="var(--wax)" stroke-width="4.5" stroke-linecap="round"/>
+          <path d="M3 17 L8.5 23 L14 17.5" fill="none" stroke="var(--wax)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="20" cy="17" r="4" fill="var(--blue)"/></svg>
+        <h1>Feedback Loop<small>Physiology · Blood pressure, pituitary, thyroid (L4–L6)</small></h1>
+      </div>
+      <button class="duepill" id="duePill" title="Spaced review queue">Review queue empty</button>
+      <div class="lvl" aria-label="Level and XP">
+        <span class="name" id="lvlName">Resting Rate</span>
+        <div class="bar"><i id="xpBar" style="width:0%"></i></div>
+        <span class="xp mono" id="xpText">0 XP</span>
+      </div>
+    </div>
+    <nav class="tabs" role="tablist" aria-label="Sections">
+      <button role="tab" data-tab="learn" aria-selected="true">Learn</button>
+      <button role="tab" data-tab="memory" aria-selected="false">Memory aids</button>
+      <button role="tab" data-tab="lookup" aria-selected="false">Lookup</button>
+      <button role="tab" data-tab="cards" aria-selected="false">Flashcards</button>
+      <button role="tab" data-tab="quiz" aria-selected="false">MCQ</button>
+      <button role="tab" data-tab="tf" aria-selected="false">True/False</button>
+      <button role="tab" data-tab="cases" aria-selected="false">Case files</button>
+      <button role="tab" data-tab="games" aria-selected="false">Mini-games</button>
+      <button role="tab" data-tab="mock" aria-selected="false">Exam mock</button>
+      <button role="tab" data-tab="progress" aria-selected="false">Progress</button>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ================= LEARN ================= -->
+<section class="panel" id="p-learn">
+  <div>
+    <p class="eyebrow">Study guide</p>
+    <h2>Blood pressure, the pituitary and the thyroid</h2>
+  </div>
+  <p class="lede">Built from your three lecture files: Lecture 4 Blood Pressure (Dr. Nermeen Zaitoun), Lecture 5 Pituitary Gland and Lecture 6 Thyroid Gland (Dr. Nermeen Bastawy). It follows their wording. Every part ends with a <b>Quiz me on this</b> button, and every answer in the games links back here.</p>
+<div class="box new7"><h4>Seven upgrades in this version</h4><div class="new7grid">
+    <button class="n7" data-goto="quiz"><b>1 · Spaced review</b><span>The pill at the top shows what's due. Missed items return in a minute, mastered ones in a day.</span></button>
+    <button class="n7" data-goto="quiz"><b>2 · Confidence check</b><span>Mark "I'm sure" or "Guessing" before answering. Confident mistakes go to a Danger zone.</span></button>
+    <button class="n7" data-goto="cases"><b>3 · Case files</b><span>Clinical stories with 4–5 linked questions, from Graves' to haemorrhage.</span></button>
+    <button class="n7" data-goto="games" data-mode="path"><b>4 · Build the pathway</b><span>Put RAAS, the baroreflex and hormone axes in the right order.</span></button>
+    <button class="n7" data-goto="games" data-mode="arrows"><b>5 · Predict the arrows</b><span>↑ ↓ ↔ for each variable: the way physiology exams test mechanisms.</span></button>
+    <button class="n7" data-goto="games"><b>6 · Boss battles</b><span>One boss per lecture: 3 lives, a timer, critical hits for fast answers.</span></button>
+    <button class="n7" data-goto="lookup"><b>7 · Lookup and guide links</b><span>Search 54 terms. Every answer links back to the guide; every part has "Quiz me on this".</span></button>
+  </div></div>
+  <div class="chips" id="learnChips">
+    <button class="chip" data-jump="c-bpb">L4 · BP basics and factors</button>
+    <button class="chip" data-jump="c-bpr">L4 · Regulation of BP</button>
+    <button class="chip" data-jump="c-pit">L5 · Pituitary and GH</button>
+    <button class="chip" data-jump="c-pitd">L5 · GH disorders, ADH, oxytocin</button>
+    <button class="chip" data-jump="c-thy">L6 · Thyroid hormones</button>
+    <button class="chip" data-jump="c-thyd">L6 · Thyroid disorders</button>
+  </div>
+
+  <article class="chapter" id="c-bpb">
+    <header><p class="eyebrow">Lecture 4 · part 1</p><h3>Arterial blood pressure: values and factors</h3></header>
+    <p><b>Arterial blood pressure (ABP)</b> is the pressure of blood on the arterial walls. The highest normal reading is <b class="mono">120/80 mmHg</b>.</p>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Normal</th><th>Meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Systolic (SBP)</td><td class="mono">120 mmHg (about 100–120)</td><td>Pressure during <b>left ventricular contraction</b>; shows the <b>pumping ability of the heart</b></td></tr>
+        <tr><td>Diastolic (DBP)</td><td class="mono">80 mmHg (60–90)</td><td>Pressure during <b>left ventricular diastole</b>; shows the <b>peripheral resistance</b></td></tr>
+        <tr><td>Pulse pressure (PP)</td><td class="mono">SBP − DBP = 40 (30–50)</td><td>The difference between systolic and diastolic</td></tr>
+      </tbody></table></div>
+    <div class="note">The slide calls diastolic pressure the "maximum" pressure during diastole. Textbooks describe it as the <b>lowest</b> pressure in the cycle. If an exam option says "minimum pressure during diastole", that is the standard definition.</div>
+    <h4>Physiological factors</h4>
+    <div class="tbl"><table>
+      <thead><tr><th>Factor</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Age</td><td>Newborn <b class="mono">80/40</b> (vagal tone) · child <b class="mono">80/60</b> · adult <b class="mono">120/80</b> · then a gradual rise as arteries lose <b>elasticity</b></td></tr>
+        <tr><td>Sex</td><td>Before 45: males about <b class="mono">5 mmHg</b> higher. After 45: <b>diastolic</b> higher in females</td></tr>
+        <tr><td>Race</td><td>Americans and Europeans tend to have higher ABP</td></tr>
+        <tr><td>Meals</td><td>Digestion <b>increases</b> ABP</td></tr>
+        <tr><td>Emotions and exercise</td><td><b>Increase</b> ABP through sympathetic activity</td></tr>
+        <tr><td>Gravity</td><td>Each <b class="mono">1 cm below</b> the heart <b>adds 0.77 mmHg</b>; each 1 cm above <b>subtracts 0.77 mmHg</b></td></tr>
+      </tbody></table></div>
+    <h4>What determines ABP</h4>
+    <p class="mono">ABP = cardiac output (COP) × total peripheral resistance (TPR)</p>
+    <div class="tbl"><table>
+      <thead><tr><th>Change</th><th>Main effect</th><th>Pulse pressure</th></tr></thead>
+      <tbody>
+        <tr><td>↑ Stroke volume</td><td>Raises <b>systolic</b> more than diastolic</td><td>↑</td></tr>
+        <tr><td>Change in heart rate</td><td>Mainly changes <b>diastolic</b>; systolic stays about the same</td><td>—</td></tr>
+        <tr><td>↑ Peripheral resistance</td><td>Raises <b>diastolic</b> more than systolic</td><td><b>↓</b></td></tr>
+        <tr><td>↓ Elasticity (atherosclerosis)</td><td><b>Systolic ↑, diastolic ↓</b></td><td><b>↑</b></td></tr>
+      </tbody></table></div>
+    <div class="hook"><b class="k">"Systolic = Squeeze, Diastolic = Drag"</b><span>Systolic shows how hard the heart Squeezes (stroke volume). Diastolic shows how much the vessels Drag (resistance). Stiff arteries split them apart: SBP up, DBP down, PP widens.</span></div>
+    <div class="hook"><b class="k">120 · 80 · 40 · 0.77</b><span>SBP 120, DBP 80, PP 40. Every cm below the heart adds 0.77 mmHg.</span></div>
+    <div class="trap">↑ TPR raises DBP more, so pulse pressure <b>narrows</b>. Atherosclerosis raises SBP and lowers DBP, so pulse pressure <b>widens</b>. Heart-rate changes act mainly on <b>diastolic</b> pressure.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="bpb">Quiz me on this</button></div>
+  </article>
+
+  <article class="chapter" id="c-bpr">
+    <header><p class="eyebrow">Lecture 4 · part 2</p><h3>Regulation of arterial blood pressure</h3></header>
+    <p>Three tiers: <b>rapidly acting</b> (nervous), <b>intermediate</b>, and <b>slowly acting</b> (the kidney).</p>
+    <h4>1. Rapidly acting: medullary cardiovascular centres</h4>
+    <div class="tbl"><table>
+      <thead><tr><th>Area</th><th>Centre</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr><td rowspan="2">Pressor area (vasomotor area)</td><td>Vasoconstrictor centre (VCC): <b>vasoconstrictor tone</b></td><td>Arteriolar constriction → ↑ TPR → ↑ ABP; venoconstriction → ↑ mean systemic filling pressure → ↑ venous return → ↑ COP</td></tr>
+        <tr><td>Cardiac stimulatory centre (CSC): <b>sympathetic tone</b></td><td>↑ HR and ↑ force of contraction → ↑ SV → ↑ COP and ABP</td></tr>
+        <tr><td rowspan="2">Depressor area</td><td>Vasodilator centre (VDC)</td><td>Inhibits the VCC → vasodilatation → ↓ peripheral resistance</td></tr>
+        <tr><td>Cardiac inhibitory centre (CIC)</td><td>Inhibits the heart through the <b>vagus</b> (vagal tone) → bradycardia → ↓ COP</td></tr>
+      </tbody></table></div>
+    <div class="tbl"><table>
+      <thead><tr><th></th><th>Baroreceptor reflex</th><th>Chemoreceptor reflex</th></tr></thead>
+      <tbody>
+        <tr><td>Receptors</td><td><b>Carotid sinus</b> and <b>aortic arch</b></td><td><b>Carotid body</b> and <b>aortic body</b></td></tr>
+        <tr><td>Stimulus</td><td>ABP changes between <b class="mono">60 and 200 mmHg</b></td><td><b>Hypoxia</b> (main stimulus); ABP between <b class="mono">40 and 60 mmHg</b> (e.g. haemorrhage, with acidosis and hypercapnia)</td></tr>
+        <tr><td>Response</td><td>↑ ABP → inhibits the pressor area → ↓ HR, vasodilatation. ↓ ABP → the reverse</td><td>Mainly stimulates <b>respiration</b>; excites the pressor area and inhibits the depressor area → ↑ ABP</td></tr>
+      </tbody></table></div>
+    <ul>
+      <li><b>Afferent nerves:</b> <b>glossopharyngeal (IX)</b> via the carotid sinus nerve, and <b>vagus (X)</b> from the aortic arch.</li>
+      <li><b>Centre:</b> vasomotor centre in the <b>medulla oblongata</b>.</li>
+      <li><b>Timing:</b> starts within <b>seconds</b>, lasts <b>hours</b>; nervous.</li>
+      <li>Other cardiovascular receptors on the slide: low-pressure atrial and ventricular receptors, the coronary chemoreflex (Bezold-Jarisch) and pulmonary juxtacapillary (J) receptors.</li>
+    </ul>
+    <h4>2. Intermediate: capillary fluid shift (within minutes)</h4>
+    <ul>
+      <li><b>ABP falls</b> → capillary hydrostatic pressure falls → fluid moves <b>from tissues into capillaries</b> → ↑ venous return → ↑ COP → ↑ ABP.</li>
+      <li><b>ABP rises</b> → more filtration out of capillaries → ↓ venous return and COP → ↓ ABP.</li>
+      <li>The slide also lists stress-relaxation of vessels as an intermediate mechanism.</li>
+    </ul>
+    <h4>3. Slowly acting: the kidney</h4>
+    <ol>
+      <li><b>Pressure diuresis.</b></li>
+      <li><b>Renin–angiotensin system:</b> falling BP → less renal blood flow → kidney ischaemia → the <b>juxtaglomerular apparatus</b> releases <b>renin</b> → renin converts angiotensinogen (renin substrate, from the <b>liver</b>) into <b>angiotensin I</b> → <b>ACE in the lung</b> converts it to <b>angiotensin II</b>, a very powerful <b>vasoconstrictor</b> → ↑ BP.</li>
+      <li><b>Aldosterone:</b> falling BP → <b>adrenal cortex</b> releases aldosterone → <b>sodium and water retention</b> → ↑ blood volume → ↑ BP.</li>
+    </ol>
+    <div class="hook"><b class="k">Seconds · Minutes · Days</b><span>Nerves act in seconds, capillaries in minutes, the kidney slowly. "Liver makes the Lock (angiotensinogen), Kidney makes the Key (renin), Lung Locks it on (ACE)."</span></div>
+    <div class="hook"><b class="k">Baro = Big range, Chemo = Crisis range</b><span>Baroreceptors work from 60 to 200 mmHg; chemoreceptors join in at 40–60 mmHg, when hypoxia appears. Sinus → IX, arch → X.</span></div>
+    <div class="trap">Baroreceptors are in the carotid <b>sinus</b>; chemoreceptors are in the carotid <b>body</b>. ACE is in the <b>lung</b>; renin comes from the <b>juxtaglomerular apparatus</b>. The chemoreceptors' main job is to stimulate <b>respiration</b>.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="bpr">Quiz me on this</button></div>
+  </article>
+
+  <article class="chapter" id="c-pit">
+    <header><p class="eyebrow">Lecture 5 · part 1</p><h3>Endocrine basics, the pituitary and growth hormone</h3></header>
+    <ul>
+      <li><b>Endocrinology</b> studies glands of internal secretion. <b>Hormones</b> are chemicals secreted into body fluids and delivered <b>directly into the blood</b>. Exocrine glands secrete through <b>ducts</b>.</li>
+      <li>The pituitary (hypophysis) lies in the <b>sella turcica</b> beneath the brain.</li>
+    </ul>
+    <div class="tbl"><table>
+      <thead><tr><th>Part</th><th>Cells</th><th>Hormones</th></tr></thead>
+      <tbody>
+        <tr><td>Posterior pituitary (neurohypophysis)</td><td>Stores hormones made in the hypothalamus</td><td><b>ADH (vasopressin)</b>, <b>oxytocin</b></td></tr>
+        <tr><td>Intermediate lobe</td><td colspan="2">Rudimentary in humans</td></tr>
+        <tr><td rowspan="3">Anterior pituitary (adenohypophysis)</td><td><b>Chromophobes</b>, <b class="mono">50%</b></td><td>Precursors of alpha or beta cells</td></tr>
+        <tr><td><b>Acidophils (alpha)</b>, <b class="mono">40%</b></td><td><b>GH</b>, <b>prolactin</b> (luteotropic hormone, LTH)</td></tr>
+        <tr><td><b>Basophils (beta)</b>, <b class="mono">10%</b></td><td><b>TSH, ACTH, LH, FSH</b></td></tr>
+      </tbody></table></div>
+    <h4>Growth hormone (somatotropin)</h4>
+    <ul>
+      <li>Secreted by the <b>anterior pituitary</b> (acidophils). It has <b>direct</b> effects and an <b>indirect</b> effect, by stimulating the <b>liver</b> to make <b>somatomedin</b> (IGF-1).</li>
+      <li><b>Growth:</b> in children, before the epiphyses close, it causes <b>linear growth</b>. In adults, after closure, bones grow in <b>thickness only</b>.</li>
+    </ul>
+    <div class="tbl"><table>
+      <thead><tr><th>Protein</th><th>Carbohydrate</th><th>Fat</th></tr></thead>
+      <tbody><tr><td>↑ protein synthesis (<b>anabolic</b>)</td><td>↑ <b>blood glucose</b></td><td>↑ <b>lipolysis</b>, ↑ blood free fatty acids and <b>ketone bodies</b></td></tr></tbody></table></div>
+    <div class="hook"><b class="k">Acidophils make "GP": GH and Prolactin</b><span>Basophils make "B-FLAT": FSH, LH, ACTH, TSH. Cell shares 50 · 40 · 10 (chromophobes, acidophils, basophils).</span></div>
+    <div class="hook"><b class="k">GH builds protein, spares sugar, burns fat</b><span>Protein up, glucose up, lipolysis up, ketones up.</span></div>
+    <div class="trap">Prolactin comes from <b>acidophils</b>, not basophils. ADH and oxytocin are <b>stored and released</b> by the posterior pituitary. After epiphyseal closure GH thickens bone but cannot make it longer.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="pit">Quiz me on this</button></div>
+  </article>
+
+  <article class="chapter" id="c-pitd">
+    <header><p class="eyebrow">Lecture 5 · part 2</p><h3>GH disorders, ADH and oxytocin</h3></header>
+    <div class="tbl"><table>
+      <thead><tr><th>Disorder</th><th>Cause</th><th>Key features</th></tr></thead>
+      <tbody>
+        <tr><td>Gigantism</td><td>↑ GH from acidophils <b>before</b> epiphyseal union</td><td>All tissues grow fast → giant; high BMR; <b>hyperglycaemia and glucosuria</b> ("pituitary diabetes", not sensitive to insulin); lowered resistance; <b>hypogonadism</b> from acidophils pressing on basophils</td></tr>
+        <tr><td>Acromegaly</td><td>↑ GH <b>after</b> epiphyseal union</td><td>Coarse face; big ears and nose (cartilage); bones thicken in <b>width</b>: protruding jaws, prominent supraorbital ridge, <b>separation of teeth</b>; big hands and feet; <b>kyphosis</b>; soft-tissue overgrowth (lips, tongue, liver, spleen); hypogonadism; ↑ BMR, hyperglycaemia, glucosuria</td></tr>
+        <tr><td>Dwarfism</td><td>↓ GH in <b>childhood</b></td><td>Short but <b>proportionate</b> (span = height, upper = lower segment); at 20 looks 10; <b>no mental retardation</b>; no thyroid or adrenal deficiency; hypogonadism</td></tr>
+        <tr><td>Infantilism</td><td>↓ GH <b>and sex hormones</b></td><td>Short stature, normal mentality, <b>no sexual development</b></td></tr>
+      </tbody></table></div>
+    <div class="note"><b>Dental angle:</b> acromegaly separates the teeth and enlarges the jaw and tongue, so a patient's dentures or bite can change. Cretinism (Lecture 6) delays tooth eruption.</div>
+    <h4>Posterior pituitary</h4>
+    <div class="two">
+      <div class="box"><h4>ADH (vasopressin)</h4><ul>
+        <li>↑ water reabsorption by the kidney → ↓ water excretion → ↓ urine volume.</li>
+        <li>↑ ABP.</li>
+        <li>Deficiency: <b>diabetes insipidus</b> (polyuria).</li></ul></div>
+      <div class="box"><h4>Oxytocin</h4><ul>
+        <li>Contracts the <b>uterus</b> during delivery.</li>
+        <li><b>Milk ejection reflex:</b> baby suckles → sensory impulses from the nipple → oxytocin in blood → contraction of <b>myoepithelial cells</b> → milk flows.</li></ul></div>
+    </div>
+    <div class="hook"><b class="k">Before the plate = Giant, After the plate = Acro</b><span>Same excess GH; the epiphyseal plate decides: open = taller, closed = thicker ("acro" = extremities).</span></div>
+    <div class="hook"><b class="k">Dwarf = Wise and in proportion; Infantile = No puberty</b><span>Dwarfism: small, proportionate, normal mind. Infantilism adds missing sex hormones.</span></div>
+    <div class="hook"><b class="k">ADH = "Add Dat H₂O"</b><span>Keeps water, so urine falls. No ADH = diabetes insipidus, floods of dilute urine.</span></div>
+    <div class="trap">Both gigantism and acromegaly cause <b>hyperglycaemia</b> and <b>hypogonadism</b>. Dwarfism has <b>no mental retardation</b> (that is cretinism). Diabetes insipidus is an <b>ADH</b> problem, not insulin.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="pitd">Quiz me on this</button></div>
+  </article>
+
+  <article class="chapter" id="c-thy">
+    <header><p class="eyebrow">Lecture 6 · part 1</p><h3>Thyroid hormones, control and actions</h3></header>
+    <ul>
+      <li><b>Follicular cells</b> secrete <b>thyroxine (T4)</b> and <b>triiodothyronine (T3)</b>. The follicle lumen holds <b>colloid</b>, a glycoprotein.</li>
+      <li><b>Parafollicular (C) cells</b> secrete <b>calcitonin</b>.</li>
+      <li><b>Control:</b> hypothalamus <b>TRH</b> → anterior pituitary <b>TSH</b> → thyroid <b>T4, T3</b>. T4 feeds back to <b>↓ TSH</b>.</li>
+    </ul>
+    <div class="tbl"><table>
+      <thead><tr><th>System</th><th>Action of thyroid hormone</th></tr></thead>
+      <tbody>
+        <tr><td>General metabolism</td><td>↑ <b>BMR</b>, O₂ consumption and heat production</td></tr>
+        <tr><td>Carbohydrate</td><td>↑ blood glucose (gluconeogenesis, glucose utilisation)</td></tr>
+        <tr><td>Lipids</td><td>↓ <b>blood cholesterol</b> (more conversion to bile acids and uptake from plasma); ↑ fatty acid mobilisation</td></tr>
+        <tr><td>Protein</td><td>Anabolic for energy production (catabolic in muscle at high levels)</td></tr>
+        <tr><td>CNS</td><td><b>Growth, differentiation and maturation</b></td></tr>
+        <tr><td>CVS</td><td>↑ <b>heart rate</b> and <b>cardiac output</b></td></tr>
+        <tr><td>GIT</td><td>↑ appetite, motility and secretions</td></tr>
+        <tr><td>Pituitary and bone</td><td>↓ TSH, ↑ GH; ↑ bone growth, maturation and resorption</td></tr>
+      </tbody></table></div>
+    <div class="hook"><b class="k">Thyroid hormone = the body's accelerator</b><span>Everything speeds up: metabolism, heat, heart, gut, brain development. Only cholesterol and TSH go down.</span></div>
+    <div class="hook"><b class="k">T-T-T: TRH → TSH → T4</b><span>Hypothalamus, pituitary, thyroid. T4 switches TSH off.</span></div>
+    <div class="trap">Calcitonin comes from <b>parafollicular C cells</b>, not follicular cells. Thyroid hormone <b>lowers</b> cholesterol, so hypothyroidism <b>raises</b> it.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="thy">Quiz me on this</button></div>
+  </article>
+
+  <article class="chapter" id="c-thyd">
+    <header><p class="eyebrow">Lecture 6 · part 2</p><h3>Hyperthyroidism, myxoedema and cretinism</h3></header>
+    <h4>Hyperthyroidism (thyrotoxicosis, Graves' disease)</h4>
+    <p><b>Cause:</b> excess hormone production due to <b>LATS</b> (long-acting thyroid stimulator): abnormal <b>antibodies</b> made by <b>lymphocytes</b> in an <b>autoimmune</b> disease, stimulating the gland with a long-acting effect.</p>
+    <p><b>Clinical picture:</b> heat intolerance, fine straight hair, <b>bulging eyes</b>, facial flushing, <b>enlarged thyroid</b>, <b>tachycardia</b>, ↑ systolic BP, clubbing, breast enlargement, <b>weight loss</b>, <b>tremors</b>, muscle wasting, <b>diarrhoea</b>, menstrual changes (amenorrhoea), localised oedema.</p>
+    <h4>Hypothyroidism</h4>
+    <div class="two">
+      <div class="box"><h4>Adult: myxoedema</h4>
+        <p><b>Causes:</b></p><ol>
+          <li><b>Primary:</b> damage or surgical removal of the thyroid; metabolic defect.</li>
+          <li><b>Secondary:</b> ↓ <b>TSH</b> (e.g. <b>Simmond's disease</b>).</li>
+          <li><b>Tertiary:</b> hypothalamic lesion.</li></ol>
+        <p><b>Picture:</b> <b>cold intolerance</b>, facial and eyelid oedema, dull expression, hair loss, fatigue, apathy, <b>thick tongue</b>, slow speech, <b>hoarse voice</b>, dry coarse skin, brittle nails, poor appetite, <b>constipation</b>, weight gain, poor memory, muscle aches, menstrual problems, <b>high cholesterol</b>. Late: subnormal temperature, <b>bradycardia</b>, thick skin, ↓ consciousness, cardiac complications.</p></div>
+      <div class="box"><h4>Child: cretinism</h4>
+        <p><b>Causes</b> (in utero or early life): <b>absent thyroid gland</b>, or a <b>metabolic defect</b> so the gland cannot make hormone.</p>
+        <p><b>Usually detected at 6 months.</b> Dull, apathetic infant, coarse face, hoarse cry; delayed bone growth → short, depressed nose; <b>delayed sitting, walking and tooth eruption</b>; defective speech; dry skin, scanty hair; <b>mental retardation</b> (the <b>most common cause of curable mental retardation</b>); soft tissue grows more than bone → big liver and gut, weak abdominal wall → <b>pot belly and umbilical hernia</b>, <b>protruding tongue</b> → open mouth; ↓↓↓ BMR with hypothermia; incontinence; infantilism, sterility; ↑↑↑ cholesterol.</p></div>
+    </div>
+    <div class="tbl"><table>
+      <thead><tr><th>Lab pattern</th><th>TRH</th><th>TSH</th><th>T4/T3</th></tr></thead>
+      <tbody>
+        <tr><td>Graves' (LATS)</td><td>↓</td><td><b>↓</b> (feedback)</td><td><b>↑</b></td></tr>
+        <tr><td>Primary hypothyroidism</td><td>↑</td><td><b>↑</b></td><td><b>↓</b></td></tr>
+        <tr><td>Secondary (pituitary, Simmond's)</td><td>↑</td><td><b>↓</b></td><td><b>↓</b></td></tr>
+        <tr><td>Tertiary (hypothalamus)</td><td>↓</td><td><b>↓</b></td><td><b>↓</b></td></tr>
+      </tbody></table></div>
+    <p class="small muted">The feedback table is worked out from the TRH → TSH → T4 loop in the lecture, so you can reason through "predict the change" questions.</p>
+    <div class="hook"><b class="k">Hyper = Hot, Hungry, Hurried · Hypo = Cold, Constipated, Coarse</b><span>Hyper: heat intolerance, weight loss with appetite, tachycardia, tremor, diarrhoea. Hypo: cold intolerance, constipation, coarse skin and voice, bradycardia, weight gain.</span></div>
+    <div class="hook"><b class="k">Cretin's "5 P's": Pot belly, Protruding tongue, Puffy face, Poor growth, Poor mind</b><span>And it is curable if found early, which is why newborn screening matters.</span></div>
+    <div class="trap">LATS is an <b>antibody</b> from lymphocytes, not a pituitary hormone, so TSH is <b>low</b> in Graves'. Secondary hypothyroidism has <b>low TSH</b>; primary has <b>high TSH</b>. Dwarfism has normal intelligence; <b>cretinism</b> has mental retardation.</div>
+    <div class="row"><button class="btn wax qmb" data-topic="thyd">Quiz me on this</button></div>
+  </article>
+</section>
+
+<!-- ================= MEMORY ================= -->
+<section class="panel" id="p-memory" hidden>
+  <div><p class="eyebrow">Memory aids</p><h2>Hooks, numbers and traps</h2></div>
+  <p class="lede">Read these out loud, then test yourself in the Flashcards. The numbers grid is your last-hour sheet.</p>
+  <h3>How questions catch you</h3>
+  <div class="mem-grid">
+    <div class="mem"><span class="t">Trick 1</span><span class="big">Swapped partners</span><p>Sinus vs body, acidophil vs basophil, gigantism vs acromegaly, dwarfism vs cretinism, primary vs secondary.</p></div>
+    <div class="mem"><span class="t">Trick 2</span><span class="big">Wrong direction</span><p>Does pulse pressure widen or narrow? Does cholesterol rise or fall? Does TSH go up or down?</p></div>
+    <div class="mem"><span class="t">Trick 3</span><span class="big">Wrong organ</span><p>Renin from the kidney, angiotensinogen from the liver, ACE in the lung, aldosterone from the adrenal cortex.</p></div>
+    <div class="mem"><span class="t">Trick 4</span><span class="big">Wrong number</span><p>60–200 vs 40–60 mmHg; 50/40/10%; 0.77 mmHg per cm; 6 months for cretinism.</p></div>
+    <div class="mem"><span class="t">Trick 5</span><span class="big">Wrong timing</span><p>Seconds vs minutes vs slow; before vs after epiphyseal union.</p></div>
+    <div class="mem"><span class="t">Trick 6</span><span class="big">Look-alike disease</span><p>Diabetes insipidus is ADH; "pituitary diabetes" is the hyperglycaemia of GH excess.</p></div>
+  </div>
+  <h3>Numbers you must own</h3>
+  <div class="numgrid" id="numGrid"></div>
+  <h3>Hooks</h3>
+  <div class="mem-grid" id="memGrid"></div>
+  <h3>Top traps</h3>
+  <div class="mem-grid" id="trapGrid"></div>
+</section>
+
+<!-- ================= LOOKUP ================= -->
+<section class="panel" id="p-lookup" hidden>
+  <div><p class="eyebrow">Lookup</p><h2>Search any term</h2></div>
+  <p class="lede">Type a word to find its meaning, jump to it in the guide, or start a quiz built only from questions that use it.</p>
+  <div class="card"><label for="lkInput" class="small muted">Search terms</label><input id="lkInput" type="search" placeholder="e.g. renin, TSH, acromegaly" autocomplete="off"><span class="small muted" id="lkCount"></span></div>
+  <div class="card" id="lkList"></div>
+</section>
+
+<!-- ================= FLASHCARDS ================= -->
+<section class="panel" id="p-cards" hidden>
+  <div><p class="eyebrow">Flashcards</p><h2>Flip, recall, sort</h2></div>
+  <div class="chips" id="cardChips"></div>
+  <div class="card">
+    <div class="hud"><span>Card <b id="cIdx">1</b>/<b id="cTot">0</b></span><span>Known <b id="cKnown">0</b></span><label class="small"><input type="checkbox" id="cUnknown"> Only cards I don't know yet</label></div>
+    <div class="flash" id="flash" tabindex="0" role="button" aria-label="Flip card">
+      <div class="flash-in">
+        <div class="face front"><span class="tag" id="cTag"></span><div class="q" id="cFront"></div><span class="muted small">Tap or press Space to flip</span></div>
+        <div class="face back"><span class="tag" id="cTag2"></span><div class="a" id="cBack"></div></div>
+      </div>
+    </div>
+    <div class="row">
+      <button class="btn ghost" id="cAgain">Again</button>
+      <button class="btn wax" id="cGot">Got it</button>
+      <button class="btn ghost" id="cShuffle">Shuffle</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="panel" id="p-quiz" hidden>
+  <div><p class="eyebrow">MCQ</p><h2>10-question rounds with combos</h2></div>
+  <p class="lede">Ten-question rounds. Mark your confidence before each answer; every explanation links back to the guide. Keys <kbd>1</kbd>–<kbd>4</kbd> answer and <kbd>Enter</kbd> goes next. Misses go into Weak spots.</p>
+  <div id="quizArea"></div>
+</section>
+
+<!-- ================= TRUE/FALSE ================= -->
+<section class="panel" id="p-tf" hidden>
+  <div><p class="eyebrow">True/False</p><h2>20-statement rounds with combos</h2></div>
+  <p class="lede">Every fact has a true and a false wording, and you get one at random, so you have to know the fact rather than remember the sentence. Keys <kbd>T</kbd> and <kbd>F</kbd> answer and <kbd>Enter</kbd> goes next. Misses go into Weak spots.</p>
+  <div id="tfArea"></div>
+</section>
+
+<!-- ================= CASES ================= -->
+<section class="panel" id="p-cases" hidden>
+  <div><p class="eyebrow">Case files</p><h2>Clinical stories, step by step</h2></div>
+  <p class="lede">Each case gives you a patient, then asks 4–5 linked questions: diagnosis, cause, mechanism and lab results. Keys <kbd>1</kbd>–<kbd>4</kbd> answer and <kbd>Enter</kbd> goes on.</p>
+  <div id="caseArea"></div>
+</section>
+
+<!-- ================= GAMES ================= -->
+<section class="panel" id="p-games" hidden>
+  <div><p class="eyebrow">Mini-games</p><h2>Drill the bits examiners love</h2></div>
+  <div id="gameArea"></div>
+</section>
+
+<!-- ================= MOCK ================= -->
+<section class="panel" id="p-mock" hidden>
+  <div><p class="eyebrow">Exam simulation</p><h2>15-question exam mock</h2></div>
+  <p class="lede">15 questions from all six topics, one mark each. Pick mixed, MCQ-only or true/false-only. You see no answers until you submit, then you get a full review. The real time limit may differ.</p>
+  <div id="mockArea"></div>
+</section>
+
+<!-- ================= PROGRESS ================= -->
+<section class="panel" id="p-progress" hidden>
+  <div><p class="eyebrow">Progress</p><h2>Where you stand</h2></div>
+  <div id="progArea"></div>
+</section>
+</main>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* ======================= DATA ======================= */
+const TOPICS={
+  bpb:{n:"BP basics and factors",ch:"L4"},
+  bpr:{n:"Regulation of BP",ch:"L4"},
+  pit:{n:"Pituitary and GH",ch:"L5"},
+  pitd:{n:"GH disorders, ADH, oxytocin",ch:"L5"},
+  thy:{n:"Thyroid hormones",ch:"L6"},
+  thyd:{n:"Thyroid disorders",ch:"L6"}
+};
+const LECTURES={L4:{name:"Blood Pressure",boss:"The Pressor Area",topics:["bpb","bpr"]},L5:{name:"Pituitary Gland",boss:"The Acidophil Giant",topics:["pit","pitd"]},L6:{name:"Thyroid Gland",boss:"The Goitre",topics:["thy","thyd"]}};
+/* [topic, stem, correct, [wrong x3], explanation] */
+const Q=[
+/* ---------- BP BASICS ---------- */
+["bpb","Arterial blood pressure is defined as:","The pressure of blood on the arterial walls",["The pressure of blood on the venous walls","The volume of blood pumped per minute","The resistance of arterioles to blood flow"],"Lecture 4, slide 2."],
+["bpb","The highest normal blood pressure reading given in the lecture is:","120/80 mmHg",["140/90 mmHg","110/70 mmHg","130/85 mmHg"],"120/80 is the highest normal reading."],
+["bpb","Normal diastolic blood pressure ranges from:","60 to 90 mmHg",["30 to 50 mmHg","100 to 140 mmHg","40 to 60 mmHg"],"DBP 80 mmHg (60–90)."],
+["bpb","Pulse pressure is calculated as:","Systolic pressure minus diastolic pressure",["Diastolic pressure minus systolic pressure","Cardiac output times peripheral resistance","Systolic pressure divided by heart rate"],"PP = SBP − DBP = 40 mmHg."],
+["bpb","Normal pulse pressure is about:","40 mmHg (30–50)",["80 mmHg (60–90)","120 mmHg (100–140)","10 mmHg (5–15)"],"120 − 80 = 40."],
+["bpb","Systolic pressure mainly reflects:","The pumping ability of the heart",["The peripheral resistance of arterioles","The elasticity of the large veins","The viscosity of the blood"],"Systolic = left ventricular contraction."],
+["bpb","Diastolic pressure mainly signifies:","The peripheral resistance",["The pumping ability of the heart","The stroke volume","The venous return"],"Diastolic reflects resistance."],
+["bpb","Systolic pressure is recorded during:","Left ventricular contraction",["Left ventricular relaxation","Atrial contraction","Isovolumetric relaxation of the right ventricle"],"When the LV contracts and ejects."],
+["bpb","The normal blood pressure of a newborn is about:","80/40 mmHg",["80/60 mmHg","120/80 mmHg","100/70 mmHg"],"Newborn 80/40 (vagal tone); child 80/60."],
+["bpb","The normal blood pressure of a child is about:","80/60 mmHg",["80/40 mmHg","120/80 mmHg","140/90 mmHg"],"Child 80/60."],
+["bpb","Blood pressure rises gradually with age mainly because of:","Loss of arterial elasticity",["Increased vagal tone","Falling cardiac output","Reduced sympathetic activity"],"Arteries stiffen with age."],
+["bpb","Before the age of 45, compared with females, males have a BP that is:","About 5 mmHg higher",["About 5 mmHg lower","About 20 mmHg higher","Exactly the same"],"Lecture 4, sex factor."],
+["bpb","After the age of 45:","Diastolic pressure is higher in females than males",["Systolic pressure is higher in males than females","Diastolic pressure falls in both sexes","Blood pressure stops rising in both sexes"],"After 45 female diastolic exceeds male."],
+["bpb","According to the lecture, digestion of a meal:","Increases arterial blood pressure",["Decreases arterial blood pressure","Has no effect on blood pressure","Lowers the systolic pressure"],"Meals increase ABP."],
+["bpb","Emotions and exercise raise blood pressure through:","Increased sympathetic activity",["Increased vagal tone","Reduced cardiac output","Capillary fluid shift into vessels"],"Sympathetic drive."],
+["bpb","For each 1 cm below the level of the heart, arterial pressure:","Increases by 0.77 mmHg",["Decreases by 0.77 mmHg","Increases by 7.7 mmHg","Does not change"],"Gravity factor."],
+["bpb","For each 1 cm above the level of the heart, arterial pressure:","Decreases by 0.77 mmHg",["Increases by 0.77 mmHg","Decreases by 7.7 mmHg","Does not change"],"Above the heart, pressure falls."],
+["bpb","Arterial blood pressure equals:","Cardiac output × total peripheral resistance",["Stroke volume × total venous return","Heart rate ÷ total peripheral resistance","Pulse pressure × resting heart rate"],"ABP = COP × TPR."],
+["bpb","An increase in stroke volume raises:","Systolic pressure more than diastolic",["Diastolic pressure more than systolic","Both pressures exactly equally","Venous pressure more than arterial"],"SV acts mainly on systolic."],
+["bpb","Changes in heart rate mainly affect:","Diastolic pressure",["Systolic pressure","Mean venous pressure","Pulmonary arterial pressure"],"Systolic stays almost constant."],
+["bpb","An increase in total peripheral resistance:","Raises diastolic more than systolic, so pulse pressure decreases",["Raises systolic more than diastolic, so pulse pressure increases","Lowers both pressures equally","Raises systolic and leaves diastolic unchanged"],"↑TPR narrows PP."],
+["bpb","In atherosclerosis (decreased arterial elasticity):","Systolic rises, diastolic falls, pulse pressure increases",["Systolic falls, diastolic rises, pulse pressure decreases","Both pressures fall and pulse pressure stays the same","Both pressures rise equally and pulse pressure is unchanged"],"Stiff arteries widen PP."],
+["bpb","A patient's pulse pressure has widened. The most likely change from the lecture's list is:","Decreased elasticity of the aorta",["Increased peripheral resistance","Decreased stroke volume","A faster heart rate"],"Atherosclerosis widens PP."],
+["bpb","Which population does the lecture say tends to have higher arterial pressure?","Americans and Europeans",["Newborn infants","Children under 10","People who avoid meals"],"Race factor."],
+/* ---------- BP REGULATION ---------- */
+["bpr","The three tiers of ABP regulation are:","Rapid (nervous), intermediate and slow (kidney)",["Cardiac, vascular and respiratory control","Hormonal, chemical and thermal control","Acute, chronic and permanent control"],"Lecture 4, slide 8."],
+["bpr","The rapidly acting mechanism of BP regulation is:","Nervous",["Renal","Hormonal","Capillary"],"Medullary centres and reflexes."],
+["bpr","The pressor area is also called the:","Vasomotor area",["Depressor area","Cardiac inhibitory area","Respiratory area"],"Pressor = vasomotor area (VMA)."],
+["bpr","The pressor area contains:","The vasoconstrictor centre and the cardiac stimulatory centre",["The vasodilator centre and the cardiac inhibitory centre","The respiratory and vomiting centres","The baroreceptors and chemoreceptors"],"Pressor = VCC + CSC."],
+["bpr","Stimulation of the vasoconstrictor centre causes:","Arteriolar constriction, raising TPR and ABP",["Arteriolar dilatation, lowering TPR and ABP","Bradycardia through the vagus","Fluid shift from capillaries to tissues"],"Plus venoconstriction → ↑VR."],
+["bpr","Venoconstriction raises ABP by increasing:","Mean systemic filling pressure and venous return",["Peripheral resistance in the capillary beds","Vagal tone and inhibition of the heart","Capillary filtration out into the tissues"],"↑MSFP → ↑VR → ↑COP."],
+["bpr","The cardiac stimulatory centre acts through:","Sympathetic tone, raising heart rate and contraction force",["Vagal tone, slowing the heart and lowering output","The glossopharyngeal nerve to the carotid sinus","Release of renin from the juxtaglomerular cells"],"↑HR and ↑SV → ↑COP."],
+["bpr","The cardiac inhibitory centre slows the heart through the:","Vagus nerve",["Sympathetic chain","Glossopharyngeal nerve","Phrenic nerve"],"Vagal tone → bradycardia."],
+["bpr","The vasodilator centre lowers BP by:","Inhibiting the vasoconstrictor centre",["Stimulating the cardiac stimulatory centre","Releasing aldosterone","Increasing venous return"],"VDC inhibits VCC."],
+["bpr","The depressor area lowers ABP through:","Vasodilatation and a slower heart rate",["Vasoconstriction and a faster heart rate","Sodium and water retention","Fluid shift into the capillaries"],"↓TPR and ↓COP."],
+["bpr","Arterial baroreceptors are found in the:","Carotid sinus and aortic arch",["Carotid body and aortic body","Right atrium and venae cavae","Juxtaglomerular apparatus"],"Bodies hold chemoreceptors."],
+["bpr","Arterial chemoreceptors are found in the:","Carotid body and aortic body",["Carotid sinus and aortic arch","Medulla oblongata","Pulmonary capillaries"],"Sinus = baro, body = chemo."],
+["bpr","Baroreceptors respond to ABP changes between:","60 and 200 mmHg",["40 and 60 mmHg","0 and 40 mmHg","200 and 300 mmHg"],"Chemoreceptors join at 40–60."],
+["bpr","The main stimulus for the chemoreceptors is:","Hypoxia",["Hypertension","Hyperglycaemia","Bradycardia"],"Plus low ABP 40–60 mmHg."],
+["bpr","Chemoreceptors affect ABP when it falls to between:","40 and 60 mmHg",["60 and 200 mmHg","100 and 140 mmHg","10 and 20 mmHg"],"E.g. haemorrhage."],
+["bpr","The main function of the arterial chemoreceptors is to:","Stimulate the respiratory centres",["Inhibit the pressor area","Release renin from the kidney","Slow the heart via the vagus"],"They also raise ABP."],
+["bpr","Afferent fibres from the carotid sinus travel in the:","Glossopharyngeal nerve (IX)",["Vagus nerve (X)","Hypoglossal nerve (XII)","Trigeminal nerve (V)"],"Carotid sinus nerve → IX."],
+["bpr","Afferent fibres from the aortic arch travel in the:","Vagus nerve (X)",["Glossopharyngeal nerve (IX)","Phrenic nerve","Accessory nerve (XI)"],"Aortic → X."],
+["bpr","The vasomotor centre is located in the:","Medulla oblongata",["Hypothalamus","Cerebral cortex","Spinal cord at T1"],"Brain stem."],
+["bpr","When ABP rises, the baroreceptor reflex causes:","Decreased heart rate and vasodilatation",["Increased heart rate and vasoconstriction","Release of renin and aldosterone","Fluid shift from tissues into capillaries"],"Inhibits the pressor area."],
+["bpr","When ABP falls, the baroreceptor reflex causes:","Increased heart rate and vasoconstriction",["Decreased heart rate and vasodilatation","Increased urine output","Fluid shift out of the capillaries"],"Less inhibition of the pressor area."],
+["bpr","The nervous (baroreceptor) mechanism starts within:","Seconds, and lasts hours",["Minutes, and lasts days","Hours, and lasts weeks","Days, and lasts months"],"Rapid mechanism."],
+["bpr","The capillary fluid shift mechanism starts within:","A few minutes",["A few seconds","Several days","Several weeks"],"Intermediate mechanism."],
+["bpr","When ABP falls, the capillary fluid shift mechanism:","Moves fluid from tissues into capillaries, raising venous return",["Moves fluid from capillaries into tissues, lowering venous return","Increases urine output by the kidney","Releases renin from the liver"],"Lower hydrostatic pressure → absorption."],
+["bpr","When ABP rises, capillary hydrostatic pressure rises and:","Filtration increases, lowering venous return and ABP",["Absorption increases, raising venous return and ABP","Renin release increases","Heart rate increases"],"More fluid leaves the capillaries."],
+["bpr","The slowly acting mechanism of BP regulation depends mainly on the:","Kidney",["Medulla","Capillaries","Skin"],"Pressure diuresis, RAAS, aldosterone."],
+["bpr","Renin is secreted by the:","Juxtaglomerular apparatus of the kidney",["Zona glomerulosa of the adrenal cortex","Hepatocytes of the liver","Endothelium of the lung capillaries"],"In response to renal ischaemia."],
+["bpr","The stimulus for renin release in the lecture is:","Falling BP causing kidney ischaemia",["Rising BP stretching the kidney","High blood glucose","Increased vagal tone"],"Less renal blood flow."],
+["bpr","Renin converts angiotensinogen (renin substrate) into:","Angiotensin I",["Angiotensin II","Aldosterone","Bradykinin"],"Then ACE makes Ang II."],
+["bpr","Angiotensinogen is produced by the:","Liver",["Kidney","Lung","Adrenal cortex"],"Renin substrate in plasma."],
+["bpr","Angiotensin I is converted to angiotensin II mainly in the:","Lung, by converting enzyme",["Liver, by renin","Kidney, by aldosterone","Heart, by vasopressin"],"ACE in the lung."],
+["bpr","Angiotensin II raises BP mainly by being:","A very powerful vasoconstrictor",["A very powerful vasodilator","A stimulant of vagal tone","A hormone that causes diuresis"],"Also stimulates aldosterone."],
+["bpr","Aldosterone is secreted by the:","Adrenal cortex",["Adrenal medulla","Posterior pituitary","Juxtaglomerular apparatus"],"In response to falling BP."],
+["bpr","Aldosterone raises BP by:","Sodium and water retention, increasing blood volume",["Direct constriction of the arterioles in the skin","Increasing the heart rate through sympathetic nerves","Shifting fluid out of capillaries into the tissues"],"↑ volume → ↑ BP."],
+["bpr","The coronary chemoreflex is also called the:","Bezold-Jarisch reflex",["Bainbridge reflex","Hering-Breuer reflex","Cushing reflex"],"Listed with cardiovascular receptors."],
+/* ---------- PITUITARY & GH ---------- */
+["pit","Hormones are delivered:","Directly into the blood",["Through ducts onto a surface","Into the lymph vessels","Into the gut lumen"],"Exocrine glands use ducts."],
+["pit","The pituitary gland lies in the:","Sella turcica",["Foramen magnum","Pineal recess","Cavernous sinus"],"Beneath the base of the brain."],
+["pit","Another name for the posterior pituitary is the:","Neurohypophysis",["Adenohypophysis","Pars intermedia","Hypothalamus"],"Anterior = adenohypophysis."],
+["pit","The posterior pituitary secretes (releases):","ADH and oxytocin",["GH and prolactin","TSH and ACTH","LH and FSH"],"Made in the hypothalamus, stored here."],
+["pit","In humans, the intermediate lobe of the pituitary is:","Rudimentary",["The largest lobe","The source of GH","The source of ADH"],"Lecture 5."],
+["pit","Chromophobes make up about what share of anterior pituitary cells?","50%",["40%","10%","90%"],"50 · 40 · 10."],
+["pit","Chromophobes are:","Precursor cells of alpha or beta cells",["The cells that secrete GH","The cells that secrete TSH","Nerve endings from the hypothalamus"],"Precursors."],
+["pit","Acidophils (alpha cells) make up about:","40% of anterior pituitary cells",["50% of anterior pituitary cells","10% of anterior pituitary cells","90% of anterior pituitary cells"],"They secrete GH and prolactin."],
+["pit","Acidophils secrete:","Growth hormone and prolactin",["TSH and ACTH hormones","LH and FSH hormones","ADH and oxytocin"],"GP: GH + Prolactin."],
+["pit","Basophils (beta cells) secrete all of the following EXCEPT:","Prolactin",["TSH (thyrotropin)","ACTH","FSH"],"Prolactin is acidophil."],
+["pit","Basophils make up about:","10% of anterior pituitary cells",["40% of anterior pituitary cells","50% of anterior pituitary cells","25% of anterior pituitary cells"],"B-FLAT cells."],
+["pit","Another name for prolactin in the lecture is:","Luteotropic hormone (LTH)",["Luteinizing hormone (LH)","Somatotropin","Thyrotropin"],"LTH."],
+["pit","Another name for growth hormone is:","Somatotropin",["Thyrotropin","Corticotropin","Vasopressin"],"GH = somatotropin."],
+["pit","The indirect effect of growth hormone works through:","Somatomedin (IGF-1) produced by the liver",["Thyroxine produced by the thyroid gland","Insulin produced by the pancreatic islets","Cortisol produced by the adrenal cortex"],"Liver → IGF-1."],
+["pit","Before closure of the epiphyses, growth hormone causes:","Linear growth of bones",["Thickening of bones without lengthening","Resorption of the growth plate","No effect on bone"],"Children grow taller."],
+["pit","After closure of the epiphyses, growth hormone causes bones to grow:","In thickness only",["In length only","In length and thickness","Not at all"],"Adults: width only."],
+["pit","The effect of GH on protein metabolism is:","Increased protein synthesis (anabolic)",["Increased protein breakdown (catabolic)","No effect on protein","Decreased amino acid uptake"],"Anabolic."],
+["pit","The effect of GH on blood glucose is to:","Increase it",["Decrease it","Keep it fixed","Abolish it"],"Diabetogenic."],
+["pit","The effect of GH on fat metabolism is:","Increased lipolysis, free fatty acids and ketone bodies",["Increased fat storage and lower free fatty acids","No effect on fat metabolism","Decreased ketone body formation"],"Fat is burned."],
+["pit","Exocrine glands differ from endocrine glands because they:","Secrete through ducts",["Secrete directly into blood","Have no secretory cells","Secrete hormones into blood"],"Endocrine = ductless."],
+/* ---------- PITUITARY DISORDERS & POSTERIOR ---------- */
+["pitd","Gigantism results from excess GH:","Before union of the epiphyses",["After union of the epiphyses","During pregnancy","In old age"],"Children."],
+["pitd","Acromegaly results from excess GH:","After union of the epiphyses",["Before union of the epiphyses","During fetal life","With low sex hormones"],"Adults."],
+["pitd","Excess GH in gigantism and acromegaly is produced by:","Acidophil (alpha) cells",["Basophil (beta) cells","Chromophobe cells","Parafollicular cells"],"Acidophils make GH."],
+["pitd","Hypogonadism in gigantism is explained in the lecture by:","Pressure of acidophil cells on basophils",["Excess oxytocin secretion by the pituitary","Destruction of the thyroid gland","Loss of ADH from the posterior lobe"],"Basophils make LH/FSH."],
+["pitd","Hyperglycaemia and glucosuria in GH excess are called:","Pituitary diabetes",["Diabetes insipidus","Renal glycosuria","Type 1 diabetes"],"Not sensitive to insulin."],
+["pitd","A feature of acromegaly is:","Separation of the teeth and protruding jaws",["Proportionate short stature with normal jaws","Delayed tooth eruption and a small mandible","Mental retardation present from infancy"],"Bones thicken in width."],
+["pitd","In acromegaly, the ears and nose enlarge because of:","Increased cartilaginous growth",["Fluid retention in the face","Lengthening of the skull bones","Wasting of facial muscles"],"Cartilage grows."],
+["pitd","Bowing of the spine seen in acromegaly is called:","Kyphosis",["Scoliosis","Lordosis","Spondylosis"],"Lecture 5."],
+["pitd","Soft-tissue overgrowth in acromegaly includes:","Lips, tongue, liver and spleen",["Thyroid follicles and colloid","Brain and spinal cord","Hair follicles and nails"],"Splenomegaly, hepatomegaly."],
+["pitd","Dwarfism results from:","Decreased GH during childhood",["Decreased GH after puberty","Decreased thyroxine at birth","Excess GH before puberty"],"Pituitary dwarf."],
+["pitd","A pituitary dwarf has:","Proportionate body and normal intelligence",["Disproportionate limbs and mental retardation","Protruding tongue and umbilical hernia","Excess height and hyperglycaemia"],"Span = height; no mental retardation."],
+["pitd","A pituitary dwarf aged 20 may have the body development of a child aged about:","10 years",["2 years","15 years","5 months"],"Lecture 5."],
+["pitd","Infantilism results from:","Decreased GH and sex hormones",["Decreased GH with normal sex hormones","Excess GH and sex hormones","Decreased thyroxine at birth"],"No sexual development."],
+["pitd","The key difference between infantilism and dwarfism is that infantilism shows:","No sexual development",["Mental retardation","Excess body height","High blood glucose"],"Sex hormones are also low."],
+["pitd","ADH acts on the kidney to:","Increase water reabsorption and decrease urine volume",["Decrease water reabsorption and increase urine volume","Increase sodium excretion","Secrete renin"],"Antidiuretic."],
+["pitd","ADH is also called:","Vasopressin",["Somatotropin","Oxytocin","Calcitonin"],"It raises ABP."],
+["pitd","Deficiency of ADH causes:","Diabetes insipidus",["Diabetes mellitus","Pituitary diabetes","Myxoedema"],"Polyuria."],
+["pitd","The main symptom of diabetes insipidus is:","Polyuria",["Hyperglycaemia","Glucosuria","Oliguria"],"Large urine volume."],
+["pitd","Oxytocin causes milk ejection by contracting the:","Myoepithelial cells of the breast",["Smooth muscle of the bladder wall","Alveolar secretory cells of the breast","Skeletal muscle of the chest wall"],"Milk letting."],
+["pitd","The stimulus for the oxytocin milk-ejection reflex is:","The baby suckling at the nipple",["A rise in maternal blood glucose","A fall in maternal blood pressure","Exposure of the mother to cold"],"Sensory impulses from the nipple."],
+["pitd","Oxytocin acts on the uterus to:","Contract it during delivery",["Relax it during pregnancy","Thicken its lining","Secrete milk"],"Uterine contraction."],
+/* ---------- THYROID HORMONES ---------- */
+["thy","T4 and T3 are secreted by the:","Follicular cells",["Parafollicular C cells","Chromophobe cells","Colloid"],"C cells make calcitonin."],
+["thy","Calcitonin is secreted by the:","Parafollicular (C) cells",["Follicular epithelial cells","Acidophil pituitary cells","Adrenal cortical cells"],"C for calcitonin."],
+["thy","The colloid in the thyroid follicle is a:","Glycoprotein",["Lipid droplet","Mineral crystal","Blood clot"],"Slide 2."],
+["thy","The correct order of the thyroid axis is:","TRH → TSH → T4/T3",["TSH → TRH → T4/T3","T4 → TSH → TRH","TRH → T4 → TSH"],"Hypothalamus → pituitary → thyroid."],
+["thy","TRH is secreted by the:","Hypothalamus",["Anterior pituitary","Thyroid gland","Posterior pituitary"],"Thyrotropin-releasing hormone."],
+["thy","TSH is secreted by the:","Anterior pituitary (basophils)",["Hypothalamic nuclei","Thyroid follicular cells","Posterior pituitary"],"Thyrotropin."],
+["thy","High levels of T4 act on the pituitary to:","Decrease TSH production",["Increase TSH production","Increase ADH release","Increase TRH release"],"Negative feedback."],
+["thy","Thyroid hormone affects basal metabolic rate by:","Increasing BMR, O₂ consumption and heat production",["Decreasing BMR and heat production","Having no effect on metabolism","Increasing BMR while lowering O₂ consumption"],"General metabolism."],
+["thy","Thyroid hormone affects blood cholesterol by:","Decreasing it",["Increasing it","Keeping it constant","Converting it into glucose"],"Hypothyroidism → high cholesterol."],
+["thy","Thyroid hormone affects blood glucose by:","Increasing it",["Decreasing it","Having no effect","Blocking its absorption"],"CHO metabolism."],
+["thy","The effect of thyroid hormone on the cardiovascular system is:","Increased heart rate and cardiac output",["Decreased heart rate and cardiac output","Vasoconstriction and bradycardia","No cardiovascular effect"],"CVS."],
+["thy","The effect of thyroid hormone on the gut is:","Increased appetite, motility and secretions",["Decreased appetite, motility and secretions","Constipation with slower gut transit","Reduced secretions with normal appetite"],"GIT."],
+["thy","In the CNS, thyroid hormone is needed for:","Growth, differentiation and maturation",["Pain perception and reflexes","Sleep induction and dreaming","Production and storage of ADH"],"Hence cretinism."],
+["thy","Thyroid hormone affects cholesterol mainly by increasing its:","Conversion to bile acids and uptake from plasma",["Synthesis in the liver with no removal","Storage in adipose tissue under the skin","Absorption from the gut into lymph"],"From the actions figure."],
+["thy","On the pituitary, thyroid hormone:","Decreases TSH and increases GH",["Increases TSH and decreases GH","Increases both TSH and GH","Decreases both TSH and GH"],"Figure on slide 5."],
+/* ---------- THYROID DISORDERS ---------- */
+["thyd","Another name for hyperthyroidism in the lecture is:","Thyrotoxicosis (Graves' disease)",["Myxoedema (adult form)","Cretinism (child form)","Simmond's disease"],"Lecture 6."],
+["thyd","LATS in Graves' disease is:","An antibody made by lymphocytes that stimulates the thyroid",["A pituitary hormone that stimulates the thyroid gland","A hypothalamic hormone that inhibits TSH release","An enzyme in the colloid that converts T4 to T3"],"Autoimmune, long acting."],
+["thyd","Graves' disease is classified as:","An autoimmune disease",["A congenital enzyme defect","A pituitary tumour","A hypothalamic lesion"],"Abnormal antibodies."],
+["thyd","Which is a feature of hyperthyroidism?","Heat intolerance and weight loss",["Cold intolerance and weight gain","Bradycardia and constipation","Thick tongue and hoarse voice"],"Hot, hungry, hurried."],
+["thyd","Hyperthyroidism causes all of the following EXCEPT:","Bradycardia",["Tachycardia","Tremors","Diarrhoea"],"Bradycardia is hypothyroid."],
+["thyd","Bulging eyes are a feature of:","Hyperthyroidism",["Myxoedema","Cretinism","Pituitary dwarfism"],"Graves' eye signs."],
+["thyd","Adult hypothyroidism is called:","Myxoedema",["Cretinism","Thyrotoxicosis","Acromegaly"],"Children: cretinism."],
+["thyd","Childhood hypothyroidism is called:","Cretinism",["Myxoedema","Infantilism","Dwarfism"],"Congenital hypothyroidism."],
+["thyd","Primary hypothyroidism in adults is caused by:","Damage or surgical removal of the thyroid",["Low TSH from a failing pituitary","A lesion in the hypothalamus","LATS antibodies from lymphocytes"],"Also metabolic defects."],
+["thyd","Secondary hypothyroidism is due to:","Decreased TSH, as in Simmond's disease",["Damage to the thyroid tissue itself","A lesion in the hypothalamus","Excess iodine in the diet"],"Pituitary cause."],
+["thyd","Tertiary hypothyroidism is due to:","A hypothalamic lesion",["A pituitary lesion","Thyroid surgery","An autoimmune antibody"],"Low TRH."],
+["thyd","Which is a feature of myxoedema?","Cold intolerance and a hoarse voice",["Heat intolerance and fine tremors","Weight loss with diarrhoea","Tachycardia with bulging eyes"],"Cold, constipated, coarse."],
+["thyd","Blood cholesterol in hypothyroidism is:","Raised",["Lowered","Normal","Absent"],"Thyroid hormone normally lowers it."],
+["thyd","Cretinism is usually detected at about:","6 months of age",["1 week of age","5 years of age","Puberty"],"Lecture 6."],
+["thyd","Causes of cretinism include:","Absence of the thyroid or a metabolic defect",["LATS antibodies from lymphocytes","Excess GH before the epiphyses close","Lack of ADH from birth"],"In utero or early life."],
+["thyd","Cretinism is described as the most common cause of:","Curable mental retardation",["Incurable short stature","Diabetes insipidus","Acromegaly in children"],"Early treatment works."],
+["thyd","The bulging abdomen and umbilical hernia of cretinism occur because:","Soft tissue grows more than bone and the abdominal wall is weak",["The bones grow faster than the soft tissues around them","Excess growth hormone enlarges all the abdominal organs","Fluid shifts from the capillaries into the abdominal cavity"],"Big liver and gut."],
+["thyd","The open mouth of a cretin is due to:","An enlarged protruding tongue",["A short upper lip","Missing front teeth","Weak jaw muscles"],"Soft-tissue growth."],
+["thyd","The BMR in cretinism is:","Markedly decreased, with hypothermia",["Markedly increased, with fever","Normal for the child's age","Increased, with weight loss"],"↓↓↓ BMR."],
+["thyd","Tooth eruption in cretinism is:","Delayed",["Early","Normal","Doubled"],"Dental relevance."],
+["thyd","Unlike pituitary dwarfism, cretinism shows:","Mental retardation",["Proportionate body","Normal intelligence","No hypogonadism"],"Dwarf: normal mentality."],
+["thyd","In Graves' disease, TSH levels are expected to be:","Low, because high T4 feeds back on the pituitary",["High, because TSH causes the disease","Normal, because LATS replaces TSH","Absent, because the pituitary is destroyed"],"Worked out from the feedback loop."]
+];
+
+const CARDS=[
+["bpb","Arterial blood pressure","Pressure of blood on the arterial walls; highest normal 120/80 mmHg"],
+["bpb","SBP, DBP and PP values","SBP 120 (100–120) · DBP 80 (60–90) · PP 40 (30–50)"],
+["bpb","What SBP and DBP show","SBP: pumping ability of the heart. DBP: peripheral resistance"],
+["bpb","BP by age","Newborn 80/40 · child 80/60 · adult 120/80 · then rises (lost elasticity)"],
+["bpb","Sex and BP","Before 45: males ~5 mmHg higher. After 45: diastolic higher in females"],
+["bpb","Gravity and BP","Each 1 cm below heart +0.77 mmHg; each 1 cm above −0.77 mmHg"],
+["bpb","ABP formula","ABP = cardiac output × total peripheral resistance"],
+["bpb","Stroke volume vs heart rate","↑SV raises systolic more. HR changes affect mainly diastolic"],
+["bpb","TPR vs elasticity","↑TPR: DBP ↑ more, PP narrows. ↓Elasticity: SBP ↑, DBP ↓, PP widens"],
+["bpr","Three tiers of regulation","Rapid (nervous, seconds) · intermediate (capillary shift, minutes) · slow (kidney)"],
+["bpr","Pressor area","Vasoconstrictor centre (vasoconstrictor tone) + cardiac stimulatory centre (sympathetic tone)"],
+["bpr","Depressor area","Vasodilator centre (inhibits VCC) + cardiac inhibitory centre (vagal tone)"],
+["bpr","Baroreceptors","Carotid sinus and aortic arch; 60–200 mmHg; IX and X afferents"],
+["bpr","Chemoreceptors","Carotid and aortic bodies; hypoxia; 40–60 mmHg; mainly stimulate respiration"],
+["bpr","Baroreflex when BP rises","Inhibits pressor area → ↓HR, vasodilatation → ↓BP"],
+["bpr","Capillary fluid shift","BP ↓ → fluid enters capillaries → ↑VR, COP. BP ↑ → more filtration"],
+["bpr","Renin–angiotensin","↓BP → renal ischaemia → JGA renin → angiotensinogen (liver) → Ang I → ACE (lung) → Ang II vasoconstriction"],
+["bpr","Aldosterone","Adrenal cortex; Na⁺ and water retention → ↑ blood volume → ↑ BP"],
+["pit","Endocrine vs exocrine","Endocrine: hormones directly into blood. Exocrine: through ducts"],
+["pit","Pituitary location and parts","Sella turcica; posterior (neurohypophysis), intermediate (rudimentary), anterior (adenohypophysis)"],
+["pit","Anterior pituitary cells","Chromophobes 50% (precursors) · acidophils 40% (GH, prolactin) · basophils 10% (TSH, ACTH, LH, FSH)"],
+["pit","Posterior pituitary hormones","ADH (vasopressin) and oxytocin"],
+["pit","GH growth effects","Direct + indirect via liver somatomedin (IGF-1). Children: linear growth. Adults: thickness only"],
+["pit","GH metabolic effects","↑ protein synthesis · ↑ blood glucose · ↑ lipolysis, FFA and ketones"],
+["pitd","Gigantism","↑GH before epiphyseal union; giant; high BMR; pituitary diabetes; hypogonadism"],
+["pitd","Acromegaly","↑GH after union; coarse face, big jaw, separated teeth, big hands/feet, kyphosis, organomegaly"],
+["pitd","Dwarfism","↓GH in childhood; short but proportionate; normal mind; hypogonadism"],
+["pitd","Infantilism","↓GH and sex hormones; short; normal mind; no sexual development"],
+["pitd","ADH","↑ water reabsorption → ↓ urine; ↑ ABP; deficiency = diabetes insipidus (polyuria)"],
+["pitd","Oxytocin","Uterine contraction in labour; milk ejection via myoepithelial cells when baby suckles"],
+["thy","Thyroid cells","Follicular → T4, T3. Parafollicular C cells → calcitonin. Colloid = glycoprotein"],
+["thy","Thyroid axis","Hypothalamus TRH → pituitary TSH → thyroid T4/T3; T4 lowers TSH"],
+["thy","Thyroid actions","↑BMR, heat, O₂ · ↑glucose · ↓cholesterol · CNS maturation · ↑HR, COP · ↑appetite, motility"],
+["thyd","Graves' disease","Hyperthyroidism from LATS: autoimmune antibodies from lymphocytes, long-acting stimulation"],
+["thyd","Hyperthyroid picture","Heat intolerance, weight loss, bulging eyes, goitre, tachycardia, tremor, diarrhoea, amenorrhoea"],
+["thyd","Myxoedema causes","Primary: thyroid damage/removal, metabolic defect. Secondary: ↓TSH (Simmond's). Tertiary: hypothalamus"],
+["thyd","Myxoedema picture","Cold intolerance, puffy face, hoarse voice, thick tongue, dry skin, constipation, bradycardia, high cholesterol"],
+["thyd","Cretinism causes and timing","Absent gland or metabolic defect; usually detected at 6 months"],
+["thyd","Cretinism picture","Dull, short, depressed nose, delayed sitting/walking/teeth, mental retardation, pot belly, hernia, big tongue, ↓↓↓BMR, ↑↑↑cholesterol"]
+];
+
+const NUMBERS=[
+["120/80","Highest normal BP"],["60–90","Normal diastolic range"],["40 (30–50)","Pulse pressure"],["80/40","Newborn BP"],
+["80/60","Child BP"],["5 mmHg","Male excess before 45"],["0.77 mmHg","Per cm below/above heart"],["60–200 mmHg","Baroreceptor range"],
+["40–60 mmHg","Chemoreceptor range"],["Seconds","Nervous mechanism starts"],["Minutes","Capillary fluid shift starts"],["50 · 40 · 10%","Chromophobes · acidophils · basophils"],
+["2","Posterior pituitary hormones"],["4","Basophil hormones (TSH, ACTH, LH, FSH)"],["10 yrs","Body age of a 20-year-old dwarf"],["6 months","Cretinism usually detected"]
+];
+
+const HOOKS=[
+["L4","Systolic = Squeeze, Diastolic = Drag","SBP shows pumping; DBP shows resistance."],
+["L4","Stiff pipes split the numbers","Atherosclerosis: SBP up, DBP down, PP wider."],
+["L4","Tight taps narrow the gap","↑TPR raises DBP more, so PP narrows."],
+["L4","Seconds, Minutes, Slow","Nerves, capillaries, kidney."],
+["L4","Sinus = Stretch, Body = Breath","Carotid sinus senses pressure; carotid body senses hypoxia."],
+["L4","Liver Lock, Kidney Key, Lung Lock-on","Angiotensinogen, renin, ACE."],
+["L4","IX from the neck, X from the chest","Carotid sinus → glossopharyngeal; aortic arch → vagus."],
+["L5","50 · 40 · 10","Chromophobes, acidophils, basophils."],
+["L5","Acid = GP, Basic = B-FLAT","GH and prolactin; FSH, LH, ACTH, TSH."],
+["L5","Plate open = Giant, Plate closed = Acro","Timing of excess GH."],
+["L5","Dwarf is Wise","Proportionate, normal mind."],
+["L5","ADH = Add Dat H₂O","Less urine; lack = diabetes insipidus."],
+["L5","Suckle → Squeeze","Suckling → oxytocin → myoepithelial cells squeeze milk out."],
+["L6","T-T-T","TRH → TSH → T4; T4 shuts TSH off."],
+["L6","C cells make Calcitonin","Follicular cells make T4 and T3."],
+["L6","Hyper = Hot, Hungry, Hurried","Heat intolerance, weight loss, tachycardia, tremor, diarrhoea."],
+["L6","Hypo = Cold, Constipated, Coarse","Cold intolerance, constipation, coarse skin and voice."],
+["L6","Cretin's 5 P's","Pot belly, Protruding tongue, Puffy face, Poor growth, Poor mind."]
+];
+const TRAPS=[
+["Pulse pressure","↑TPR narrows it; atherosclerosis widens it."],
+["Heart rate","Changes mainly diastolic pressure."],
+["Sinus vs body","Baroreceptors in sinus/arch; chemoreceptors in bodies."],
+["ACE","Converting enzyme is in the lung."],
+["Prolactin","Acidophil hormone, not basophil."],
+["Posterior pituitary","Stores and releases ADH and oxytocin made by the hypothalamus."],
+["Two diabetes","Diabetes insipidus = no ADH. Pituitary diabetes = GH excess hyperglycaemia."],
+["Mind","Dwarfism normal; cretinism retarded."],
+["TSH","Low in Graves' and in secondary hypothyroidism; high in primary."],
+["Cholesterol","Low in hyperthyroidism, high in hypothyroidism."]
+];
+
+const SORTS=[
+{name:"Which anterior pituitary cell?",desc:"Chromophobe, acidophil or basophil?",buckets:["Chromophobe","Acidophil","Basophil"],
+ items:[["50% of cells",0],["Precursor cells",0],["40% of cells",1],["Growth hormone",1],["Prolactin (LTH)",1],["10% of cells",2],["TSH",2],["ACTH",2],["LH",2],["FSH",2]]},
+{name:"Pressor or depressor?",desc:"Which medullary area?",buckets:["Pressor area","Depressor area"],
+ items:[["Vasoconstrictor centre",0],["Cardiac stimulatory centre",0],["Sympathetic tone",0],["Venoconstriction",0],["Vasodilator centre",1],["Cardiac inhibitory centre",1],["Vagal tone",1],["Bradycardia",1]]},
+{name:"Hyper or hypothyroid?",desc:"Which thyroid state?",buckets:["Hyperthyroid","Hypothyroid"],
+ items:[["Heat intolerance",0],["Cold intolerance",1],["Weight loss",0],["Weight gain",1],["Tachycardia",0],["Bradycardia",1],["Diarrhoea",0],["Constipation",1],["Tremors",0],["Hoarse voice",1],["Bulging eyes",0],["High cholesterol",1]]},
+{name:"Which GH disorder?",desc:"Gigantism, acromegaly, dwarfism or infantilism?",buckets:["Gigantism","Acromegaly","Dwarfism","Infantilism"],
+ items:[["Excess GH before epiphyses close",0],["Excess GH after epiphyses close",1],["Separated teeth, big jaw",1],["Kyphosis",1],["Giant stature",0],["Proportionate short stature",2],["Body of a 10-year-old at 20",2],["Low GH and sex hormones",3],["No sexual development",3]]},
+{name:"Fast, intermediate or slow?",desc:"Which BP regulation tier?",buckets:["Rapid (nervous)","Intermediate","Slow (kidney)"],
+ items:[["Baroreceptor reflex",0],["Chemoreceptor reflex",0],["Starts within seconds",0],["Capillary fluid shift",1],["Starts within minutes",1],["Stress relaxation",1],["Renin–angiotensin",2],["Aldosterone",2],["Pressure diuresis",2]]},
+{name:"Which organ?",desc:"Where does it come from?",buckets:["Kidney","Liver","Lung","Adrenal cortex"],
+ items:[["Renin",0],["Juxtaglomerular apparatus",0],["Angiotensinogen",1],["Somatomedin (IGF-1)",1],["Converting enzyme (ACE)",2],["Aldosterone",3]]}
+];
+
+/* ===== NEW: clinical case files ===== */
+const CASES=[
+{t:"thyd",title:"The restless student",story:"A 22-year-old woman complains that she always feels hot, has lost 6 kg despite eating more, and has frequent loose stools. Her pulse is 118, her hands shake slightly, her eyes look prominent and there is a smooth swelling in the front of her neck.",
+ steps:[["What is the most likely diagnosis?","Hyperthyroidism (Graves' disease)",["Myxoedema","Acromegaly","Diabetes insipidus"],"Heat intolerance, weight loss, diarrhoea, tachycardia, tremor, bulging eyes and goitre are the classic hyperthyroid picture."],
+ ["What causes the disease in this case?","LATS: antibodies from lymphocytes that stimulate the thyroid",["A TSH-secreting pituitary tumour","Surgical removal of the thyroid","A hypothalamic lesion lowering TRH"],"Graves' is autoimmune; LATS has a long-acting stimulating effect."],
+ ["What would you expect her TSH to be?","Low",["High","Normal","Absent from birth"],"High T4 suppresses TSH by negative feedback."],
+ ["Which other finding fits her condition?","Raised systolic pressure",["Bradycardia","High blood cholesterol","Hoarse voice and thick tongue"],"Hyperthyroidism raises heart rate, cardiac output and systolic BP."]]},
+{t:"thyd",title:"The tired teacher",story:"A 50-year-old man had most of his thyroid removed 3 years ago and stopped taking his tablets. He now feels cold all the time, has gained weight, is constipated and his voice has become hoarse. His face is puffy and his pulse is 54.",
+ steps:[["What is the diagnosis?","Myxoedema (adult hypothyroidism)",["Cretinism","Thyrotoxicosis","Infantilism"],"Adult hypothyroidism is myxoedema."],
+ ["What type of hypothyroidism is this?","Primary",["Secondary","Tertiary","Autoimmune hyperthyroid"],"Surgical removal of the gland is a primary cause."],
+ ["What would his blood cholesterol be?","Raised",["Lowered","Normal","Undetectable"],"Without thyroid hormone, cholesterol is not cleared."],
+ ["What would his TSH be?","High",["Low","Normal","Zero"],"With the gland removed, the pituitary is no longer suppressed."]]},
+{t:"thyd",title:"The quiet baby",story:"A 6-month-old baby is brought in because she is unusually sleepy and floppy. She has a coarse face, a hoarse cry, a large protruding tongue, a pot belly with an umbilical hernia, dry skin and is not yet holding her head well.",
+ steps:[["What is the most likely diagnosis?","Cretinism",["Pituitary dwarfism","Infantilism","Acromegaly"],"Congenital hypothyroidism, usually detected around 6 months."],
+ ["Which is a possible cause?","Absence of the thyroid gland",["LATS antibodies","Excess GH","Lack of ADH"],"Absent gland or a metabolic defect."],
+ ["Why is her abdomen bulging?","Soft tissue grows more than bone, with a weak abdominal wall",["Fluid shift into the peritoneum from high BP","Excess GH enlarging the organs","Constipation alone with no other cause"],"Big liver and gut, weak wall, hernia."],
+ ["What makes early diagnosis so important?","It is the commonest cause of curable mental retardation",["It turns into acromegaly in adulthood","It causes diabetes insipidus later","It always resolves without treatment"],"Treatment prevents permanent damage."],
+ ["What dental finding would you expect as she grows?","Delayed tooth eruption",["Early tooth eruption","Separation of teeth from jaw growth","Normal eruption"],"Listed in the cretinism picture."]]},
+{t:"pitd",title:"The changing denture",story:"A 45-year-old man says his lower denture no longer fits, his rings and shoes feel tight, and friends say his face looks 'coarser'. Spaces have opened between his remaining teeth. His blood glucose is high.",
+ steps:[["What is the most likely diagnosis?","Acromegaly",["Gigantism","Myxoedema","Pituitary dwarfism"],"Excess GH after the epiphyses have closed."],
+ ["Which cells produce the excess hormone?","Acidophil (alpha) cells",["Basophil cells","Chromophobes","Follicular cells"],"Acidophils make GH."],
+ ["Why are his bones thicker but he is not taller?","His epiphyses have already fused",["GH only affects soft tissue","His thyroid is underactive","GH cannot reach bone in adults"],"After union, GH thickens bone only."],
+ ["Why is his blood glucose high?","GH raises blood glucose (pituitary diabetes)",["ADH deficiency","Excess thyroid hormone alone","Kidney damage from high BP"],"GH is diabetogenic."]]},
+{t:"pitd",title:"The thirsty man",story:"After a head injury, a man passes very large volumes of dilute urine day and night and is always thirsty. His blood glucose is normal.",
+ steps:[["Which hormone is most likely lacking?","ADH (vasopressin)",["Insulin","Oxytocin","Growth hormone"],"Normal glucose rules out diabetes mellitus."],
+ ["What is the condition called?","Diabetes insipidus",["Diabetes mellitus","Pituitary diabetes","Myxoedema"],"Polyuria from lack of ADH."],
+ ["Where is ADH released from?","The posterior pituitary",["The anterior pituitary","The adrenal cortex","The juxtaglomerular apparatus"],"Neurohypophysis stores ADH and oxytocin."],
+ ["What does ADH normally do to urine volume?","Decreases it by increasing water reabsorption",["Increases it by blocking water reabsorption","Has no effect on urine","Increases sodium loss only"],"Antidiuretic."]]},
+{t:"pitd",title:"The short but bright boy",story:"A 14-year-old boy is much shorter than his classmates but his body proportions are normal and he is top of his class. His thyroid tests are normal and he shows no signs of puberty yet.",
+ steps:[["What is the most likely diagnosis?","Pituitary dwarfism",["Cretinism","Acromegaly","Myxoedema"],"Proportionate, normal intelligence, normal thyroid."],
+ ["Which hormone was deficient in childhood?","Growth hormone",["Thyroxine","ADH","Calcitonin"],"↓GH during childhood."],
+ ["Which feature argues against cretinism?","Normal intelligence",["Short stature","Delayed puberty","Normal proportions only"],"Cretins have mental retardation."],
+ ["If he also never develops sexually, the picture becomes:","Infantilism",["Gigantism","Acromegaly","Graves' disease"],"↓GH and ↓sex hormones."]]},
+{t:"bpr",title:"The bleeding cyclist",story:"A cyclist is hit by a car and loses a lot of blood. In the ambulance his systolic pressure is 70 mmHg and falling. His heart rate is 130 and his skin is cold and pale.",
+ steps:[["Which receptors first detect the fall in pressure?","Baroreceptors in the carotid sinus and aortic arch",["Chemoreceptors in the carotid sinus","J receptors in the lung","Juxtaglomerular cells only"],"Baroreceptors cover 60–200 mmHg."],
+ ["Why is his heart rate 130?","Less inhibition of the pressor area raises sympathetic drive",["Increased vagal tone","Aldosterone acting on the heart","Capillary filtration out of vessels"],"↓BP → ↑HR and vasoconstriction."],
+ ["If pressure falls to 50 mmHg, which extra receptors join in?","Chemoreceptors in the carotid and aortic bodies",["Low-pressure atrial receptors only","Baroreceptors in the venae cavae","Pain receptors in the skin"],"Chemoreceptors act at 40–60 mmHg with hypoxia."],
+ ["Over the next minutes, what helps restore volume?","Fluid shifts from tissues into the capillaries",["Fluid shifts from capillaries into the tissues","Renin is broken down by the liver","ADH secretion stops"],"Intermediate mechanism."],
+ ["Over hours to days, which kidney hormone chain helps?","Renin → angiotensin II and aldosterone",["Calcitonin → vitamin D","Oxytocin → milk ejection","TSH → thyroxine"],"Slow mechanism raises vasoconstriction and volume."]]},
+{t:"bpb",title:"The stiff arteries",story:"A 70-year-old woman with atherosclerosis has a blood pressure of 170/70 mmHg. Her daughter, aged 35, has a pressure of 115/78 mmHg.",
+ steps:[["What is the mother's pulse pressure?","100 mmHg",["70 mmHg","170 mmHg","240 mmHg"],"170 − 70."],
+ ["Why is the mother's pulse pressure wide?","Loss of arterial elasticity raises systolic and lowers diastolic",["Increased peripheral resistance raises diastolic","A slow heart rate lowers both pressures","Gravity adds 0.77 mmHg per cm"],"Atherosclerosis widens PP."],
+ ["What is the daughter's pulse pressure?","37 mmHg",["78 mmHg","115 mmHg","193 mmHg"],"115 − 78, within 30–50."],
+ ["If the mother's arterioles constricted strongly, her pulse pressure would tend to:","Narrow, as diastolic rises more",["Widen further, as systolic rises more","Stay exactly the same","Fall to zero"],"↑TPR raises DBP more."]]}
+];
+
+/* ===== NEW: pathway builder (steps in order) ===== */
+const PATHS=[
+{t:"bpr",name:"Renin–angiotensin system",steps:["Blood pressure falls","Kidney becomes ischaemic","Juxtaglomerular apparatus releases renin","Renin converts angiotensinogen to angiotensin I","ACE in the lung forms angiotensin II","Vasoconstriction raises blood pressure"]},
+{t:"bpr",name:"Baroreceptor reflex (BP rises)",steps:["Arterial pressure rises","Carotid sinus and aortic arch receptors stretch","Signals travel in nerves IX and X","Medullary centre inhibits the pressor area","Heart rate falls and vessels dilate","Blood pressure returns towards normal"]},
+{t:"bpr",name:"Aldosterone mechanism",steps:["Blood pressure falls","Adrenal cortex releases aldosterone","Kidney retains sodium and water","Blood volume increases","Blood pressure rises"]},
+{t:"bpr",name:"Capillary fluid shift (BP falls)",steps:["Arterial pressure falls","Capillary hydrostatic pressure falls","Fluid moves from tissues into capillaries","Venous return increases","Cardiac output and BP rise"]},
+{t:"pit",name:"GH indirect effect",steps:["Anterior pituitary acidophils release GH","GH reaches the liver","Liver produces somatomedin (IGF-1)","IGF-1 stimulates growth","Long bones grow if epiphyses are open"]},
+{t:"pitd",name:"Milk-ejection reflex",steps:["Baby suckles at the nipple","Sensory impulses travel to the hypothalamus","Posterior pituitary releases oxytocin","Oxytocin reaches the breast in blood","Myoepithelial cells contract","Milk flows"]},
+{t:"thy",name:"Thyroid axis and feedback",steps:["Hypothalamus secretes TRH","Anterior pituitary secretes TSH","Thyroid follicular cells release T4 and T3","T4 and T3 raise metabolic rate","High T4 inhibits TSH release"]},
+{t:"pitd",name:"ADH and water balance",steps:["Posterior pituitary releases ADH","ADH acts on kidney tubules","Water reabsorption increases","Urine volume falls","Blood volume and pressure rise"]}
+];
+
+/* ===== NEW: predict the arrows (up / down / same) ===== */
+const ARROWS=[
+{t:"bpb",s:"Atherosclerosis reduces aortic elasticity.",v:[["Systolic BP","up"],["Diastolic BP","down"],["Pulse pressure","up"]],e:"Stiff arteries: SBP up, DBP down, PP widens."},
+{t:"bpb",s:"Peripheral resistance increases (arteriolar constriction).",v:[["Diastolic BP","up"],["Pulse pressure","down"],["Mean ABP","up"]],e:"↑TPR raises DBP more than SBP, so PP narrows."},
+{t:"bpb",s:"Stroke volume increases.",v:[["Systolic BP","up"],["Pulse pressure","up"],["Cardiac output","up"]],e:"SV acts mainly on systolic."},
+{t:"bpr",s:"Arterial pressure suddenly rises; the baroreceptor reflex responds.",v:[["Heart rate","down"],["Peripheral resistance","down"],["Vagal tone","up"]],e:"Pressor area inhibited, depressor active."},
+{t:"bpr",s:"Severe haemorrhage lowers arterial pressure.",v:[["Heart rate","up"],["Renin secretion","up"],["Fluid entering capillaries","up"]],e:"Nervous, intermediate and renal mechanisms all push BP up."},
+{t:"bpr",s:"Angiotensin II levels rise.",v:[["Arteriolar tone","up"],["Aldosterone","up"],["Blood pressure","up"]],e:"Ang II constricts vessels and stimulates aldosterone."},
+{t:"pit",s:"A child has excess growth hormone.",v:[["Blood glucose","up"],["Lipolysis","up"],["Protein synthesis","up"]],e:"GH: anabolic, diabetogenic, lipolytic."},
+{t:"pitd",s:"ADH secretion is lost (diabetes insipidus).",v:[["Urine volume","up"],["Water reabsorption","down"],["Plasma volume","down"]],e:"No antidiuresis."},
+{t:"thyd",s:"Graves' disease (LATS stimulation).",v:[["T4 and T3","up"],["TSH","down"],["Heart rate","up"]],e:"High hormone suppresses TSH."},
+{t:"thyd",s:"Primary hypothyroidism after thyroid surgery.",v:[["T4","down"],["TSH","up"],["Blood cholesterol","up"]],e:"Loss of feedback raises TSH; cholesterol rises."},
+{t:"thyd",s:"Secondary hypothyroidism (Simmond's disease, low TSH).",v:[["TSH","down"],["T4","down"],["BMR","down"]],e:"The pituitary is the problem."},
+{t:"thy",s:"Thyroid hormone levels rise within the normal range.",v:[["BMR","up"],["Blood cholesterol","down"],["Heart rate","up"]],e:"The accelerator."},
+{t:"thyd",s:"Cretinism (untreated congenital hypothyroidism).",v:[["BMR","down"],["Serum cholesterol","up"],["Body temperature","down"]],e:"↓↓↓BMR with hypothermia; ↑↑↑cholesterol."},
+{t:"bpb",s:"A person stands up; consider the feet compared with heart level.",v:[["Arterial pressure in the feet","up"],["Arterial pressure in the head","down"],["Pressure at heart level","same"]],e:"0.77 mmHg per cm below the heart is added."}
+];
+
+/* ===== NEW: glossary ===== */
+const GLOSS=[
+["Arterial blood pressure","Pressure of blood on the arterial walls; 120/80 mmHg highest normal.","bpb"],
+["Systolic pressure","Pressure during left ventricular contraction; reflects pumping ability.","bpb"],
+["Diastolic pressure","Pressure during ventricular diastole; reflects peripheral resistance.","bpb"],
+["Pulse pressure","Systolic minus diastolic; about 40 mmHg.","bpb"],
+["Total peripheral resistance (TPR)","Resistance that opposes blood flow; raising it raises diastolic more.","bpb"],
+["Cardiac output (COP)","Volume pumped per minute; ABP = COP × TPR.","bpb"],
+["Pressor area","Vasomotor area: vasoconstrictor centre + cardiac stimulatory centre.","bpr"],
+["Depressor area","Vasodilator centre + cardiac inhibitory centre (vagal).","bpr"],
+["Vagal tone","Continuous inhibition of the heart by the vagus from the cardiac inhibitory centre.","bpr"],
+["Baroreceptors","Stretch receptors in carotid sinus and aortic arch; 60–200 mmHg.","bpr"],
+["Chemoreceptors","Carotid and aortic bodies; hypoxia; 40–60 mmHg; stimulate respiration.","bpr"],
+["Carotid sinus","Baroreceptor site; afferents in the glossopharyngeal nerve (IX).","bpr"],
+["Carotid body","Chemoreceptor site sensitive to hypoxia.","bpr"],
+["Bezold-Jarisch reflex","The coronary chemoreflex listed with cardiovascular receptors.","bpr"],
+["J receptors","Pulmonary juxtacapillary receptors.","bpr"],
+["Capillary fluid shift","Intermediate mechanism: fluid moves in or out of capillaries with BP changes.","bpr"],
+["Mean systemic filling pressure","Raised by venoconstriction, increasing venous return.","bpr"],
+["Renin","Enzyme from the juxtaglomerular apparatus; converts angiotensinogen to angiotensin I.","bpr"],
+["Angiotensinogen","Renin substrate made by the liver.","bpr"],
+["ACE","Converting enzyme in the lung; angiotensin I → angiotensin II.","bpr"],
+["Angiotensin II","Very powerful vasoconstrictor; raises BP.","bpr"],
+["Aldosterone","Adrenal cortex hormone; sodium and water retention.","bpr"],
+["Pressure diuresis","Slow renal mechanism listed in the lecture.","bpr"],
+["Hormone","Chemical secreted into body fluids by an endocrine gland, directly into blood.","pit"],
+["Sella turcica","Bony seat of the pituitary beneath the brain.","pit"],
+["Neurohypophysis","Posterior pituitary; releases ADH and oxytocin.","pit"],
+["Adenohypophysis","Anterior pituitary; chromophobes, acidophils, basophils.","pit"],
+["Chromophobes","50% of anterior pituitary cells; precursors.","pit"],
+["Acidophils","Alpha cells, 40%; GH and prolactin.","pit"],
+["Basophils","Beta cells, 10%; TSH, ACTH, LH, FSH.","pit"],
+["Somatotropin","Growth hormone.","pit"],
+["Somatomedin (IGF-1)","Liver product mediating GH's indirect growth effect.","pit"],
+["Luteotropic hormone (LTH)","Prolactin.","pit"],
+["Epiphyseal union","Closure of growth plates; after it GH thickens bone only.","pit"],
+["Gigantism","Excess GH before epiphyseal union.","pitd"],
+["Acromegaly","Excess GH after epiphyseal union; 'large extremities'.","pitd"],
+["Pituitary diabetes","Hyperglycaemia and glucosuria of GH excess, insulin-insensitive.","pitd"],
+["Dwarfism","GH deficiency in childhood; proportionate, normal mind.","pitd"],
+["Infantilism","GH and sex hormone deficiency; no sexual development.","pitd"],
+["ADH (vasopressin)","Increases renal water reabsorption; raises ABP.","pitd"],
+["Diabetes insipidus","ADH deficiency; polyuria.","pitd"],
+["Oxytocin","Uterine contraction; milk ejection via myoepithelial cells.","pitd"],
+["Myoepithelial cells","Contractile cells around breast alveoli; squeezed by oxytocin.","pitd"],
+["Follicular cells","Thyroid cells making T4 and T3.","thy"],
+["Parafollicular (C) cells","Thyroid cells making calcitonin.","thy"],
+["Colloid","Glycoprotein filling the thyroid follicle.","thy"],
+["TRH","Thyrotropin-releasing hormone from the hypothalamus.","thy"],
+["TSH","Thyrotropin from anterior pituitary basophils.","thy"],
+["BMR","Basal metabolic rate; raised by thyroid hormone.","thy"],
+["Thyrotoxicosis","Hyperthyroidism; Graves' disease.","thyd"],
+["LATS","Long-acting thyroid stimulator: autoimmune antibody from lymphocytes.","thyd"],
+["Myxoedema","Adult hypothyroidism.","thyd"],
+["Cretinism","Childhood (congenital) hypothyroidism.","thyd"],
+["Simmond's disease","Pituitary failure causing secondary hypothyroidism (low TSH).","thyd"]
+];
+
+/* True/false facts: [topic, TRUE version, FALSE version]. One version is chosen at random each time. */
+const TFB=[
+["bpb","Arterial blood pressure is the pressure of blood on the arterial walls.","Arterial blood pressure is the pressure of blood on the venous walls."],
+["bpb","The highest normal blood pressure reading is 120/80 mmHg.","The highest normal blood pressure reading is 140/100 mmHg."],
+["bpb","Normal diastolic pressure ranges from 60 to 90 mmHg.","Normal diastolic pressure ranges from 100 to 140 mmHg."],
+["bpb","Pulse pressure equals systolic minus diastolic pressure.","Pulse pressure equals systolic plus diastolic pressure."],
+["bpb","Normal pulse pressure is about 40 mmHg.","Normal pulse pressure is about 80 mmHg."],
+["bpb","Systolic pressure indicates the pumping ability of the heart.","Systolic pressure mainly indicates the peripheral resistance."],
+["bpb","Diastolic pressure signifies the peripheral resistance.","Diastolic pressure signifies the pumping ability of the heart."],
+["bpb","A newborn's blood pressure is about 80/40 mmHg.","A newborn's blood pressure is about 120/80 mmHg."],
+["bpb","A child's blood pressure is about 80/60 mmHg.","A child's blood pressure is about 140/90 mmHg."],
+["bpb","Blood pressure rises with age as arteries lose elasticity.","Blood pressure falls with age as arteries gain elasticity."],
+["bpb","Before 45, males have BP about 5 mmHg higher than females.","Before 45, females have BP about 20 mmHg higher than males."],
+["bpb","After 45, diastolic pressure is higher in females than in males.","After 45, diastolic pressure is higher in males than in females."],
+["bpb","Digestion of meals increases arterial blood pressure.","Digestion of meals decreases arterial blood pressure."],
+["bpb","Emotions raise blood pressure through sympathetic activity.","Emotions lower blood pressure through vagal activity."],
+["bpb","Each 1 cm below the heart adds 0.77 mmHg to arterial pressure.","Each 1 cm below the heart subtracts 0.77 mmHg from arterial pressure."],
+["bpb","ABP equals cardiac output times peripheral resistance.","ABP equals stroke volume divided by heart rate."],
+["bpb","Increased stroke volume raises systolic more than diastolic pressure.","Increased stroke volume raises diastolic more than systolic pressure."],
+["bpb","Heart rate changes mainly affect diastolic pressure.","Heart rate changes mainly affect systolic pressure."],
+["bpb","Increased peripheral resistance decreases pulse pressure.","Increased peripheral resistance increases pulse pressure."],
+["bpb","Atherosclerosis increases pulse pressure.","Atherosclerosis decreases pulse pressure."],
+["bpb","In atherosclerosis, diastolic pressure falls.","In atherosclerosis, diastolic pressure rises sharply."],
+["bpr","ABP regulation has rapid, intermediate and slow mechanisms.","ABP regulation relies on the kidney alone."],
+["bpr","The rapidly acting mechanism is nervous.","The rapidly acting mechanism is renal."],
+["bpr","The pressor area is also called the vasomotor area.","The depressor area is also called the vasomotor area."],
+["bpr","The vasoconstrictor centre maintains vasoconstrictor tone.","The vasoconstrictor centre maintains vagal tone."],
+["bpr","The cardiac stimulatory centre raises heart rate and contraction force.","The cardiac stimulatory centre slows the heart."],
+["bpr","Venoconstriction increases venous return.","Venoconstriction decreases venous return."],
+["bpr","The cardiac inhibitory centre acts through the vagus nerve.","The cardiac inhibitory centre acts through sympathetic nerves."],
+["bpr","The vasodilator centre inhibits the vasoconstrictor centre.","The vasodilator centre stimulates the vasoconstrictor centre."],
+["bpr","Baroreceptors are in the carotid sinus and aortic arch.","Baroreceptors are in the carotid body and aortic body."],
+["bpr","Chemoreceptors are in the carotid body and aortic body.","Chemoreceptors are in the carotid sinus and aortic arch."],
+["bpr","Baroreceptors respond to ABP between 60 and 200 mmHg.","Baroreceptors respond only to ABP between 40 and 60 mmHg."],
+["bpr","Hypoxia is the main stimulus for chemoreceptors.","Hypertension is the main stimulus for chemoreceptors."],
+["bpr","Chemoreceptors affect ABP between 40 and 60 mmHg.","Chemoreceptors affect ABP between 60 and 200 mmHg."],
+["bpr","The chemoreceptors mainly stimulate the respiratory centres.","The chemoreceptors mainly inhibit the respiratory centres."],
+["bpr","Carotid sinus afferents travel in the glossopharyngeal nerve.","Carotid sinus afferents travel in the hypoglossal nerve."],
+["bpr","Aortic arch afferents travel in the vagus nerve.","Aortic arch afferents travel in the glossopharyngeal nerve."],
+["bpr","The vasomotor centre lies in the medulla oblongata.","The vasomotor centre lies in the cerebral cortex."],
+["bpr","A rise in ABP leads to reflex bradycardia and vasodilatation.","A rise in ABP leads to reflex tachycardia and vasoconstriction."],
+["bpr","The baroreceptor mechanism starts within seconds.","The baroreceptor mechanism takes days to start."],
+["bpr","The capillary fluid shift mechanism starts within minutes.","The capillary fluid shift mechanism starts within seconds."],
+["bpr","A fall in ABP shifts fluid from tissues into capillaries.","A fall in ABP shifts fluid from capillaries into tissues."],
+["bpr","The slow mechanism of BP regulation depends on the kidney.","The slow mechanism of BP regulation depends on the skin."],
+["bpr","Renin is produced by the juxtaglomerular apparatus.","Renin is produced by the adrenal cortex."],
+["bpr","Renin is released when blood pressure falls.","Renin is released when blood pressure rises."],
+["bpr","Renin converts angiotensinogen into angiotensin I.","Renin converts angiotensin I into angiotensin II."],
+["bpr","Angiotensinogen is made by the liver.","Angiotensinogen is made by the lung."],
+["bpr","Converting enzyme in the lung forms angiotensin II.","Converting enzyme in the liver forms angiotensin I."],
+["bpr","Angiotensin II is a powerful vasoconstrictor.","Angiotensin II is a powerful vasodilator."],
+["bpr","Aldosterone is produced by the adrenal cortex.","Aldosterone is produced by the posterior pituitary."],
+["bpr","Aldosterone causes sodium and water retention.","Aldosterone causes sodium and water loss."],
+["pit","Hormones are delivered directly into the blood.","Hormones are delivered through ducts."],
+["pit","Exocrine glands secrete through ducts.","Exocrine glands secrete directly into the blood."],
+["pit","The pituitary lies in the sella turcica.","The pituitary lies in the foramen magnum."],
+["pit","The posterior pituitary is the neurohypophysis.","The posterior pituitary is the adenohypophysis."],
+["pit","The posterior pituitary releases ADH and oxytocin.","The posterior pituitary releases GH and prolactin."],
+["pit","The intermediate lobe is rudimentary in humans.","The intermediate lobe is the largest lobe in humans."],
+["pit","Chromophobes form about 50% of anterior pituitary cells.","Chromophobes form about 10% of anterior pituitary cells."],
+["pit","Chromophobes are precursor cells.","Chromophobes secrete growth hormone."],
+["pit","Acidophils form about 40% of anterior pituitary cells.","Acidophils form about 10% of anterior pituitary cells."],
+["pit","Acidophils secrete growth hormone and prolactin.","Acidophils secrete TSH and ACTH."],
+["pit","Basophils secrete TSH, ACTH, LH and FSH.","Basophils secrete growth hormone and prolactin."],
+["pit","Basophils form about 10% of anterior pituitary cells.","Basophils form about 50% of anterior pituitary cells."],
+["pit","Prolactin is also called luteotropic hormone.","Prolactin is also called somatotropin."],
+["pit","Growth hormone is also called somatotropin.","Growth hormone is also called thyrotropin."],
+["pit","GH acts indirectly through somatomedin from the liver.","GH acts indirectly through thyroxine from the thyroid."],
+["pit","Before epiphyseal closure, GH causes linear growth.","Before epiphyseal closure, GH thickens bones only."],
+["pit","After epiphyseal closure, GH increases bone thickness only.","After epiphyseal closure, GH still increases height."],
+["pit","GH increases protein synthesis.","GH increases protein breakdown."],
+["pit","GH raises blood glucose.","GH lowers blood glucose."],
+["pit","GH increases lipolysis and ketone bodies.","GH decreases lipolysis and ketone bodies."],
+["pitd","Gigantism is excess GH before epiphyseal union.","Gigantism is excess GH after epiphyseal union."],
+["pitd","Acromegaly is excess GH after epiphyseal union.","Acromegaly is excess GH before epiphyseal union."],
+["pitd","Excess GH comes from acidophil cells.","Excess GH comes from basophil cells."],
+["pitd","GH excess can cause hyperglycaemia and glucosuria.","GH excess causes hypoglycaemia."],
+["pitd","Hypogonadism in gigantism is due to acidophil pressure on basophils.","Hypogonadism in gigantism is due to excess oxytocin."],
+["pitd","Acromegaly can separate the teeth.","Acromegaly delays tooth eruption."],
+["pitd","Acromegaly enlarges the hands and feet.","Acromegaly shrinks the hands and feet."],
+["pitd","Kyphosis can occur in acromegaly.","Kyphosis is a feature of dwarfism."],
+["pitd","Acromegaly causes overgrowth of the lips and tongue.","Acromegaly causes wasting of the lips and tongue."],
+["pitd","Dwarfism is due to decreased GH during childhood.","Dwarfism is due to excess GH during childhood."],
+["pitd","A pituitary dwarf has a proportionate body.","A pituitary dwarf has very short limbs and a long trunk."],
+["pitd","Pituitary dwarfs have normal intelligence.","Pituitary dwarfs have mental retardation."],
+["pitd","Infantilism is due to decreased GH and sex hormones.","Infantilism is due to decreased thyroxine."],
+["pitd","Infantilism shows no sexual development.","Infantilism shows early sexual development."],
+["pitd","ADH increases water reabsorption by the kidney.","ADH decreases water reabsorption by the kidney."],
+["pitd","ADH decreases urine volume.","ADH increases urine volume."],
+["pitd","ADH is also called vasopressin.","ADH is also called oxytocin."],
+["pitd","ADH deficiency causes diabetes insipidus.","ADH deficiency causes diabetes mellitus."],
+["pitd","Diabetes insipidus causes polyuria.","Diabetes insipidus causes oliguria."],
+["pitd","Oxytocin contracts the uterus during delivery.","Oxytocin relaxes the uterus during delivery."],
+["pitd","Oxytocin contracts the myoepithelial cells of the breast.","Oxytocin stimulates milk production by the alveolar cells."],
+["pitd","Suckling triggers the oxytocin milk-ejection reflex.","Cold exposure triggers the oxytocin milk-ejection reflex."],
+["thy","Follicular cells secrete T4 and T3.","Parafollicular cells secrete T4 and T3."],
+["thy","Parafollicular C cells secrete calcitonin.","Follicular cells secrete calcitonin."],
+["thy","Thyroid colloid is a glycoprotein.","Thyroid colloid is a lipid."],
+["thy","TRH comes from the hypothalamus.","TRH comes from the thyroid gland."],
+["thy","TSH comes from the anterior pituitary.","TSH comes from the posterior pituitary."],
+["thy","T4 inhibits TSH production.","T4 stimulates TSH production."],
+["thy","Thyroid hormone increases BMR and heat production.","Thyroid hormone decreases BMR and heat production."],
+["thy","Thyroid hormone decreases blood cholesterol.","Thyroid hormone increases blood cholesterol."],
+["thy","Thyroid hormone increases blood glucose.","Thyroid hormone decreases blood glucose."],
+["thy","Thyroid hormone increases heart rate and cardiac output.","Thyroid hormone decreases heart rate and cardiac output."],
+["thy","Thyroid hormone increases appetite and gut motility.","Thyroid hormone decreases appetite and gut motility."],
+["thy","Thyroid hormone is needed for CNS growth and maturation.","Thyroid hormone has no role in CNS development."],
+["thyd","Hyperthyroidism is also called thyrotoxicosis.","Hyperthyroidism is also called myxoedema."],
+["thyd","LATS is an antibody made by lymphocytes.","LATS is a hormone made by the pituitary."],
+["thyd","Graves' disease is autoimmune.","Graves' disease is caused by a pituitary tumour."],
+["thyd","Hyperthyroidism causes heat intolerance.","Hyperthyroidism causes cold intolerance."],
+["thyd","Hyperthyroidism causes weight loss.","Hyperthyroidism causes weight gain."],
+["thyd","Hyperthyroidism causes tachycardia.","Hyperthyroidism causes bradycardia."],
+["thyd","Hyperthyroidism causes diarrhoea.","Hyperthyroidism causes constipation."],
+["thyd","Bulging eyes are a sign of hyperthyroidism.","Bulging eyes are a sign of myxoedema."],
+["thyd","Adult hypothyroidism is called myxoedema.","Adult hypothyroidism is called cretinism."],
+["thyd","Childhood hypothyroidism is called cretinism.","Childhood hypothyroidism is called infantilism."],
+["thyd","Surgical removal of the thyroid causes primary hypothyroidism.","Surgical removal of the thyroid causes tertiary hypothyroidism."],
+["thyd","Secondary hypothyroidism is due to low TSH.","Secondary hypothyroidism is due to a thyroid tumour."],
+["thyd","Simmond's disease causes secondary hypothyroidism.","Simmond's disease causes hyperthyroidism."],
+["thyd","Tertiary hypothyroidism is due to a hypothalamic lesion.","Tertiary hypothyroidism is due to a pituitary lesion."],
+["thyd","Myxoedema causes cold intolerance and constipation.","Myxoedema causes heat intolerance and diarrhoea."],
+["thyd","Hypothyroidism raises blood cholesterol.","Hypothyroidism lowers blood cholesterol."],
+["thyd","Hypothyroidism causes a hoarse voice.","Hypothyroidism causes a high-pitched voice."],
+["thyd","Cretinism is usually detected at about 6 months.","Cretinism is usually detected at about 6 years."],
+["thyd","Cretinism can result from absence of the thyroid gland.","Cretinism results from excess growth hormone."],
+["thyd","Cretinism is the commonest cause of curable mental retardation.","Cretinism causes no mental retardation."],
+["thyd","Cretinism delays tooth eruption.","Cretinism causes early tooth eruption."],
+["thyd","Cretins have a protruding tongue.","Cretins have an unusually small tongue."],
+["thyd","Cretinism lowers BMR markedly.","Cretinism raises BMR markedly."],
+["thyd","Umbilical hernia is common in cretinism.","Umbilical hernia is a feature of hyperthyroidism."],
+["thyd","TSH is low in Graves' disease.","TSH is high in Graves' disease."],
+["thyd","TSH is high in primary hypothyroidism.","TSH is low in primary hypothyroidism."]
+];
+
+/* ======================= STATE ======================= */
+const KEY="feedbackloop_physio_v1";
+let S={xp:0,qs:{},mocks:[],known:{},games:{},badges:{}};
+function load(){try{const r=localStorage.getItem(KEY);if(r){S=Object.assign(S,JSON.parse(r));}}catch(e){}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S));}catch(e){}}
+load();
+function hash(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return (h>>>0).toString(36);}
+const QB=Q.map(q=>({id:hash(q[1]+q[2]),t:q[0],q:q[1],a:q[2],w:q[3],e:q[4]}));
+const TFI=TFB.map(f=>({id:"f"+hash(f[1]),t:f[0],T:f[1],F:f[2],n:f[3]||""}));
+/* One fact becomes one statement: the true or the false wording, chosen at random unless forced. */
+function tfItem(f,forced){const isT=forced===undefined?Math.random()<0.5:forced;
+  return {q:{id:f.id,t:f.t,q:isT?f.T:f.F,a:isT?"True":"False",e:isT?(f.n||"This matches your notes."):("Your notes say: "+f.T+(f.n?" "+f.n:""))},opts:["True","False"]};}
+const CB=CARDS.map(c=>({id:hash(c[1]),t:c[0],f:c[1],b:c[2]}));
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;};
+
+const LEVELS=[[0,"Resting Rate"],[100,"Baroreceptor"],[250,"Pressor Area"],[450,"Renin"],[700,"Angiotensin II"],[1000,"Acidophil"],[1400,"Somatomedin"],[1900,"Thyroxine"],[2500,"Homeostasis Master"]];
+function level(){let i=0;for(let k=0;k<LEVELS.length;k++)if(S.xp>=LEVELS[k][0])i=k;return i;}
+function renderXP(){const i=level();const lo=LEVELS[i][0],hi=LEVELS[i+1]?LEVELS[i+1][0]:lo+1000;
+  $("#lvlName").textContent="Lv "+(i+1)+" · "+LEVELS[i][1];
+  $("#xpBar").style.width=Math.min(100,((S.xp-lo)/(hi-lo))*100)+"%";
+  $("#xpText").textContent=S.xp+" XP";}
+function addXP(n){const before=level();S.xp+=Math.round(n);save();renderXP();if(level()>before)toast("Level up! "+LEVELS[level()][1]);checkBadges();}
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2200);}
+function record(id,ok){const r=S.qs[id]||{s:0,c:0,l:0};r.s++;if(ok)r.c++;r.l=ok?1:0;S.qs[id]=r;save();}
+
+const BADGES=[
+["first","First round","Finish a quiz round",()=>S.games.rounds>0],
+["combo5","Combo 5","Get 5 right in a row",()=>(S.games.bestCombo||0)>=5],
+["combo10","Combo 10","Get 10 right in a row",()=>(S.games.bestCombo||0)>=10],
+["perfect","Clean sweep","Get every answer right in a round",()=>S.games.perfect>0],
+["mock12","Safe pass","Score 12/15 or more in an exam mock",()=>S.mocks.some(m=>m.s/(m.n||15)>=0.8)],
+["mock15","Full marks","Get everything right in an exam mock",()=>S.mocks.some(m=>m.s>=(m.n||15))],
+["sorter","Sorted","Clear a Sort-it round with no mistakes",()=>S.games.sortPerfect>0],
+["blitz","Blitz 15","Score 15+ in True/False Blitz",()=>(S.games.blitz||0)>=15],
+["mm","Number cruncher","Score 10+ in Number lock",()=>(S.games.num||0)>=10],
+["cards","Card shark","Mark 40 flashcards known",()=>Object.keys(S.known).length>=40],
+["cover","Full coverage","Answer every MCQ and true/false item once",()=>QB.concat(TFI).every(q=>S.qs[q.id])]
+];
+function checkBadges(){BADGES.forEach(b=>{if(!S.badges[b[0]]&&b[3]()){S.badges[b[0]]=1;save();toast("Badge: "+b[1]);}});}
+
+/* ======================= TABS ======================= */
+const TABS=["learn","memory","cards","quiz","tf","games","mock","progress"];
+function show(t){if(!TABS.includes(t))t="learn";
+  document.querySelectorAll("nav.tabs button").forEach(b=>b.setAttribute("aria-selected",b.dataset.tab===t?"true":"false"));
+  TABS.forEach(x=>$("#p-"+x).hidden=(x!==t));
+  if(t==="progress")renderProgress(); if(t==="tf"||t==="quiz"){const f=t==="tf"?"tf":"mcq";quiz=sess[f];if(!quiz)quizMenu(f);} if(t==="games"&&!game)gameMenu(); if(t==="mock"&&!mock)mockMenu();
+  try{localStorage.setItem(KEY+"_tab",t);}catch(e){}
+  if(location.hash.slice(1)!==t)history.replaceState(null,"","#"+t);
+  window.scrollTo({top:0});}
+document.querySelectorAll("nav.tabs button").forEach(b=>b.onclick=()=>show(b.dataset.tab));
+window.addEventListener("hashchange",()=>show(location.hash.slice(1)));
+document.querySelectorAll("[data-jump]").forEach(b=>b.onclick=()=>document.getElementById(b.dataset.jump).scrollIntoView({behavior:"smooth"}));
+
+/* ======================= MEMORY ======================= */
+$("#numGrid").innerHTML=NUMBERS.map(n=>`<div class="num"><b>${esc(n[0])}</b><span>${esc(n[1])}</span></div>`).join("");
+$("#memGrid").innerHTML=HOOKS.map(h=>`<div class="mem"><span class="t">${h[0]}</span><span class="big">${esc(h[1])}</span><p>${esc(h[2])}</p></div>`).join("");
+$("#trapGrid").innerHTML=TRAPS.map(h=>`<div class="mem"><span class="t">Trap · ${esc(h[0])}</span><p>${esc(h[1])}</p></div>`).join("");
+
+/* ======================= FLASHCARDS ======================= */
+let cTopic="all",deck=[],ci=0;
+function buildChips(el,cur,cb,withWeak){
+  const opts=[["all","All"]].concat(Object.keys(TOPICS).map(k=>[k,TOPICS[k].ch+" · "+TOPICS[k].n]));
+  el.innerHTML=opts.map(o=>`<button class="chip" aria-pressed="${o[0]===cur}" data-k="${o[0]}">${esc(o[1])}</button>`).join("");
+  el.querySelectorAll("button").forEach(b=>b.onclick=()=>{el.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed","false"));b.setAttribute("aria-pressed","true");cb(b.dataset.k);});}
+function makeDeck(){deck=CB.filter(c=>(cTopic==="all"||c.t===cTopic)&&(!$("#cUnknown").checked||!S.known[c.id]));ci=0;showCard();}
+function showCard(){$("#flash").classList.remove("flipped");$("#cTot").textContent=deck.length;
+  $("#cKnown").textContent=CB.filter(c=>(cTopic==="all"||c.t===cTopic)&&S.known[c.id]).length;
+  if(!deck.length){$("#cIdx").textContent=0;$("#cFront").textContent="All cards here are marked known.";$("#cBack").textContent="Untick the filter or pick another chapter.";$("#cTag").textContent=$("#cTag2").textContent="";return;}
+  const c=deck[ci];$("#cIdx").textContent=ci+1;$("#cFront").textContent=c.f;$("#cBack").textContent=c.b;
+  $("#cTag").textContent=$("#cTag2").textContent=TOPICS[c.t].ch+" · "+TOPICS[c.t].n;}
+function flip(){$("#flash").classList.toggle("flipped");}
+$("#flash").onclick=flip;
+$("#flash").onkeydown=e=>{if(e.key===" "||e.key==="Enter"){e.preventDefault();flip();}};
+$("#cGot").onclick=()=>{if(!deck.length)return;const c=deck[ci];if(!S.known[c.id]){S.known[c.id]=1;addXP(2);}save();
+  if($("#cUnknown").checked){deck.splice(ci,1);if(ci>=deck.length)ci=0;}else ci=(ci+1)%deck.length;showCard();checkBadges();};
+$("#cAgain").onclick=()=>{if(!deck.length)return;const c=deck[ci];delete S.known[c.id];save();const x=deck.splice(ci,1)[0];deck.splice(Math.min(deck.length,ci+3),0,x);if(ci>=deck.length)ci=0;showCard();};
+$("#cShuffle").onclick=()=>{deck=shuffle(deck);ci=0;showCard();};
+$("#cUnknown").onchange=makeDeck;
+buildChips($("#cardChips"),"all",k=>{cTopic=k;makeDeck();});
+makeDeck();
+
+/* ======================= QUESTION RENDER ======================= */
+function qHTML(q,opts,num){const tf=opts.length===2;return `<span class="tag">${num?num+" · ":""}${TOPICS[q.t].ch} · ${esc(TOPICS[q.t].n)}</span><p class="stem">${esc(q.q)}</p>
+  <div class="opts ${tf?"tf":""}">${opts.map((o,i)=>`<button class="opt" data-i="${i}">${tf?"":`<span class="L">${"ABCD"[i]}</span>`}<span>${esc(o)}</span></button>`).join("")}</div>`;}
+
+/* ======================= ROUNDS: TRUE/FALSE + MCQ ======================= */
+const AREA={tf:"#tfArea",mcq:"#quizArea"},ROUND={tf:20,mcq:10},sess={tf:null,mcq:null};let quiz=null;
+const bank=f=>f==="tf"?TFI:QB;
+function weakPool(f){return bank(f).filter(q=>{const r=S.qs[q.id];return r&&(r.l===0||r.c/r.s<0.6);});}
+function quizMenu(f){sess[f]=null;quiz=null;const wk=weakPool(f).length,unit=f==="tf"?"facts":"questions",b=bank(f);
+  const modes=[["all","Mixed round","All topics, "+ROUND[f]+(f==="tf"?" statements":" questions"),b.length+" "+unit+" in bank"],["weak","Weak spots","What you missed or score under 60% on",wk+" waiting"]]
+    .concat(Object.keys(TOPICS).map(k=>[k,TOPICS[k].n,TOPICS[k].ch+" only",b.filter(q=>q.t===k).length+" "+unit]));
+  const el=$(AREA[f]);
+  el.innerHTML=`<div class="modes">${modes.map(m=>`<button class="mode" data-m="${m[0]}"><b>${esc(m[1])}</b><span>${esc(m[2])}</span><span class="meta">${esc(m[3])}</span></button>`).join("")}</div>`;
+  el.querySelectorAll(".mode").forEach(b=>b.onclick=()=>startQuiz(f,b.dataset.m));}
+function startQuiz(f,m){let pool;const n=ROUND[f];
+  if(m==="weak"){pool=weakPool(f);if(pool.length<n)pool=pool.concat(shuffle(bank(f).filter(q=>!S.qs[q.id]))).slice(0,n);if(!pool.length){toast("No weak spots yet. Play a mixed round first.");return;}}
+  else pool=m==="all"?bank(f):bank(f).filter(q=>q.t===m);
+  /* unseen first, then last-time misses, then the rest at random */
+  const pr=q=>{const r=S.qs[q.id];return !r?0:(r.l===0?1:2+Math.random());};
+  pool=shuffle(pool).sort((a,b)=>pr(a)-pr(b));
+  const picked=shuffle(pool.slice(0,Math.min(n,pool.length)));
+  sess[f]=quiz={f,m,qs:picked.map(x=>f==="tf"?tfItem(x):{q:x,opts:shuffle([x.a].concat(x.w))}),i:0,score:0,combo:0,best:0,xp:0,missed:[],answered:false};
+  renderQuiz();}
+function mult(){return Math.min(3,1+Math.floor(quiz.combo/3)*0.5);}
+function renderQuiz(){const z=quiz,it=z.qs[z.i],el=$(AREA[z.f]);
+  el.innerHTML=`<div class="card pop">
+   <div class="hud"><span>${z.f==="tf"?"Statement":"Q"} <b>${z.i+1}</b>/${z.qs.length}</span><span>Score <b>${z.score}</b></span><span class="combo">Combo <b class="combo">${z.combo}</b> · ×${mult()}</span><span>+<b>${z.xp}</b> XP</span><button class="btn ghost" id="qQuit" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <div class="progress"><i style="width:${(z.i/z.qs.length)*100}%"></i></div>
+   ${qHTML(it.q,it.opts)}<div id="qFb"></div></div>`;
+  $("#qQuit").onclick=()=>quizMenu(z.f);
+  el.querySelectorAll(".opt").forEach(b=>b.onclick=()=>answer(+b.dataset.i));
+  z.answered=false;}
+function answer(i){const z=quiz;if(z.answered)return;z.answered=true;const it=z.qs[z.i];const ok=it.opts[i]===it.q.a;
+  const btns=$(AREA[z.f]).querySelectorAll(".opt");btns.forEach((b,k)=>{b.disabled=true;if(it.opts[k]===it.q.a)b.classList.add("ok");else if(k===i)b.classList.add("no");});
+  record(it.q.id,ok);
+  if(ok){z.combo++;z.score++;const g=(z.f==="tf"?6:10)*mult();z.xp+=g;addXP(g);z.best=Math.max(z.best,z.combo);}else{z.combo=0;z.missed.push(it);}
+  S.games.bestCombo=Math.max(S.games.bestCombo||0,z.combo);save();
+  $("#qFb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct: "+esc(it.q.a):"Not quite. Answer: "+esc(it.q.a)}</b>${esc(it.q.e)}</div>
+   <div class="row" style="margin-top:12px"><button class="btn wax" id="qNext">${z.i+1<z.qs.length?"Next":"See results"}</button></div>`;
+  $("#qNext").onclick=next;$("#qNext").focus();}
+function next(){const z=quiz;if(z.i+1<z.qs.length){z.i++;renderQuiz();}else endQuiz();}
+function endQuiz(){const z=quiz;S.games.rounds=(S.games.rounds||0)+1;if(z.score===z.qs.length&&z.qs.length>=10)S.games.perfect=(S.games.perfect||0)+1;save();checkBadges();
+  const pct=Math.round(z.score/z.qs.length*100),el=$(AREA[z.f]);
+  el.innerHTML=`<div class="card pop"><p class="eyebrow">Round complete</p>
+   <div class="row" style="align-items:flex-end;gap:18px"><span class="score">${z.score}/${z.qs.length}</span><span class="muted">${pct}% · best combo ${z.best} · +${Math.round(z.xp)} XP</span></div>
+   <p>${pct>=90?"Exam-ready on this set. Try the exam mock.":pct>=70?"Solid. Read the misses below, then go again.":"Re-read the chapter in Learn, then play Weak spots."}</p>
+   ${z.missed.length?`<h4>Review your misses</h4><div class="opts">${z.missed.map(m=>`<div class="fb no"><b>${esc(m.q.q)}</b>Answer: ${esc(m.q.a)}. ${esc(m.q.e)}</div>`).join("")}</div>`:""}
+   <div class="row"><button class="btn wax" id="qAgain">Play again</button><button class="btn ghost" id="qMenu">Choose a mode</button></div></div>`;
+  $("#qAgain").onclick=()=>startQuiz(z.f,z.m);$("#qMenu").onclick=()=>quizMenu(z.f);}
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;
+  const tab=TABS.find(x=>!$("#p-"+x).hidden),k=e.key.toLowerCase();
+  const pickIdx=tf=>{if(/^[1-4]$/.test(k))return +k-1;if(tf&&k==="t")return 0;if(tf&&k==="f")return 1;return -1;};
+  if((tab==="tf"||tab==="quiz")&&quiz&&quiz.f===(tab==="tf"?"tf":"mcq")&&quiz.qs[quiz.i]){
+    const i=pickIdx(quiz.f==="tf");
+    if(!quiz.answered&&i>=0&&i<quiz.qs[quiz.i].opts.length)answer(i);
+    else if(e.key==="Enter"&&quiz.answered&&$("#qNext")){e.preventDefault();next();}}
+  if(tab==="mock"&&mock&&!mock.done){const o=mock.qs[mock.i].opts,i=pickIdx(o.length===2);if(i>=0&&i<o.length)mockPick(i);}
+  if(tab==="cards"&&e.key===" "&&e.target===document.body){e.preventDefault();flip();}
+});
+
+/* ======================= MINI-GAMES ======================= */
+let game=null,gTimer=null;
+function stopTimer(){clearInterval(gTimer);gTimer=null;}
+function gameMenu(){stopTimer();game=null;
+  $("#gameArea").innerHTML=`<div class="modes">
+   <button class="mode" data-g="num"><b>Number lock</b><span>Match each item to its number: mm, degrees, records. 12 rounds.</span><span class="meta">Best ${S.games.num||0}</span></button>
+   <button class="mode" data-g="blitz"><b>True/False blitz</b><span>60 seconds against the clock. Right +1, wrong −1. Every wrong one shows the fix.</span><span class="meta">Best ${S.games.blitz||0}</span></button>
+   ${SORTS.map((s,i)=>`<button class="mode" data-g="sort" data-i="${i}"><b>Sort it: ${esc(s.name)}</b><span>${esc(s.desc)}</span><span class="meta">${s.items.length} items</span></button>`).join("")}
+  </div>`;
+  $("#gameArea").querySelectorAll(".mode").forEach(b=>b.onclick=()=>{const g=b.dataset.g;if(g==="num")startNum();else if(g==="blitz")startBlitz();else startSort(+b.dataset.i);});}
+
+/* Number lock */
+function startNum(){const items=shuffle(NUMBERS).slice(0,12);game={k:"num",items,i:0,score:0};renderNum();}
+function renderNum(){const g=game,it=g.items[g.i];
+  const others=shuffle([...new Set(NUMBERS.map(n=>n[0]).filter(v=>v!==it[0]))]).slice(0,3);
+  const opts=shuffle([it[0]].concat(others));
+  $("#gameArea").innerHTML=`<div class="card pop"><div class="hud"><span>Round <b>${g.i+1}</b>/12</span><span>Score <b>${g.score}</b></span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <div class="item">${esc(it[1])}</div><div class="buckets">${opts.map(o=>`<button class="bucket mono" data-v="${esc(o)}">${esc(o)}</button>`).join("")}</div><div id="gfb"></div></div>`;
+  $("#gq").onclick=gameMenu;
+  $("#gameArea").querySelectorAll(".bucket").forEach(b=>b.onclick=()=>{if(g.lock)return;g.lock=true;const ok=b.dataset.v===it[0];
+    $("#gameArea").querySelectorAll(".bucket").forEach(x=>{x.disabled=true;if(x.dataset.v===it[0])x.classList.add("ok");else if(x===b)x.classList.add("no");});
+    if(ok){g.score++;addXP(5);}
+    setTimeout(()=>{g.lock=false;if(g.i+1<12){g.i++;renderNum();}else endGame("num",g.score,12);},ok?600:1400);});}
+
+/* Blitz */
+const blitzItem=f=>{const it=tfItem(f),tr=it.q.a==="True";return [it.q.q,tr?1:0,tr?f.n:f.T];};
+function startBlitz(){game={k:"blitz",deck:shuffle(TFI).map(blitzItem),i:0,score:0,t:60,wrong:[]};renderBlitz();
+  gTimer=setInterval(()=>{game.t--;const el=$("#bt");if(el){el.textContent=game.t+"s";if(game.t<=10)el.classList.add("low");}if(game.t<=0){stopTimer();endGame("blitz",game.score,null,game.wrong);}},1000);}
+function renderBlitz(){const g=game;if(g.i>=g.deck.length){g.deck=g.deck.concat(shuffle(TFI).map(blitzItem));}const it=g.deck[g.i];
+  $("#gameArea").innerHTML=`<div class="card"><div class="hud"><span class="timer" id="bt">${g.t}s</span><span>Score <b>${g.score}</b></span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <div class="item pop">${esc(it[0])}</div><div class="buckets"><button class="bucket" id="bT">True <kbd>T</kbd></button><button class="bucket" id="bF">False <kbd>F</kbd></button></div><div id="gfb" class="small muted"></div></div>`;
+  $("#gq").onclick=gameMenu;$("#bT").onclick=()=>blitzAns(1);$("#bF").onclick=()=>blitzAns(0);}
+function blitzAns(v){const g=game;if(!g||g.k!=="blitz"||g.t<=0)return;const it=g.deck[g.i];const ok=(v===it[1]);
+  if(ok){g.score++;addXP(3);}else{g.score--;g.wrong.push(it);}
+  g.i++;renderBlitz();if(!ok)$("#gfb").innerHTML=`<div class="fb no"><b>Last one was ${it[1]?"TRUE":"FALSE"}</b>${esc(it[0])}${it[2]?" → "+esc(it[2]):""}</div>`;}
+document.addEventListener("keydown",e=>{if(game&&game.k==="blitz"&&!$("#p-games").hidden){if(e.key==="t"||e.key==="T")blitzAns(1);if(e.key==="f"||e.key==="F")blitzAns(0);}});
+
+/* Sort it */
+function startSort(si){const s=SORTS[si];game={k:"sort",s,si,items:shuffle(s.items),i:0,score:0,miss:0};renderSort();}
+function renderSort(){const g=game,it=g.items[g.i];
+  $("#gameArea").innerHTML=`<div class="card pop"><div class="hud"><span><b>${esc(g.s.name)}</b></span><span>Item <b>${g.i+1}</b>/${g.items.length}</span><span>Mistakes <b>${g.miss}</b></span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <div class="progress"><i style="width:${g.i/g.items.length*100}%"></i></div>
+   <div class="item">${esc(it[0])}</div><div class="buckets">${g.s.buckets.map((b,k)=>`<button class="bucket" data-k="${k}">${esc(b)}</button>`).join("")}</div></div>`;
+  $("#gq").onclick=gameMenu;
+  $("#gameArea").querySelectorAll(".bucket").forEach(b=>b.onclick=()=>{if(g.lock)return;g.lock=true;const ok=+b.dataset.k===it[1];
+    $("#gameArea").querySelectorAll(".bucket").forEach(x=>{x.disabled=true;if(+x.dataset.k===it[1])x.classList.add("ok");else if(x===b)x.classList.add("no");});
+    if(ok){g.score++;addXP(3);}else g.miss++;
+    setTimeout(()=>{g.lock=false;if(g.i+1<g.items.length){g.i++;renderSort();}else{if(!g.miss){S.games.sortPerfect=(S.games.sortPerfect||0)+1;save();}endGame("sort",g.score,g.items.length);}},ok?450:1300);});}
+
+function endGame(k,score,total,wrong){stopTimer();
+  if(k==="num"||k==="blitz"){if(score>(S.games[k]||0)){S.games[k]=score;toast("New best!");}}
+  save();checkBadges();const g=game;
+  $("#gameArea").innerHTML=`<div class="card pop"><p class="eyebrow">Game over</p><span class="score">${score}${total?"/"+total:""}</span>
+   ${k==="blitz"?`<p class="muted">Best ${S.games.blitz||0}. Each wrong answer cost a point.</p>`:""}
+   ${wrong&&wrong.length?`<h4>Fix these</h4><div class="opts">${wrong.map(w=>`<div class="fb no"><b>${esc(w[0])}</b>${w[1]?"TRUE":"FALSE"}${w[2]?". "+esc(w[2]):""}</div>`).join("")}</div>`:""}
+   <div class="row"><button class="btn wax" id="gAgain">Play again</button><button class="btn ghost" id="gMenu">All games</button></div></div>`;
+  $("#gAgain").onclick=()=>{if(k==="num")startNum();else if(k==="blitz")startBlitz();else startSort(g.si);};$("#gMenu").onclick=gameMenu;}
+
+/* ======================= EXAM MOCK (MIXED) ======================= */
+let mock=null,mTimer=null;
+const DIST={bpb:2,bpr:3,pit:2,pitd:3,thy:2,thyd:3};
+const KINDS={mix:"Mixed: MCQ + true/false",mcq:"MCQ only",tf:"True/false only"};
+const fmt=s=>Math.floor(s/60)+":"+String(s%60).padStart(2,"0");
+function mockMenu(){clearInterval(mTimer);mock=null;const h=S.mocks.slice(-5).reverse();
+  $("#mockArea").innerHTML=`<div class="card"><h3>Pick your paper</h3>
+   <p class="muted small">15 questions across all six topics, one mark each, 15 minutes. Keys <kbd>1</kbd>–<kbd>4</kbd> answer MCQs; <kbd>T</kbd> and <kbd>F</kbd> answer true/false.</p>
+   <div class="modes"><button class="mode" data-k="mix"><b>Mixed paper</b><span>About 8 MCQ and 7 true/false</span><span class="meta">Recommended</span></button>
+   <button class="mode" data-k="mcq"><b>MCQ paper</b><span>15 multiple-choice questions</span><span class="meta">Out of 15</span></button>
+   <button class="mode" data-k="tf"><b>True/false paper</b><span>15 statements, about half true</span><span class="meta">Extra practice</span></button></div>
+   ${h.length?`<h4>Recent attempts</h4><div class="opts">${h.map(m=>`<div class="row small"><b class="mono">${m.s}/${m.n||15}</b><span class="muted">${esc(KINDS[m.k]||"")}</span><span class="muted">${new Date(m.d).toLocaleString()}</span><span class="muted">${fmt(m.time)} used</span></div>`).join("")}</div>`:""}</div>`;
+  $("#mockArea").querySelectorAll(".mode").forEach(b=>b.onclick=()=>startMock(b.dataset.k));}
+const mcqItem=q=>({q,opts:shuffle([q.a].concat(q.w))});
+function startMock(kind){clearInterval(mTimer);let items,tries=0;
+  do{items=[];let k=Math.random()<0.5?0:1;
+    Object.keys(DIST).forEach(t=>{const mq=shuffle(QB.filter(q=>q.t===t)),tq=shuffle(TFI.filter(q=>q.t===t));
+      for(let j=0;j<DIST[t];j++){const useMcq=kind==="mcq"||(kind==="mix"&&k%2===0);k++;
+        items.push(useMcq?mcqItem(mq[j]):tfItem(tq[j]));}});
+    const tfs=items.filter(x=>x.opts.length===2),tr=tfs.filter(x=>x.q.a==="True").length;tries++;
+    var ok=!tfs.length||(tr>=tfs.length*0.35&&tr<=tfs.length*0.65);}while(!ok&&tries<50);
+  const n=items.length;
+  mock={k:kind,qs:shuffle(items).map(x=>Object.assign(x,{pick:null,flag:false})),i:0,n,total:n*60,t:n*60,done:false};
+  renderMock();mTimer=setInterval(()=>{mock.t--;const el=$("#mt");if(el){el.textContent=fmt(mock.t);if(mock.t<=120)el.classList.add("low");}if(mock.t<=0)submitMock();},1000);}
+function renderMock(){const m=mock,it=m.qs[m.i];const answered=m.qs.filter(x=>x.pick!==null).length;
+  $("#mockArea").innerHTML=`<div class="card">
+   <div class="hud"><span class="timer ${m.t<=120?"low":""}" id="mt">${fmt(m.t)}</span><span>Answered <b>${answered}</b>/${m.n}</span><button class="btn ghost" id="mFlag" style="padding:6px 12px">${it.flag?"Unflag":"Flag"}</button><button class="btn wax" id="mSubmit" style="margin-left:auto;padding:6px 14px">Submit</button></div>
+   <div class="qnav">${m.qs.map((x,k)=>`<button data-k="${k}" class="${x.pick!==null?"ans":""} ${k===m.i?"cur":""} ${x.flag?"flag":""}" aria-label="Question ${k+1}">${k+1}</button>`).join("")}</div>
+   ${qHTML(it.q,it.opts,"Q"+(m.i+1)+(it.opts.length===2?" · True or false":""))}
+   <div class="row"><button class="btn ghost" id="mPrev" ${m.i===0?"disabled":""}>Previous</button><button class="btn" id="mNext" ${m.i===m.n-1?"disabled":""}>Next</button></div>
+   <div id="mConfirm"></div></div>`;
+  $("#mockArea").querySelectorAll(".opt").forEach((b,k)=>{if(it.pick===k)b.classList.add("pick");b.onclick=()=>mockPick(k);});
+  $("#mockArea").querySelectorAll(".qnav button").forEach(b=>b.onclick=()=>{stopAdv(m);m.i=+b.dataset.k;renderMock();});
+  $("#mPrev").onclick=()=>{stopAdv(m);m.i--;renderMock();};$("#mNext").onclick=()=>{stopAdv(m);m.i++;renderMock();};
+  $("#mFlag").onclick=()=>{it.flag=!it.flag;renderMock();};
+  $("#mSubmit").onclick=()=>{stopAdv(m);const left=m.n-m.qs.filter(x=>x.pick!==null).length;
+    $("#mConfirm").innerHTML=`<div class="fb ${left?"no":"ok"}"><b>${left?left+" unanswered. Submit anyway?":"Submit your mock?"}</b><div class="row" style="margin-top:8px"><button class="btn wax" id="mYes">Submit now</button><button class="btn ghost" id="mNo">Keep working</button></div></div>`;
+    $("#mYes").onclick=submitMock;$("#mNo").onclick=()=>$("#mConfirm").innerHTML="";};}
+const stopAdv=m=>{clearTimeout(m.adv);m.pending=false;};
+function mockPick(k){const m=mock;if(!m||m.done||m.pending)return;const idx=m.i;m.qs[idx].pick=k;renderMock();
+  if(idx<m.n-1){m.pending=true;m.adv=setTimeout(()=>{m.pending=false;if(!m.done&&m.i===idx){m.i=idx+1;renderMock();}},260);}}
+function submitMock(){const m=mock;if(!m||m.done)return;m.done=true;clearInterval(mTimer);stopAdv(m);
+  let s=0;const byT={};m.qs.forEach(x=>{const ok=x.pick!==null&&x.opts[x.pick]===x.q.a;x.ok=ok;if(ok)s++;record(x.q.id,ok);byT[x.q.t]=byT[x.q.t]||[0,0];byT[x.q.t][1]++;if(ok)byT[x.q.t][0]++;});
+  const used=m.total-Math.max(0,m.t),pct=Math.round(s/m.n*100);S.mocks.push({s,n:m.n,k:m.k,d:Date.now(),time:used});save();addXP(s*5);checkBadges();
+  const verdict=pct>=93?"Excellent: that is a top mark.":pct>=80?"Strong pass. Tidy the misses and you're set.":pct>=60?"Passing, but leaving marks behind. Drill the weak topics below.":"Not yet. Go back to Learn for the weak topics, then retake.";
+  $("#mockArea").innerHTML=`<div class="card pop"><p class="eyebrow">Mock result · ${esc(KINDS[m.k])}</p>
+   <div class="row" style="align-items:flex-end;gap:18px"><span class="score">${s}/${m.n}</span><span class="muted">${pct}% · ${fmt(used)} used · +${s*5} XP</span></div><p>${verdict}</p>
+   <div class="tbars">${Object.keys(byT).map(t=>`<div class="tbar"><span>${esc(TOPICS[t].n)}</span><div class="bar"><i style="width:${byT[t][0]/byT[t][1]*100}%"></i></div><span class="mono">${byT[t][0]}/${byT[t][1]}</span></div>`).join("")}</div>
+   <h4>Review</h4><div class="opts">${m.qs.map((x,k)=>`<div class="fb ${x.ok?"ok":"no"}"><b>${k+1}. ${esc(x.q.q)}</b>${x.ok?"":"You answered: "+(x.pick===null?"nothing":esc(x.opts[x.pick]))+". "}Answer: ${esc(x.q.a)}. ${esc(x.q.e)}</div>`).join("")}</div>
+   <div class="row"><button class="btn wax" id="mAgain">New mock</button><button class="btn ghost" id="mWeak">Drill weak MCQs</button><button class="btn ghost" id="mWeakTf">Drill weak true/false</button></div></div>`;
+  $("#mAgain").onclick=()=>startMock(m.k);$("#mWeak").onclick=()=>{show("quiz");startQuiz("mcq","weak");};$("#mWeakTf").onclick=()=>{show("tf");startQuiz("tf","weak");};window.scrollTo({top:0});}
+
+/* ======================= PROGRESS ======================= */
+let resetArm=false;
+function renderProgress(){const ALLQ=QB.concat(TFI);const rows=Object.keys(TOPICS).map(t=>{const qs=ALLQ.filter(q=>q.t===t);let s=0,c=0,seen=0;qs.forEach(q=>{const r=S.qs[q.id];if(r){seen++;s+=r.s;c+=r.c;}});
+   return {t,n:TOPICS[t].ch+" · "+TOPICS[t].n,acc:s?Math.round(c/s*100):null,cov:Math.round(seen/qs.length*100)};});
+  const best=S.mocks.length?S.mocks.slice().sort((a,b)=>b.s/(b.n||15)-a.s/(a.n||15))[0]:null;const weak=weakPool("tf").length+weakPool("mcq").length;
+  const worst=rows.filter(r=>r.acc!==null).sort((a,b)=>a.acc-b.acc)[0];
+  $("#progArea").innerHTML=`
+   <div class="two"><div class="card"><span class="muted small">Level</span><span class="score" style="font-size:2rem">${LEVELS[level()][1]}</span><span class="muted small">${S.xp} XP</span></div>
+   <div class="card"><span class="muted small">Best exam mock</span><span class="score" style="font-size:2rem">${best?best.s+"/"+(best.n||15):"—"}</span><span class="muted small">${S.mocks.length} attempt${S.mocks.length===1?"":"s"}</span></div>
+   <div class="card"><span class="muted small">Weak spots waiting</span><span class="score" style="font-size:2rem">${weak}</span><span class="muted small">${worst?"Weakest topic: "+esc(TOPICS[worst.t].n):"Play a round to find out"}</span></div></div>
+   <div class="card"><h3>Accuracy by topic</h3><p class="muted small">MCQ and true/false combined. Bar = accuracy on what you have answered; covered = share of the bank you have seen.</p>
+   <div class="tbars">${rows.map(r=>`<div class="tbar"><span>${esc(r.n)}<br><span class="muted small">${r.cov}% covered</span></span><div class="bar"><i style="width:${r.acc||0}%"></i></div><span class="mono">${r.acc===null?"—":r.acc+"%"}</span></div>`).join("")}</div></div>
+   <div class="card"><h3>Badges</h3><div class="badges">${BADGES.map(b=>`<span class="badge ${S.badges[b[0]]?"on":""}" title="${esc(b[2])}">${esc(b[1])}</span>`).join("")}</div><p class="muted small">Hover or long-press a badge to see how to earn it.</p></div>
+   <div class="card"><h3>Study plan for the quiz</h3><ol style="margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:6px">
+     <li>Read one part of Learn, then press its "Quiz me on this" button (about 1¼ hours for all six).</li>
+     <li>Open the Case files and solve all eight.</li>
+     <li>Play Build the pathway and Predict the arrows until both are clean.</li>
+     <li>Beat the three bosses.</li>
+     <li>Clear your review queue whenever the pill at the top shows items due.</li>
+     <li>Take a mixed exam mock. Under 12/15? Play the Danger zone, then take another.</li></ol></div>
+   <div class="card"><h3>Reset</h3><p class="muted small">Clears XP, scores and known cards on this device.</p><div class="row"><button class="btn ghost" id="rst">${resetArm?"Tap again to confirm reset":"Reset progress"}</button></div></div>`;
+  $("#rst").onclick=()=>{if(!resetArm){resetArm=true;renderProgress();setTimeout(()=>{resetArm=false;},4000);return;}
+    S={xp:0,qs:{},mocks:[],known:{},games:{},badges:{}};save();resetArm=false;renderXP();makeDeck();renderProgress();toast("Progress reset");};}
+
+/* ======================= BOOT ======================= */
+renderXP();
+let startTab=location.hash.slice(1);if(!TABS.includes(startTab)){try{startTab=localStorage.getItem(KEY+"_tab")||"learn";}catch(e){startTab="learn";}}
+show(startTab);
+</script>
+<script>
+/* ======================= FEATURE LAYER: seven upgrades =======================
+   1 Spaced review queue · 2 Confidence check · 3 Case files · 4 Pathway builder
+   5 Predict the arrows · 6 Boss battles · 7 Lookup + links between guide and games */
+S.sr=S.sr||{};S.conf=S.conf||{sr:0,sw:0,gr:0,gw:0};S.danger=S.danger||{};S.cases=S.cases||{};S.boss=S.boss||{};
+const INTERVALS=[0,60e3,10*60e3,60*60e3,6*3600e3,24*3600e3]; /* box 1..5 */
+let GUESS=false,CURGUESS=false,TERMPOOL=[],TERMLABEL="";
+TABS.splice(TABS.indexOf("memory")+1,0,"lookup");TABS.splice(TABS.indexOf("tf")+1,0,"cases");
+
+/* ---------- 1. spaced review ---------- */
+function srUpdate(id,ok,guess){const r=S.sr[id]||{b:0,d:0};
+  if(ok&&!guess)r.b=Math.min(5,(r.b||0)+1);else if(ok&&guess)r.b=Math.max(1,Math.min(r.b||1,2));else r.b=1;
+  r.d=Date.now()+INTERVALS[r.b];S.sr[id]=r;}
+function dueItems(f){const now=Date.now();return bank(f).filter(q=>{const r=S.sr[q.id];return r&&r.d<=now;}).sort((a,b)=>S.sr[a.id].d-S.sr[b.id].d);}
+function dueCount(){return dueItems("mcq").length+dueItems("tf").length;}
+function nextDueIn(){const now=Date.now(),f=Object.values(S.sr).filter(r=>r.d>now).map(r=>r.d-now);return f.length?Math.min(...f):null;}
+function renderDue(){const p=$("#duePill");if(!p)return;const n=dueCount();
+  if(n){p.textContent=n+" due for review";p.classList.add("hot");}
+  else{const t=nextDueIn();p.textContent=t?"Next review in "+(t<3600e3?Math.ceil(t/60e3)+" min":Math.round(t/3600e3)+" h"):"Review queue empty";p.classList.remove("hot");}}
+const _record=record;
+record=function(id,ok){_record(id,ok);srUpdate(id,ok,CURGUESS);if(!ok&&!CURGUESS)S.danger[id]=1;else if(ok&&!CURGUESS)delete S.danger[id];save();renderDue();};
+setInterval(renderDue,30e3);
+$("#duePill").onclick=()=>{const f=dueItems("mcq").length?"mcq":dueItems("tf").length?"tf":"mcq";show(f==="mcq"?"quiz":"tf");startQuiz(f,"due");};
+
+const _quizMenu=quizMenu;
+quizMenu=function(f){_quizMenu(f);const el=$(AREA[f]),n=dueItems(f).length,modes=el.querySelector(".modes");
+  const b=document.createElement("button");b.className="mode due";
+  b.innerHTML=`<b>Review due now</b><span>Spaced repetition: missed and shaky items come back just before you'd forget them</span><span class="meta">${n} due</span>`;
+  b.onclick=()=>startQuiz(f,"due");modes.prepend(b);
+  const dz=bank(f).filter(q=>S.danger[q.id]).length;
+  if(dz){const d=document.createElement("button");d.className="mode danger";d.innerHTML=`<b>Danger zone</b><span>Questions you got wrong while feeling sure</span><span class="meta">${dz} waiting</span>`;d.onclick=()=>startQuiz(f,"danger");modes.insertBefore(d,b.nextSibling);}};
+const _startQuiz=startQuiz;
+startQuiz=function(f,m){
+  let pool=null;
+  if(m==="due")pool=dueItems(f);
+  else if(m==="danger")pool=shuffle(bank(f).filter(q=>S.danger[q.id]));
+  else if(m==="term")pool=shuffle(TERMPOOL);
+  if(!pool)return _startQuiz(f,m);
+  pool=pool.slice(0,ROUND[f]);
+  if(!pool.length){toast(m==="due"?"Nothing due yet. Missed items come back here.":"Nothing here yet.");return;}
+  sess[f]=quiz={f,m,qs:pool.map(x=>f==="tf"?tfItem(x):{q:x,opts:shuffle([x.a].concat(x.w))}),i:0,score:0,combo:0,best:0,xp:0,missed:[],answered:false};
+  renderQuiz();};
+
+/* ---------- 2. confidence check + 7. read links ---------- */
+function readLink(t){return `<a href="#" class="readlink" data-t="${t}">Read this in the guide →</a>`;}
+function setGuess(g){GUESS=g;document.querySelectorAll(".conf .chip").forEach(b=>b.setAttribute("aria-pressed",String((b.dataset.g==="1")===g)));}
+const _renderQuiz=renderQuiz;
+renderQuiz=function(){_renderQuiz();GUESS=false;const el=$(AREA[quiz.f]),opts=el.querySelector(".opts");
+  if(quiz.m==="due"||quiz.m==="danger"||quiz.m==="term"){const tag=el.querySelector(".hud");tag.insertAdjacentHTML("afterbegin",`<span class="pill">${quiz.m==="due"?"Review":quiz.m==="danger"?"Danger zone":esc(TERMLABEL)}</span>`);}
+  const row=document.createElement("div");row.className="conf";
+  row.innerHTML=`<span class="small muted">Before you answer:</span><button class="chip" data-g="0" aria-pressed="true">I'm sure</button><button class="chip" data-g="1" aria-pressed="false">Guessing</button><span class="small muted">key G</span>`;
+  opts.before(row);row.querySelectorAll("button").forEach(b=>b.onclick=()=>setGuess(b.dataset.g==="1"));};
+const _answer=answer;
+answer=function(i){const z=quiz;if(!z||z.answered)return;const it=z.qs[z.i],ok=it.opts[i]===it.q.a,g=GUESS;
+  CURGUESS=g;_answer(i);CURGUESS=false;
+  const c=S.conf;if(ok&&!g)c.sr++;else if(ok&&g)c.gr++;else if(!ok&&!g)c.sw++;else c.gw++;save();
+  const fb=$("#qFb .fb");let note="";
+  if(ok&&g)note="Lucky guess. It will come back in your review queue in about 10 minutes.";
+  else if(!ok&&!g)note="Confident mistake. These are the dangerous ones, so it goes into your Danger zone.";
+  else if(!ok&&g)note="Good call flagging it as a guess. It comes back in your review queue in a minute.";
+  if(note)fb.insertAdjacentHTML("beforeend",`<div class="note2">${note}</div>`);
+  fb.insertAdjacentHTML("beforeend",readLink(it.q.t));
+  document.querySelectorAll(".conf .chip").forEach(b=>b.disabled=true);checkBadges();};
+document.addEventListener("click",e=>{
+  const a=e.target.closest(".readlink");if(a){e.preventDefault();show("learn");const el=document.getElementById("c-"+a.dataset.t);if(el)setTimeout(()=>el.scrollIntoView({behavior:"smooth"}),30);return;}
+  const q=e.target.closest(".qmb");if(q){show("quiz");startQuiz("mcq",q.dataset.topic);return;}
+  const go=e.target.closest("[data-goto]");if(go){show(go.dataset.goto);if(go.dataset.mode)setTimeout(()=>{const fn={path:startPath,arrows:startArrows}[go.dataset.mode];if(fn)fn();},20);}
+});
+
+/* ---------- 3. case files ---------- */
+let CASE=null;
+function caseMenu(){CASE=null;const el=$("#caseArea");
+  el.innerHTML=`<div class="modes">${CASES.map((c,i)=>{const best=S.cases[i];return `<button class="mode" data-c="${i}"><b>${esc(c.title)}</b><span>${TOPICS[c.t].ch} · ${esc(TOPICS[c.t].n)} · ${c.steps.length} questions</span><span class="meta">${best===undefined?"Not opened":best===c.steps.length?"Solved ✓":"Best "+best+"/"+c.steps.length}</span></button>`;}).join("")}</div>`;
+  el.querySelectorAll(".mode").forEach(b=>b.onclick=()=>startCase(+b.dataset.c));}
+function startCase(i){const c=CASES[i];CASE={i,c,s:0,score:0,answered:false,opts:c.steps.map(st=>shuffle([st[1]].concat(st[2])))};renderCase();}
+function renderCase(){const C=CASE,c=C.c,st=c.steps[C.s];
+  $("#caseArea").innerHTML=`<div class="card pop">
+   <div class="hud"><span class="pill">${TOPICS[c.t].ch} · Case file</span><span>Question <b>${C.s+1}</b>/${c.steps.length}</span><span>Score <b>${C.score}</b></span><button class="btn ghost" id="cQuit" style="margin-left:auto;padding:6px 12px">All cases</button></div>
+   <h3>${esc(c.title)}</h3><div class="story">${esc(c.story)}</div>
+   <p class="stem">${esc(st[0])}</p>
+   <div class="opts">${C.opts[C.s].map((o,k)=>`<button class="opt" data-i="${k}"><span class="L">${"ABCD"[k]}</span><span>${esc(o)}</span></button>`).join("")}</div><div id="caseFb"></div></div>`;
+  $("#cQuit").onclick=caseMenu;C.answered=false;
+  $("#caseArea").querySelectorAll(".opt").forEach(b=>b.onclick=()=>caseAnswer(+b.dataset.i));}
+function caseAnswer(k){const C=CASE;if(!C||C.answered)return;C.answered=true;const st=C.c.steps[C.s],o=C.opts[C.s],ok=o[k]===st[1];
+  $("#caseArea").querySelectorAll(".opt").forEach((b,j)=>{b.disabled=true;if(o[j]===st[1])b.classList.add("ok");else if(j===k)b.classList.add("no");});
+  if(ok){C.score++;addXP(8);}
+  $("#caseFb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct":"Answer: "+esc(st[1])}</b>${esc(st[3])}${readLink(C.c.t)}</div><div class="row" style="margin-top:12px"><button class="btn wax" id="caseNext">${C.s+1<C.c.steps.length?"Next question":"Close the case"}</button></div>`;
+  $("#caseNext").onclick=caseNext;$("#caseNext").focus();}
+function caseNext(){const C=CASE;if(C.s+1<C.c.steps.length){C.s++;renderCase();return;}
+  const n=C.c.steps.length;S.cases[C.i]=Math.max(S.cases[C.i]||0,C.score);save();checkBadges();
+  $("#caseArea").innerHTML=`<div class="card pop"><p class="eyebrow">Case closed</p><span class="score">${C.score}/${n}</span>
+   <p>${C.score===n?"Solved. You reasoned through every step.":C.score>=n-1?"Nearly there. Read the step you missed, then replay.":"Re-read this topic in the guide, then reopen the case."}</p>
+   <div class="row"><button class="btn wax" id="caseAgain">Replay this case</button><button class="btn ghost" id="caseMenuB">All cases</button>${readLink(C.c.t).replace('class="readlink"','class="readlink btn ghost"')}</div></div>`;
+  $("#caseAgain").onclick=()=>startCase(C.i);$("#caseMenuB").onclick=caseMenu;}
+
+/* ---------- 4. pathway builder ---------- */
+function startPath(){game={k:"path",list:shuffle(PATHS).slice(0,4),p:0,placed:[],miss:0,totalMiss:0,score:0,chips:null};newPathChips();renderPath();}
+function newPathChips(){const g=game,P=g.list[g.p];g.placed=[];g.miss=0;g.chips=shuffle(P.steps.map((s,i)=>({s,i})));}
+function renderPath(){const g=game,P=g.list[g.p];
+  $("#gameArea").innerHTML=`<div class="card pop"><div class="hud"><span class="pill">Pathway ${g.p+1}/${g.list.length}</span><span>${TOPICS[P.t].ch} · ${esc(TOPICS[P.t].n)}</span><span>Mistakes <b>${g.miss}</b></span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <h3>${esc(P.name)}</h3><p class="small muted">Tap the steps in the order they happen.</p>
+   <ol class="pathlist">${g.placed.map(s=>`<li>${esc(s)}</li>`).join("")}${g.placed.length<P.steps.length?`<li class="ghost">…</li>`:""}</ol>
+   <div class="pathchips">${g.chips.map((c,k)=>`<button class="pchip" data-k="${k}">${esc(c.s)}</button>`).join("")}</div><div id="pfb"></div></div>`;
+  $("#gq").onclick=gameMenu;
+  $("#gameArea").querySelectorAll(".pchip").forEach(b=>b.onclick=()=>pathTap(+b.dataset.k,b));}
+function pathTap(k,btn){const g=game,P=g.list[g.p],c=g.chips[k];
+  if(c.i===g.placed.length){g.placed.push(c.s);g.chips.splice(k,1);addXP(2);
+    if(g.placed.length===P.steps.length){g.score+=g.miss===0?1:0;g.totalMiss+=g.miss;renderPath();
+      $("#pfb").innerHTML=`<div class="fb ok"><b>${g.miss===0?"Perfect order":"Pathway complete"}</b>${g.miss?g.miss+" wrong tap"+(g.miss>1?"s":"")+" on this one.":"No mistakes."}${readLink(P.t)}</div><div class="row" style="margin-top:10px"><button class="btn wax" id="pNext">${g.p+1<g.list.length?"Next pathway":"Finish"}</button></div>`;
+      $("#pNext").onclick=()=>{if(g.p+1<g.list.length){g.p++;newPathChips();renderPath();}else{if(g.totalMiss===0){S.games.pathPerfect=(S.games.pathPerfect||0)+1;save();}endGame("path",g.score,g.list.length);}};
+    }else renderPath();}
+  else{g.miss++;btn.classList.add("shake");btn.classList.add("no");setTimeout(()=>{btn.classList.remove("shake","no");},450);$(".hud b").textContent=g.miss;}}
+
+/* ---------- 5. predict the arrows ---------- */
+const ARW={up:"↑",down:"↓",same:"↔"};
+function startArrows(){game={k:"arrows",list:shuffle(ARROWS).slice(0,6),i:0,right:0,total:0,pick:{},checked:false};renderArrows();}
+function renderArrows(){const g=game,A=g.list[g.i];
+  $("#gameArea").innerHTML=`<div class="card pop"><div class="hud"><span class="pill">Scenario ${g.i+1}/${g.list.length}</span><span>${TOPICS[A.t].ch}</span><span>Arrows right <b>${g.right}</b>/${g.total}</span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Quit</button></div>
+   <p class="stem">${esc(A.s)}</p><p class="small muted">Predict what happens to each one.</p>
+   <div class="arrows">${A.v.map((v,k)=>`<div class="arow"><span>${esc(v[0])}</span><span class="abtns">${["up","down","same"].map(d=>`<button class="abtn ${g.pick[k]===d?"sel":""}" data-k="${k}" data-d="${d}" aria-label="${v[0]} ${d}">${ARW[d]}</button>`).join("")}</span></div>`).join("")}</div>
+   <div class="row"><button class="btn wax" id="aCheck" ${Object.keys(g.pick).length<A.v.length?"disabled":""}>Check</button></div><div id="afb"></div></div>`;
+  $("#gq").onclick=gameMenu;
+  $("#gameArea").querySelectorAll(".abtn").forEach(b=>b.onclick=()=>{if(g.checked)return;g.pick[b.dataset.k]=b.dataset.d;renderArrows();});
+  $("#aCheck").onclick=arrowsCheck;}
+function arrowsCheck(){const g=game,A=g.list[g.i];if(g.checked)return;g.checked=true;let r=0;
+  A.v.forEach((v,k)=>{const ok=g.pick[k]===v[1];if(ok)r++;const row=$("#gameArea").querySelectorAll(".arow")[k];row.classList.add(ok?"ok":"no");
+    row.querySelectorAll(".abtn").forEach(b=>{b.disabled=true;if(b.dataset.d===v[1])b.classList.add("right");});});
+  g.right+=r;g.total+=A.v.length;addXP(r*3);$(".hud b").textContent=g.right;$(".hud b").nextSibling&&0;
+  $("#aCheck").disabled=true;
+  $("#afb").innerHTML=`<div class="fb ${r===A.v.length?"ok":"no"}"><b>${r}/${A.v.length} arrows right</b>${esc(A.e)}${readLink(A.t)}</div><div class="row" style="margin-top:10px"><button class="btn wax" id="aNext">${g.i+1<g.list.length?"Next scenario":"Finish"}</button></div>`;
+  $("#aNext").onclick=()=>{if(g.i+1<g.list.length){g.i++;g.pick={};g.checked=false;renderArrows();}else{const pct=Math.round(g.right/g.total*100);if(pct>(S.games.arrows||0)){S.games.arrows=pct;}save();endGame("arrows",g.right,g.total);}};}
+
+/* ---------- 6. boss battles ---------- */
+let bTimer=null;
+const _stopTimer=stopTimer;stopTimer=function(){_stopTimer();clearInterval(bTimer);bTimer=null;};
+function startBoss(L){const lec=LECTURES[L];
+  const pool=shuffle(QB.filter(q=>lec.topics.includes(q.t)).map(mcqItem).concat(shuffle(TFI.filter(q=>lec.topics.includes(q.t))).slice(0,25).map(f=>tfItem(f))));
+  game={k:"boss",L,lec,pool,i:0,hp:100,hearts:3,t:20,answered:false,hits:0,crit:0,start:Date.now()};renderBoss();}
+function renderBoss(){const g=game,it=g.pool[g.i];clearInterval(bTimer);g.t=20;g.answered=false;g.qStart=Date.now();
+  $("#gameArea").innerHTML=`<div class="card pop boss"><div class="hud"><span class="pill">Boss · ${esc(g.lec.name)}</span><span class="hearts" aria-label="${g.hearts} lives">${"♥".repeat(g.hearts)}<span class="lost">${"♥".repeat(3-g.hearts)}</span></span><span class="timer" id="bt">${g.t}s</span><button class="btn ghost" id="gq" style="margin-left:auto;padding:6px 12px">Flee</button></div>
+   <div class="bossname"><b>${esc(g.lec.boss)}</b><span class="mono">${g.hp} HP</span></div><div class="hp"><i style="width:${g.hp}%"></i></div>
+   ${qHTML(it.q,it.opts)}<div id="bfb"></div></div>`;
+  $("#gq").onclick=gameMenu;
+  $("#gameArea").querySelectorAll(".opt").forEach(b=>b.onclick=()=>bossAnswer(+b.dataset.i));
+  bTimer=setInterval(()=>{g.t--;const el=$("#bt");if(el){el.textContent=g.t+"s";if(g.t<=5)el.classList.add("low");}if(g.t<=0){clearInterval(bTimer);bossAnswer(-1);}},1000);}
+function bossAnswer(k){const g=game;if(!g||g.k!=="boss"||g.answered)return;g.answered=true;clearInterval(bTimer);const it=g.pool[g.i],ok=k>=0&&it.opts[k]===it.q.a;
+  $("#gameArea").querySelectorAll(".opt").forEach((b,j)=>{b.disabled=true;if(it.opts[j]===it.q.a)b.classList.add("ok");else if(j===k)b.classList.add("no");});
+  record(it.q.id,ok);let msg;
+  if(ok){const fast=(Date.now()-g.qStart)<7000,dmg=fast?15:10;g.hp=Math.max(0,g.hp-dmg);g.hits++;if(fast)g.crit++;addXP(fast?8:5);msg=fast?"Critical hit! −15 HP":"Hit! −10 HP";}
+  else{g.hearts--;msg=k<0?"Time's up. You lose a heart.":"Missed. You lose a heart.";}
+  $(".hp i").style.width=g.hp+"%";$(".bossname .mono").textContent=g.hp+" HP";
+  $("#bfb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${msg}</b>${ok?"":"Answer: "+esc(it.q.a)+". "}${esc(it.q.e)}</div><div class="row" style="margin-top:10px"><button class="btn wax" id="bNext">${g.hp<=0||g.hearts<=0||g.i+1>=g.pool.length?"See the result":"Next attack"}</button></div>`;
+  $("#bNext").onclick=bossNext;$("#bNext").focus();}
+function bossNext(){const g=game;if(g.hp<=0||g.hearts<=0||g.i+1>=g.pool.length){bossEnd();return;}g.i++;renderBoss();}
+function bossEnd(){const g=game;stopTimer();const win=g.hp<=0;
+  if(win){S.boss[g.L]=1;addXP(60);save();checkBadges();}
+  $("#gameArea").innerHTML=`<div class="card pop"><p class="eyebrow">${win?"Boss defeated":"The boss survived"}</p><span class="score">${win?"Victory":"Retreat"}</span>
+   <p>${win?`You beat ${esc(g.lec.boss)} with ${g.hearts} heart${g.hearts===1?"":"s"} left and ${g.crit} critical hit${g.crit===1?"":"s"}.`:`${esc(g.lec.boss)} still has ${g.hp} HP. Read the lecture in Learn, then try again.`}</p>
+   <div class="row"><button class="btn wax" id="bAgain">Fight again</button><button class="btn ghost" id="gMenu">All games</button></div></div>`;
+  $("#bAgain").onclick=()=>startBoss(g.L);$("#gMenu").onclick=gameMenu;}
+
+const _gameMenu=gameMenu;
+gameMenu=function(){_gameMenu();const modes=$("#gameArea .modes");
+  const extra=document.createElement("div");extra.className="modes";extra.style.marginBottom="10px";
+  extra.innerHTML=Object.keys(LECTURES).map(L=>`<button class="mode bossmode" data-boss="${L}"><b>Boss: ${esc(LECTURES[L].boss)}</b><span>${esc(LECTURES[L].name)} · 3 lives, 20 s per question, fast answers crit</span><span class="meta">${S.boss[L]?"Defeated ✓":"Undefeated"}</span></button>`).join("")+
+   `<button class="mode" data-x="path"><b>Build the pathway</b><span>Put the steps of RAAS, reflexes and hormone axes in order</span><span class="meta">${PATHS.length} pathways</span></button>
+    <button class="mode" data-x="arrows"><b>Predict the arrows</b><span>↑ ↓ or ↔ for each variable in a scenario</span><span class="meta">Best ${S.games.arrows||0}%</span></button>`;
+  modes.before(extra);
+  extra.querySelectorAll("[data-boss]").forEach(b=>b.onclick=()=>startBoss(b.dataset.boss));
+  extra.querySelector('[data-x="path"]').onclick=startPath;extra.querySelector('[data-x="arrows"]').onclick=startArrows;};
+const _endGame=endGame;
+endGame=function(k,score,total,wrong){if(k==="path"||k==="arrows"){stopTimer();save();checkBadges();
+  $("#gameArea").innerHTML=`<div class="card pop"><p class="eyebrow">Game over</p><span class="score">${score}/${total}</span>
+   <p class="muted">${k==="path"?"Pathways built without a single wrong tap.":"Arrows predicted correctly."}</p>
+   <div class="row"><button class="btn wax" id="gAgain">Play again</button><button class="btn ghost" id="gMenu">All games</button></div></div>`;
+  $("#gAgain").onclick=k==="path"?startPath:startArrows;$("#gMenu").onclick=gameMenu;return;}
+  return _endGame(k,score,total,wrong);};
+
+/* ---------- 7. lookup ---------- */
+function renderLookup(){const box=$("#lkInput"),q=(box.value||"").trim().toLowerCase();
+  const hits=GLOSS.filter(g=>!q||g[0].toLowerCase().includes(q)||g[1].toLowerCase().includes(q));
+  $("#lkCount").textContent=hits.length+" of "+GLOSS.length+" terms";
+  $("#lkList").innerHTML=hits.map(g=>{const key=g[0].toLowerCase().replace(/\s*\(.*\)/,"").split(" ")[0];
+    const n=QB.filter(x=>(x.q+" "+x.a+" "+x.e).toLowerCase().includes(g[0].toLowerCase().replace(/\s*\(.*\)/,""))).length;
+    return `<div class="gl"><div class="glh"><b>${esc(g[0])}</b><span class="tag">${TOPICS[g[2]].ch} · ${esc(TOPICS[g[2]].n)}</span></div><p>${esc(g[1])}</p>
+     <div class="row small">${readLink(g[2])}${n>=2?`<button class="btn ghost termq" data-term="${esc(g[0])}" style="padding:4px 10px">Quiz me on this term (${n})</button>`:""}</div></div>`;}).join("")||`<p class="muted">No match. Try a shorter word, such as "renin" or "TSH".</p>`;
+  $("#lkList").querySelectorAll(".termq").forEach(b=>b.onclick=()=>{const t=b.dataset.term,key=t.toLowerCase().replace(/\s*\(.*\)/,"");
+    TERMPOOL=QB.filter(x=>(x.q+" "+x.a+" "+x.e).toLowerCase().includes(key));TERMLABEL=t;show("quiz");startQuiz("mcq","term");});}
+$("#lkInput").addEventListener("input",renderLookup);
+
+/* ---------- tabs, keys, progress, badges ---------- */
+const _show=show;
+show=function(t){_show(t);if(t==="cases"&&!CASE)caseMenu();if(t==="lookup")renderLookup();renderDue();};
+document.addEventListener("keydown",e=>{
+  if(e.target.tagName==="INPUT")return;const k=e.key.toLowerCase(),tab=TABS.find(x=>!$("#p-"+x).hidden);
+  if((tab==="quiz"||tab==="tf")&&quiz&&!quiz.answered&&k==="g"){setGuess(!GUESS);}
+  if(tab==="cases"&&CASE){if(!CASE.answered&&/^[1-4]$/.test(k))caseAnswer(+k-1);else if(CASE.answered&&e.key==="Enter"&&$("#caseNext")){e.preventDefault();caseNext();}}
+  if(tab==="games"&&game&&game.k==="boss"&&!game.answered){const o=game.pool[game.i].opts;let i=-1;if(/^[1-4]$/.test(k))i=+k-1;if(o.length===2&&k==="t")i=0;if(o.length===2&&k==="f")i=1;if(i>=0&&i<o.length)bossAnswer(i);}
+  else if(tab==="games"&&game&&game.k==="boss"&&game.answered&&e.key==="Enter"&&$("#bNext")){e.preventDefault();bossNext();}
+});
+const _renderProgress=renderProgress;
+renderProgress=function(){_renderProgress();const area=$("#progArea"),reset=area.lastElementChild;
+  const boxes=[1,2,3,4,5].map(b=>Object.values(S.sr).filter(r=>r.b===b).length),tot=boxes.reduce((a,b)=>a+b,0);
+  const c=S.conf,sureN=c.sr+c.sw,gN=c.gr+c.gw,sureAcc=sureN?Math.round(c.sr/sureN*100):null,gAcc=gN?Math.round(c.gr/gN*100):null;
+  const dz=Object.keys(S.danger).length,solved=CASES.filter((x,i)=>S.cases[i]===x.steps.length).length;
+  const card=document.createElement("div");card.className="two";
+  card.innerHTML=`<div class="card"><h3>Spaced review</h3><p class="muted small">Box 1 comes back in a minute, box 5 in a day. Items climb a box each time you get them right while sure.</p>
+    <div class="tbars">${boxes.map((n,k)=>`<div class="tbar"><span>Box ${k+1}</span><div class="bar"><i style="width:${tot?n/tot*100:0}%"></i></div><span class="mono">${n}</span></div>`).join("")}</div>
+    <p class="small"><b>${dueCount()}</b> due now.</p></div>
+   <div class="card"><h3>Confidence check</h3><p class="muted small">How often you are right when you feel sure, and when you guess.</p>
+    <div class="tbars"><div class="tbar"><span>When sure</span><div class="bar"><i style="width:${sureAcc||0}%"></i></div><span class="mono">${sureAcc===null?"—":sureAcc+"%"}</span></div>
+    <div class="tbar"><span>When guessing</span><div class="bar"><i style="width:${gAcc||0}%"></i></div><span class="mono">${gAcc===null?"—":gAcc+"%"}</span></div></div>
+    <p class="small">${dz} question${dz===1?"":"s"} in your Danger zone.${sureAcc!==null&&sureN>=10&&sureAcc<80?" You feel sure more often than you are right: slow down and read every option.":""}</p></div>
+   <div class="card"><h3>Bosses and cases</h3><div class="badges">${Object.keys(LECTURES).map(L=>`<span class="badge ${S.boss[L]?"on":""}">${esc(LECTURES[L].boss)}</span>`).join("")}</div>
+    <p class="small">Cases solved: <b>${solved}/${CASES.length}</b> · Best arrows: <b>${S.games.arrows||0}%</b></p></div>`;
+  area.insertBefore(card,reset);};
+BADGES.push(
+ ["bossL4","Pressor slayer","Defeat the Lecture 4 boss",()=>!!S.boss.L4],
+ ["bossL5","Giant slayer","Defeat the Lecture 5 boss",()=>!!S.boss.L5],
+ ["bossL6","Goitre slayer","Defeat the Lecture 6 boss",()=>!!S.boss.L6],
+ ["detective","Detective","Solve every case file without a mistake",()=>CASES.every((x,i)=>S.cases[i]===x.steps.length)],
+ ["calibrated","Well calibrated","20+ sure answers at 85% accuracy or better",()=>{const c=S.conf,n=c.sr+c.sw;return n>=20&&c.sr/n>=0.85;}],
+ ["pathfinder","Pathfinder","Build a whole pathway round with no wrong taps",()=>(S.games.pathPerfect||0)>0],
+ ["forecaster","Forecaster","Score 90%+ in Predict the arrows",()=>(S.games.arrows||0)>=90]);
+renderDue();
+{const t=location.hash.slice(1);if(TABS.includes(t))show(t);}
+
+</script>
+
+
+</body>
+</html>
