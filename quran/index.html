@@ -1,0 +1,1046 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Sabaq · Quran ḥifẓ, meaning and Arabic">
+<meta property="og:description" content="Memorise the whole Quran in the sabaq, sabqi and manzil cycle, with translations, tafsīr, word-by-word grammar and a 28-lesson Quranic Arabic course.">
+<meta name="theme-color" content="#1C4C86">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect x='2' y='2' width='36' height='36' rx='8' fill='%231C4C86'/%3E%3Cpath d='M20 9v22M20 11c-3-2-8-2-11 0v18c3-2 8-2 11 0c3-2 8-2 11 0V11c-3-2-8-2-11 0z' fill='none' stroke='%23F1E6CC' stroke-width='2.2' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style>
+<script>window.SABAQ_PUBLIC=1</script>
+<title>Sabaq</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Memorise the whole Quran with its meaning, and learn Arabic from the āyāt you memorise.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=Reem+Kufi:wght@500;700&display=swap">
+<style>
+/* Layout: a fixed left rail of stations (Today → Progress) beside one working column; the mushaf line is the hero element everywhere. */
+:root{
+  --bg:#EEF0EC; --panel:#FBFBF9; --sunk:#E4E7E1; --ink:#17202B; --muted:#5A6472; --line:#D3D8D0;
+  --lapis:#1C4C86; --lapis-soft:#DCE5F1; --gold:#9C6F12; --gold-soft:#F1E6CC; --good:#2B7A4B; --good-soft:#DCEFE3; --bad:#B0281E; --bad-soft:#F6DEDB;
+  --quran:"Amiri Quran","Amiri","Scheherazade New","Noto Naskh Arabic","Geeza Pro",serif;
+  --kufi:"Reem Kufi","IBM Plex Sans",system-ui,sans-serif;
+  --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0D131B; --panel:#141C27; --sunk:#1A2431; --ink:#E5E9EF; --muted:#97A2B1; --line:#263345;
+  --lapis:#86AEE6; --lapis-soft:#1D2D45; --gold:#D8B260; --gold-soft:#3A2F17; --good:#63C38E; --good-soft:#173324; --bad:#F08A80; --bad-soft:#3D1D1B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0D131B; --panel:#141C27; --sunk:#1A2431; --ink:#E5E9EF; --muted:#97A2B1; --line:#263345;
+  --lapis:#86AEE6; --lapis-soft:#1D2D45; --gold:#D8B260; --gold-soft:#3A2F17; --good:#63C38E; --good-soft:#173324; --bad:#F08A80; --bad-soft:#3D1D1B; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{background:var(--bg);color:var(--ink)}
+body{font:15px/1.55 var(--sans);margin:0}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--lapis)}
+.app{display:grid;grid-template-columns:200px minmax(0,1fr);min-height:100vh}
+.rail{position:sticky;top:0;height:100vh;padding:22px 14px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:4px;background:var(--panel)}
+.brand{font:700 26px/1 var(--kufi);color:var(--lapis);padding:0 10px 4px;letter-spacing:.01em;display:flex;align-items:baseline;gap:8px}
+.brand small{font:500 20px/1 var(--kufi);color:var(--gold)}
+.tagline{font-size:12px;color:var(--muted);padding:0 10px 14px}
+.nav{display:flex;flex-direction:column;gap:2px}
+.nav button{all:unset;cursor:pointer;padding:8px 10px;border-radius:8px;display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-weight:500}
+.nav button:hover{background:var(--sunk);color:var(--ink)}
+.nav button[aria-current="page"]{background:var(--lapis-soft);color:var(--lapis)}
+.nav button:focus-visible{outline:2px solid var(--lapis);outline-offset:1px}
+.badge{font:500 11px/1 var(--mono);padding:3px 6px;border-radius:99px;background:var(--gold-soft);color:var(--gold)}
+.railfoot{margin-top:auto;font-size:11px;color:var(--muted);padding:0 10px}
+main{min-width:0;padding-block:28px 80px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:900px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1{font:700 30px/1.15 var(--kufi);margin:0;text-wrap:balance}
+h2{font:600 19px/1.3 var(--sans);margin:0;text-wrap:balance}
+h3{font:600 15px/1.3 var(--sans);margin:0}
+.eyebrow{font:500 11px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gold)}
+.muted{color:var(--muted)} .small{font-size:13px}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.grid{display:grid;gap:14px}
+.g2{grid-template-columns:repeat(2,minmax(0,1fr))} .g3{grid-template-columns:repeat(3,minmax(0,1fr))} .g4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.btn{cursor:pointer;border:1px solid var(--line);background:var(--panel);padding:8px 14px;border-radius:8px;font-weight:500}
+.btn:hover{border-color:var(--lapis)}
+.btn:focus-visible,.opt:focus-visible,.wtap:focus-visible{outline:2px solid var(--lapis);outline-offset:2px}
+.btn.pri{background:var(--lapis);border-color:var(--lapis);color:var(--panel)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--panel)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 10px;font-size:13px}
+.btn:disabled{opacity:.45;cursor:default}
+.stat{display:flex;flex-direction:column;gap:2px}
+.stat b{font:600 26px/1.1 var(--mono);font-variant-numeric:tabular-nums}
+.stat span{font-size:12px;color:var(--muted)}
+.bar{height:8px;border-radius:99px;background:var(--sunk);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--lapis);border-radius:99px}
+.bar.gold i{background:var(--gold)}
+/* Quran text */
+.q{font-family:var(--quran);direction:rtl;text-align:right;font-size:30px;line-height:2.15;word-spacing:.06em}
+.q.lg{font-size:36px} .q.md{font-size:26px} .q.sm{font-size:22px;line-height:1.9}
+.ar{font-family:var(--quran);direction:rtl;font-size:1.25em}
+.num{font-family:var(--quran);color:var(--gold);font-size:.8em;padding:0 .15em;white-space:nowrap}
+.wtap{cursor:pointer;border-radius:6px;padding:0 .06em;transition:background .15s}
+.wtap:hover{background:var(--gold-soft)}
+.wtap.sel{background:var(--lapis-soft);color:var(--lapis)}
+.hid{color:transparent;background:var(--sunk);border-radius:6px;cursor:pointer;user-select:none}
+.hint{color:var(--muted)}
+.tr{font-size:15px;color:var(--ink)}
+.tr .ref{font:500 12px var(--mono);color:var(--muted);margin-right:6px}
+.wbw{display:flex;flex-wrap:wrap;direction:rtl;gap:8px}
+.wbw div{display:flex;flex-direction:column;align-items:center;gap:0;padding:6px 8px;border:1px solid var(--line);border-radius:8px;min-width:64px;background:var(--panel);cursor:pointer}
+.wbw div:hover{border-color:var(--gold)}
+.wbw .wa{font-family:var(--quran);font-size:24px;line-height:1.7}
+.wbw .wt{font-size:11px;color:var(--muted);direction:ltr}
+.wbw .wg{font-size:12px;direction:ltr;text-align:center;max-width:120px}
+/* Mushaf page */
+.page{container-type:inline-size;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:22px 20px;box-shadow:0 0 0 6px var(--sunk) inset}
+.mline{font-family:var(--quran);direction:rtl;font-size:clamp(14px,4.3cqi,30px);line-height:2.05;text-align:justify;text-align-last:justify;min-height:2.05em;white-space:nowrap;overflow:hidden}
+.mline.c{text-align:center;text-align-last:center}
+.sh .sa{font-family:var(--quran);font-size:21px;font-weight:400}
+.sh{font:700 15px/1.4 var(--kufi);text-align:center;color:var(--lapis);border:1px solid var(--line);border-radius:6px;padding:9px;margin:4px 0;background:var(--lapis-soft)}
+.aytap{cursor:pointer;border-radius:4px}
+.aytap:hover,.aytap.on{background:var(--gold-soft)}
+.aytap.mem{color:var(--good)}
+.pnav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pnav input,.pnav select,.field input,.field select,.field textarea{padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+/* Quiz */
+.opts{display:grid;gap:10px}
+.opt{all:unset;cursor:pointer;border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--panel);display:flex;gap:10px;align-items:center}
+.opt:hover{border-color:var(--lapis)}
+.opt .k{font:500 12px var(--mono);color:var(--muted);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.opt.ok{border-color:var(--good);background:var(--good-soft)}
+.opt.no{border-color:var(--bad);background:var(--bad-soft)}
+.opt.arq{font-family:var(--quran);font-size:24px;direction:rtl;justify-content:flex-start;line-height:1.8}
+.fb{border-radius:8px;padding:10px 12px;font-size:14px}
+.fb.ok{background:var(--good-soft);color:var(--good)} .fb.no{background:var(--bad-soft);color:var(--bad)}
+.grades{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.grades .btn{display:flex;flex-direction:column;align-items:center;gap:0;padding:8px}
+.grades .btn small{font:400 11px var(--mono);color:var(--muted)}
+.gA{border-color:var(--bad)!important} .gH{border-color:var(--gold)!important} .gG{border-color:var(--good)!important} .gE{border-color:var(--lapis)!important}
+.steps{display:flex;gap:6px;flex-wrap:wrap}
+.steps span{font:500 12px var(--mono);padding:5px 10px;border-radius:99px;background:var(--sunk);color:var(--muted)}
+.steps span.on{background:var(--lapis);color:var(--panel)}
+.steps span.done{background:var(--good-soft);color:var(--good)}
+.chip{font:500 11px var(--mono);padding:3px 8px;border-radius:99px;background:var(--sunk);color:var(--muted);white-space:nowrap}
+.chip.m{background:var(--gold-soft);color:var(--gold)} .chip.d{background:var(--lapis-soft);color:var(--lapis)}
+.list{display:flex;flex-direction:column}
+.list>div{display:flex;justify-content:space-between;gap:10px;padding:9px 2px;border-bottom:1px solid var(--line);align-items:center}
+.list>div:last-child{border-bottom:0}
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:14px}
+th,td{text-align:left;padding:7px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font:500 11px var(--mono);text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.juzmap{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:6px}
+.juzmap div{border-radius:6px;padding:6px 4px;text-align:center;font:500 12px var(--mono);background:var(--sunk);position:relative;overflow:hidden}
+.juzmap div i{position:absolute;left:0;bottom:0;top:0;background:var(--good-soft);z-index:0}
+.juzmap div span{position:relative}
+.heat{display:flex;flex-wrap:wrap;gap:3px}
+.heat i{width:12px;height:12px;border-radius:3px;background:var(--sunk)}
+.heat i.l1{background:var(--good-soft)} .heat i.l2{background:color-mix(in srgb,var(--good) 55%,var(--good-soft))} .heat i.l3{background:var(--good)}
+.lex{font-family:var(--quran);font-size:52px;line-height:1.6;text-align:center;direction:rtl}
+.flip{min-height:140px;justify-content:center;text-align:center}
+.lesson p{margin:0 0 10px;max-width:68ch}
+.lesson ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.ex{border-left:3px solid var(--gold);padding:4px 12px}
+.mark{background:var(--gold-soft);color:var(--gold);border-radius:5px;padding:0 .1em}
+.sheet{position:fixed;inset:0;background:color-mix(in srgb,var(--ink) 35%,transparent);display:flex;justify-content:flex-end;z-index:20}
+.sheet>div{width:min(560px,100%);height:100%;overflow:auto;background:var(--panel);border-left:1px solid var(--line);padding:22px max(18px,env(safe-area-inset-right,0px)) 40px 22px;display:flex;flex-direction:column;gap:14px}
+.tafsir{font-size:15px;line-height:1.7}
+.tafsir.arx{font-family:"Amiri","Noto Naskh Arabic","Geeza Pro",serif;direction:rtl;text-align:right;font-size:19px;line-height:2}
+.tafsir .ar{color:var(--lapis)}
+.tafsir h2,.tafsir h3{font-size:15px;margin:10px 0 4px}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.seg button{all:unset;cursor:pointer;padding:6px 12px;font-size:13px;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--lapis-soft);color:var(--lapis)}
+.toast{position:fixed;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;z-index:40}
+.note{font-size:13px;color:var(--muted);background:var(--sunk);border-radius:8px;padding:10px 12px}
+.loading{padding:60px 0;text-align:center;color:var(--muted)}
+.kbd{font:500 11px var(--mono);border:1px solid var(--line);border-radius:4px;padding:0 5px}
+@media (max-width:820px){
+  .app{grid-template-columns:minmax(0,1fr)}
+  .rail{position:sticky;top:env(safe-area-inset-top,0px);height:auto;z-index:10;flex-direction:row;align-items:center;padding:10px max(12px,env(safe-area-inset-left,0px));gap:10px;border-right:0;border-bottom:1px solid var(--line)}
+  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--panel)}
+  .brand{font-size:20px;padding:0} .brand small,.tagline,.railfoot{display:none}
+  .nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;min-width:0}
+  .nav button{padding:7px 10px;white-space:nowrap}
+  .nav .badge{display:none}
+  .g3,.g4{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .q{font-size:26px} .q.lg{font-size:30px}
+  .juzmap{grid-template-columns:repeat(6,minmax(0,1fr))}
+}
+@media (max-width:480px){.g2{grid-template-columns:minmax(0,1fr)} .grades{grid-template-columns:repeat(2,minmax(0,1fr))} h1{font-size:25px} .page{padding:14px 10px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+</head>
+<body>
+<div class="app">
+  <aside class="rail">
+    <div class="brand">Sabaq <small>سَبَق</small></div>
+    <div class="tagline">Ḥifẓ, meaning and Arabic, from one mushaf.</div>
+    <nav class="nav" id="nav" aria-label="Sections"></nav>
+    <div class="railfoot">Text: Tanzil &amp; Quran.com (Ḥafṣ). Grammar: Quranic Arabic Corpus.</div>
+  </aside>
+  <main><div class="wrap" id="view"><div class="loading">Opening the mushaf…</div></div></main>
+</div>
+<div id="sheet" hidden></div>
+
+<script>
+'use strict';
+/* ========== utilities ========== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const AD=n=>String(n).replace(/\d/g,d=>'٠١٢٣٤٥٦٧٨٩'[d]);
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const range=(a,b)=>{const r=[];if(a<=b)for(let i=a;i<=b;i++)r.push(i);else for(let i=a;i>=b;i--)r.push(i);return r};
+const pct=(a,b)=>b?Math.round(1000*a/b)/10:0;
+function toast(m){const t=document.createElement('div');t.className='toast';t.textContent=m;document.body.appendChild(t);setTimeout(()=>t.remove(),2200)}
+async function J(p){const r=await fetch(p);if(!r.ok)throw new Error(p+' → '+r.status);return r.json()}
+const sk=w=>w.replace(/[^ء-غف-يٱ]/g,'').replace(/[ٱأإآ]/g,'ا').replace(/ؤ/g,'و').replace(/ئ/g,'ي').replace(/ى/g,'ي').replace(/ة/g,'ه').replace(/ء/g,'');
+
+/* ========== data ========== */
+let D, KEY={}, SI={}, LESSONS=[], SIM={};
+const WJ={}, TRC={}, TFC={}; let INFO=null;
+const A=i=>D.ayahs[i];             // s,a,page,juz,hizb,rub,sajda,words,line0,line1,ruku,page1,sahih
+const sName=s=>D.surahs[s-1][1];
+const ref=i=>A(i)[0]+':'+A(i)[1];
+function juzWords(j){if(!WJ[j])WJ[j]=J(`data/w/${String(j).padStart(2,'0')}.json`);return WJ[j]}
+async function W(i){const a=A(i);return (await juzWords(a[3]))[a[0]+':'+a[1]]}
+const PUB=!!window.SABAQ_PUBLIC;
+const TRN={20:'Saheeh International',85:'Abdel Haleem',84:'Taqi Usmani',19:'Pickthall',22:'Yusuf Ali',149:'Bridges (Fadel Soliman)',203:'Hilali & Khan'};
+if(PUB){delete TRN[85];delete TRN[84];delete TRN[149]}
+const TRO=()=>[20,85,84,19,22,149,203].filter(k=>TRN[k]);const trSel=()=>TRN[S.set.tr]?+S.set.tr:20;
+async function trText(i,id){id=+id;if(!TRN[id])id=20;if(id===20)return A(i)[12];if(!TRC[id])TRC[id]=J(`data/t/${id}.json`);return (await TRC[id])[i]}
+const TFN={16:['Tafsīr al-Muyassar','ar'],91:['Tafsīr as-Saʿdī','ar'],169:['Ibn Kathīr (abridged, English)','en']};
+if(PUB)delete TFN[169];
+async function tafsir(i,id){if(!TFN[id])id=16;
+  for(let k=i;k>=0&&A(k)[0]===A(i)[0];k--){
+    const j=A(k)[3],key=id+'/'+j;
+    if(!TFC[key])TFC[key]=J(`data/tf/${id}/${String(j).padStart(2,'0')}.json`).catch(()=>({}));
+    const t=(await TFC[key])[ref(k)];
+    if(t)return {html:t,from:k};
+  }
+  return null;
+}
+function lineCodes(i){const a=A(i),o=[];for(let p=a[2];p<=a[11];p++){const l0=p===a[2]?a[8]:1,l1=p===a[11]?a[9]:15;for(let l=l0;l<=l1;l++)o.push(p*16+l)}return o}
+function countLines(list){const s=new Set();list.forEach(i=>lineCodes(i).forEach(c=>s.add(c)));return s.size}
+
+/* ========== state ========== */
+const SK='sabaq_v1';
+let S={};try{S=JSON.parse(localStorage.getItem(SK))||{}}catch(e){S={}}
+S=Object.assign({ay:{},lex:{},gram:{},days:{},games:{},set:{}},S);
+S.set=Object.assign({daily:5,order:'back',tr:20,tf:16,rev:150,lexNew:10,pool:'mem'},S.set);
+function save(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}}
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const dnum=s=>Math.round(Date.parse(s+'T00:00:00Z')/864e5);
+const TD=()=>dnum(ymd(new Date()));
+function dayLog(k,n=1){const d=ymd(new Date());const o=S.days[d]=S.days[d]||{};o[k]=(o[k]||0)+n;save()}
+/* SM-2 style scheduling in whole days. g: 0 again, 1 hard, 2 good, 3 easy */
+function sched(rec,g){
+  const t=TD();rec=rec||{n:0,iv:0,ef:2.4,lp:0};
+  if(g===0){rec.n=0;rec.iv=0;rec.lp=(rec.lp||0)+1;rec.ef=Math.max(1.3,rec.ef-.2);rec.due=t}
+  else{
+    rec.n++;
+    if(rec.n===1)rec.iv=g===3?3:1;
+    else if(rec.n===2)rec.iv=g===1?2:g===3?6:4;
+    else rec.iv=Math.max(rec.iv+1,Math.round(rec.iv*rec.ef*(g===1?.6:g===3?1.3:1)));
+    rec.iv=Math.min(rec.iv,365);
+    rec.ef=Math.min(2.8,Math.max(1.3,rec.ef+(g===3?.1:g===1?-.15:0)));
+    rec.due=t+rec.iv;
+  }
+  rec.last=t;return rec;
+}
+const memo=i=>S.ay[i]&&S.ay[i].n>0;
+function memList(){return Object.keys(S.ay).map(Number).filter(memo).sort((a,b)=>a-b)}
+function dueAyat(){const t=TD();return Object.keys(S.ay).map(Number).filter(i=>S.ay[i].due<=t).sort((a,b)=>a-b)}
+
+/* ========== hifz order ========== */
+let ORDER=[];
+function buildOrder(){
+  const surs=S.set.order==='back'?[1,...range(114,2)]:range(1,114);
+  ORDER=[];for(const s of surs){const n=D.surahs[s-1][7];for(let a=0;a<n;a++)ORDER.push(SI[s]+a)}
+}
+function nextLesson(){
+  const out=[];let ln=0;const tgt=S.set.daily;
+  for(const i of ORDER){
+    if(S.ay[i])continue;
+    if(out.length&&A(i)[0]!==A(out[out.length-1])[0]){if(ln>=tgt*.6)break}
+    if(out.length&&i!==out[out.length-1]+1&&A(i)[0]===A(out[out.length-1])[0])break;
+    out.push(i);ln=countLines(out);if(ln>=tgt)break;
+  }
+  if(out.length){let rest=[],k=out[out.length-1]+1;while(k<6236&&A(k)[0]===A(out[0])[0]&&!S.ay[k]){rest.push(k);k++}if(rest.length&&countLines([...out,...rest])-ln<=Math.max(3,tgt*.6))out.push(...rest)}
+  return out;
+}
+
+/* ========== rendering helpers ========== */
+function ayahHTML(i,opts={}){
+  const w=A(i)[7];
+  const words=w.map((x,k)=>`<span class="wtap" data-i="${i}" data-k="${k}">${esc(x)}</span>`).join(' ');
+  return words+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`;
+}
+function fadeHTML(i,level,seed){
+  const w=A(i)[7];
+  return w.map((x,k)=>{
+    let show=true;
+    if(level===1)show=(k+seed)%2===0;
+    else if(level>=2)show=false;
+    if(show)return `<span>${esc(x)}</span>`;
+    if(level===2){const M='[\u064b-\u065f\u0670\u06d6-\u06ed]*';const f=x.match(new RegExp('^(?:[\u0648\u0641]'+M+')?(?:[\u0671\u0627]\u0644'+M+')?[\u0621-\u064a\u0671]'+M));return `<span class="hint">${esc(f?f[0]:x[0])}…</span>`}
+    return `<span class="hid" data-reveal="${esc(x)}">${esc(x)}</span>`;
+  }).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`;
+}
+document.addEventListener('click',e=>{const h=e.target.closest('.hid');if(h){h.classList.remove('hid');}});
+const AUDIO_BASE='https://everyayah.com/data/Abdul_Basit_Murattal_192kbps/';
+let player=null,audioBlocked=false;
+function playAyat(list,reps=1,onEnd){
+  if(player){player.pause();player=null}
+  const q=[];list.forEach(i=>{for(let r=0;r<reps;r++)q.push(i)});
+  let k=0;const au=new Audio();player=au;
+  const go=()=>{if(k>=q.length||player!==au){onEnd&&onEnd();return}const a=A(q[k]);au.src=AUDIO_BASE+String(a[0]).padStart(3,'0')+String(a[1]).padStart(3,'0')+'.mp3';au.play().catch(err)};
+  const err=()=>{if(player!==au)return;audioBlocked=true;toast('Audio is blocked in this view. Use the Quran.com ↗ link beside Play to hear the āyah.');player=null};
+  au.onended=()=>{k++;go()};au.onerror=err;go();
+}
+function stopAudio(){if(player){player.pause();player=null}}
+
+/* ========== navigation ========== */
+const VIEWS=[['today','Today'],['hifz','Ḥifẓ'],['review','Review'],['mushaf','Mushaf'],['words','Words'],['grammar','Grammar'],['games','Tests'],['progress','Progress']];
+let cur='today';
+function nav(){
+  const due=dueAyat().length;
+  $('#nav').innerHTML=VIEWS.map(([k,l])=>`<button data-v="${k}" ${k===cur?'aria-current="page"':''}>${l}${k==='review'&&due?`<span class="badge">${due}</span>`:''}</button>`).join('');
+}
+$('#nav').addEventListener('click',e=>{const b=e.target.closest('button');if(b)go(b.dataset.v)});
+function go(v,arg){stopAudio();cur=v;nav();const f=R[v];$('#view').innerHTML='';window.scrollTo(0,0);f(arg);try{history.replaceState(null,'','#'+v)}catch(e){}}
+const R={};
+const V=()=>$('#view');
+
+/* ========== TODAY ========== */
+R.today=()=>{
+  const mem=memList(),due=dueAyat(),les=nextLesson(),t=ymd(new Date()),log=S.days[t]||{};
+  const known=Object.keys(S.lex).filter(k=>S.lex[k].n>0).map(Number);
+  const cov=known.reduce((s,k)=>s+D.lemmas[k][3],0);
+  const streak=(()=>{let n=0,d=new Date();for(;;){const k=ymd(d);if(S.days[k]&&(S.days[k].new||S.days[k].rev||S.days[k].q))n++;else if(n||k!==t)break;d.setDate(d.getDate()-1);if(n>3650)break}return n})();
+  const lesTxt=les.length?`${sName(A(les[0])[0])} ${A(les[0])[1]}–${A(les[les.length-1])[1]}`:'Whole Quran memorised';
+  V().innerHTML=`
+  <div class="spread"><div><div class="eyebrow">${new Date().toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long'})}</div><h1>Today’s three portions</h1></div>
+  <div class="row"><span class="chip">Streak ${streak} day${streak===1?'':'s'}</span></div></div>
+  <div class="grid g3">
+    <div class="card"><div class="eyebrow">1 · Sabaq · new</div><h2>${esc(lesTxt)}</h2>
+      <div class="small muted">${les.length} āyāt · about ${countLines(les)} mushaf lines${log.new?` · ${log.new} learned today`:''}</div>
+      <button class="btn pri" id="tNew" ${les.length?'':'disabled'}>Learn the new portion</button></div>
+    <div class="card"><div class="eyebrow">2 · Sabqi &amp; manzil · review</div><h2>${due.length} āyāt due</h2>
+      <div class="small muted">${due.filter(i=>S.ay[i].n<=2).length} recent, ${due.filter(i=>S.ay[i].n>2).length} older${log.rev?` · ${log.rev} reviewed today`:''}</div>
+      <button class="btn ${due.length?'pri':''}" id="tRev">${due.length?'Recite what is due':'Nothing due · open review'}</button></div>
+    <div class="card"><div class="eyebrow">3 · Lughah · Arabic</div><h2>${pct(cov,D.tokens)}% of the Quran’s words</h2>
+      <div class="small muted">${known.length} of ${D.lemmas.length} lemmas known · ${lexQueue().length} cards waiting</div>
+      <button class="btn" id="tLex">Study words</button></div>
+  </div>
+  <div class="card">
+    <div class="spread"><h2>Your mushaf</h2><span class="small muted">${mem.length} / 6,236 āyāt · ${pct(mem.length,6236)}%</span></div>
+    <div class="bar"><i style="width:${pct(mem.length,6236)}%"></i></div>
+    <div class="juzmap" id="jm"></div>
+    <div class="small muted">Green fill is the share of each juzʾ memorised. Tap a juzʾ to open it in the mushaf.</div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Next grammar lesson</h3><div id="tGram"></div></div>
+    <div class="card"><h3>A quick test</h3><div class="small muted">Ten rounds from what you have memorised${mem.length<8?' (Juz ʿAmma until you have more)':''}.</div><div class="row"><button class="btn" data-g="next">Continue the āyah</button><button class="btn" data-g="build">Build word by word</button><button class="btn" data-g="meaning">Meaning match</button></div></div>
+  </div>`;
+  const jm=$('#jm');const per={},tot={};D.ayahs.forEach((a,i)=>{tot[a[3]]=(tot[a[3]]||0)+1;if(memo(i))per[a[3]]=(per[a[3]]||0)+1});
+  jm.innerHTML=range(1,30).map(j=>`<div data-j="${j}" style="cursor:pointer" title="Juzʾ ${j}: ${pct(per[j]||0,tot[j])}%"><i style="width:${pct(per[j]||0,tot[j])}%"></i><span>${j}</span></div>`).join('');
+  jm.onclick=e=>{const d=e.target.closest('[data-j]');if(d)go('mushaf',{page:A(D.ayahs.findIndex(a=>a[3]==d.dataset.j))[2]})};
+  $('#tNew').onclick=()=>go('hifz',{list:les});
+  $('#tRev').onclick=()=>go('review');
+  $('#tLex').onclick=()=>go('words');
+  const nl=LESSONS.find(l=>!(S.gram[l.id]&&S.gram[l.id].done))||LESSONS[0];
+  $('#tGram').innerHTML=`<div class="row"><span class="chip">${nl.id}</span><b>${esc(nl.title)}</b><span class="ar">${esc(nl.ar)}</span></div><button class="btn sm" style="margin-top:8px">Open lesson</button>`;
+  $('#tGram').querySelector('button').onclick=()=>go('grammar',{lesson:nl.id});
+  V().querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>go('games',{game:b.dataset.g}));
+};
+
+/* ========== HIFZ (new lesson flow) ========== */
+let H=null;
+R.hifz=(arg)=>{
+  if(arg&&arg.list)H={list:arg.list,step:0,k:0,lv:0,seed:Math.random()*2|0,build:null,grades:{}};
+  if(!H||!H.list.length){hifzPicker();return}
+  hifzRender();
+};
+function hifzPicker(){
+  const les=nextLesson();
+  V().innerHTML=`<div><div class="eyebrow">Ḥifẓ</div><h1>Learn a new portion</h1></div>
+  <div class="card"><h2>${les.length?`Next on your path: ${esc(sName(A(les[0])[0]))} ${A(les[0])[1]}–${A(les[les.length-1])[1]}`:'Your path is complete'}</h2>
+  <div class="small muted">Path: ${S.set.order==='back'?'al-Fātiḥah, then an-Nās back to al-Baqarah':'mushaf order'} · ${S.set.daily} lines a day. Change both in Progress → Settings.</div>
+  <div><button class="btn pri" id="hp1" ${les.length?'':'disabled'}>Start</button></div></div>
+  <div class="card"><h2>Or choose any passage</h2>
+  <div class="row"><label class="field">Sūrah<select id="hs">${D.surahs.map(s=>`<option value="${s[0]}">${s[0]}. ${esc(s[1])} · ${s[3]}</option>`).join('')}</select></label>
+  <label class="field">From āyah<input id="ha" type="number" min="1" value="1" style="width:90px"></label>
+  <label class="field">To āyah<input id="hb" type="number" min="1" value="5" style="width:90px"></label>
+  <button class="btn" id="hp2" style="align-self:flex-end">Learn this passage</button></div>
+  <div class="small muted">Passages you already know can be marked as known in Progress, so they go straight into review.</div></div>`;
+  $('#hp1').onclick=()=>go('hifz',{list:les});
+  $('#hs').value=String(A(les[0]??0)[0]);
+  $('#hp2').onclick=()=>{const s=+$('#hs').value,n=D.surahs[s-1][7];let a=Math.max(1,Math.min(n,+$('#ha').value||1)),b=Math.max(a,Math.min(n,+$('#hb').value||a));go('hifz',{list:range(SI[s]+a-1,SI[s]+b-1)})};
+}
+const HSTEPS=['Listen & understand','Memorise each āyah','Join the passage','Build it','Seal it'];
+async function hifzRender(){
+  const L=H.list,s=A(L[0])[0];
+  const head=`<div class="spread"><div><div class="eyebrow">Ḥifẓ · ${esc(sName(s))} ${A(L[0])[1]}–${A(L[L.length-1])[1]}</div><h1>${HSTEPS[H.step]}</h1></div>
+  <button class="btn ghost sm" id="hq">Leave</button></div>
+  <div class="steps">${HSTEPS.map((t,k)=>`<span class="${k===H.step?'on':k<H.step?'done':''}">${k+1}. ${t}</span>`).join('')}</div>`;
+  V().innerHTML=head+'<div id="hbody" class="wrap" style="gap:14px"></div>';
+  $('#hq').onclick=()=>{H=null;go('today')};
+  const B=$('#hbody');
+  if(H.step===0){
+    const trs=await Promise.all(L.map(i=>trText(i,S.set.tr)));
+    B.innerHTML=`<div class="card"><div class="row"><button class="btn pri sm" id="pl1">Play passage</button><button class="btn sm" id="pl3">Play each āyah ×3</button><button class="btn ghost sm" id="pls">Stop</button>
+      <span class="small muted">Reciter: ʿAbd al-Bāsiṭ ʿAbd aṣ-Ṣamad (murattal). Tap any word for its meaning and grammar.</span></div></div>`+
+      L.map((i,k)=>`<div class="card"><div class="q lg">${ayahHTML(i)}</div><div class="tr"><span class="ref">${ref(i)}</span>${esc(trs[k])}</div>
+      <div class="row"><button class="btn sm" data-play="${i}">Play</button><a class="btn sm ghost" href="https://quran.com/${A(i)[0]}/${A(i)[1]}" target="_blank" rel="noopener">Quran.com ↗</a><button class="btn sm ghost" data-wbw="${i}">Word by word</button><button class="btn sm ghost" data-det="${i}">Tafsīr &amp; more</button></div><div class="wbwbox"></div></div>`).join('')+
+      `<div class="row"><button class="btn pri" id="hn">I understand it · start memorising</button></div>`;
+    $('#pl1').onclick=()=>playAyat(L,1);$('#pl3').onclick=()=>playAyat(L,3);$('#pls').onclick=stopAudio;
+    B.querySelectorAll('[data-play]').forEach(b=>b.onclick=()=>playAyat([+b.dataset.play],1));
+    B.querySelectorAll('[data-wbw]').forEach(b=>b.onclick=async()=>{const box=b.closest('.card').querySelector('.wbwbox');box.innerHTML=box.innerHTML?'':await wbwHTML(+b.dataset.wbw)});
+    B.querySelectorAll('[data-det]').forEach(b=>b.onclick=()=>openAyah(+b.dataset.det));
+    $('#hn').onclick=()=>{H.step=1;H.k=0;H.lv=0;hifzRender()};
+  }
+  else if(H.step===1){
+    const i=L[H.k];
+    const lvName=['Read it with the reciter, three to five times','Every other word is hidden','Only the first letter of each word','Recite it with nothing shown'][H.lv];
+    B.innerHTML=`<div class="card"><div class="spread"><span class="eyebrow">Āyah ${H.k+1} of ${L.length} · ${ref(i)}</span><span class="chip">Stage ${H.lv+1} of 4</span></div>
+      <div class="small muted">${lvName}. Tap a hidden word to peek.</div>
+      <div class="q lg">${H.lv===0?ayahHTML(i):fadeHTML(i,H.lv,H.seed)}</div>
+      ${H.lv===0?`<div class="tr muted">${esc(A(i)[12])}</div>`:''}
+      <div class="row"><button class="btn sm" id="hpa">Play</button><button class="btn sm" id="hpr">Play ×5</button><a class="btn sm ghost" href="https://quran.com/${A(i)[0]}/${A(i)[1]}" target="_blank" rel="noopener">Quran.com ↗</a>
+      ${H.lv>0?'<button class="btn sm ghost" id="hdn">Easier</button>':''}
+      <button class="btn pri" id="hup">${H.lv<3?'I can do it · hide more':'I recited it correctly'}</button></div></div>
+      <div class="note">Classic method: read with the reciter, then recite from memory, then check. Say it aloud each time. Linking the last word of one āyah to the first of the next is where most slips happen.</div>`;
+    $('#hpa').onclick=()=>playAyat([i],1);$('#hpr').onclick=()=>playAyat([i],5);
+    if($('#hdn'))$('#hdn').onclick=()=>{H.lv--;hifzRender()};
+    $('#hup').onclick=()=>{if(H.lv<3){H.lv++;H.seed^=1}else{H.k++;H.lv=0;if(H.k>=L.length){H.step=2;H.k=0}}hifzRender()};
+  }
+  else if(H.step===2){
+    const upto=H.k;
+    B.innerHTML=`<div class="card"><div class="small muted">Recite āyāt 1 to ${upto+1} together from memory. Each āyah shows only its first word. Tap the rest to check.</div>
+      ${L.slice(0,upto+1).map(i=>`<div class="q">${A(i)[7].map((x,k)=>k===0?`<span>${esc(x)}</span>`:`<span class="hid">${esc(x)}</span>`).join(' ')} <span class="num">﴿${AD(A(i)[1])}﴾</span></div>`).join('')}
+      <div class="row"><button class="btn sm" id="hpp">Play these</button><button class="btn sm ghost" id="hbk">Go back a stage</button><button class="btn pri" id="hjn">${upto+1<L.length?'Joined · add the next āyah':'Joined the whole passage'}</button></div></div>`;
+    $('#hpp').onclick=()=>playAyat(L.slice(0,upto+1),1);
+    $('#hbk').onclick=()=>{H.step=1;H.k=Math.min(upto,L.length-1);H.lv=2;hifzRender()};
+    $('#hjn').onclick=()=>{if(upto+1<L.length){H.k++}else{H.step=3;H.k=0;H.build=null}hifzRender()};
+  }
+  else if(H.step===3){
+    if(!H.build)H.build={k:0,w:0,miss:0,tot:0};
+    const b=H.build,i=L[b.k],w=A(i)[7];
+    const pool=[...new Set(D.ayahs.slice(SI[s],SI[s]+D.surahs[s-1][7]).flatMap(a=>a[7]))];
+    const right=w[b.w];
+    const dis=shuffle(pool.filter(x=>sk(x)!==sk(right))).slice(0,3);
+    const opts=shuffle([right,...dis]);
+    B.innerHTML=`<div class="card"><div class="spread"><span class="eyebrow">Āyah ${b.k+1} of ${L.length} · word ${b.w+1} of ${w.length}</span><span class="chip">${b.miss} slip${b.miss===1?'':'s'}</span></div>
+      <div class="q">${w.slice(0,b.w).map(esc).join(' ')} <span class="hint">…</span></div>
+      <div class="opts g2 grid">${opts.map((o,k)=>`<button class="opt arq" data-o="${esc(o)}"><span class="k">${k+1}</span>${esc(o)}</button>`).join('')}</div></div>`;
+    const choose=btn=>{
+      const o=btn.dataset.o;b.tot++;
+      if(o===right){b.w++;if(b.w>=w.length){b.w=0;b.k++;if(b.k>=L.length){H.step=4;}}hifzRender()}
+      else{b.miss++;btn.classList.add('no');B.querySelector(`.opt[data-o="${CSS.escape(right)}"]`).classList.add('ok')}
+    };
+    B.querySelectorAll('.opt').forEach(x=>x.onclick=()=>choose(x));
+    keyOpts=n=>{const x=B.querySelectorAll('.opt')[n];if(x)choose(x)};
+  }
+  else{
+    B.innerHTML=`<div class="card"><div class="small muted">Recite each āyah once more without looking, then reveal it and grade yourself honestly. This sets when it comes back for review.</div></div>`+
+    L.map(i=>`<div class="card" data-ay="${i}"><div class="spread"><span class="eyebrow">${ref(i)}</span><button class="btn sm ghost rv">Reveal</button></div>
+      <div class="q md" hidden>${ayahHTML(i)}</div>${gradeHTML()}</div>`).join('')+
+    `<div class="row"><button class="btn pri" id="hdone" disabled>Save to my mushaf</button></div>`;
+    B.querySelectorAll('.rv').forEach(b=>b.onclick=()=>{b.closest('.card').querySelector('.q').hidden=false});
+    B.querySelectorAll('[data-ay]').forEach(c=>c.querySelectorAll('[data-gr]').forEach(g=>g.onclick=()=>{
+      H.grades[c.dataset.ay]=+g.dataset.gr;c.querySelectorAll('[data-gr]').forEach(x=>x.style.opacity=x===g?1:.4);
+      $('#hdone').disabled=Object.keys(H.grades).length<L.length;
+    }));
+    $('#hdone').onclick=()=>{
+      L.forEach(i=>{const g=H.grades[i];S.ay[i]=sched(null,g===0?0:g);S.ay[i].t0=TD();if(g===0){S.ay[i].n=1;S.ay[i].iv=0;S.ay[i].due=TD()}});
+      dayLog('new',L.length);save();
+      const done=L.length;H=null;
+      V().innerHTML=`<div class="card"><div class="eyebrow">Sealed</div><h1>${done} āyāt added to your mushaf</h1>
+      <div class="muted">They come back tomorrow, then at growing intervals. Āyāt you marked "Again" are due again today.</div>
+      <div class="row"><button class="btn pri" id="d1">Review what is due</button><button class="btn" id="d2">Back to Today</button><button class="btn" id="d3">Test this passage</button></div></div>`;
+      $('#d1').onclick=()=>go('review');$('#d2').onclick=()=>go('today');$('#d3').onclick=()=>go('games',{game:'next',scope:L});
+      nav();
+    };
+  }
+}
+function gradeHTML(){return `<div class="grades"><button class="btn gA" data-gr="0">Again<small>forgot</small></button><button class="btn gH" data-gr="1">Hard<small>hesitated</small></button><button class="btn gG" data-gr="2">Good<small>correct</small></button><button class="btn gE" data-gr="3">Easy<small>fluent</small></button></div>`}
+
+/* ========== word-by-word & ayah sheet ========== */
+const TAGN={PERF:'past (māḍī)',IMPF:'present (muḍāriʿ)',IMPV:'command (amr)',PASS:'passive',NOM:'nominative (marfūʿ)',ACC:'accusative (manṣūb)',GEN:'genitive (majrūr)',
+ 'MOOD:IND':'indicative','MOOD:SUBJ':'subjunctive (manṣūb)','MOOD:JUS':'jussive (majzūm)',INDEF:'indefinite',ACT_PCPL:'active participle',PASS_PCPL:'passive participle',VN:'verbal noun (maṣdar)',
+ PN:'proper noun',ADJ:'adjective',PRON:'pronoun',DEM:'demonstrative',REL:'relative pronoun',T:'time adverb',LOC:'place adverb',NEG:'negative particle',CONJ:'conjunction',P:'preposition',
+ COND:'conditional',INTG:'interrogative',VOC:'vocative',EMPH:'emphatic',CERT:'particle of certainty',SUB:'subordinating',REM:'resumption',DET:'definite article',FUT:'future particle',RES:'restriction',PRO:'prohibition',EXP:'exception',ACC_P:'accusative particle',CIRC:'circumstantial',SUP:'supplemental',RSLT:'result',ANS:'answer',INC:'inceptive',PREV:'preventive',CAUS:'cause',AMD:'amendment',EXL:'explanation',EXH:'exhortation',RET:'retraction',SUR:'surprise',AVR:'aversion',INL:'initial letters',INT:'interpretation',EQ:'equalisation',COM:'comitative',ATT:'attention',ADDR:'addressee',DIST:'distance',NV:'verb-like noun',MD:'modal'};
+const ROMAN=['','I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII'];
+function pgnName(t){const m=t.match(/^([123])?([MF])?([SDP])?$/);if(!m||t==='')return null;const p={1:'1st',2:'2nd',3:'3rd'}[m[1]]||'';const g={M:'masculine',F:'feminine'}[m[2]]||'';const n={S:'singular',D:'dual',P:'plural'}[m[3]]||(m[2]&&!m[1]?'singular':'');return [p&&p+' person',g,n].filter(Boolean).join(' ')}
+function parseWord(d){
+  const [gl,tl,ln,li,ri,pos,tags,aff]=d;const T=tags?tags.split(' '):[];
+  const out=[];out.push({N:'Noun (ism)',V:'Verb (fiʿl)',P:'Particle (ḥarf)'}[pos]||pos);
+  for(const t of T){
+    if(t.startsWith('VF:')){out.push('Form '+ROMAN[+t.slice(3)]);continue}
+    if(t.startsWith('FAM:')){out.push('family of '+t.slice(4));continue}
+    const p=pgnName(t);if(p){out.push(p);continue}
+    if(TAGN[t])out.push(TAGN[t]);
+  }
+  return out.join(' · ');
+}
+function affName(a){const t=a[1].slice(1).split(' ');return (a[1][0]==='+'?'prefix ':'suffix ')+a[0]+' = '+t.map(x=>TAGN[x]||pgnName(x)||x).filter(Boolean).join(', ')}
+async function wbwHTML(i){
+  const ws=await W(i),ar=A(i)[7];
+  return `<div class="wbw">${ws.map((d,k)=>`<div data-wi="${i}" data-wk="${k}"><span class="wa">${esc(ar[k])}</span><span class="wt">${esc(d[1])}</span><span class="wg">${esc(d[0])}</span></div>`).join('')}</div>`;
+}
+document.addEventListener('click',async e=>{
+  const w=e.target.closest('.wtap,[data-wi]');if(!w||e.target.closest('.opts'))return;
+  const i=+(w.dataset.i??w.dataset.wi),k=+(w.dataset.k??w.dataset.wk);
+  if(Number.isNaN(i))return;
+  openWord(i,k);
+});
+async function openWord(i,k){
+  const d=(await W(i))[k],ar=A(i)[7][k];
+  const lem=d[3]>=0?D.lemmas[d[3]]:null,root=d[4]>=0?D.roots[d[4]]:null;
+  sheet(`<div class="spread"><span class="eyebrow">Word ${k+1} · ${ref(i)}</span><button class="btn sm ghost" data-close>Close</button></div>
+   <div class="lex">${esc(ar)}</div>
+   <div style="text-align:center"><b>${esc(d[0])}</b> <span class="muted">· ${esc(d[1])}</span></div>
+   <div class="card"><h3>Grammar</h3><div>${esc(parseWord(d))}</div>${d[7].length?`<div class="small muted">${d[7].map(a=>esc(affName(a))).join('<br>')}</div>`:''}</div>
+   ${lem?`<div class="card"><h3>Lemma</h3><div class="row"><span class="ar" style="font-size:28px">${esc(lem[0])}</span><span>${esc(lem[4])}</span><span class="chip">${lem[3]}× in the Quran</span></div>
+     <div class="row"><button class="btn sm" id="wlearn">${S.lex[d[3]]?'In your word deck':'Add to my word deck'}</button></div></div>`:''}
+   ${root?`<div class="card"><h3>Root <span class="ar" style="font-size:24px">${esc(root[0].split('').join(' '))}</span> <span class="chip">${root[1]}×</span></h3>
+     <div class="list">${root[2].slice(0,14).map(l=>`<div><span class="ar" style="font-size:22px">${esc(D.lemmas[l][0])}</span><span class="small">${esc(D.lemmas[l][4])}</span><span class="chip">${D.lemmas[l][3]}×</span></div>`).join('')}</div>
+     <button class="btn sm" id="wroot">Open root family</button></div>`:''}
+   <div class="row"><button class="btn sm" id="wayah">Open the āyah</button></div>`);
+  const L=$('#wlearn');if(L)L.onclick=()=>{if(!S.lex[d[3]]){S.lex[d[3]]={n:0,iv:0,ef:2.4,due:TD(),added:1};save()}L.textContent='In your word deck'};
+  const r=$('#wroot');if(r)r.onclick=()=>{closeSheet();go('words',{root:d[4]})};
+  $('#wayah').onclick=()=>openAyah(i);
+}
+function sheet(html){const s=$('#sheet');s.className='sheet';s.innerHTML=`<div role="dialog" aria-modal="true">${html}</div>`;s.hidden=false;s.onclick=e=>{if(e.target===s||e.target.closest('[data-close]'))closeSheet()}}
+function closeSheet(){$('#sheet').hidden=true;$('#sheet').innerHTML=''}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden)closeSheet()});
+async function openAyah(i){
+  const a=A(i);
+  sheet(`<div class="spread"><span class="eyebrow">${esc(sName(a[0]))} · ${ref(i)} · page ${a[2]} · juzʾ ${a[3]}</span><button class="btn sm ghost" data-close>Close</button></div>
+   <div class="q md">${ayahHTML(i)}</div>
+   <div class="row"><button class="btn sm" id="sp">Play</button><a class="btn sm ghost" href="https://quran.com/${a[0]}/${a[1]}" target="_blank" rel="noopener">Quran.com ↗</a><button class="btn sm" id="sl">${memo(i)?'Memorised ✓':'Learn from here'}</button><button class="btn sm ghost" id="sprev">◂ Previous</button><button class="btn sm ghost" id="snext">Next ▸</button></div>
+   <div class="card"><div class="spread"><h3>Translation</h3><select id="str">${TRO().map(k=>`<option value="${k}" ${k===trSel()?'selected':''}>${TRN[k]}</option>`).join('')}<option value="all">All ${Object.keys(TRN).length}</option></select></div><div id="strt" class="tr"></div></div>
+   <div class="card"><h3>Word by word</h3><div id="swbw"></div></div>
+   <div class="card"><div class="spread"><h3>Tafsīr</h3><select id="stf">${Object.entries(TFN).map(([k,v])=>`<option value="${k}" ${+k===+(TFN[S.set.tf]?S.set.tf:16)?'selected':''}>${v[0]}</option>`).join('')}</select></div><div id="stft" class="tafsir"></div></div>
+   <div class="card"><div class="spread"><h3>About ${esc(sName(a[0]))}</h3>${PUB?'':'<button class="btn sm" id="sinfo">Show introduction</button>'}</div>
+   <div class="row"><span class="chip ${D.surahs[a[0]-1][5]==='M'?'m':'d'}">${D.surahs[a[0]-1][5]==='M'?'Makkan':'Madinan'}</span><span class="chip">${D.surahs[a[0]-1][7]} āyāt</span><span class="chip">revelation order ${D.surahs[a[0]-1][6]}</span><span class="chip">${esc(D.surahs[a[0]-1][4])}</span></div><div id="sinf" class="tafsir"></div></div>
+   ${SIM[i]?`<div class="card"><h3>Similar āyāt (mutashābihāt)</h3>${SIM[i].map(([j,r])=>`<div class="ex"><div class="small muted">${esc(sName(A(j)[0]))} ${ref(j)} · ${Math.round(r*100)}% alike</div><div class="q sm">${esc(A(j)[7].join(' '))}</div></div>`).join('')}</div>`:''}`);
+  $('#sp').onclick=()=>playAyat([i],1);
+  $('#sl').onclick=()=>{if(memo(i))return;closeSheet();const L=[];let ln=0;for(let k=i;k<6236&&A(k)[0]===a[0]&&ln<S.set.daily;k++){L.push(k);ln=countLines(L)}go('hifz',{list:L})};
+  $('#sprev').onclick=()=>i>0&&openAyah(i-1);$('#snext').onclick=()=>i<6235&&openAyah(i+1);
+  const showTr=async()=>{const v=$('#str').value;if(v==='all'){const r=await Promise.all(TRO().map(id=>trText(i,id)));$('#strt').innerHTML=TRO().map(id=>TRN[id]).map((n,k)=>`<p style="margin:0 0 8px"><b class="small">${n}</b><br>${esc(r[k])}</p>`).join('')}else{S.set.tr=+v;save();$('#strt').textContent=await trText(i,v)}};
+  $('#str').onchange=showTr;showTr();
+  $('#swbw').innerHTML=await wbwHTML(i);
+  const showTf=async()=>{const id=+$('#stf').value;S.set.tf=id;save();$('#stft').innerHTML='<span class="muted">Loading…</span>';const t=await tafsir(i,id);$('#stft').className='tafsir'+(TFN[id][1]==='ar'?' arx':'');$('#stft').innerHTML=t?(t.from!==i?`<div class="small muted" style="direction:ltr;text-align:left">Commentary on ${ref(t.from)} onward, which covers this āyah.</div>`:'')+t.html:'<span class="muted">No commentary text for this āyah in this source.</span>'};
+  $('#stf').onchange=showTf;showTf();
+  if($('#sinfo'))$('#sinfo').onclick=async()=>{if(!INFO)INFO=await J('data/info.json');const x=INFO[a[0]];$('#sinf').innerHTML=x.html+`<p class="small muted">Source: ${esc(x.src||'Quran.com chapter info')}</p>`;$('#sinfo').remove()};
+}
+
+/* ========== REVIEW ========== */
+let RV=null;
+R.review=()=>{
+  const due=dueAyat().slice(0,S.set.rev);
+  if(!due.length){
+    const mem=memList();
+    V().innerHTML=`<div><div class="eyebrow">Review</div><h1>Nothing is due</h1></div>
+    <div class="card"><div>${mem.length?`You have ${mem.length} āyāt in your mushaf. The next ones fall due ${nextDueTxt()}.`:'Learn a portion first. It will come back here for review tomorrow.'}</div>
+    <div class="row">${mem.length?'<button class="btn pri" id="rx">Recite a sūrah you know anyway</button>':''}<button class="btn" id="rt">Back to Today</button></div></div>`;
+    if($('#rx'))$('#rx').onclick=()=>{const surs=[...new Set(mem.map(i=>A(i)[0]))];const s=pick(surs);startReview(mem.filter(i=>A(i)[0]===s),true)};
+    $('#rt').onclick=()=>go('today');return;
+  }
+  startReview(due,false);
+};
+function nextDueTxt(){const t=TD();const ds=Object.values(S.ay).map(r=>r.due).filter(d=>d>t).sort((a,b)=>a-b);if(!ds.length)return 'later';const d=ds[0]-t;return d===1?'tomorrow':`in ${d} days`}
+function startReview(list,extra){
+  const groups=[];for(const i of list){const g=groups[groups.length-1];if(g&&g[g.length-1]===i-1&&A(i)[0]===A(g[0])[0])g.push(i);else groups.push([i])}
+  RV={groups,g:0,k:0,shown:false,extra,done:0,total:list.length};reviewRender();
+}
+function reviewRender(){
+  const r=RV,g=r.groups[r.g],i=g[r.k];
+  const prev=i>0&&A(i-1)[0]===A(i)[0]?i-1:null;
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Review${r.extra?' · extra':''} · passage ${r.g+1} of ${r.groups.length}</div><h1>${esc(sName(A(g[0])[0]))} ${A(g[0])[1]}${g.length>1?'–'+A(g[g.length-1])[1]:''}</h1></div><span class="chip">${r.done} / ${r.total}</span></div>
+  <div class="bar"><i style="width:${pct(r.done,r.total)}%"></i></div>
+  <div class="card">
+    ${r.k>0?g.slice(0,r.k).map(j=>`<div class="q sm muted">${esc(A(j)[7].join(' '))} <span class="num">﴿${AD(A(j)[1])}﴾</span></div>`).join(''):
+     prev!==null?`<div class="small muted">Cue: the āyah before</div><div class="q sm muted">${esc(A(prev)[7].join(' '))} <span class="num">﴿${AD(A(prev)[1])}﴾</span></div>`:'<div class="small muted">Cue: the start of the sūrah</div>'}
+    <div class="eyebrow">Recite ${ref(i)} from memory</div>
+    <div class="q lg" id="rq">${r.shown?ayahHTML(i):`<span class="hint">${esc(A(i)[7][0])} …</span>`}</div>
+    ${r.shown?`<div class="tr muted">${esc(A(i)[12])}</div>${gradeHTML()}`:`<div class="row"><button class="btn pri" id="rs">Reveal <span class="kbd">space</span></button><button class="btn" id="rh">Next word</button><button class="btn ghost" id="rp">Listen</button></div>`}
+  </div>
+  <div class="row"><button class="btn ghost sm" id="rq2">Stop for now</button></div>`;
+  let hint=1;
+  if(!r.shown){$('#rs').onclick=()=>{r.shown=true;reviewRender()};$('#rh').onclick=()=>{hint++;const w=A(i)[7];$('#rq').innerHTML=`${esc(w.slice(0,hint).join(' '))} <span class="hint">…</span>`;if(hint>=w.length){r.shown=true;reviewRender()}};$('#rp').onclick=()=>playAyat([i],1)}
+  else V().querySelectorAll('[data-gr]').forEach(b=>b.onclick=()=>gradeReview(+b.dataset.gr));
+  $('#rq2').onclick=()=>{RV=null;go('today')};
+}
+function gradeReview(gr){
+  const r=RV,i=r.groups[r.g][r.k];
+  if(!r.extra||S.ay[i])S.ay[i]=sched(S.ay[i],gr);
+  if(gr===0&&!r.extra){/* stays due today */}
+  r.done++;dayLog('rev');
+  r.k++;r.shown=false;
+  if(r.k>=r.groups[r.g].length){r.g++;r.k=0}
+  if(r.g>=r.groups.length){save();nav();V().innerHTML=`<div class="card"><div class="eyebrow">Review complete</div><h1>${r.total} āyāt recited</h1><div class="muted">${dueAyat().length?`${dueAyat().length} āyāt you marked "Again" are still due today.`:'Your mushaf is up to date.'}</div><div class="row"><button class="btn pri" id="ra">${dueAyat().length?'Recite those again':'Back to Today'}</button><button class="btn" id="rg">Test yourself</button></div></div>`;$('#ra').onclick=()=>go(dueAyat().length?'review':'today');$('#rg').onclick=()=>go('games');RV=null;return}
+  save();reviewRender();
+}
+
+/* ========== MUSHAF ========== */
+let MP={page:1};
+R.mushaf=(arg)=>{if(arg&&arg.page)MP.page=arg.page;if(arg&&arg.ayah!=null){MP.page=A(arg.ayah)[2];MP.hl=arg.ayah}mushafRender()};
+async function mushafRender(){
+  const p=MP.page;
+  const onPage=[];D.ayahs.forEach((a,i)=>{if(a[2]<=p&&a[11]>=p)onPage.push(i)});
+  const juzs=[...new Set(onPage.map(i=>A(i)[3]))];await Promise.all(juzs.map(juzWords));
+  const ln=Array.from({length:16},()=>[]);
+  for(const i of onPage){const ws=await W(i),a=A(i);
+    // words on this page: lines restart when the page changes; detect via line drop
+    let pg=a[2],last=0;
+    ws.forEach((d,k)=>{if(d[2]<last)pg++;last=d[2];if(pg===p)ln[d[2]].push([i,k])});
+    if(a[11]===p){ln[ws[ws.length-1][2]].push([i,-1])}
+  }
+  const extra={};
+  for(const i of onPage.filter(i=>A(i)[1]===1&&A(i)[2]===p)){
+    const s=A(i)[0],fl=A(i)[8];
+    const head=`<div class="sh"><span class="sa">سُورَةُ ${esc(D.surahs[s-1][3])}</span> · ${esc(D.surahs[s-1][1])}</div>`;
+    if(s===1||s===9){if(fl-1>=1)extra[fl-1]=head}
+    else{if(fl-2>=1)extra[fl-2]=head;if(fl-1>=1)extra[fl-1]='<div class="mline c">بِسْمِ ٱللَّهِ ٱلرَّحْمَـٰنِ ٱلرَّحِيمِ</div>'}
+  }
+  let html='';
+  for(let L=1;L<=15;L++){
+    if(ln[L].length){
+      html+=`<div class="mline${ln[L].length<5||p<=2?' c':''}">`+ln[L].map(([i,k])=>{
+        const cls=`aytap${memo(i)?' mem':''}${MP.hl===i?' on':''}`;
+        return k<0?`<span class="${cls} num" data-ay="${i}">﴿${AD(A(i)[1])}﴾</span>`:`<span class="${cls}" data-ay="${i}">${esc(A(i)[7][k])}</span>`}).join(' ')+'</div>';
+    } else html+=extra[L]||(p<=2?'':'<div class="mline"></div>');
+  }
+  const a0=A(onPage[0]);
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Mushaf · Madani layout, 15 lines</div><h1>${esc(sName(a0[0]))}<span class="muted" style="font-size:18px"> · page ${p} · juzʾ ${a0[3]}</span></h1></div></div>
+  <div class="pnav">
+    <button class="btn sm" id="mp">◂ Prev</button><input id="mpg" type="number" min="1" max="604" value="${p}" style="width:84px" aria-label="Page">
+    <button class="btn sm" id="mn">Next ▸</button>
+    <select id="msu" aria-label="Sūrah">${D.surahs.map(s=>`<option value="${s[0]}" ${s[0]===a0[0]?'selected':''}>${s[0]}. ${esc(s[1])}</option>`).join('')}</select>
+    <select id="mju" aria-label="Juzʾ">${range(1,30).map(j=>`<option value="${j}" ${j===a0[3]?'selected':''}>Juzʾ ${j}</option>`).join('')}</select>
+    <input id="msr" placeholder="Search: 2:255, a word, or English" style="flex:1;min-width:180px">
+  </div>
+  <div id="mres"></div>
+  <div class="page" id="mpage">${html}</div>
+  <div class="row small muted"><span>Tap an āyah for translation, word by word, tafsīr and grammar.</span><span style="color:var(--good)">Green = memorised.</span>
+  <button class="btn sm" id="mmem">Memorise this page</button><button class="btn sm ghost" id="mknow">I already know this page</button></div>`;
+  $('#mp').onclick=()=>{if(p>1){MP.page--;MP.hl=null;mushafRender()}};$('#mn').onclick=()=>{if(p<604){MP.page++;MP.hl=null;mushafRender()}};
+  $('#mpg').onchange=e=>{MP.page=Math.max(1,Math.min(604,+e.target.value||1));mushafRender()};
+  $('#msu').onchange=e=>{MP.page=A(SI[+e.target.value])[2];mushafRender()};
+  $('#mju').onchange=e=>{MP.page=A(D.ayahs.findIndex(a=>a[3]==e.target.value))[2];mushafRender()};
+  fitLines();
+  $('#mpage').onclick=e=>{const t=e.target.closest('[data-ay]');if(t){MP.hl=+t.dataset.ay;openAyah(+t.dataset.ay)}};
+  $('#mmem').onclick=()=>go('hifz',{list:onPage.filter(i=>A(i)[2]===p&&!memo(i))});
+  $('#mknow').onclick=()=>{markKnown(onPage.filter(i=>A(i)[2]===p));mushafRender();toast('Added to review, spread over the next week')};
+  $('#msr').onkeydown=e=>{if(e.key==='Enter')search(e.target.value)};
+}
+function fitLines(){document.querySelectorAll('#mpage .mline').forEach(e=>{e.style.fontSize='';if(e.scrollWidth>e.clientWidth+1){const f=parseFloat(getComputedStyle(e).fontSize);e.style.fontSize=(f*e.clientWidth/e.scrollWidth*.985).toFixed(2)+'px'}})}
+window.addEventListener('resize',()=>{if(cur==='mushaf')fitLines()});
+function search(q){
+  q=q.trim();const box=$('#mres');if(!q){box.innerHTML='';return}
+  const m=q.match(/^(\d{1,3})\s*[:.]\s*(\d{1,3})$/);
+  if(m){const s=+m[1],a=+m[2];if(SI[s]!=null&&a>=1&&a<=D.surahs[s-1][7]){const i=SI[s]+a-1;MP.page=A(i)[2];MP.hl=i;mushafRender().then(()=>openAyah(i))}return}
+  let hits=[];
+  if(/[؀-ۿ]/.test(q)){const k=q.split(/\s+/).map(sk).join(' ');D.ayahs.forEach((a,i)=>{if(a[7].map(sk).join(' ').includes(k))hits.push(i)})}
+  else{const k=q.toLowerCase();D.ayahs.forEach((a,i)=>{if(a[12].toLowerCase().includes(k))hits.push(i)})}
+  box.innerHTML=`<div class="card"><div class="spread"><h3>${hits.length} result${hits.length===1?'':'s'}</h3><button class="btn sm ghost" id="mrc">Clear</button></div><div class="list">${hits.slice(0,60).map(i=>`<div data-go="${i}" style="cursor:pointer;display:block"><div class="small"><b>${ref(i)}</b> ${esc(sName(A(i)[0]))}</div><div class="q sm">${esc(A(i)[7].join(' '))}</div><div class="small muted">${esc(A(i)[12])}</div></div>`).join('')}</div>${hits.length>60?'<div class="small muted">Showing the first 60.</div>':''}</div>`;
+  $('#mrc').onclick=()=>box.innerHTML='';
+  box.querySelectorAll('[data-go]').forEach(d=>d.onclick=()=>{const i=+d.dataset.go;MP.page=A(i)[2];MP.hl=i;mushafRender().then(()=>openAyah(i))});
+}
+function markKnown(list){
+  const t=TD();let k=0;
+  for(const i of list){if(S.ay[i])continue;S.ay[i]={n:2,iv:4,ef:2.4,lp:0,due:t+1+(k++%7),last:t,t0:t,known:1}}
+  save();nav();
+}
+
+/* ========== WORDS (vocabulary from the Quran) ========== */
+function lexQueue(){
+  const t=TD();const due=Object.keys(S.lex).map(Number).filter(k=>S.lex[k].due<=t);
+  const d=ymd(new Date()),newToday=(S.days[d]&&S.days[d].lexNew)||0;
+  const room=Math.max(0,S.set.lexNew-newToday);
+  const fresh=lexOrder().filter(k=>!S.lex[k]).slice(0,room);
+  return [...due,...fresh];
+}
+let LEXORD=null,LEXMEMKEY='';
+function lexOrder(){
+  // lemmas in your memorised āyāt first (by Quran frequency), then the rest by frequency; skip particles of one letter
+  const mem=memList();const key=mem.length+':'+Object.values(WJ).filter(p=>p.done).length;
+  if(LEXORD&&LEXMEMKEY===key)return LEXORD;
+  const all=D.lemmas.map((l,k)=>k).filter(k=>D.lemmas[k][0].replace(/[ً-ٰ]/g,'').length>1).sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]);
+  const inMem=new Set();
+  if(mem.length){for(const i of mem){const j=A(i)[3];if(!WJ[j]||!WJ[j].done)continue;for(const d of WJ[j].done[ref(i)])if(d[3]>=0)inMem.add(d[3])}}
+  LEXORD=[...all.filter(k=>inMem.has(k)),...all.filter(k=>!inMem.has(k))];LEXMEMKEY=key;return LEXORD;
+}
+async function preloadMemWords(){const js=[...new Set(memList().map(i=>A(i)[3]))];for(const j of js){const p=juzWords(j);if(!p.done)p.done=await p}}
+let LX=null;
+R.words=async(arg)=>{
+  if(arg&&arg.root!=null){rootView(arg.root);return}
+  await preloadMemWords();
+  const q=lexQueue();
+  const known=Object.keys(S.lex).filter(k=>S.lex[k].n>0).map(Number);
+  const cov=known.reduce((s,k)=>s+D.lemmas[k][3],0);
+  const top=[100,300,1000].map(n=>{const ks=D.lemmas.map((l,k)=>k).sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]).slice(0,n);return pct(ks.reduce((s,k)=>s+D.lemmas[k][3],0),D.tokens)});
+  V().innerHTML=`<div><div class="eyebrow">Lughah · vocabulary</div><h1>The words of the Quran</h1></div>
+  <div class="grid g4">
+    <div class="card stat"><b>${pct(cov,D.tokens)}%</b><span>of all ${D.tokens.toLocaleString()} word tokens covered by lemmas you know</span></div>
+    <div class="card stat"><b>${known.length}</b><span>lemmas known of ${D.lemmas.length.toLocaleString()}</span></div>
+    <div class="card stat"><b>${q.length}</b><span>cards for today (${S.set.lexNew} new a day)</span></div>
+    <div class="card stat"><b>${top[0]}%</b><span>covered by the top 100 lemmas alone (top 300: ${top[1]}%)</span></div>
+  </div>
+  <div class="card"><div class="spread"><h2>Word deck</h2><button class="btn pri" id="lgo" ${q.length?'':'disabled'}>${q.length?'Study '+q.length+' cards':'Done for today'}</button></div>
+  <div class="small muted">New words come from the āyāt you have memorised first, then by how often they occur. Each card shows the word in a real āyah.</div></div>
+  <div class="card"><div class="spread"><h2>Roots</h2><input id="rsq" placeholder="Find a root, e.g. رحم or علم" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel)"></div>
+  <div class="tbl"><table><thead><tr><th>Root</th><th>Family</th><th class="n">Uses</th></tr></thead><tbody id="rtb"></tbody></table></div></div>`;
+  $('#lgo').onclick=()=>{LX={q:shuffle(q),k:0,show:false,n:q.length};lexCard()};
+  const roots=D.roots.map((r,k)=>k).sort((a,b)=>D.roots[b][1]-D.roots[a][1]);
+  const fill=f=>{const list=f?roots.filter(k=>sk(D.roots[k][0]).includes(sk(f))):roots.slice(0,40);$('#rtb').innerHTML=list.slice(0,80).map(k=>`<tr data-r="${k}" style="cursor:pointer"><td class="ar" style="font-size:22px">${esc(D.roots[k][0].split('').join(' '))}</td><td class="small">${D.roots[k][2].slice(0,4).map(l=>esc(D.lemmas[l][4])).join(' · ')}</td><td class="n">${D.roots[k][1]}</td></tr>`).join('')};
+  fill('');$('#rsq').oninput=e=>fill(e.target.value);
+  $('#rtb').onclick=e=>{const r=e.target.closest('[data-r]');if(r)rootView(+r.dataset.r)};
+};
+async function lexCard(){
+  const L=LX;if(L.k>=L.q.length){save();go('words');toast('Word deck done for today');return}
+  const li=L.q[L.k],l=D.lemmas[li];const [s,a,w]=l[5].split(':').map(Number);const i=SI[s]+a-1;
+  const isNew=!S.lex[li];
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Word deck · ${L.k+1} of ${L.n}${isNew?' · new':''}</div><h1>What does it mean?</h1></div><button class="btn ghost sm" id="lq">Stop</button></div>
+  <div class="card flip"><div class="lex">${esc(l[0])}</div><div class="small muted">${{N:'noun',V:'verb',P:'particle'}[l[1]]||''} · occurs ${l[3]}×</div>
+  ${L.show?`<h2>${esc(l[4])}</h2><div>${l[2]?`Root <span class="ar" style="font-size:22px">${esc(l[2].split('').join(' '))}</span>`:''}</div>
+   <div class="ex" style="text-align:right"><div class="q sm">${A(i)[7].map((x,k)=>k===w-1?`<span class="mark">${esc(x)}</span>`:esc(x)).join(' ')}</div><div class="small muted" style="text-align:left">${ref(i)} · ${esc(A(i)[12])}</div></div>${gradeHTML()}`
+  :`<div><button class="btn pri" id="lsh">Show meaning <span class="kbd">space</span></button></div>`}</div>`;
+  $('#lq').onclick=()=>{save();go('words')};
+  if(!L.show)$('#lsh').onclick=()=>{L.show=true;lexCard()};
+  else V().querySelectorAll('[data-gr]').forEach(b=>b.onclick=()=>{const g=+b.dataset.gr;if(isNew)dayLog('lexNew');S.lex[li]=sched(S.lex[li]&&S.lex[li].n!=null?S.lex[li]:null,g);dayLog('lex');L.k++;L.show=false;if(g===0)L.q.push(li);save();lexCard()});
+}
+function rootView(ri){
+  const r=D.roots[ri];
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Root family · ${r[1]} uses</div><h1 class="ar" style="font-size:44px">${esc(r[0].split('').join(' '))}</h1></div><button class="btn sm" id="rb">◂ Words</button></div>
+  <div class="card"><div class="tbl"><table><thead><tr><th>Lemma</th><th>Type</th><th>Meaning (most common gloss)</th><th class="n">Uses</th><th></th></tr></thead><tbody>
+  ${r[2].slice().sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]).map(l=>`<tr><td class="ar" style="font-size:24px">${esc(D.lemmas[l][0])}</td><td class="small">${{N:'noun',V:'verb',P:'particle'}[D.lemmas[l][1]]}</td><td>${esc(D.lemmas[l][4])}</td><td class="n">${D.lemmas[l][3]}</td><td><button class="btn sm" data-add="${l}">${S.lex[l]?'In deck':'Add'}</button></td></tr>`).join('')}
+  </tbody></table></div></div>
+  <div class="card"><h3>First uses in the Quran</h3><div id="rex" class="list"></div></div>`;
+  $('#rb').onclick=()=>go('words');
+  V().querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const l=+b.dataset.add;if(!S.lex[l]){S.lex[l]={n:0,iv:0,ef:2.4,due:TD(),added:1};save()}b.textContent='In deck'});
+  const ex=r[2].slice(0,8).map(l=>D.lemmas[l][5]);
+  $('#rex').innerHTML=ex.map(x=>{const [s,a,w]=x.split(':').map(Number);const i=SI[s]+a-1;return `<div style="display:block"><div class="q sm">${A(i)[7].map((y,k)=>k===w-1?`<span class="mark">${esc(y)}</span>`:esc(y)).join(' ')}</div><div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}).join('');
+}
+
+/* ========== GRAMMAR ========== */
+R.grammar=(arg)=>{
+  if(arg&&arg.lesson){lessonView(LESSONS.find(l=>l.id===arg.lesson));return}
+  const units=[...new Set(LESSONS.map(l=>l.unit))];
+  const done=LESSONS.filter(l=>S.gram[l.id]&&S.gram[l.id].done).length;
+  V().innerHTML=`<div><div class="eyebrow">Naḥw &amp; ṣarf · learned through the āyāt</div><h1>Arabic grammar from the Quran</h1></div>
+  <div class="card"><div class="spread"><span>${done} of ${LESSONS.length} lessons passed</span><span class="small muted">A lesson is passed at 8 of 10 in its drill.</span></div><div class="bar gold"><i style="width:${pct(done,LESSONS.length)}%"></i></div>
+  <div class="small muted">Every example and drill question is a real word from the mushaf, taken from your memorised āyāt where possible. The grammar of all 77,429 words comes from the Quranic Arabic Corpus.</div></div>
+  ${units.map(u=>`<div class="card"><h2>${esc(u)}</h2><div class="list">${LESSONS.filter(l=>l.unit===u).map(l=>{const g=S.gram[l.id];return `<div data-l="${l.id}" style="cursor:pointer"><span class="row"><span class="chip">${l.id}</span><b>${esc(l.title)}</b><span class="ar">${esc(l.ar)}</span></span><span class="chip ${g&&g.done?'d':''}">${g?(g.done?'passed ':'')+g.best+'/10':'new'}</span></div>`}).join('')}</div></div>`).join('')}`;
+  V().querySelectorAll('[data-l]').forEach(d=>d.onclick=()=>lessonView(LESSONS.find(l=>l.id===d.dataset.l)));
+};
+function matchQ(q,d,prev,next){
+  const [gl,tl,ln,li,ri,pos,tags,aff]=d;const T=tags?tags.split(' '):[];
+  if(q.pos&&pos!==q.pos)return false;
+  if(q.tags&&!q.tags.every(t=>T.includes(t)))return false;
+  if(q.tagsAny&&!q.tagsAny.some(t=>T.includes(t)))return false;
+  if(q.notTags&&q.notTags.some(t=>T.includes(t)))return false;
+  if(q.hasRoot&&ri<0)return false;
+  if(q.hasCase&&!['NOM','ACC','GEN'].some(t=>T.includes(t)))return false;
+  if(q.affHas&&!aff.some(a=>a[1].includes(q.affHas)))return false;
+  if(q.weak&&!(ri>=0&&/[ويءأ]/.test(D.roots[ri][0])))return false;
+  if(q.afterPrep){const pre=aff.some(a=>a[1]==='+P');const pw=prev&&prev[5]==='P'&&prev[6].split(' ').includes('P')&&!prev[7].some(a=>a[1].includes('PRON'));if(!(T.includes('GEN')&&(pre||pw)))return false}
+  if(q.idafa){if(aff.some(a=>a[1].includes('DET'))||T.includes('INDEF')||T.includes('PRON')||T.includes('PN')||!['NOM','ACC','GEN'].some(t=>T.includes(t)))return false;if(!(next&&next[5]==='N'&&next[6].split(' ').includes('GEN')&&!next[7].some(a=>a[1]==='+P')))return false}
+  if(q.afterFam){if(!(prev&&prev[6].includes('FAM:')))return false;if(!['NOM','ACC'].some(t=>T.includes(t)))return false}
+  return true;
+}
+const DRILL={
+  pos3:{ask:'What kind of word is this?',ans:d=>({N:'Noun (ism)',V:'Verb (fiʿl)',P:'Particle (ḥarf)'})[d[5]],opts:()=>['Noun (ism)','Verb (fiʿl)','Particle (ḥarf)']},
+  root:{ask:'What is its root?',ans:d=>d[4]>=0?D.roots[d[4]][0].split('').join(' '):null,opts:a=>{const L=a.replace(/ /g,'');const c=shuffle(D.roots.filter(r=>r[0]!==L&&[...r[0]].some(x=>L.includes(x))&&r[1]>8)).slice(0,3).map(r=>r[0].split('').join(' '));return shuffle([a,...c])},ar:true},
+  def:{ask:'Is this noun definite or indefinite?',ans:d=>d[7].some(a=>a[1].includes('DET'))?'Definite (maʿrifa)':d[6].split(' ').includes('INDEF')?'Indefinite (nakira)':null,opts:()=>['Definite (maʿrifa)','Indefinite (nakira)']},
+  gender:{ask:'Masculine or feminine?',ans:d=>{const t=d[6].split(' ').find(x=>/^[MF][SDP]?$/.test(x));return t?(t[0]==='M'?'Masculine':'Feminine'):null},opts:()=>['Masculine','Feminine']},
+  number:{ask:'Singular, dual or plural?',ans:d=>{const t=d[6].split(' ').find(x=>/^[MF][SDP]?$/.test(x));return t?({S:'Singular',D:'Dual',P:'Plural'})[t[1]||'S']:null},opts:()=>['Singular','Dual','Plural']},
+  case:{ask:'Which case is it in?',ans:d=>{const T=d[6].split(' ');return T.includes('NOM')?'Nominative (marfūʿ)':T.includes('ACC')?'Accusative (manṣūb)':T.includes('GEN')?'Genitive (majrūr)':null},opts:()=>['Nominative (marfūʿ)','Accusative (manṣūb)','Genitive (majrūr)']},
+  pgn:{ask:'Who is doing the action?',ans:d=>{const t=d[6].split(' ').find(x=>/^[123][MF]?[SDP]$/.test(x));return t?pgnName(t):null},opts:a=>{const all=['3MS','3FS','3MD','3MP','3FP','2MS','2FS','2MP','1S','1P'].map(pgnName);return shuffle([a,...shuffle(all.filter(x=>x!==a)).slice(0,3)])}},
+  tense:{ask:'Past, present or command?',ans:d=>{const T=d[6].split(' ');return T.includes('PERF')?'Past (māḍī)':T.includes('IMPF')?'Present (muḍāriʿ)':T.includes('IMPV')?'Command (amr)':null},opts:()=>['Past (māḍī)','Present (muḍāriʿ)','Command (amr)']},
+  mood:{ask:'Which mood is this present-tense verb in?',ans:d=>{const T=d[6].split(' ');return T.includes('MOOD:IND')?'Indicative (marfūʿ)':T.includes('MOOD:SUBJ')?'Subjunctive (manṣūb)':T.includes('MOOD:JUS')?'Jussive (majzūm)':null},opts:()=>['Indicative (marfūʿ)','Subjunctive (manṣūb)','Jussive (majzūm)']},
+  voice:{ask:'Active or passive?',ans:d=>d[5]==='V'?(d[6].split(' ').includes('PASS')?'Passive':'Active'):null,opts:()=>['Active','Passive']},
+  form:{ask:'Which verb form (wazn) is it?',ans:d=>{const t=d[6].split(' ').find(x=>x.startsWith('VF:'));return t?'Form '+ROMAN[+t.slice(3)]:null},opts:a=>{const all=range(1,10).map(n=>'Form '+ROMAN[n]).filter(x=>x!=='Form IX');return shuffle([a,...shuffle(all.filter(x=>x!==a)).slice(0,3)])}},
+  pcpl:{ask:'Active or passive participle?',ans:d=>{const T=d[6].split(' ');return T.includes('ACT_PCPL')?'Active participle (ism fāʿil)':T.includes('PASS_PCPL')?'Passive participle (ism mafʿūl)':null},opts:()=>['Active participle (ism fāʿil)','Passive participle (ism mafʿūl)']},
+  pron:{ask:'Whom does the attached pronoun refer to?',ans:d=>{const a=d[7].find(x=>x[1].includes('PRON'));if(!a)return null;const t=a[1].split(' ').find(x=>/^[123][MF]?[SDP]$/.test(x));return t?pgnName(t):null},opts:a=>{const all=['3MS','3FS','3MD','3MP','3FP','2MS','2MP','1S','1P'].map(pgnName);return shuffle([a,...shuffle(all.filter(x=>x!==a)).slice(0,3)])}},
+  gloss:{ask:'What does it mean here?',ans:d=>d[0]||null,opts:(a,pool)=>{const nk=x=>x.toLowerCase().replace(/[()\[\].,]/g,'').trim();const seen=new Set([nk(a)]);const o=[];for(const x of shuffle(pool)){if(!x)continue;const k=nk(x);if(seen.has(k))continue;seen.add(k);o.push(x);if(o.length>=3)break}return shuffle([a,...o])}}
+};
+async function findExamples(q,want=40){
+  const mem=memList();const out=[];const seen=new Set();
+  const scan=async(list)=>{for(const i of list){if(out.length>=want)return;const ws=await W(i);for(let k=0;k<ws.length;k++){if(matchQ(q,ws[k],ws[k-1],ws[k+1])){const key=i+':'+k;if(!seen.has(key)){seen.add(key);out.push([i,k])}}}}};
+  await scan(shuffle(mem));
+  if(out.length<want&&q.juz){await juzWords(q.juz);await scan(shuffle(D.ayahs.map((a,i)=>i).filter(i=>A(i)[3]===q.juz)))}
+  if(out.length<want){for(const j of shuffle(range(1,30)).slice(0,3)){await juzWords(j);await scan(shuffle(D.ayahs.map((a,i)=>i).filter(i=>A(i)[3]===j)).slice(0,300));if(out.length>=want)break}}
+  return out;
+}
+function wordInAyah(i,k){return A(i)[7].map((x,j)=>j===k?`<span class="mark">${esc(x)}</span>`:esc(x)).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`}
+async function lessonView(l){
+  const ix=LESSONS.indexOf(l);
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">${esc(l.unit)} · ${l.id}</div><h1>${esc(l.title)}</h1><div class="ar" style="font-size:26px;color:var(--gold)">${esc(l.ar)}</div></div><button class="btn sm" id="lb">◂ All lessons</button></div>
+  <div class="card lesson">${l.body.map(p=>`<p>${esc(p).replace(/([؀-ۿ][؀-ۿݐ-ݿࢠ-ࣿ\s۝-ۭ]*[؀-ۿ])/g,'<span class="ar">$1</span>')}</p>`).join('')}</div>
+  <div class="card lesson"><h3>Key rules</h3><ul>${l.points.map(p=>`<li>${esc(p).replace(/([؀-ۿ][؀-ۿ\s]*[؀-ۿ])/g,'<span class="ar">$1</span>')}</li>`).join('')}</ul></div>
+  <div class="card"><div class="spread"><h3>Seen in the mushaf</h3><button class="btn sm ghost" id="lmore">More examples</button></div><div id="lex" class="list"><div class="muted small">Finding examples…</div></div></div>
+  <div class="row"><button class="btn pri" id="ldr">Take the drill · 10 questions</button>${ix<LESSONS.length-1?`<button class="btn" id="lnx">Next lesson ▸</button>`:''}</div>`;
+  $('#lb').onclick=()=>go('grammar');
+  if($('#lnx'))$('#lnx').onclick=()=>lessonView(LESSONS[ix+1]);
+  $('#ldr').onclick=()=>drill(l);
+  const show=async()=>{
+    let ex=[];
+    if(l.ex)for(const x of l.ex){const [s,a,w]=x.split(':').map(Number);ex.push([SI[s]+a-1,w-1])}
+    ex=[...ex,...(await findExamples(l.q,12))].slice(0,8);
+    const rows=await Promise.all(ex.map(async([i,k])=>{const d=(await W(i))[k];return `<div style="display:block"><div class="q sm" style="cursor:pointer" data-ow="${i}:${k}">${wordInAyah(i,k)}</div><div class="small"><b>${esc(A(i)[7][k])}</b> “${esc(d[0])}” · ${esc(parseWord(d))}</div><div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}));
+    $('#lex').innerHTML=rows.join('')||'<div class="muted small">No examples found yet.</div>';
+    $('#lex').querySelectorAll('[data-ow]').forEach(x=>x.onclick=()=>{const [i,k]=x.dataset.ow.split(':').map(Number);openWord(i,k)});
+  };
+  show();$('#lmore').onclick=()=>{l.ex=null;show()};
+}
+async function drill(l){
+  const dr=DRILL[l.drill];V().innerHTML='<div class="loading">Building your drill from the mushaf…</div>';
+  const ex=shuffle(await findExamples(l.q,60));const items=[];
+  const pool=[];for(const [i,k] of ex){pool.push((await W(i))[k][0])}
+  for(const [i,k] of ex){const d=(await W(i))[k];const a=dr.ans(d);if(a&&!items.some(x=>x.i===i&&x.k===k))items.push({i,k,d,a});if(items.length>=10)break}
+  if(!items.length){V().innerHTML='<div class="card">Not enough examples found for this drill yet.</div>';return}
+  runQuiz({title:`Drill · ${l.title}`,n:items.length,make:(r)=>{const it=items[r];const opts=dr.opts(it.a,pool);return {prompt:`<div class="small muted">${ref(it.i)} · ${esc(sName(A(it.i)[0]))}</div><div class="q md">${wordInAyah(it.i,it.k)}</div><h3>${dr.ask}</h3>`,opts:opts.includes(it.a)?opts:shuffle([it.a,...opts.slice(0,3)]),ans:it.a,ar:dr.ar,explain:`<b>${esc(A(it.i)[7][it.k])}</b> “${esc(it.d[0])}”: ${esc(parseWord(it.d))}${it.d[4]>=0?` · root ${esc(D.roots[it.d[4]][0])}`:''}<br><span class="muted">${esc(A(it.i)[12])}</span>`}},
+    done:(score,n)=>{const g=S.gram[l.id]=S.gram[l.id]||{best:0};g.best=Math.max(g.best,Math.round(score*10/n));if(score/n>=.8)g.done=1;save();
+      return `<div class="row"><button class="btn pri" id="dnx">${LESSONS.indexOf(l)<LESSONS.length-1?'Next lesson':'All lessons'}</button><button class="btn" id="drt">Drill again</button><button class="btn ghost" id="dbk">Back to lesson</button></div>`},
+    after:()=>{$('#dnx').onclick=()=>{const ix=LESSONS.indexOf(l);ix<LESSONS.length-1?lessonView(LESSONS[ix+1]):go('grammar')};$('#drt').onclick=()=>drill(l);$('#dbk').onclick=()=>lessonView(l)}});
+}
+
+/* ========== generic quiz runner ========== */
+let keyOpts=null;
+function runQuiz(cfg){
+  let r=0,score=0;const n=cfg.n;
+  const step=async()=>{
+    if(r>=n){keyOpts=null;dayLog('q',n);dayLog('ok',score);
+      const extra=cfg.done?cfg.done(score,n):'';
+      V().innerHTML=`<div class="card"><div class="eyebrow">${esc(cfg.title)}</div><h1>${score} / ${n}</h1><div class="muted">${score===n?'Flawless.':score>=n*.8?'Strong. Repeat tomorrow to lock it in.':'Go back over the ones you missed, then try again.'}</div>${extra||`<div class="row"><button class="btn pri" id="qa">Play again</button><button class="btn" id="qb">All tests</button></div>`}</div>`;
+      if(cfg.after)cfg.after();else{$('#qa').onclick=()=>cfg.again?cfg.again():go('games');$('#qb').onclick=()=>go('games')}
+      return}
+    const it=await cfg.make(r);
+    if(!it){r++;step();return}
+    V().innerHTML=`<div class="spread"><div><div class="eyebrow">${esc(cfg.title)} · ${r+1} of ${n}</div></div><div class="row"><span class="chip">${score} correct</span><button class="btn ghost sm" id="qx">Quit</button></div></div>
+    <div class="bar"><i style="width:${pct(r,n)}%"></i></div>
+    <div class="card">${it.prompt}<div class="opts grid ${it.opts.length>3&&!it.wide?'g2':''}">${it.opts.map((o,k)=>`<button class="opt${it.ar?' arq':''}" data-k="${k}"><span class="k">${k+1}</span><span>${it.raw?o:esc(o)}</span></button>`).join('')}</div><div id="qf"></div></div>`;
+    $('#qx').onclick=()=>{keyOpts=null;go('games')};
+    let answered=false;
+    const choose=k=>{
+      if(answered)return;answered=true;const o=it.opts[k],ok=o===it.ans;if(ok)score++;
+      const bs=V().querySelectorAll('.opt');bs.forEach((b,j)=>{if(it.opts[j]===it.ans)b.classList.add('ok');else if(j===k)b.classList.add('no')});
+      $('#qf').innerHTML=`<div class="fb ${ok?'ok':'no'}">${ok?'Correct.':'Not quite.'}</div>${it.explain?`<div class="small" style="margin-top:8px">${it.explain}</div>`:''}<div class="row" style="margin-top:10px"><button class="btn pri" id="qn">Next <span class="kbd">enter</span></button></div>`;
+      if(cfg.onAnswer)cfg.onAnswer(it,ok);
+      $('#qn').onclick=()=>{r++;step()};$('#qn').focus();
+    };
+    V().querySelectorAll('.opt').forEach(b=>b.onclick=()=>choose(+b.dataset.k));
+    keyOpts=k=>choose(k);
+  };
+  step();
+}
+document.addEventListener('keydown',e=>{
+  if(e.target.closest('input,select,textarea'))return;
+  if(/^[1-4]$/.test(e.key)&&keyOpts){keyOpts(+e.key-1);return}
+  if(e.key===' '){const b=$('#rs')||$('#lsh');if(b){e.preventDefault();b.click()}}
+  if(e.key==='Enter'){const b=$('#qn');if(b){e.preventDefault();b.click()}}
+});
+
+/* ========== TESTS (games) ========== */
+const GAMES=[
+ ['next','Continue the āyah','Shown one āyah, pick how the next begins. The core ḥifẓ check.'],
+ ['prev','What came before?','Shown an āyah, pick the one before it. Builds two-way links.'],
+ ['build','Build word by word','Rebuild an āyah one word at a time from four choices.'],
+ ['gap','Fill the gap','One word is missing. Which is it?'],
+ ['mutash','Mutashābihāt','Near-identical āyāt elsewhere in the Quran. Pick the exact wording that belongs here.'],
+ ['where','Which sūrah?','Place an āyah in its sūrah.'],
+ ['order','Put in order','Four consecutive āyāt, shuffled. Tap them in order.'],
+ ['opener','Page openers','The first words of each mushaf page, the ḥuffāẓ’s own drill.'],
+ ['meaning','Meaning match','Pick the translation of an āyah.'],
+ ['wmean','Word meanings','What does this word mean in this āyah?'],
+ ['roots','Root hunt','Find the three-letter root of a word.'],
+ ['parse','Parse it','Name the grammar of a word: tense, case, form, person.']
+];
+let GP=null;
+R.games=(arg)=>{
+  if(arg&&arg.game){playGame(arg.game,arg.scope);return}
+  const mem=memList();
+  V().innerHTML=`<div><div class="eyebrow">Tests</div><h1>Test your ḥifẓ, meaning and Arabic</h1></div>
+  <div class="card"><div class="spread"><div><h3>Draw questions from</h3><div class="small muted">${mem.length} āyāt memorised</div></div>
+  <div class="seg" id="gpool">${[['mem','My memorised āyāt'],['30','Juz ʿAmma'],['all','Whole Quran']].map(([k,l])=>`<button data-p="${k}" aria-pressed="${S.set.pool===k}">${l}</button>`).join('')}</div></div>
+  ${S.set.pool==='mem'&&mem.length<8?'<div class="note">You have fewer than 8 āyāt memorised, so questions come from Juz ʿAmma for now.</div>':''}</div>
+  <div class="grid g3">${GAMES.map(([k,t,d])=>`<div class="card"><h3>${t}</h3><div class="small muted" style="flex:1">${d}</div><div><button class="btn sm pri" data-g="${k}">Play 10</button> <span class="small muted">${S.games[k]?`best ${S.games[k]}/10`:''}</span></div></div>`).join('')}</div>`;
+  $('#gpool').onclick=e=>{const b=e.target.closest('button');if(b){S.set.pool=b.dataset.p;save();R.games()}};
+  V().querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>playGame(b.dataset.g));
+};
+function poolAyat(scope){
+  if(scope&&scope.length)return scope;
+  const mem=memList();
+  if(S.set.pool==='mem'&&mem.length>=8)return mem;
+  if(S.set.pool==='all')return D.ayahs.map((a,i)=>i);
+  return D.ayahs.map((a,i)=>i).filter(i=>A(i)[3]===30);
+}
+const start=(i,n=4)=>A(i)[7].slice(0,n).join(' ');
+function distinctStarts(right,cands,n=3){const seen=new Set([right]);const out=[];for(const c of cands){if(!seen.has(c)){seen.add(c);out.push(c)}if(out.length>=n)break}return out}
+async function playGame(g,scope){
+  const P=poolAyat(scope);const title=GAMES.find(x=>x[0]===g)[1];
+  const surahOf=i=>A(i)[0];const inS=i=>D.ayahs.map((a,j)=>j).filter(j=>A(j)[0]===A(i)[0]);
+  const sameSurahStartOk=i=>i<6235&&A(i+1)[0]===A(i)[0];
+  const done=(score,n)=>{S.games[g]=Math.max(S.games[g]||0,Math.round(score*10/n));save();return ''};
+  const base={title,n:10,done,again:()=>playGame(g,scope)};
+  if(g==='next'||g==='prev'){
+    const cand=P.filter(i=>g==='next'?sameSurahStartOk(i):(i>0&&A(i-1)[0]===A(i)[0]));
+    if(!cand.length){V().innerHTML='<div class="card">Memorise a passage of at least two āyāt first.</div>';return}
+    runQuiz({...base,make:()=>{
+      const i=pick(cand),t=g==='next'?i+1:i-1;const right=start(t);
+      const sims=(SIM[t]||[]).map(([j])=>start(j));
+      const near=shuffle(inS(i).filter(j=>j!==t&&j!==i)).map(j=>start(j));
+      const opts=shuffle([right,...distinctStarts(right,[...sims,...near,...shuffle(P).map(j=>start(j))])]);
+      return {prompt:`<div class="small muted">${esc(sName(surahOf(i)))} · ${ref(i)}</div><div class="q md">${esc(A(i)[7].join(' '))} <span class="num">﴿${AD(A(i)[1])}﴾</span></div><h3>${g==='next'?'How does the next āyah begin?':'How does the āyah before it begin?'}</h3>`,opts:opts.map(o=>o+' …'),ans:right+' …',ar:true,wide:true,explain:`<div class="q sm">${esc(A(t)[7].join(' '))} <span class="num">﴿${AD(A(t)[1])}﴾</span></div><span class="muted">${ref(t)} · ${esc(A(t)[12])}</span>`}
+    }});return;
+  }
+  if(g==='build'){
+    const cand=P.filter(i=>A(i)[7].length>=3&&A(i)[7].length<=40);
+    const i=pick(cand),w=A(i)[7];const pool=[...new Set(inS(i).flatMap(j=>A(j)[7]))];
+    runQuiz({...base,title:`${title} · ${ref(i)}`,n:w.length,make:(r)=>{const right=w[r];return {prompt:`<div class="small muted">${esc(sName(surahOf(i)))} · ${ref(i)}</div><div class="q md">${esc(w.slice(0,r).join(' '))} <span class="hint">…</span></div>`,opts:shuffle([right,...shuffle(pool.filter(x=>sk(x)!==sk(right))).slice(0,3)]),ans:right,ar:true}},
+      done:(s,n)=>{S.games.build=Math.max(S.games.build||0,Math.round(s*10/n));save();return ''}});return;
+  }
+  if(g==='gap'){
+    runQuiz({...base,make:()=>{const i=pick(P.filter(j=>A(j)[7].length>=4)),w=A(i)[7];const k=1+(Math.random()*(w.length-1)|0);const right=w[k];
+      const pool=[...new Set([...(SIM[i]||[]).flatMap(([j])=>A(j)[7]),...inS(i).flatMap(j=>A(j)[7])])].filter(x=>sk(x)!==sk(right));
+      return {prompt:`<div class="small muted">${ref(i)}</div><div class="q md">${w.map((x,j)=>j===k?'<span class="mark">ــــــ</span>':esc(x)).join(' ')}</div>`,opts:shuffle([right,...shuffle(pool).slice(0,3)]),ans:right,ar:true,explain:`<span class="muted">${esc(A(i)[12])}</span>`}}});return;
+  }
+  if(g==='mutash'){
+    let cand=P.filter(i=>SIM[i]&&SIM[i].some(([j,r])=>A(j)[7].join(' ')!==A(i)[7].join(' ')));
+    if(cand.length<3)cand=Object.keys(SIM).map(Number).filter(i=>SIM[i].some(([j])=>A(j)[7].join(' ')!==A(i)[7].join(' ')));
+    runQuiz({...base,make:()=>{const i=pick(cand);const prev=i>0&&A(i-1)[0]===A(i)[0]?i-1:null;
+      const right=A(i)[7].join(' ');const others=[...new Set(SIM[i].map(([j])=>A(j)[7].join(' ')).filter(x=>x!==right))].slice(0,3);
+      return {prompt:`<div class="small muted">${esc(sName(surahOf(i)))} · ${ref(i)}. Which wording is the one in this place?</div>${prev!=null?`<div class="q sm muted">${esc(A(prev)[7].join(' '))} <span class="num">﴿${AD(A(prev)[1])}﴾</span></div>`:'<div class="small muted">(first āyah of the sūrah)</div>'}`,
+        opts:shuffle([right,...others]),ans:right,ar:true,wide:true,explain:SIM[i].filter(([j])=>A(j)[7].join(' ')!==right).slice(0,3).map(([j])=>diffPair(i,j)).join('')}}});return;
+  }
+  if(g==='where'){
+    runQuiz({...base,make:()=>{const i=pick(P);const s=surahOf(i);const near=shuffle(range(Math.max(1,s-6),Math.min(114,s+6)).filter(x=>x!==s)).slice(0,3);
+      return {prompt:`<div class="q md">${esc(A(i)[7].join(' '))}</div><h3>Which sūrah is this āyah from?</h3>`,opts:shuffle([s,...near]).map(x=>`${x}. ${D.surahs[x-1][1]}`),ans:`${s}. ${sName(s)}`,explain:`${ref(i)} · <span class="muted">${esc(A(i)[12])}</span>`}}});return;
+  }
+  if(g==='order'){
+    const cand=P.filter(i=>i+3<6236&&A(i+3)[0]===A(i)[0]&&[1,2,3].every(d=>P.includes(i+d)||S.set.pool!=='mem'||P.length<8));
+    const cands=cand.length?cand:D.ayahs.map((a,i)=>i).filter(i=>A(i)[3]===30&&i+3<6236&&A(i+3)[0]===A(i)[0]);
+    orderGame(cands,title);return;
+  }
+  if(g==='opener'){
+    const pages=[...new Set(P.map(i=>A(i)[2]))].filter(p=>p>1);
+    const firstOf=p=>D.ayahs.findIndex(a=>a[2]===p||(a[2]<p&&a[11]>=p));
+    runQuiz({...base,make:async()=>{const p=pick(pages);const i=firstOf(p);
+      // the page may open mid-āyah: take the words of i that sit on page p
+      const ws=await W(i);let pg=A(i)[2],last=0;const onP=[];ws.forEach((d,k)=>{if(d[2]<last)pg++;last=d[2];if(pg===p)onP.push(A(i)[7][k])});
+      const right=onP.slice(0,3).join(' ');
+      const others=shuffle(pages.filter(x=>Math.abs(x-p)<=12&&x!==p)).slice(0,6).map(x=>{const j=firstOf(x);return start(j,3)});
+      return {prompt:`<h3>How does page ${p} begin?</h3><div class="small muted">${esc(sName(A(i)[0]))} · juzʾ ${A(i)[3]}</div>`,opts:shuffle([right,...distinctStarts(right,others)]).map(o=>o+' …'),ans:right+' …',ar:true,explain:`Page ${p} opens inside ${ref(i)}.`}}});return;
+  }
+  if(g==='meaning'){
+    runQuiz({...base,make:()=>{const i=pick(P);const others=shuffle(inS(i).filter(j=>j!==i)).slice(0,3);while(others.length<3)others.push(pick(D.ayahs.map((a,j)=>j)));
+      return {prompt:`<div class="q md">${esc(A(i)[7].join(' '))} <span class="num">﴿${AD(A(i)[1])}﴾</span></div><h3>What does it mean?</h3>`,opts:shuffle([i,...others]).map(j=>A(j)[12]),ans:A(i)[12],wide:true,explain:`${ref(i)} · Saheeh International`}}});return;
+  }
+  if(g==='wmean'||g==='roots'||g==='parse'){
+    const P2=shuffle(P).slice(0,160);await Promise.all([...new Set(P2.map(i=>A(i)[3]))].map(juzWords));
+    const glossPool=[];for(const i of P2)for(const d of await W(i))glossPool.push(d[0]);
+    const fields=['tense','case','form','pgn','pos3','def','number','voice'];
+    runQuiz({...base,make:async()=>{
+      for(let t=0;t<60;t++){const i=pick(P2),ws=await W(i),k=Math.random()*ws.length|0,d=ws[k];
+        let dr,a;
+        if(g==='wmean'){if(!d[0]||d[5]==='P')continue;dr=DRILL.gloss;a=d[0]}
+        else if(g==='roots'){if(d[4]<0)continue;dr=DRILL.root;a=dr.ans(d)}
+        else{const f=pick(fields);dr=DRILL[f];a=dr.ans(d);if(!a)continue}
+        const opts=dr.opts(a,glossPool);
+        return {prompt:`<div class="small muted">${ref(i)}</div><div class="q md">${wordInAyah(i,k)}</div><h3>${dr.ask}</h3>`,opts,ans:a,ar:dr.ar,explain:`<b>${esc(A(i)[7][k])}</b> “${esc(d[0])}”: ${esc(parseWord(d))}${d[4]>=0?` · root ${esc(D.roots[d[4]][0])}`:''}`}
+      }return null}});return;
+  }
+}
+function diffPair(i,j){
+  const a=A(i)[7],b=A(j)[7],sa=a.map(sk),sb=b.map(sk);
+  const m=a.map(()=>0),n=b.map(()=>0);const dp=Array.from({length:a.length+1},()=>new Array(b.length+1).fill(0));
+  for(let x=a.length-1;x>=0;x--)for(let y=b.length-1;y>=0;y--)dp[x][y]=sa[x]===sb[y]?dp[x+1][y+1]+1:Math.max(dp[x+1][y],dp[x][y+1]);
+  let x=0,y=0;while(x<a.length&&y<b.length){if(sa[x]===sb[y]){m[x]=n[y]=1;x++;y++}else if(dp[x+1][y]>=dp[x][y+1])x++;else y++}
+  const show=(w,k)=>w.map((t,q)=>k[q]?esc(t):`<span class="mark">${esc(t)}</span>`).join(' ');
+  return `<div class="ex" style="margin-top:6px"><div class="small"><b>Here, ${ref(i)}</b></div><div class="q sm">${show(a,m)}</div><div class="small"><b>Elsewhere, ${ref(j)}</b> ${esc(sName(A(j)[0]))}</div><div class="q sm">${show(b,n)}</div></div>`;
+}
+function orderGame(cands,title){
+  let r=0,score=0;const n=6;
+  const round=()=>{
+    if(r>=n){S.games.order=Math.max(S.games.order||0,Math.round(score*10/n));save();dayLog('q',n);dayLog('ok',score);V().innerHTML=`<div class="card"><div class="eyebrow">${title}</div><h1>${score} / ${n}</h1><div class="row"><button class="btn pri" id="oa">Play again</button><button class="btn" id="ob">All tests</button></div></div>`;$('#oa').onclick=()=>orderGame(cands,title);$('#ob').onclick=()=>go('games');return}
+    const i=pick(cands);const set=[i,i+1,i+2,i+3];const sh=shuffle(set);let got=[];let miss=false;
+    const draw=()=>{V().innerHTML=`<div class="spread"><div class="eyebrow">${title} · ${r+1} of ${n} · ${esc(sName(A(i)[0]))}</div><span class="chip">${score} correct</span></div>
+      <div class="card"><h3>Tap the āyāt in order, first to last</h3><div class="opts grid">${sh.map(j=>`<button class="opt arq ${got.includes(j)?'ok':''}" data-j="${j}" ${got.includes(j)?'disabled':''}>${esc(A(j)[7].join(' '))}</button>`).join('')}</div><div id="of"></div></div>`;
+      V().querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{const j=+b.dataset.j;if(j===set[got.length]){got.push(j);if(got.length===4){if(!miss)score++;r++;toast(miss?'Done, with a slip':'Perfect order');setTimeout(round,700);return}draw()}else{miss=true;b.classList.add('no');setTimeout(()=>b.classList.remove('no'),500)}});};
+    draw();
+  };round();
+}
+
+/* ========== PROGRESS & SETTINGS ========== */
+R.progress=()=>{
+  const mem=memList();const bySurah={};mem.forEach(i=>{bySurah[A(i)[0]]=(bySurah[A(i)[0]]||0)+1});
+  const pagesFull=range(1,604).filter(p=>{const on=D.ayahs.map((a,i)=>i).filter(i=>A(i)[2]===p);return on.length&&on.every(memo)}).length;
+  const days=[];const d=new Date();for(let k=0;k<119;k++){const x=new Date(d);x.setDate(d.getDate()-118+k);const o=S.days[ymd(x)]||{};const v=(o.new||0)*3+(o.rev||0)+(o.q||0)/2+(o.lex||0)/3;days.push(v)}
+  const strong=mem.filter(i=>S.ay[i].iv>=21).length;
+  V().innerHTML=`<div><div class="eyebrow">Progress</div><h1>Where you stand</h1></div>
+  <div class="grid g4">
+   <div class="card stat"><b>${mem.length.toLocaleString()}</b><span>āyāt memorised (${pct(mem.length,6236)}%)</span></div>
+   <div class="card stat"><b>${pagesFull}</b><span>complete mushaf pages of 604</span></div>
+   <div class="card stat"><b>${strong}</b><span>āyāt held 3 weeks or longer</span></div>
+   <div class="card stat"><b>${Object.values(S.gram).filter(g=>g.done).length}/${LESSONS.length}</b><span>grammar lessons passed</span></div>
+  </div>
+  <div class="card"><h2>Last 17 weeks</h2><div class="heat">${days.map(v=>`<i class="${v>=30?'l3':v>=10?'l2':v>0?'l1':''}"></i>`).join('')}</div></div>
+  <div class="card"><div class="spread"><h2>Sūrahs</h2><div class="small muted">Mark what you already know: it goes straight into review, spread over a week.</div></div>
+  <div class="tbl"><table><thead><tr><th>#</th><th>Sūrah</th><th></th><th class="n">Āyāt</th><th style="width:30%">Memorised</th><th></th></tr></thead><tbody>
+  ${D.surahs.map(s=>{const m=bySurah[s[0]]||0;return `<tr><td class="n">${s[0]}</td><td><b>${esc(s[1])}</b> <span class="ar">${esc(s[3])}</span><div class="small muted">${esc(s[4])}</div></td><td><span class="chip ${s[5]==='M'?'m':'d'}">${s[5]==='M'?'Makkan':'Madinan'}</span></td><td class="n">${s[7]}</td><td><div class="bar"><i style="width:${pct(m,s[7])}%"></i></div><span class="small muted">${m}/${s[7]}</span></td><td>${m<s[7]?`<button class="btn sm" data-know="${s[0]}">I know it</button>`:'<span class="chip d">complete</span>'}</td></tr>`}).join('')}
+  </tbody></table></div></div>
+  <div class="card"><h2>Settings</h2>
+   <div class="row">
+    <label class="field">New lines a day<select id="sd">${[3,5,7,10,15,30].map(n=>`<option ${n===S.set.daily?'selected':''} value="${n}">${n}${n===15?' (one page)':n===30?' (two pages)':''}</option>`).join('')}</select></label>
+    <label class="field">Path<select id="so"><option value="back" ${S.set.order==='back'?'selected':''}>al-Fātiḥah, then an-Nās → al-Baqarah</option><option value="fwd" ${S.set.order==='fwd'?'selected':''}>Mushaf order</option></select></label>
+    <label class="field">Review cap a day<select id="sr">${[50,100,150,300,1000].map(n=>`<option ${n===S.set.rev?'selected':''}>${n}</option>`).join('')}</select></label>
+    <label class="field">New words a day<select id="sw">${[5,10,15,20,30].map(n=>`<option ${n===S.set.lexNew?'selected':''}>${n}</option>`).join('')}</select></label>
+    <label class="field">Translation<select id="st">${TRO().map(k=>`<option value="${k}" ${k===trSel()?'selected':''}>${TRN[k]}</option>`).join('')}</select></label>
+   </div>
+   <div class="small muted">Progress is saved in this browser only. Copy a backup now and then, and paste it back to restore or move devices.</div>
+   <div class="row"><button class="btn sm" id="bk">Copy backup</button><button class="btn sm" id="rs2">Restore from backup</button><button class="btn sm ghost" id="rz">Reset everything…</button></div>
+   <div id="bkbox"></div>
+  </div>
+  <div class="card small muted"><h3>Sources</h3>
+   <div>Quran text: Uthmani Ḥafṣ text from the Quran.com API (King Fahd Complex script), checked against the <a href="https://tanzil.net" target="_blank" rel="noopener">Tanzil</a> Uthmani text 1.1 (CC BY 3.0). Page and line layout: the 604-page Madani mushaf, via Quran.com.</div>
+${PUB?`   <div>Translations: Saheeh International (via Tanzil and Quran.com, for non-commercial use with credit); Pickthall; Yusuf Ali; Hilali &amp; Khan (King Fahd Complex). Word-by-word glosses and transliteration: Quran.com.</div>
+   <div>Tafsīr: al-Muyassar (King Fahd Complex) and as-Saʿdī, via Quran.com. This public copy leaves out the copyrighted translations and commentary that the private edition carries.</div>
+   <div>Grammar, roots and lemmas: the <a href="https://corpus.quran.com" target="_blank" rel="noopener">Quranic Arabic Corpus</a> 0.4 (GPL), in the corrected edition by mustafa0x. Recitation: ʿAbd al-Bāsiṭ ʿAbd aṣ-Ṣamad (murattal), streamed from everyayah.com.</div>
+`:`   <div>Translations: Saheeh International (via Tanzil and Quran.com); M.A.S. Abdel Haleem, Taqi Usmani, Pickthall, Yusuf Ali, Bridges (Fadel Soliman), Hilali &amp; Khan via Quran.com. Word-by-word glosses and transliteration: Quran.com.</div>
+   <div>Tafsīr: al-Muyassar (King Fahd Complex), as-Saʿdī, Ibn Kathīr abridged (Darussalam), all via Quran.com. Sūrah introductions: Quran.com chapter info.</div>
+   <div>Grammar, roots and lemmas: the <a href="https://corpus.quran.com" target="_blank" rel="noopener">Quranic Arabic Corpus</a> 0.4 (GPL), in the corrected edition by mustafa0x. Recitation: ʿAbd al-Bāsiṭ ʿAbd aṣ-Ṣamad (murattal), from everyayah.com.</div>
+`}   <div>Nuh Ha Mim Keller’s <i>The Quran Beheld</i> is not included: it has no licensed digital text.</div>
+  </div>`;
+  V().querySelectorAll('[data-know]').forEach(b=>b.onclick=()=>{const s=+b.dataset.know;markKnown(range(SI[s],SI[s]+D.surahs[s-1][7]-1));R.progress();toast(`${sName(s)} added to review`)});
+  $('#sd').onchange=e=>{S.set.daily=+e.target.value;save()};
+  $('#so').onchange=e=>{S.set.order=e.target.value;save();buildOrder()};
+  $('#sr').onchange=e=>{S.set.rev=+e.target.value;save()};
+  $('#sw').onchange=e=>{S.set.lexNew=+e.target.value;save()};
+  $('#st').onchange=e=>{S.set.tr=+e.target.value;save()};
+  $('#bk').onclick=()=>{const t=JSON.stringify(S);$('#bkbox').innerHTML=`<textarea id="bkt" rows="4" style="width:100%;margin-top:8px" readonly>${esc(t)}</textarea>`;const ta=$('#bkt');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Backup copied')).catch(()=>{ta.select();toast('Select all and copy the text')})};
+  $('#rs2').onclick=()=>{$('#bkbox').innerHTML=`<textarea id="rst" rows="4" style="width:100%;margin-top:8px" placeholder="Paste a backup here"></textarea><button class="btn sm pri" id="rsg">Restore</button>`;$('#rsg').onclick=()=>{try{const o=JSON.parse($('#rst').value);if(!o.ay||!o.set)throw 0;S=o;save();buildOrder();nav();toast('Restored');R.progress()}catch(e){toast('That text is not a Sabaq backup')}}};
+  $('#rz').onclick=()=>{$('#bkbox').innerHTML=`<div class="note">This erases every memorised āyah, word and score in this browser. <button class="btn sm" id="rzy" style="border-color:var(--bad);color:var(--bad)">Erase everything</button> <button class="btn sm ghost" id="rzn">Keep it</button></div>`;$('#rzy').onclick=()=>{S={ay:{},lex:{},gram:{},days:{},games:{},set:S.set};save();nav();R.progress();toast('Reset')};$('#rzn').onclick=()=>$('#bkbox').innerHTML=''};
+};
+
+/* ========== boot ========== */
+(async()=>{
+  try{
+    [D,LESSONS,SIM]=await Promise.all([J('data/core.json'),J('data/lessons.json'),J('data/sim.json')]);
+    D.ayahs.forEach((a,i)=>{KEY[a[0]+':'+a[1]]=i;if(a[1]===1)SI[a[0]]=i});
+    buildOrder();nav();
+    const h=(location.hash||'').slice(1);go(VIEWS.some(v=>v[0]===h)?h:'today');
+  }catch(e){V().innerHTML=`<div class="card"><h2>The mushaf data did not load</h2><div class="muted">${esc(e.message)}. Reload the page; if it persists, the data files are missing from this copy.</div></div>`}
+})();
+</script>
+
+</body>
+</html>

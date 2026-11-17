@@ -1,0 +1,663 @@
+[
+ {
+  "id": "L01",
+  "unit": "Reading the mushaf",
+  "title": "Letters, vowels and the marks of the mushaf",
+  "ar": "الحروف والحركات",
+  "drill": "gloss",
+  "q": {
+   "pos": "N",
+   "juz": 30
+  },
+  "body": [
+   "Arabic is written right to left in 28 consonant letters. Most letters join to the next one, so a letter changes shape at the start, middle or end of a word. Six letters never join forward: ا د ذ ر ز و.",
+   "Short vowels are written as marks. Fatḥa (a line above) gives a, kasra (a line below) gives i, and ḍamma (a small wāw above) gives u. A sukūn (a small circle) means the letter has no vowel. A shadda (a small w-shape) doubles the letter.",
+   "Tanwīn is a doubled vowel mark at the end of an indefinite noun, read -an, -in or -un. The Madani mushaf you will memorise also uses special marks. The dagger alif (ـٰـ) is a long ā that is not written as a full letter. The waṣla alif (ٱ) is silent when you join it to the word before. Small high letters and the pause marks (ۘ ۖ ۗ ۚ ۛ ۙ) tell you where you may stop."
+  ],
+  "points": [
+   "Fatḥa a, kasra i, ḍamma u, sukūn no vowel, shadda doubles the letter.",
+   "Tanwīn (ـً ـٍ ـٌ) marks an indefinite noun.",
+   "ٱ (waṣla) is silent when joined to the word before; ـٰ is a long ā.",
+   "Pause marks: ۘ (mīm) you must stop, ۖ (ṣlā) better to continue, ۗ (qlā) better to stop, ۚ (jīm) either, ۛ (three dots) stop at one of the pair, never both; ۙ (lā) do not stop."
+  ]
+ },
+ {
+  "id": "L02",
+  "unit": "Building blocks",
+  "title": "Noun, verb and particle",
+  "ar": "الاسم والفعل والحرف",
+  "drill": "pos3",
+  "q": {
+   "juz": 30
+  },
+  "body": [
+   "Arabic grammarians divide every word into three kinds. An ism (noun) names a thing or quality, and includes adjectives, pronouns and participles. A fiʿl (verb) shows an action tied to a time. A ḥarf (particle) only has meaning together with other words: prepositions, conjunctions, negatives and the like.",
+   "Signs of a noun: it can take al-, tanwīn, a preposition before it, or the genitive case. Signs of a verb: it can take qad, sa- or sawfa, or the past-tense endings such as -tu and -at. A particle takes none of these."
+  ],
+  "points": [
+   "Ism: takes al-, tanwīn, a preposition or the genitive case.",
+   "Fiʿl: takes qad, sa-, sawfa, -tu, -at.",
+   "Ḥarf: takes none of the signs of a noun or a verb.",
+   "Pronouns, participles and maṣdars are all nouns."
+  ]
+ },
+ {
+  "id": "L03",
+  "unit": "Building blocks",
+  "title": "Roots and patterns",
+  "ar": "الجذر والوزن",
+  "drill": "root",
+  "q": {
+   "hasRoot": true,
+   "juz": 30
+  },
+  "body": [
+   "Most Arabic words come from a root of three consonants that carries a core meaning. ك ت ب is about writing, so it gives kataba (he wrote), kitāb (book), kātib (writer) and maktūb (written).",
+   "A pattern (wazn) pours the root into a fixed shape, and each shape adds its own kind of meaning. Grammarians write patterns with ف ع ل standing for the three root letters: fāʿil is the doer, mafʿūl the thing done, and fiʿāl often a noun.",
+   "Learn a root once and you can read its family across the whole Quran. ر ح م gives raḥmān, raḥīm, raḥma and arḥām; ع ل م gives ʿilm, ʿalīm, ʿālamīn and ʿallama. The Roots tab shows every family with its count."
+  ],
+  "points": [
+   "Root = the consonants that carry the meaning; pattern = the shape that adds the role.",
+   "Patterns are written with ف ع ل: fāʿil, mafʿūl, faʿīl, fiʿāl…",
+   "To find the root, strip prefixes, suffixes and the pattern's added letters (ا، و، ي، م، ت، ن، س).",
+   "The Roots tab lists every root in the Quran with its whole family."
+  ]
+ },
+ {
+  "id": "L04",
+  "unit": "Building blocks",
+  "title": "The definite article and tanwīn",
+  "ar": "التعريف والتنكير",
+  "drill": "def",
+  "q": {
+   "pos": "N",
+   "juz": 30
+  },
+  "body": [
+   "al- (ٱلْ) makes a noun definite, like 'the'. Before a 'sun letter' (ت ث د ذ ر ز س ش ص ض ط ظ ل ن) the lām is not pronounced and the next letter is doubled, as in ٱلرَّحْمَـٰنِ ar-raḥmān. Before a 'moon letter' the lām is heard, as in ٱلْحَمْدُ al-ḥamd.",
+   "A noun with tanwīn is indefinite, like 'a/an': كِتَـٰبٌ 'a book', هُدًى 'a guidance'. A noun is also definite when it is a proper name, a pronoun, or the first term of an iḍāfa (Lesson 9)."
+  ],
+  "points": [
+   "ٱلْ = definite; tanwīn = indefinite.",
+   "Sun letters absorb the lām of al-: ٱلشَّمْسِ ash-shams.",
+   "Moon letters keep it: ٱلْقَمَرِ al-qamar.",
+   "A noun never has both al- and tanwīn."
+  ]
+ },
+ {
+  "id": "L05",
+  "unit": "Building blocks",
+  "title": "Gender",
+  "ar": "المذكر والمؤنث",
+  "drill": "gender",
+  "q": {
+   "pos": "N",
+   "notTags": [
+    "PRON",
+    "PN",
+    "DEM",
+    "REL"
+   ],
+   "juz": 30
+  },
+  "body": [
+   "Every Arabic noun is masculine or feminine, and verbs, adjectives and pronouns agree with it. The commonest feminine sign is tāʾ marbūṭa (ة), as in رَحْمَة raḥma (mercy) and جَنَّة janna (garden). Others are a final alif maqṣūra (ـى) or alif mamdūda (ـاء), as in ذِكْرَى dhikrā.",
+   "Some nouns are feminine without any sign: أَرْض arḍ (earth), شَمْس shams (sun), نَفْس nafs (soul), نَار nār (fire). Broken plurals of things are treated as feminine singular for agreement."
+  ],
+  "points": [
+   "ة, ـى and ـاء usually mark the feminine.",
+   "Feminine with no sign: arḍ, shams, nafs, nār, dār, yad.",
+   "Adjectives agree in gender with their noun.",
+   "Plurals of non-humans take feminine singular agreement."
+  ]
+ },
+ {
+  "id": "L06",
+  "unit": "Building blocks",
+  "title": "Singular, dual and plural",
+  "ar": "المفرد والمثنى والجمع",
+  "drill": "number",
+  "q": {
+   "pos": "N",
+   "notTags": [
+    "PRON",
+    "PN",
+    "DEM",
+    "REL"
+   ],
+   "juz": 30
+  },
+  "body": [
+   "Arabic counts in three numbers. The dual adds ـَانِ in the nominative or ـَيْنِ otherwise: جَنَّتَانِ 'two gardens'. The sound masculine plural adds ـُونَ or ـِينَ: مُؤْمِنُونَ, مُتَّقِينَ. The sound feminine plural adds ـَات: مُؤْمِنَات.",
+   "Most plurals are 'broken': the vowels inside the word change, as in كِتَاب → كُتُب and رَسُول → رُسُل. They have to be learned word by word, which is why the vocabulary trainer shows them as separate lemmas."
+  ],
+  "points": [
+   "Dual: ـَانِ (nominative) / ـَيْنِ (accusative and genitive).",
+   "Sound m. plural: ـُونَ / ـِينَ. Sound f. plural: ـَات.",
+   "Broken plurals change the inside of the word: قَلْب → قُلُوب.",
+   "Sūrat ar-Raḥmān's refrain ends in a dual: rabbikumā, tukadhdhibān."
+  ]
+ },
+ {
+  "id": "L07",
+  "unit": "Case",
+  "title": "The three cases",
+  "ar": "الإعراب: الرفع والنصب والجر",
+  "drill": "case",
+  "q": {
+   "pos": "N",
+   "hasCase": true,
+   "juz": 30
+  },
+  "body": [
+   "A noun's ending changes with its job in the sentence. Nominative (marfūʿ) usually ends in -u: it is the subject or the predicate. Accusative (manṣūb) usually ends in -a: it is an object, or follows inna and her sisters. Genitive (majrūr) usually ends in -i: it follows a preposition or is the second term of an iḍāfa.",
+   "Duals and sound masculine plurals show case with letters instead: -ūna or -āni for the nominative, -īna or -ayni for the other two. Some nouns (mamnūʿ min aṣ-ṣarf, such as many proper names) take -a in the genitive and no tanwīn.",
+   "The case is how you check that you understand an āyah. In ٱلْحَمْدُ لِلَّهِ, al-ḥamdu is nominative because it is the subject, and allāhi is genitive because it follows li-."
+  ],
+  "points": [
+   "Marfūʿ -u / -ūna / -āni: subject, predicate.",
+   "Manṣūb -a / -īna / -ayni: object; noun after inna; predicate of kāna.",
+   "Majrūr -i / -īna / -ayni: after a preposition; second term of an iḍāfa.",
+   "Diptotes take -a for the genitive: إِلَىٰٓ إِبْرَٰهِيمَ (2:136)."
+  ]
+ },
+ {
+  "id": "L08",
+  "unit": "Case",
+  "title": "Prepositions",
+  "ar": "حروف الجر",
+  "drill": "gloss",
+  "q": {
+   "pos": "P",
+   "tags": [
+    "P"
+   ],
+   "juz": 30
+  },
+  "body": [
+   "A preposition (ḥarf jarr) always puts the noun after it in the genitive. Some are separate words: مِنْ min (from), إِلَى ilā (to), عَنْ ʿan (away from), عَلَى ʿalā (on), فِي fī (in). Others are one letter joined to the noun: بِـ bi- (with or by), لِـ li- (for or belonging to), كَـ ka- (like). وَ wa- is also used to swear an oath, as in وَٱلْعَصْرِ 'by the time'.",
+   "A preposition and its noun (jārr wa-majrūr) often come before what they describe, for emphasis or rhyme: لِلَّهِ ٱلْأَمْرُ 'to God belongs the command'."
+  ],
+  "points": [
+   "min, ilā, ʿan, ʿalā, fī, bi-, li-, ka-, ḥattā, wa- of oath.",
+   "The noun after a preposition is always majrūr.",
+   "li- + al- is written لِلْ, so lil-muttaqīn.",
+   "An oath with wa- or ta-: وَٱلشَّمْسِ, تَٱللَّهِ."
+  ]
+ },
+ {
+  "id": "L09",
+  "unit": "Case",
+  "title": "The possessive construction (iḍāfa)",
+  "ar": "الإضافة",
+  "drill": "case",
+  "q": {
+   "pos": "N",
+   "idafa": true,
+   "juz": 30
+  },
+  "ex": [
+   "1:1:1",
+   "1:2:3",
+   "1:4:2",
+   "114:1:3",
+   "110:2:5"
+  ],
+  "body": [
+   "Two nouns side by side can mean 'the X of Y': رَبِّ ٱلْعَـٰلَمِينَ 'Lord of the worlds', يَوْمِ ٱلدِّينِ 'the Day of Judgement'. The first term (muḍāf) never takes al- or tanwīn. Its case depends on its job in the sentence. The second term (muḍāf ilayhi) is always genitive.",
+   "If the second term is definite, the whole phrase is definite. Attached pronouns work the same way: رَبُّكَ 'your Lord' is an iḍāfa of rabb and -ka."
+  ],
+  "points": [
+   "Muḍāf: no al-, no tanwīn, any case.",
+   "Muḍāf ilayhi: always genitive.",
+   "A chain is possible: بِسْمِ ٱللَّهِ, 'in the name of God'.",
+   "Noun + pronoun suffix is also an iḍāfa: كِتَـٰبَهُۥ."
+  ]
+ },
+ {
+  "id": "L10",
+  "unit": "Pronouns",
+  "title": "Attached pronouns",
+  "ar": "الضمائر المتصلة",
+  "drill": "pron",
+  "q": {
+   "affHas": "PRON",
+   "juz": 30
+  },
+  "body": [
+   "Pronoun endings attach to nouns (to mean 'my, your, his'), to verbs (as objects) and to prepositions. The core set is: ـِي/ـنِي (me, my), ـنَا (us, our), ـكَ (you m.), ـكِ (you f.), ـكُمْ (you m. pl.), ـهُ (him, his), ـهَا (her), ـهُمْ (them m.), ـهُنَّ (them f.), and the duals ـكُمَا and ـهُمَا.",
+   "After i or y, ـهُ, ـهُمْ and ـهُنَّ change to ـهِ, ـهِمْ and ـهِنَّ: فِيهِ, عَلَيْهِمْ. In the mushaf a small wāw or yāʾ after ـهُۥ marks a lengthened vowel."
+  ],
+  "points": [
+   "ـهُ his/him, ـهَا her, ـهُمْ their (m.), ـهُنَّ their (f.).",
+   "ـكَ your (m.), ـكُمْ your (pl.), ـنَا our, ـِي my.",
+   "ـنِي = me after verbs: ذَرْنِى (74:11), ٱدْعُونِىٓ (40:60).",
+   "ـهِ after i/y: بِهِۦ, عَلَيْهِ."
+  ]
+ },
+ {
+  "id": "L11",
+  "unit": "Pronouns",
+  "title": "Separate pronouns and demonstratives",
+  "ar": "الضمائر المنفصلة وأسماء الإشارة",
+  "drill": "gloss",
+  "q": {
+   "tagsAny": [
+    "PRON",
+    "DEM"
+   ],
+   "stemOnly": true
+  },
+  "body": [
+   "Separate pronouns stand alone: أَنَا I, نَحْنُ we, أَنتَ you (m.), أَنتُمْ you (pl.), هُوَ he, هِيَ she, هُمْ they. In the Quran, إِيَّاكَ is the object form that comes before the verb for emphasis, as in إِيَّاكَ نَعْبُدُ, 'You alone we worship'.",
+   "Demonstratives point. هَـٰذَا (this, m.), هَـٰذِهِۦ (this, f.), and هَـٰٓؤُلَآءِ (these) are near. ذَٰلِكَ (that, m.), تِلْكَ (that, f.), and أُو۟لَـٰٓئِكَ (those) are far. ذَٰلِكَ ٱلْكِتَـٰبُ 'that Book' uses the far form for the Quran to mark its rank."
+  ],
+  "points": [
+   "huwa, hiya, hum, hunna; anta, anti, antum; anā, naḥnu.",
+   "iyyā- + suffix = object put first: iyyāka naʿbudu.",
+   "Near: hādhā, hādhihi, hāʾulāʾi. Far: dhālika, tilka, ulāʾika.",
+   "Pronouns and demonstratives count as nouns (asmāʾ)."
+  ]
+ },
+ {
+  "id": "L12",
+  "unit": "Pronouns",
+  "title": "Relative pronouns",
+  "ar": "الأسماء الموصولة",
+  "drill": "gloss",
+  "q": {
+   "tagsAny": [
+    "REL"
+   ],
+   "stemOnly": true
+  },
+  "body": [
+   "Relative pronouns join a clause to a noun, like 'who' and 'which'. ٱلَّذِى (m. sing.), ٱلَّتِى (f. sing.), ٱلَّذِينَ (m. pl., the most frequent), and ٱللَّـٰتِى / ٱلَّـٰٓئِى (f. pl.). مَن means 'whoever, the one who' for persons, and مَا means 'what, that which' for things.",
+   "The clause after it (ṣila) must contain a pronoun that refers back. In ٱلَّذِينَ يُؤْمِنُونَ بِٱلْغَيْبِ 'those who believe in the unseen', the referring pronoun is the -ūna inside the verb."
+  ],
+  "points": [
+   "alladhī, allatī, alladhīna, allātī.",
+   "man = who (persons), mā = what (things).",
+   "Alladhīna is among the most frequent words in the Quran, so learn it early.",
+   "The clause after it needs a pronoun pointing back."
+  ]
+ },
+ {
+  "id": "L13",
+  "unit": "Sentences",
+  "title": "The nominal sentence",
+  "ar": "الجملة الاسمية: المبتدأ والخبر",
+  "drill": "gloss",
+  "q": {
+   "pos": "N",
+   "tags": [
+    "NOM"
+   ],
+   "juz": 30
+  },
+  "ex": [
+   "1:2:1",
+   "112:1:2",
+   "112:1:3",
+   "112:2:1",
+   "112:2:2"
+  ],
+  "body": [
+   "A sentence that starts with a noun is nominal. Its subject (mubtadaʾ) and predicate (khabar) are both nominative, and Arabic needs no word for 'is'. ٱللَّهُ ٱلصَّمَدُ means 'God is the Eternal Refuge'. ٱلْحَمْدُ لِلَّهِ means 'praise is to God'.",
+   "The predicate can be a noun, a prepositional phrase (لِلَّهِ) or a whole clause. When the predicate is a prepositional phrase and the subject is indefinite, the phrase comes first: لَهُمْ عَذَابٌ 'for them is a punishment'."
+  ],
+  "points": [
+   "Mubtadaʾ + khabar, both marfūʿ, with no verb 'to be'.",
+   "The khabar can be a word, a jārr-majrūr phrase or a sentence.",
+   "Indefinite subject → predicate first: لَهُمْ عَذَابٌ أَلِيمٌ.",
+   "Kāna and inna change the cases (Lesson 23)."
+  ]
+ },
+ {
+  "id": "L14",
+  "unit": "Verbs",
+  "title": "The past tense",
+  "ar": "الفعل الماضي",
+  "drill": "pgn",
+  "q": {
+   "pos": "V",
+   "tags": [
+    "PERF"
+   ],
+   "juz": 30
+  },
+  "body": [
+   "The past (māḍī) is the base form of the verb: فَعَلَ 'he did'. Person is shown by endings: فَعَلَتْ she did, فَعَلُوا۟ they did, فَعَلْتَ you (m.) did, فَعَلْتُمْ you (pl.) did, فَعَلْتُ I did, فَعَلْنَا we did.",
+   "The Quran often uses the past for events that are certain but still to come, especially the Hour: إِذَا ٱلسَّمَآءُ ٱنفَطَرَتْ 'when the sky is split open'. After idhā, read the past as a future."
+  ],
+  "points": [
+   "Base: faʿala (he). -at she, -ū they, -ta you, -tum you all, -tu I, -nā we.",
+   "A past verb after idhā or in a condition often means the future.",
+   "Qad + past = 'has already': قَدْ أَفْلَحَ.",
+   "The Quran's most frequent verb is qāla, 'he said'."
+  ]
+ },
+ {
+  "id": "L15",
+  "unit": "Verbs",
+  "title": "The present tense",
+  "ar": "الفعل المضارع",
+  "drill": "pgn",
+  "q": {
+   "pos": "V",
+   "tags": [
+    "IMPF"
+   ],
+   "juz": 30
+  },
+  "body": [
+   "The present (muḍāriʿ) adds a prefix from the letters أ ن ي ت. يَفْعَلُ he does, تَفْعَلُ she does or you do, أَفْعَلُ I do, نَفْعَلُ we do. Plurals add ـُونَ: يَفْعَلُونَ they do, تَفْعَلُونَ you all do.",
+   "It covers present and future, and sa- or sawfa make the future explicit: سَيَعْلَمُونَ 'they will come to know'. The very frequent closing of āyāt, لَعَلَّكُمْ تَتَّقُونَ, uses it: 'so that you may be mindful'."
+  ],
+  "points": [
+   "Prefixes: ya- he/they, ta- she/you, a- I, na- we.",
+   "-ūna for the plural, -āni for the dual, -īna for 'you (f. sing.)'.",
+   "sa- / sawfa = will.",
+   "The default ending is -u (indicative); Lesson 17 explains -a and the dropped endings."
+  ]
+ },
+ {
+  "id": "L16",
+  "unit": "Verbs",
+  "title": "Commands and prohibitions",
+  "ar": "الأمر والنهي",
+  "drill": "tense",
+  "q": {
+   "pos": "V",
+   "juz": 30
+  },
+  "body": [
+   "The command (amr) is formed from the present by dropping the prefix and adding a helping vowel when needed: تَقْرَأُ → ٱقْرَأْ 'Read!'. قُلْ 'Say!' is the most frequent command in the Quran. Plural commands end in ـُوا۟: ٱعْبُدُوا۟.",
+   "A prohibition is lā + the jussive present: لَا تَحْزَنْ 'do not grieve'. Many duʿāʾs in the Quran are commands addressed to God in humility: رَبِّ ٱغْفِرْ لِى."
+  ],
+  "points": [
+   "Amr: drop the prefix, keep sukūn: ٱقْرَأْ, قُلْ, ٱصْبِرْ.",
+   "Plural amr: ٱعْبُدُوا۟, ٱتَّقُوا۟.",
+   "Prohibition: lā + majzūm: لَا تَقْرَبُوا۟.",
+   "Qul ('Say') opens five sūrahs."
+  ]
+ },
+ {
+  "id": "L17",
+  "unit": "Verbs",
+  "title": "Moods of the present",
+  "ar": "المرفوع والمنصوب والمجزوم",
+  "drill": "mood",
+  "q": {
+   "pos": "V",
+   "tags": [
+    "IMPF"
+   ]
+  },
+  "body": [
+   "The present tense has three moods. The indicative (marfūʿ, -u, -ūna) is the default. The subjunctive (manṣūb, -a, and the -na of plurals drops) follows an (to), lan (will never), li- or kay (so that), and ḥattā (until): لَن تَرَىٰنِى 'you will never see Me'.",
+   "The jussive (majzūm, sukūn, plurals drop the -na) follows lam (did not), lā of prohibition, the li- of command, and the verbs of a condition: لَمْ يَلِدْ وَلَمْ يُولَدْ 'He did not beget and was not begotten'."
+  ],
+  "points": [
+   "Marfūʿ: yafʿalu / yafʿalūna.",
+   "Manṣūb after an, lan, li-, kay, ḥattā: yafʿala / yafʿalū.",
+   "Majzūm after lam, lā (prohibition), in (if): yafʿal / yafʿalū.",
+   "Lam + jussive = a past negative: lam yalid."
+  ]
+ },
+ {
+  "id": "L18",
+  "unit": "Verbs",
+  "title": "The passive voice",
+  "ar": "المبني للمجهول",
+  "drill": "voice",
+  "q": {
+   "pos": "V"
+  },
+  "body": [
+   "The passive hides the doer. In the past, the first vowel becomes u and the second i: نَزَلَ → أُنزِلَ 'was sent down'. In the present, the prefix takes u and the vowel before the last letter becomes a: يُنفَخُ 'is blown'.",
+   "The Quran uses the passive when the doer is obvious (God) or beside the point: وَإِذَا ٱلْجِبَالُ سُيِّرَتْ 'and when the mountains are set in motion'. The noun that would have been the object becomes the subject and takes the nominative (nāʾib al-fāʿil)."
+  ],
+  "points": [
+   "Past passive: fuʿila (u…i): خُلِقَ, قُتِلَ, أُنزِلَ.",
+   "Present passive: yufʿalu (u…a): يُنفَخُ, يُقَالُ.",
+   "The former object becomes marfūʿ.",
+   "Juz ʿAmma's scenes of the Hour use many passives: سُجِّرَتْ, نُشِرَتْ."
+  ]
+ },
+ {
+  "id": "L19",
+  "unit": "Verb forms",
+  "title": "Derived forms II to IV",
+  "ar": "الأوزان: فعّل، فاعل، أفعل",
+  "drill": "form",
+  "q": {
+   "pos": "V",
+   "tagsAny": [
+    "VF:2",
+    "VF:3",
+    "VF:4"
+   ]
+  },
+  "body": [
+   "From one root, Arabic builds up to ten verb forms. Form I is the simple verb, faʿala. Form II, faʿʿala, doubles the middle letter and often makes the action intensive or causative: ʿalima 'he knew' → ʿallama 'he taught'. Form III, fāʿala, adds an ā and often means doing something with or to someone: jāhada 'he strove'.",
+   "Form IV, afʿala, adds an initial a- and usually makes the verb causative: nazala 'came down' → anzala 'sent down'; āmana 'believed' (from a-m-n). Its present has u on the prefix: yuʾminu, yunzilu."
+  ],
+  "points": [
+   "II faʿʿala / yufaʿʿilu: ʿallama, kadhdhaba, nazzala.",
+   "III fāʿala / yufāʿilu: jāhada, qātala.",
+   "IV afʿala / yufʿilu: anzala, aslama, āmana.",
+   "Forms II to IV have u on the present prefix: yu-."
+  ]
+ },
+ {
+  "id": "L20",
+  "unit": "Verb forms",
+  "title": "Derived forms V to X",
+  "ar": "الأوزان: تفعّل … استفعل",
+  "drill": "form",
+  "q": {
+   "pos": "V",
+   "tagsAny": [
+    "VF:5",
+    "VF:6",
+    "VF:7",
+    "VF:8",
+    "VF:10"
+   ]
+  },
+  "body": [
+   "Form V, tafaʿʿala, is often reflexive of II: tadhakkara 'he took heed'. Form VI, tafāʿala, is often mutual: tasāʾala 'they asked one another'. Form VII, infaʿala, is often passive in meaning: infaṭara 'was split'.",
+   "Form VIII, iftaʿala, puts a t after the first root letter: ittaqā 'was mindful' (from w-q-y), ikhtalafa 'differed'. Form X, istafʿala, often means seeking: istaghfara 'sought forgiveness', istaʿāna 'sought help' (as in nastaʿīn, Al-Fātiḥa)."
+  ],
+  "points": [
+   "V tafaʿʿala (tadhakkara), VI tafāʿala (tasāʾala).",
+   "VII infaʿala (infaṭara, inshaqqa): passive or reflexive.",
+   "VIII iftaʿala (ittaqā, ikhtalafa, ihtadā).",
+   "X istafʿala (istaghfara, istaʿāna, istakbara): seeking or deeming."
+  ]
+ },
+ {
+  "id": "L21",
+  "unit": "Derived nouns",
+  "title": "Participles",
+  "ar": "اسم الفاعل واسم المفعول",
+  "drill": "pcpl",
+  "q": {
+   "pos": "N",
+   "tagsAny": [
+    "ACT_PCPL",
+    "PASS_PCPL"
+   ]
+  },
+  "body": [
+   "The active participle (ism fāʿil) names the doer. In Form I it is fāʿil: kāfir (one who covers or denies), ʿālim (one who knows), ṣābir (patient). In the derived forms it begins with mu- and has i before the last letter: muʾmin (believer, IV), muttaqī (one who is mindful, VIII), muslim (IV).",
+   "The passive participle (ism mafʿūl) names what is acted on. In Form I it is mafʿūl: maghḍūb (one on whom anger falls), maktūb (written). In the derived forms it is mu- with a before the last letter: munzal (sent down)."
+  ],
+  "points": [
+   "Form I: fāʿil (doer) / mafʿūl (done to).",
+   "Derived forms: mu-…-i- (doer) / mu-…-a- (done to): mukram vs mukrim.",
+   "Participles are nouns: they take case, al- and tanwīn.",
+   "Al-maghḍūbi ʿalayhim and aḍ-ḍāllīn: a passive then an active participle (1:7)."
+  ]
+ },
+ {
+  "id": "L22",
+  "unit": "Derived nouns",
+  "title": "The verbal noun",
+  "ar": "المصدر",
+  "drill": "gloss",
+  "q": {
+   "pos": "N",
+   "tags": [
+    "VN"
+   ]
+  },
+  "body": [
+   "The maṣdar names the action itself: ʿilm (knowing, knowledge), ṣabr (patience), hudā (guidance), raḥma (mercy). In Form I its patterns vary and must be learned. In the derived forms they are regular: II tafʿīl (tanzīl, 'sending down'), III mufāʿala or fiʿāl (jihād), IV ifʿāl (islām, īmān), VIII iftiʿāl, X istifʿāl (istighfār).",
+   "Many of the Quran's key terms are maṣdars: īmān, islām, iḥsān, taqwā, ṣalāh, zakāh."
+  ],
+  "points": [
+   "Form I maṣdar varies: ʿilm, ṣabr, dhikr, rizq.",
+   "II tafʿīl, IV ifʿāl, V tafaʿʿul, VIII iftiʿāl, X istifʿāl.",
+   "īmān and islām are Form IV maṣdars of āmana and aslama.",
+   "A maṣdar after its own verb gives emphasis: كَلَّمَ … تَكْلِيمًا."
+  ]
+ },
+ {
+  "id": "L23",
+  "unit": "Sentences",
+  "title": "Inna, kāna and their sisters",
+  "ar": "إنّ وكان وأخواتهما",
+  "drill": "case",
+  "q": {
+   "pos": "N",
+   "afterFam": true
+  },
+  "body": [
+   "Inna ('indeed') and her sisters (anna 'that', lākinna 'but', kaʾanna 'as if', layta 'if only', laʿalla 'perhaps, so that') enter a nominal sentence and make the subject accusative while the predicate stays nominative: إِنَّ ٱللَّهَ غَفُورٌ رَّحِيمٌ.",
+   "Kāna ('was') and her sisters (aṣbaḥa, ẓalla, ṣāra, laysa 'is not', mā zāla 'still') do the opposite. The subject stays nominative and the predicate becomes accusative: وَكَانَ ٱللَّهُ عَلِيمًا حَكِيمًا, 'and God is ever Knowing, Wise'. Commentators read kāna here as 'ever so', not merely 'was'."
+  ],
+  "points": [
+   "Inna + ism manṣūb + khabar marfūʿ.",
+   "Kāna + ism marfūʿ + khabar manṣūb.",
+   "Sisters of inna: anna, lākinna, kaʾanna, layta, laʿalla.",
+   "Sisters of kāna: aṣbaḥa, amsā, ẓalla, bāta, ṣāra, laysa, mā zāla."
+  ]
+ },
+ {
+  "id": "L24",
+  "unit": "Particles",
+  "title": "Negation",
+  "ar": "أدوات النفي",
+  "drill": "gloss",
+  "q": {
+   "tags": [
+    "NEG"
+   ],
+   "stemOnly": true
+  },
+  "body": [
+   "Arabic has a negative for each time and type. lā + present = does not: لَا يَعْلَمُونَ. mā + past = did not: مَا وَدَّعَكَ رَبُّكَ. lam + jussive = did not (very common): لَمْ يَلِدْ. lan + subjunctive = will never: لَن تَنَالُوا۟.",
+   "laysa negates a nominal sentence ('is not'): لَيْسَ لَهَا مِن دُونِ ٱللَّهِ كَاشِفَةٌ. in + illā means 'only' or 'nothing but': إِنْ هُوَ إِلَّا ذِكْرٌ 'it is nothing but a reminder'."
+  ],
+  "points": [
+   "lā + muḍāriʿ = does not; lā + jussive = do not!",
+   "mā + māḍī = did not; lam + jussive = did not.",
+   "lan + manṣūb = will never.",
+   "in … illā / mā … illā = nothing but."
+  ]
+ },
+ {
+  "id": "L25",
+  "unit": "Particles",
+  "title": "Conditions and time",
+  "ar": "الشرط والظرف",
+  "drill": "gloss",
+  "q": {
+   "tagsAny": [
+    "COND",
+    "T"
+   ],
+   "stemOnly": true
+  },
+  "body": [
+   "in ('if') and man ('whoever') introduce a condition, and both verbs go into the jussive: وَمَن يَتَوَكَّلْ عَلَى ٱللَّهِ فَهُوَ حَسْبُهُۥ. law means 'if (it were the case)', for unreal conditions. The answer clause often begins with fa- or la-.",
+   "idhā ('when') is a time word that looks to a certain future. Sūrahs 81, 82, 84 and 99 open with chains of idhā clauses about the Hour, whose answer comes after the chain. In Sūrah 81 it is عَلِمَتْ نَفْسٌ مَّآ أَحْضَرَتْ (81:14)."
+  ],
+  "points": [
+   "in / man + jussive … fa-answer.",
+   "law + past … la-answer: unreal condition.",
+   "idhā + past = 'when (it will happen)'.",
+   "idh = 'when (it happened)': the start of many stories."
+  ]
+ },
+ {
+  "id": "L26",
+  "unit": "Particles",
+  "title": "Call, oath and emphasis",
+  "ar": "النداء والقسم والتوكيد",
+  "drill": "gloss",
+  "q": {
+   "tagsAny": [
+    "VOC",
+    "EMPH",
+    "CERT"
+   ],
+   "stemOnly": true
+  },
+  "body": [
+   "yā calls someone: يَـٰٓأَيُّهَا ٱلنَّاسُ 'O people'. Before a noun with al-, Arabic inserts ayyuhā (masc.) or ayyatuhā (fem.): يَـٰٓأَيَّتُهَا ٱلنَّفْسُ ٱلْمُطْمَئِنَّةُ. Duʿāʾs often drop yā: رَبَّنَا 'our Lord'.",
+   "Emphasis stacks. inna at the start, la- on the predicate, qad (certainly) before the past, and the energetic -anna on a verb: لَتُسْـَٔلُنَّ 'you will surely be asked'. Oaths (wa-, ta-) are answered by an emphasised sentence: وَٱلْعَصْرِ ۝ إِنَّ ٱلْإِنسَـٰنَ لَفِى خُسْرٍ."
+  ],
+  "points": [
+   "yā ayyuhā + al-noun.",
+   "rabbanā = (O) our Lord, with yā dropped.",
+   "inna … la- = double emphasis.",
+   "Energetic ending -anna / -an: لَنَسْفَعًۢا."
+  ]
+ },
+ {
+  "id": "L27",
+  "unit": "Particles",
+  "title": "Joining: wa, fa and thumma",
+  "ar": "حروف العطف",
+  "drill": "gloss",
+  "q": {
+   "affHas": "CONJ",
+   "juz": 30
+  },
+  "body": [
+   "wa- 'and' joins with no sense of order. fa- 'so, then' joins with immediate sequence or result: فَصَلِّ لِرَبِّكَ وَٱنْحَرْ 'so pray to your Lord and sacrifice'. thumma 'then, later' adds a gap in time or rank. aw is 'or', bal 'rather'.",
+   "The Quran also uses wa- and fa- to begin a new sentence (resumption). The corpus tags these 'REM'. That is why so many āyāt start with و or ف."
+  ],
+  "points": [
+   "wa = and; fa = so / and then (right away); thumma = then (later).",
+   "aw = or; am = or (in questions); bal = rather.",
+   "Joined nouns share the same case.",
+   "fa- also opens the answer to a condition."
+  ]
+ },
+ {
+  "id": "L28",
+  "unit": "Verb forms",
+  "title": "Weak roots",
+  "ar": "الفعل المعتل",
+  "drill": "root",
+  "q": {
+   "pos": "V",
+   "weak": true,
+   "juz": 30
+  },
+  "body": [
+   "Roots containing و or ي (and sometimes hamza) change shape. Hollow verbs (middle weak) show a long ā in the past: qāla 'he said' from q-w-l, and in the present yaqūlu. With a consonant ending the vowel shortens: qultu, and the command is qul.",
+   "Defective verbs (last weak) end in a vowel: hadā 'he guided' (h-d-y), yahdī, and the command ihdi, as in ٱهْدِنَا. Assimilated verbs (first weak) drop the w in the present: waʿada → yaʿidu. Finding the hidden root is the key skill. The Roots drill trains it on your own āyāt."
+  ],
+  "points": [
+   "Hollow: qāla / yaqūlu / qul (q-w-l); jāʾa / yajīʾu (j-y-ʾ).",
+   "Defective: hadā / yahdī / ihdi (h-d-y); daʿā / yadʿū (d-ʿ-w).",
+   "Assimilated: waʿada / yaʿidu (w-ʿ-d).",
+   "When a letter seems missing, try و or ي in that slot."
+  ]
+ }
+]
