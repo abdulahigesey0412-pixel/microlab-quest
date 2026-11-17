@@ -1966,6 +1966,8 @@ BADGES.push(
  ["planner","Planner","Make an exam countdown plan",()=>!!S.plan],
  ["onplan","On track","Tick off 5 plan tasks",()=>!!S.plan&&Object.keys(S.plan.done).length>=5],
  ["covered","Every slide","Answer at least one question from every testable slide",()=>QB.concat(TFI).every(q=>!slideOf(q.id)||S.qs[q.id]||QB.concat(TFI).some(o=>o!==q&&slideOf(o.id)===slideOf(q.id)&&S.qs[o.id]))]);
+for(let i=BADGES.length-1;i>=0;i--){if(/^bossL[456]$/.test(BADGES[i][0]))BADGES.splice(i,1);}
+Object.keys(LECTURES).forEach(L=>{if(!BADGES.some(x=>x[0]==="boss_"+L))BADGES.push(["boss_"+L,LECTURES[L].boss+" slayer","Defeat the "+LECTURES[L].name+" boss",()=>!!S.boss[L]]);});
 renderCoach();renderCountdown();
 {const t=location.hash.slice(1);if(TABS.includes(t))show(t);}
 
