@@ -1268,7 +1268,7 @@ function renderNum(){const g=game,it=g.items[g.i];
   $("#gameArea").querySelectorAll(".bucket").forEach(b=>b.onclick=()=>{if(g.lock)return;g.lock=true;const ok=b.dataset.v===it[0];
     $("#gameArea").querySelectorAll(".bucket").forEach(x=>{x.disabled=true;if(x.dataset.v===it[0])x.classList.add("ok");else if(x===b)x.classList.add("no");});
     if(ok){g.score++;addXP(5);}
-    setTimeout(()=>{g.lock=false;if(g.i+1<12){g.i++;renderNum();}else endGame("num",g.score,12);},ok?600:1400);});}
+    setTimeout(()=>{if(game!==g)return;g.lock=false;if(g.i+1<12){g.i++;renderNum();}else endGame("num",g.score,12);},ok?600:1400);});}
 
 /* Blitz */
 const blitzItem=f=>{const it=tfItem(f),tr=it.q.a==="True";return [it.q.q,tr?1:0,tr?f.n:f.T];};
@@ -1293,7 +1293,7 @@ function renderSort(){const g=game,it=g.items[g.i];
   $("#gameArea").querySelectorAll(".bucket").forEach(b=>b.onclick=()=>{if(g.lock)return;g.lock=true;const ok=+b.dataset.k===it[1];
     $("#gameArea").querySelectorAll(".bucket").forEach(x=>{x.disabled=true;if(+x.dataset.k===it[1])x.classList.add("ok");else if(x===b)x.classList.add("no");});
     if(ok){g.score++;addXP(3);}else g.miss++;
-    setTimeout(()=>{g.lock=false;if(g.i+1<g.items.length){g.i++;renderSort();}else{if(!g.miss){S.games.sortPerfect=(S.games.sortPerfect||0)+1;save();}endGame("sort",g.score,g.items.length);}},ok?450:1300);});}
+    setTimeout(()=>{if(game!==g)return;g.lock=false;if(g.i+1<g.items.length){g.i++;renderSort();}else{if(!g.miss){S.games.sortPerfect=(S.games.sortPerfect||0)+1;save();}endGame("sort",g.score,g.items.length);}},ok?450:1300);});}
 
 function endGame(k,score,total,wrong){stopTimer();
   if(k==="num"||k==="blitz"){if(score>(S.games[k]||0)){S.games[k]=score;toast("New best!");}}
