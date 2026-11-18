@@ -13,7 +13,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Memorise the whole Quran, its meaning, tajwīd and Arabic, one bite-sized lesson at a time.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Mono:wght@400;600&family=Reem+Kufi:wght@500;700&family=Rubik:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri+Quran&family=IBM+Plex+Mono:wght@400;600&family=Reem+Kufi:wght@500;700&family=Rubik:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap">
 <style>
 /* Layout: a winding path of lesson stones down one column, a rail of five stations, and a full-screen lesson stage with a sticky answer bar. */
 :root{
@@ -116,7 +116,7 @@ h3{font:700 16px/1.3 var(--sans);margin:0}
 .wbw div{display:flex;flex-direction:column;align-items:center;padding:6px 8px;border:2px solid var(--line);border-radius:12px;min-width:64px;background:var(--panel);cursor:pointer}
 .wbw div:hover{border-color:var(--gold)}
 .wbw .wa{font-family:var(--quran);font-size:24px;line-height:1.7}
-.wbw .wt{font-size:11px;color:var(--muted);direction:ltr}
+.wbw .wt{font-size:12px;font-style:italic;color:var(--muted);direction:ltr;margin-top:4px}
 .wbw .wg{font-size:12px;direction:ltr;text-align:center;max-width:120px}
 .mark{background:var(--gold-soft);color:var(--gold-d);border-radius:6px;padding:0 .12em;box-shadow:0 0 0 2px var(--gold) inset}
 :root:not([data-theme="light"]) .mark{color:var(--gold)}
@@ -273,6 +273,26 @@ td.n{font-variant-numeric:tabular-nums;text-align:right}
 }
 @media (max-width:480px){.g2{grid-template-columns:minmax(0,1fr)} .grades{grid-template-columns:repeat(2,minmax(0,1fr))} h1{font-size:24px} .page{padding:14px 10px} .lex{font-size:48px} .stage h2{font-size:20px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+
+/* transliteration */
+.tl{font-style:italic;color:var(--muted);font-size:16px;line-height:1.5;direction:ltr;text-align:left}
+.tlbig{text-align:center;font-style:italic;color:var(--muted);font-size:20px}
+.tli{font-style:italic;color:var(--muted);font-size:.92em}
+.tln{font-size:.82em;color:var(--muted);font-weight:600}
+.rootbox{display:inline-flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.tile .ttl,.opt .otl{display:block;font:italic 400 13px/1.3 var(--sans);color:var(--muted);direction:ltr;text-align:center;margin-top:4px}
+.opt.arq .otl{text-align:right}
+.opt.big .otl{text-align:center;font-size:14px}
+.letters{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px}
+.lcard{background:var(--panel);border:2px solid var(--line);border-radius:var(--r);padding:14px;display:flex;flex-direction:column;gap:6px}
+.lbig{font-family:var(--quran);font-size:50px;line-height:96px;height:96px;text-align:center;color:var(--lapis);overflow:hidden}
+.lsound{font-size:14px}
+.lforms{display:flex;justify-content:space-between;font-family:var(--quran);font-size:28px;direction:ltr;background:var(--sunk);border-radius:10px;padding:2px 10px}
+.lex-ex{all:unset;cursor:pointer;font-size:13px;border-top:1px dashed var(--line);padding-top:6px}
+.lex-ex:hover{color:var(--lapis)}
+.lex-ex .ar{font-size:20px}
+.lcap{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);padding:0 10px;text-transform:uppercase;letter-spacing:.06em}
+.wrap .wrap{margin:0;max-width:none;width:100%;min-width:0}
 </style>
 
 </head>
@@ -427,7 +447,7 @@ function parseWord(d){
 function affName(a){const t=a[1].slice(1).split(' ');return (a[1][0]==='+'?'prefix ':'suffix ')+a[0]+' = '+t.map(x=>TAGN[x]||pgnName(x)||x).filter(Boolean).join(', ')}
 async function wbwHTML(i){
   const ws=await W(i),ar=A(i)[7];
-  return `<div class="wbw">${ws.map((d,k)=>`<div data-wi="${i}" data-wk="${k}"><span class="wa">${esc(ar[k])}</span><span class="wt">${esc(d[1])}</span><span class="wg">${esc(d[0])}</span></div>`).join('')}</div>`;
+  return `<div class="wbw">${ws.map((d,k)=>`<div data-wi="${i}" data-wk="${k}"><span class="wa">${esc(ar[k])}</span><span class="wt">${esc(tlWord(i,k)||d[1])}</span><span class="wg">${esc(gl(d[0]))}</span></div>`).join('')}</div>`;
 }
 document.addEventListener('click',async e=>{
   const w=e.target.closest('.wtap,[data-wi]');if(!w||e.target.closest('.opts'))return;
@@ -440,12 +460,12 @@ async function openWord(i,k){
   const lem=d[3]>=0?D.lemmas[d[3]]:null,root=d[4]>=0?D.roots[d[4]]:null;
   sheet(`<div class="spread"><span class="eyebrow">Word ${k+1} · ${ref(i)}</span><button class="btn sm ghost" data-close>Close</button></div>
    <div class="lex">${esc(ar)}</div>
-   <div style="text-align:center"><b>${esc(d[0])}</b> <span class="muted">· ${esc(d[1])}</span></div>
+   <div class="tlbig">${esc(tlWord(i,k))}</div><div style="text-align:center"><b>${esc(gl(d[0]))}</b></div>
    <div class="card"><h3>Grammar</h3><div>${esc(parseWord(d))}</div>${d[7].length?`<div class="small muted">${d[7].map(a=>esc(affName(a))).join('<br>')}</div>`:''}</div>
-   ${lem?`<div class="card"><h3>Lemma</h3><div class="row"><span class="ar" style="font-size:28px">${esc(lem[0])}</span><span>${esc(lem[4])}</span><span class="chip">${lem[3]}× in the Quran</span></div>
+   ${lem?`<div class="card"><h3>Lemma</h3><div class="row"><span class="ar" style="font-size:28px">${esc(lem[0])}</span><span class="tli">${esc(tlText(lem[0]))}</span><span>${esc(lem[4])}</span><span class="chip">${lem[3]}× in the Quran</span></div>
      <div class="row">${lem[1]==='V'?`<button class="btn sm" id="wverb">Conjugations in the Quran</button>`:''}<button class="btn sm" id="wlearn">${S.lex[d[3]]?'In your word deck':'Add to my word deck'}</button></div></div>`:''}
-   ${root?`<div class="card"><h3>Root <span class="ar" style="font-size:24px">${esc(root[0].split('').join(' '))}</span> <span class="chip">${root[1]}×</span></h3>
-     <div class="list">${root[2].slice(0,14).map(l=>`<div><span class="ar" style="font-size:22px">${esc(D.lemmas[l][0])}</span><span class="small">${esc(D.lemmas[l][4])}</span><span class="chip">${D.lemmas[l][3]}×</span></div>`).join('')}</div>
+   ${root?`<div class="card"><h3>Root ${rootHTML(root[0])} <span class="chip">${root[1]}×</span></h3>
+     <div class="list">${root[2].slice(0,14).map(l=>`<div><span><span class="ar" style="font-size:22px">${esc(D.lemmas[l][0])}</span> <span class="tli">${esc(tlText(D.lemmas[l][0]))}</span></span><span class="small">${esc(D.lemmas[l][4])}</span><span class="chip">${D.lemmas[l][3]}×</span></div>`).join('')}</div>
      <button class="btn sm" id="wroot">Open root family</button></div>`:''}
    <div class="row"><button class="btn sm" id="wayah">Open the āyah</button></div>`);
   const VB=$('#wverb');if(VB)VB.onclick=()=>verbSheet(d[3]);const L=$('#wlearn');if(L)L.onclick=()=>{if(!S.lex[d[3]]){S.lex[d[3]]={n:0,iv:0,ef:2.4,due:TD(),added:1};save()}L.textContent='In your word deck'};
@@ -458,14 +478,14 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#sheet').hidden
 async function openAyah(i){await tjJuz(A(i)[3]);
   const a=A(i);
   sheet(`<div class="spread"><span class="eyebrow">${esc(sName(a[0]))} · ${ref(i)} · page ${a[2]} · juzʾ ${a[3]}</span><button class="btn sm ghost" data-close>Close</button></div>
-   <div class="q md${S.set.tjc?' tjon':''}">${ayahHTML(i)}</div>
+   <div class="q md${S.set.tjc?' tjon':''}">${ayahHTML(i)}</div>${tlLine(i)}
    <div class="row"><button class="btn sm" id="sp">Play</button><a class="btn sm ghost" href="https://quran.com/${a[0]}/${a[1]}" target="_blank" rel="noopener">Quran.com ↗</a><button class="btn sm" id="sl">${memo(i)?'Memorised ✓':'Learn from here'}</button><button class="btn sm ghost" id="sprev">◂ Previous</button><button class="btn sm ghost" id="snext">Next ▸</button></div>
    <div class="card"><div class="spread"><h3>Translation</h3><select id="str">${TRO().map(k=>`<option value="${k}" ${k===trSel()?'selected':''}>${TRN[k]}</option>`).join('')}<option value="all">All ${Object.keys(TRN).length}</option></select></div><div id="strt" class="tr"></div></div>
    <div class="card"><h3>Word by word</h3><div id="swbw"></div></div>
    <div class="card"><div class="spread"><h3>Tafsīr</h3><select id="stf">${Object.entries(TFN).map(([k,v])=>`<option value="${k}" ${+k===+(TFN[S.set.tf]?S.set.tf:16)?'selected':''}>${v[0]}</option>`).join('')}</select></div><div id="stft" class="tafsir"></div></div>
    <div class="card"><div class="spread"><h3>About ${esc(sName(a[0]))}</h3>${PUB?'':'<button class="btn sm" id="sinfo">Show introduction</button>'}</div>
    <div class="row"><span class="chip ${D.surahs[a[0]-1][5]==='M'?'m':'d'}">${D.surahs[a[0]-1][5]==='M'?'Makkan':'Madinan'}</span><span class="chip">${D.surahs[a[0]-1][7]} āyāt</span><span class="chip">revelation order ${D.surahs[a[0]-1][6]}</span><span class="chip">${esc(D.surahs[a[0]-1][4])}</span></div><div id="sinf" class="tafsir"></div></div>
-   ${SIM[i]?`<div class="card"><h3>Similar āyāt (mutashābihāt)</h3>${SIM[i].map(([j,r])=>`<div class="ex"><div class="small muted">${esc(sName(A(j)[0]))} ${ref(j)} · ${Math.round(r*100)}% alike</div><div class="q sm">${esc(A(j)[7].join(' '))}</div></div>`).join('')}</div>`:''}`);
+   ${SIM[i]?`<div class="card"><h3>Similar āyāt (mutashābihāt)</h3>${SIM[i].map(([j,r])=>`<div class="ex"><div class="small muted">${esc(sName(A(j)[0]))} ${ref(j)} · ${Math.round(r*100)}% alike</div><div class="q sm">${esc(A(j)[7].join(' '))}</div>${tlLine(j)}</div>`).join('')}</div>`:''}`);
   $('#sp').onclick=()=>playAyat([i],1);
   $('#sl').onclick=()=>{if(memo(i))return;closeSheet();const L=[];let ln=0;for(let k=i;k<6236&&A(k)[0]===a[0]&&ln<S.set.daily;k++){L.push(k);ln=countLines(L)}go('hifz',{list:L})};
   $('#sprev').onclick=()=>i>0&&openAyah(i-1);$('#snext').onclick=()=>i<6235&&openAyah(i+1);
@@ -540,7 +560,7 @@ function search(q){
   let hits=[];
   if(/[؀-ۿ]/.test(q)){const k=q.split(/\s+/).map(sk).join(' ');D.ayahs.forEach((a,i)=>{if(a[7].map(sk).join(' ').includes(k))hits.push(i)})}
   else{const k=q.toLowerCase();D.ayahs.forEach((a,i)=>{if(a[12].toLowerCase().includes(k))hits.push(i)})}
-  box.innerHTML=`<div class="card"><div class="spread"><h3>${hits.length} result${hits.length===1?'':'s'}</h3><button class="btn sm ghost" id="mrc">Clear</button></div><div class="list">${hits.slice(0,60).map(i=>`<div data-go="${i}" style="cursor:pointer;display:block"><div class="small"><b>${ref(i)}</b> ${esc(sName(A(i)[0]))}</div><div class="q sm">${esc(A(i)[7].join(' '))}</div><div class="small muted">${esc(A(i)[12])}</div></div>`).join('')}</div>${hits.length>60?'<div class="small muted">Showing the first 60.</div>':''}</div>`;
+  box.innerHTML=`<div class="card"><div class="spread"><h3>${hits.length} result${hits.length===1?'':'s'}</h3><button class="btn sm ghost" id="mrc">Clear</button></div><div class="list">${hits.slice(0,60).map(i=>`<div data-go="${i}" style="cursor:pointer;display:block"><div class="small"><b>${ref(i)}</b> ${esc(sName(A(i)[0]))}</div><div class="q sm">${esc(A(i)[7].join(' '))}</div>${tlLine(i)}<div class="small muted">${esc(A(i)[12])}</div></div>`).join('')}</div>${hits.length>60?'<div class="small muted">Showing the first 60.</div>':''}</div>`;
   $('#mrc').onclick=()=>box.innerHTML='';
   box.querySelectorAll('[data-go]').forEach(d=>d.onclick=()=>{const i=+d.dataset.go;MP.page=A(i)[2];MP.hl=i;mushafRender().then(()=>openAyah(i))});
 }
@@ -553,15 +573,15 @@ function markKnown(list){
 
 function rootView(ri){
   const r=D.roots[ri];
-  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Root family · ${r[1]} uses</div><h1 class="ar" style="font-size:44px">${esc(r[0].split('').join(' '))}</h1></div><button class="btn sm" id="rb">◂ Words</button></div>
-  <div class="card"><div class="tbl"><table><thead><tr><th>Lemma</th><th>Type</th><th>Meaning (most common gloss)</th><th class="n">Uses</th><th></th></tr></thead><tbody>
-  ${r[2].slice().sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]).map(l=>`<tr><td class="ar" style="font-size:24px">${esc(D.lemmas[l][0])}</td><td class="small">${{N:'noun',V:'verb',P:'particle'}[D.lemmas[l][1]]}</td><td>${esc(D.lemmas[l][4])}</td><td class="n">${D.lemmas[l][3]}</td><td><button class="btn sm" data-add="${l}">${S.lex[l]?'In deck':'Add'}</button></td></tr>`).join('')}
+  V().innerHTML=`<div class="spread"><div><div class="eyebrow">Root family · ${r[1]} uses</div><h1>${rootHTML(r[0],true)}</h1></div><button class="btn sm" id="rb">◂ Words</button></div>
+  <div class="card"><div class="tbl"><table><thead><tr><th>Lemma</th><th>Say it</th><th>Type</th><th>Meaning (most common gloss)</th><th class="n">Uses</th><th></th></tr></thead><tbody>
+  ${r[2].slice().sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]).map(l=>`<tr><td class="ar" style="font-size:24px">${esc(D.lemmas[l][0])}</td><td class="tli">${esc(tlText(D.lemmas[l][0]))}</td><td class="small">${{N:'noun',V:'verb',P:'particle'}[D.lemmas[l][1]]}</td><td>${esc(D.lemmas[l][4])}</td><td class="n">${D.lemmas[l][3]}</td><td><button class="btn sm" data-add="${l}">${S.lex[l]?'In deck':'Add'}</button></td></tr>`).join('')}
   </tbody></table></div></div>
   <div class="card"><h3>First uses in the Quran</h3><div id="rex" class="list"></div></div>`;
   $('#rb').onclick=()=>go('words');
   V().querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{const l=+b.dataset.add;if(!S.lex[l]){S.lex[l]={n:0,iv:0,ef:2.4,due:TD(),added:1};save()}b.textContent='In deck'});
   const ex=r[2].slice(0,8).map(l=>D.lemmas[l][5]);
-  $('#rex').innerHTML=ex.map(x=>{const [s,a,w]=x.split(':').map(Number);const i=SI[s]+a-1;return `<div style="display:block"><div class="q sm">${A(i)[7].map((y,k)=>k===w-1?`<span class="mark">${esc(y)}</span>`:esc(y)).join(' ')}</div><div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}).join('');
+  $('#rex').innerHTML=ex.map(x=>{const [s,a,w]=x.split(':').map(Number);const i=SI[s]+a-1;return `<div style="display:block"><div class="q sm">${A(i)[7].map((y,k)=>k===w-1?`<span class="mark">${esc(y)}</span>`:esc(y)).join(' ')}</div>${tlLine(i)}<div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}).join('');
 }
 
 
@@ -623,6 +643,184 @@ DRILL.weaktype={ask:'What type of root is this verb built on?',ans:d=>{if(d[4]<0
   if(r.filter(w).length>=2)return 'Lafīf (two weak letters)';if(w(r[0]))return 'Mithāl (weak first letter)';if(w(r[1]))return 'Ajwaf (hollow: weak middle)';if(w(r[2]))return 'Nāqiṣ (weak last letter)';
   if(r[1]===r[2])return 'Muḍāʿaf (doubled)';if(r.some(c=>'أءإؤئ'.includes(c)))return 'Mahmūz (has a hamza)';return 'Ṣaḥīḥ (sound)'},
  opts:a=>{const all=['Ṣaḥīḥ (sound)','Mahmūz (has a hamza)','Muḍāʿaf (doubled)','Mithāl (weak first letter)','Ajwaf (hollow: weak middle)','Nāqiṣ (weak last letter)','Lafīf (two weak letters)'];return shuffle([a,...shuffle(all.filter(x=>x!==a)).slice(0,3)])}};
+
+/* ========== transliteration (Easy English and Academic) ==========
+   Works on vowelled Uthmani text, word by word, with the joins a reciter makes:
+   hamzat al-waṣl falls silent after a word, the article assimilates to sun letters,
+   long vowels come from alif / wāw / yāʾ and the small marks of the mushaf. */
+const TLX=(()=>{
+  const FA='َ',DA='ُ',KA='ِ',SU='ْ',SH='ّ',FT='ً',DT='ٌ',KT='ٍ',DAG='ٰ',MAD='ٓ',HZA='ٔ';
+  const SILENT=/[۟۠]/;
+  const SHORTV=/[َُِّ]/;
+  // internal symbols keep digraph letters single: θ ث, χ خ, δ ذ, š ش, ġ غ, ʿ ع, ʾ hamza
+  const CONS={'ب':'b','ت':'t','ث':'θ','ج':'j','ح':'ḥ','خ':'χ','د':'d','ذ':'δ','ر':'r','ز':'z','س':'s','ش':'š','ص':'ṣ','ض':'ḍ','ط':'ṭ','ظ':'ẓ','ع':'ʿ','غ':'ġ','ف':'f','ق':'q','ك':'k','ل':'l','م':'m','ن':'n','ه':'h','و':'w','ي':'y','ة':'t','ء':'ʾ','أ':'ʾ','إ':'ʾ','ؤ':'ʾ','ئ':'ʾ','ى':'y'};
+  const SUN=new Set('تثدذرزسشصضطظلن');
+  const isMark=c=>/[ً-ٰٟۖ-ۜ۟-۪ۤۧۨ-ۭ]/.test(c);
+  function clusters(w){const out=[];for(const ch of w.replace(/[‏۞۩\s]/g,'')){if(isMark(ch)&&out.length)out[out.length-1].m+=ch;else out.push({b:ch,m:''})}return out}
+  const vowelOf=m=>m.includes(FA)?'a':m.includes(KA)?'i':m.includes(DA)?'u':m.includes(FT)?'an':m.includes(KT)?'in':m.includes(DT)?'un':'';
+  const lettersOf=w=>w.replace(/[^ء-يٱ]/g,'');
+  const bareEnd=o=>/[^aiuāīūʾ\-]$/.test(o);         // ends in a consonant with no vowel yet
+  function lengthen(o,v){const L={a:'ā',i:'ī',u:'ū'}[v];if(o.endsWith(v))return o.slice(0,-1)+L;if(/[āīū]$/.test(o))return o;return o+L}
+  /* one word -> {t: internal string, elided: begins with a silent waṣl, art: 'sun'|'moon'|null} */
+  function word(w,atStart){
+    const cl=clusters(w);let o='';let elided=false,art=null,artAt=-1,sunNext=false;
+    const L=lettersOf(w).replace(/ٱ/g,'ا');
+    const isAllah=/^(و|ف|ب|ت)?ا?لله(م)?$/.test(L)||/^لله$/.test(L);
+    for(let k=0;k<cl.length;k++){
+      let {b,m}=cl[k];const prev=o.slice(-1);
+      if(SILENT.test(m))continue;
+      if(b==='ـ'){if(m.includes(DAG))o=lengthen(o,'a');else if(m.includes('ۧ'))o=lengthen(o,'i');else if(m.includes(HZA))o+=(!o||/-$/.test(o)?'':'ʾ')+vowelOf(m);continue}
+      if(b==='ۥ'){o=lengthen(o,'u');continue}
+      if(b==='ۦ'){o=lengthen(o,'i');continue}
+      // hamzat al-waṣl: written ٱ, or a bare alif opening a word before a vowelless letter
+      if(b==='ٱ'||(b==='ا'&&k===0&&!m&&cl[1]&&!SHORTV.test(cl[1].m)&&!vowelOf(cl[1].m))){
+        const n1=cl[k+1],n2=cl[k+2];
+        const isArt=!isAllah&&n1&&n1.b==='ل'&&n2&&!SHORTV.test(n1.m);
+        if(isArt){art=(n2.m.includes(SH)&&SUN.has(n2.b))?'sun':'moon';artAt=k+1}
+        if(k>0)continue;                                // waṣl after a prefix (bi-, wa-, fa-) is silent
+        if(!atStart){elided=true;continue}
+        if(isArt||isAllah){o+='a';continue}
+        const third=cl[k+2];o+=(third&&third.m.includes(DA))?'u':'i';continue}
+      if(b==='آ'){if(/a$/.test(o))o=lengthen(o,'a');else o+=(o&&!/-$/.test(o)?'ʾ':'')+'ā';continue}
+      if(b==='ا'){
+        if(m.includes(HZA)){o+='ʾ'+vowelOf(m);continue}
+        if(/an$/.test(o))continue;                        // alif after fatḥatayn is silent
+        if(prev==='a'||m.includes(MAD)||m.includes(DAG)){o=lengthen(o,'a');continue}
+        if(!o){o+='a';continue}
+        if(bareEnd(o)){o+='ā';continue}                   // dictionary spellings leave the fatḥa unwritten
+        continue}
+      if(b==='ى'&&(m.includes(DAG)||!vowelOf(m))){
+        if(/i$/.test(o))o=lengthen(o,'i');else if(/[aā]$/.test(o)||m.includes(DAG))o=lengthen(o,'a');else if(/[^aiuāīūn\-]$/.test(o))o+='ā';
+        continue}
+      if((b==='و'||b==='ي')&&!m.includes(SH)&&!vowelOf(m)){
+        const v=b==='و'?'u':'i';
+        if(m.includes(DAG)){o=lengthen(o,'a');continue}   // ṣalāh, zakāh: a wāw carrying a dagger alif
+        if(k===cl.length-1&&bareEnd(o)&&o.length>1){o+=v==='u'?'ū':'ī';continue}
+        if(prev===v){o=lengthen(o,v);continue}
+        if(/[āīū]$/.test(o)&&!m.includes(SU))continue;
+        o+=b==='و'?'w':'y';continue}
+      if(b==='ل'&&art==='sun'&&k===artAt){sunNext=true;continue}
+      if(isAllah&&b==='ل'&&!m.includes(SH)&&!vowelOf(m)&&cl[k+1]&&cl[k+1].b==='ل')continue;   // Allah: the first lām is absorbed   // the assimilated lām of al-
+      let c=CONS[b];if(c==null)continue;
+      if(c==='ʾ'&&(!o||/-$/.test(o)))c='';                         // no apostrophe for a word-initial hamza or after al-
+      else if(c==='ʾ'&&/^(wa|fa|bi|li|la|ka|sa|a|yā|hā)$/.test(o))c='-';   // wa-iyyāka, yā-ayyuhā
+      if(m.includes(SH)&&k===0)m=m.replace(SH,'');                 // idghām shadda on a first letter is read once
+      if(m.includes(SH))c=sunNext?c+'-'+c:(o.endsWith(c)&&bareEnd(o)?c:c+c);   // a sukūn letter merging into its twin is not tripled
+      else if(art==='moon'&&b==='ل'&&k===artAt)c='l-';
+      sunNext=false;
+      let v=vowelOf(m);
+      if(isAllah&&b==='ل'&&m.includes(SH))v='ā';
+      if(m.includes(DAG))v=(v==='a'||!v)?'ā':v+'ā';
+      if(m.includes('ۧ'))v=(!v||v==='i')?'ī':v+'ī';
+      if(m.includes('ۨ'))v+='n';
+      o+=c+v;
+    }
+    return {t:o,elided,art};
+  }
+  const MUQ={'ا':['Alif','alif'],'ل':['Laam','lām'],'م':['Meem','mīm'],'ص':['Saad','ṣād'],'ر':['Raa','rā'],'ك':['Kaaf','kāf'],'ه':['Haa','hā'],'ي':['Yaa','yā'],'ع':["'Ayn",'ʿayn'],'ط':['Taa','ṭā'],'س':['Seen','sīn'],'ح':['Haa','ḥā'],'ق':['Qaaf','qāf'],'ن':['Noon','nūn']};
+  const MUQAYAT=new Set(['2:1','3:1','7:1','10:1','11:1','12:1','13:1','14:1','15:1','19:1','20:1','26:1','27:1','28:1','29:1','30:1','31:1','32:1','36:1','38:1','40:1','41:1','42:1','42:2','43:1','44:1','45:1','46:1','50:1','68:1']);
+  function finish(s,style){
+    if(style==='easy'){
+      s=s.replace(/([stdkgzṣḍṭẓ])([hḥ])/g,"$1'$2");      // keep s + h apart from sh, and so on
+      s=s.replace(/ā/g,'aa').replace(/ī/g,'ee').replace(/ū/g,'oo').replace(/ḥ/g,'h').replace(/ṣ/g,'s').replace(/ḍ/g,'d').replace(/ṭ/g,'t').replace(/ẓ/g,'z').replace(/ʿ/g,"'").replace(/ʾ/g,"'");
+    }
+    if(style==='easy')s=s.replace(/(^|[\s-])allaah/g,'$1Allaah');
+    return s.replace(/θ/g,'th').replace(/χ/g,'kh').replace(/δ/g,'dh').replace(/š/g,'sh').replace(/ġ/g,'gh');
+  }
+  /* stopping at the end of an āyah: the last short vowel drops, -an becomes -ā, tāʾ marbūṭa becomes h */
+  function pausal(t,w){const last=lettersOf(w).slice(-1);
+    if(last==='ة')return t.replace(/t(an|un|in|a|u|i)$/,'h');
+    if(/an$/.test(t)&&w.includes(FT))return t.slice(0,-2)+'ā';
+    if(/(un|in)$/.test(t))return t.slice(0,-2);
+    if(/[^āīū][aiu]$/.test(t))return t.slice(0,-1);
+    return t}
+  const short=s=>s.replace(/ā$/,'a').replace(/ī$/,'i').replace(/ū$/,'u');
+  /* a run of words read together; the first is read as a fresh start unless joined */
+  function run(words,style,opts={}){
+    const out=[];
+    words.forEach((w,k)=>{
+      if(opts.muq&&k===0){const ls=lettersOf(w);out.push([...ls].map(x=>(MUQ[x]||['',''])[style==='easy'?0:1]).join('-'));return}
+      const r=word(w,k===0&&!opts.joined);
+      if(opts.pause&&k===words.length-1)r.t=pausal(r.t,w);
+      if(r.elided&&out.length){out.push(short(out.pop())+r.t);return}
+      out.push(r.t);
+    });
+    let s=out.map(x=>finish(x,style)).join(' ');
+    if(style==='easy'&&opts.cap!==false)s=s.charAt(0).toUpperCase()+s.slice(1);
+    return s;
+  }
+  return {run,word:(w,style)=>finish(word(w,true).t,style),MUQAYAT};
+})();
+const LETTERS=[
+ ['ا','Alif','alif','a / aa','The long “aa” of father; at the start of a word it carries a hamza or a vowel.'],
+ ['ب','Baa','bāʾ','b','As in “bed”.'],['ت','Taa','tāʾ','t','A light, dry “t”.'],['ث','Thaa','thāʾ','th','As in “think”.'],
+ ['ج','Jeem','jīm','j','As in “jam”.'],['ح','Ḥaa','ḥāʾ','ḥ','A breathy h from the middle of the throat, like fogging a glass.'],
+ ['خ','Khaa','khāʾ','kh','Like “ch” in Scottish “loch”.'],['د','Daal','dāl','d','As in “door”.'],['ذ','Dhaal','dhāl','dh','As in “this”.'],
+ ['ر','Raa','rāʾ','r','A single tap of the tongue.'],['ز','Zaay','zāy','z','As in “zoo”.'],['س','Seen','sīn','s','As in “sun”.'],
+ ['ش','Sheen','shīn','sh','As in “ship”.'],['ص','Ṣaad','ṣād','ṣ','A heavy s, with the back of the tongue raised.'],['ض','Ḍaad','ḍād','ḍ','A heavy d from the side of the tongue; Arabic’s signature letter.'],
+ ['ط','Ṭaa','ṭāʾ','ṭ','A heavy t.'],['ظ','Ẓaa','ẓāʾ','ẓ','A heavy “dh”.'],['ع','ʿAyn','ʿayn','ʿ','A squeeze in the middle of the throat; no English match.'],
+ ['غ','Ghayn','ghayn','gh','Like a French r, gargled lightly.'],['ف','Faa','fāʾ','f','As in “far”.'],['ق','Qaaf','qāf','q','A deep k from the back of the mouth.'],
+ ['ك','Kaaf','kāf','k','As in “kite”.'],['ل','Laam','lām','l','As in “lean”.'],['م','Meem','mīm','m','As in “moon”.'],['ن','Noon','nūn','n','As in “noon”.'],
+ ['ه','Haa','hāʾ','h','A light h, as in “hat”.'],['و','Waaw','wāw','w / oo','“w”, or the long “oo” of “moon”.'],['ي','Yaa','yāʾ','y / ee','“y”, or the long “ee” of “see”.'],
+ ['ء','Hamzah','hamza','ʾ','The catch in “uh-oh”.']];
+const LETTER_EXTRA={'أ':['Hamzah on alif','hamza on alif'],'إ':['Hamzah under alif','hamza under alif'],'ؤ':['Hamzah on waaw','hamza on wāw'],'ئ':['Hamzah on yaa','hamza on yāʾ'],'آ':['Alif maddah','alif madda'],'ٱ':['Alif waṣl','alif al-waṣl'],'ة':['Taa marbooṭah','tāʾ marbūṭa'],'ى':['Alif maqṣoorah','alif maqṣūra']};
+const MARKS=[['َ','Fatḥah','fatḥa','a','A short “a”, written above the letter.'],['ِ','Kasrah','kasra','i','A short “i”, written below the letter.'],['ُ','Ḍammah','ḍamma','u','A short “u”, written above the letter.'],
+ ['ْ','Sukoon','sukūn','(none)','No vowel: the letter closes the syllable.'],['ّ','Shaddah','shadda','double','The letter is said twice: rabb, not rab.'],['ً','Tanween fatḥ','tanwīn fatḥ','-an','“-an” at the end of an indefinite word.'],
+ ['ٍ','Tanween kasr','tanwīn kasr','-in','“-in” at the end.'],['ٌ','Tanween ḍamm','tanwīn ḍamm','-un','“-un” at the end.'],['ٰ','Dagger alif','alif khanjariyya','aa','A small alif: read a long “aa”.'],['ٓ','Maddah','madda','long','Stretch the vowel (4 to 6 counts).']];
+const tlStyle=()=>S.set.tl==='academic'?'academic':'easy';
+function letterName(ch){const l=LETTERS.find(x=>x[0]===ch);if(l)return tlStyle()==='easy'?l[1]:l[2];const e=LETTER_EXTRA[ch];return e?(tlStyle()==='easy'?e[0]:e[1]):ch}
+const TLC={};
+function tlAyah(i){if(S.set.tl==='off')return '';const key=i+tlStyle();if(TLC[key]==null)TLC[key]=TLX.run(A(i)[7],tlStyle(),{muq:TLX.MUQAYAT.has(ref(i)),pause:true});return TLC[key]}
+function tlWord(i,k){if(S.set.tl==='off')return '';if(k===0&&TLX.MUQAYAT.has(ref(i)))return TLX.run([A(i)[7][0]],tlStyle(),{muq:true});return TLX.run([A(i)[7][k]],tlStyle(),{cap:false})}
+function tlText(s){if(S.set.tl==='off'||!s)return '';const ws=String(s).replace(/…/g,'').trim().split(/\s+/).filter(Boolean);return ws.length?TLX.run(ws,tlStyle(),{cap:false}):''}
+const tlLine=i=>S.set.tl==='off'?'':`<div class="tl">${esc(tlAyah(i))}</div>`;
+const tlx=()=>S.set.tl!=='off'&&S.set.tlx!==false;
+const rootLetterName=x=>'أإؤئء'.includes(x)?letterName('ء'):letterName(x);
+function rootHTML(r,big){if(!r)return '';const ls=[...r];return `<span class="rootbox"><span class="ar"${big?' style="font-size:1.6em"':''}>${esc(ls.join(' '))}</span>${S.set.tl==='off'?'':` <span class="tln">${ls.map(x=>esc(rootLetterName(x))).join(' · ')}</span>`}</span>`}
+/* Arabic inside English prose: vowelled words get a transliteration, bare letters get their names */
+function arWrap(s){return s.replace(/([؀-ۿ][؀-ۿݐ-ݿ\s]*[؀-ۿ]|[؀-ۿ])/g,m=>{
+  if(S.set.tl==='off')return `<span class="ar">${m}</span>`;
+  const voweled=/[ً-ْٰ]/.test(m);
+  const tl=voweled?tlText(m):[...m.replace(/\s+/g,'')].filter(c=>/[ء-يٱ]/.test(c)).map(letterName).join(' · ');
+  return tl?`<span class="ar">${m}</span> <span class="tli">(${esc(tl)})</span>`:`<span class="ar">${m}</span>`})}
+
+/* ========== languages ==========
+   English is written straight into the interface. Another language is one file, data/i18n/<code>.json:
+   { "name": "Español", "dir": "ltr",
+     "ui":      { "Continue": "Continuar", "{n} āyāt are due.": "{n} āyāt pendientes." },   // exact English text -> translation; {n} matches a number
+     "lessons": { "L01": { "title": "...", "body": ["..."], "points": ["..."], "qs": [["q",["a","b"],0]] } },
+     "lemmas":  { "1234": "meaning" },          // lemma index -> dictionary meaning
+     "glosses": { "In (the) name": "En (el) nombre" },   // English word-by-word gloss -> translation
+     "quran":   { "default": 83, "names": { "83": "Isa García" } } }   // Quran.com translation ids
+   tools/i18n_template.py writes a blank pack with every string to translate.
+   The pack is applied to the page as it renders, so new screens need no code changes. */
+const LANGS=[{code:'en',name:'English'}];
+let PACK=null,UIMAP=null,UIPAT=[];
+async function loadLang(code){
+  PACK=null;UIMAP=null;UIPAT=[];
+  if(!code||code==='en'){document.documentElement.lang='en';return}
+  try{PACK=await J(`data/i18n/${code}.json`)}catch(e){PACK=null;return}
+  UIMAP=new Map();for(const [k,v] of Object.entries(PACK.ui||{})){if(k.includes('{'))UIPAT.push([new RegExp('^'+k.replace(/[.*+?^$()|[\]\\]/g,'\\$&').replace(/\{(\w+)\}/g,'(.+?)')+'$'),k,v]);else UIMAP.set(k,v)}
+  document.documentElement.lang=code;document.documentElement.dir=PACK.dir||'ltr';
+  for(const l of LESSONS){const o=(PACK.lessons||{})[l.id];if(o)Object.assign(l,o)}
+  if(PACK.lemmas)for(const [k,v] of Object.entries(PACK.lemmas))if(D.lemmas[k])D.lemmas[k][4]=v;
+  if(PACK.quran&&PACK.quran.names)for(const [id,n] of Object.entries(PACK.quran.names))TRN[id]=n;
+  if(PACK.quran&&PACK.quran.default&&!S.set.trPicked)S.set.tr=+PACK.quran.default;
+}
+const gl=g=>PACK&&PACK.glosses&&PACK.glosses[g]||g;      // word-by-word gloss in the current language
+function trUI(s){if(!UIMAP)return null;const k=s.trim();if(!k||/[؀-ۿ]/.test(k))return null;
+  if(UIMAP.has(k))return s.replace(k,UIMAP.get(k));
+  for(const [re,src,dst] of UIPAT){const m=k.match(re);if(m){const names=[...src.matchAll(/\{(\w+)\}/g)].map(x=>x[1]);let out=dst;names.forEach((n,ix)=>out=out.replace('{'+n+'}',m[ix+1]));return s.replace(k,out)}}
+  return null}
+function i18nApply(root){if(!UIMAP)return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{acceptNode:n=>n.parentElement&&!n.parentElement.closest('.q,.ar,.lex,.tl,.tln,.tli,script,style,textarea')?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT});
+  const ns=[];while(w.nextNode())ns.push(w.currentNode);for(const n of ns){if(n.__tr===n.nodeValue)continue;const t=trUI(n.nodeValue);if(t!=null){n.nodeValue=t}n.__tr=n.nodeValue}
+  root.querySelectorAll&&root.querySelectorAll('[placeholder],[aria-label],[title]').forEach(e=>['placeholder','aria-label','title'].forEach(a=>{const v=e.getAttribute(a);if(v){const t=trUI(v);if(t!=null)e.setAttribute(a,t)}}))}
+let I18NOBS=null;
+function i18nWatch(){if(I18NOBS)I18NOBS.disconnect();if(!UIMAP)return;i18nApply(document.body);I18NOBS=new MutationObserver(ms=>{I18NOBS.disconnect();for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1)i18nApply(n);else if(n.nodeType===3&&n.parentElement)i18nApply(n.parentElement);I18NOBS.observe(document.body,{childList:true,subtree:true})});I18NOBS.observe(document.body,{childList:true,subtree:true})}
+/* every English string the page has shown, for building a new pack: run i18nCollect() in the console after using the app */
+const SEEN=new Set();
+function i18nCollect(){const w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);while(w.nextNode()){const n=w.currentNode;if(n.parentElement&&n.parentElement.closest('.q,.ar,.lex,.tl,.tln,.tli,script,style'))continue;const t=n.nodeValue.trim();if(t&&/[A-Za-z]/.test(t)&&!/[؀-ۿ]/.test(t))SEEN.add(t.replace(/\d+/g,'{n}'))}return [...SEEN].sort()}
+
 /* ========== Sabaq 2 · icons ========== */
 const IC={
  learn:'<path d="M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="currentColor"/>',
@@ -650,7 +848,7 @@ const ico=(n,cls='i')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="tru
 /* ========== Sabaq 2 · state additions ========== */
 S.v=2;S.xp=S.xp||0;S.done=S.done||{};S.hearts=S.hearts||{n:5,t:Date.now()};S.ach=S.ach||{};S.learn=S.learn||{};
 S.stats=Object.assign({lessons:0,perfect:0,correct:0,answered:0,reviews:0},S.stats||{});
-S.set=Object.assign({goal:30,hearts:true,sound:true,tjc:true},S.set);
+S.set=Object.assign({goal:30,hearts:true,sound:true,tjc:true,tl:'easy',tlx:true,lang:'en'},S.set);
 const MAXH=5,HREGEN=30*60*1000;
 function hearts(){if(!S.set.hearts)return 99;const h=S.hearts;while(h.n<MAXH&&Date.now()-h.t>=HREGEN){h.n++;h.t+=HREGEN}if(h.n>=MAXH)h.t=Date.now();return h.n}
 function loseHeart(){if(!S.set.hearts)return;hearts();if(S.hearts.n>=MAXH)S.hearts.t=Date.now();S.hearts.n=Math.max(0,S.hearts.n-1);save()}
@@ -765,26 +963,26 @@ async function ensureTJ(list){await Promise.all([...new Set(list.map(i=>A(i)[3])
 function chMCQ(o){return Object.assign({type:'mcq'},o)}
 function chNext(i,P){const t=i+1;const right=start(t);const sims=(SIM[t]||[]).map(([j])=>start(j));const near=shuffle(range(SI[A(i)[0]],SI[A(i)[0]]+D.surahs[A(i)[0]-1][7]-1).filter(j=>j!==t&&j!==i)).map(j=>start(j));
   const opts=shuffle([right,...distinctStarts(right,[...sims,...near,...shuffle(P||[]).map(j=>start(j))])]);
-  return chMCQ({kind:'Hifz · link',prompt:`<h2>How does the next āyah begin?</h2><div class="small muted">${esc(sName(A(i)[0]))} ${ref(i)}</div>${qwrap(ayahText(i))}`,opts:opts.map(x=>x+' …'),ans:right+' …',ar:true,wide:true,sol:`${qwrap(ayahText(t),'q sm')}`})}
+  return chMCQ({kind:'Hifz · link',prompt:`<h2>How does the next āyah begin?</h2><div class="small muted">${esc(sName(A(i)[0]))} ${ref(i)}</div>${qwrap(ayahText(i))}${tlx()?tlLine(i):''}`,opts:opts.map(x=>x+' …'),ans:right+' …',ar:true,wide:true,sol:`${qwrap(ayahText(t),'q sm')}${tlLine(t)}`})}
 function chGap(i){const w=A(i)[7];if(w.length<3)return null;const k=1+(Math.random()*(w.length-1)|0);const right=w[k];
   const pool=[...new Set([...(SIM[i]||[]).flatMap(([j])=>A(j)[7]),...surahWords(A(i)[0])])].filter(x=>sk(x)!==sk(right));
-  return chMCQ({kind:'Hifz · fill the gap',prompt:`<h2>Which word is missing?</h2><div class="small muted">${ref(i)}</div>${qwrap(w.map((x,j)=>j===k?'<span class="mark">ـــــــ</span>':esc(x)).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`)}`,opts:shuffle([right,...shuffle(pool).slice(0,3)]),ans:right,ar:true,sol:qwrap(ayahText(i),'q sm')})}
+  return chMCQ({kind:'Hifz · fill the gap',prompt:`<h2>Which word is missing?</h2><div class="small muted">${ref(i)}</div>${qwrap(w.map((x,j)=>j===k?'<span class="mark">ـــــــ</span>':esc(x)).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`)}`,opts:shuffle([right,...shuffle(pool).slice(0,3)]),ans:right,ar:true,sol:qwrap(ayahText(i),'q sm')+tlLine(i)})}
 function chMeaning(i){const s=A(i)[0];const others=shuffle(range(SI[s],SI[s]+D.surahs[s-1][7]-1).filter(j=>j!==i&&A(j)[12]!==A(i)[12])).slice(0,3);while(others.length<3)others.push(Math.random()*6236|0);
-  return chMCQ({kind:'Meaning',prompt:`<h2>What does this āyah mean?</h2>${qwrap(ayahText(i))}`,opts:shuffle([i,...others]).map(j=>A(j)[12]),ans:A(i)[12],wide:true,sol:`<span class="muted">${ref(i)} · Saheeh International</span>`})}
+  return chMCQ({kind:'Meaning',prompt:`<h2>What does this āyah mean?</h2>${qwrap(ayahText(i))}${tlx()?tlLine(i):''}`,opts:shuffle([i,...others]).map(j=>A(j)[12]),ans:A(i)[12],wide:true,sol:`<span class="muted">${ref(i)} · Saheeh International</span>`})}
 async function chBuildArabic(i){const w=A(i)[7];let pre=0;if(w.length>9)pre=w.length-7;const need=w.slice(pre);
   const pool=surahWords(A(i)[0]).filter(x=>!need.some(y=>sk(y)===sk(x)));const extra=shuffle(pool).slice(0,2);
   return {type:'tiles',kind:'Hifz · build the āyah',ar:true,prompt:`<h2>${pre?'Finish the āyah':'Build the āyah'}</h2><div class="tr">${esc(A(i)[12])}</div><div class="row"><button class="btn sm" data-say="${i}">${ico('speaker')} Listen</button><span class="small muted">${ref(i)}</span></div>${pre?qwrap(w.slice(0,pre).map(esc).join(' ')+' …','q sm'):''}`,
     tiles:shuffle([...need,...extra]),answer:need,sol:qwrap(ayahText(i),'q sm')}}
 async function chBuildMeaning(i){const ws=await W(i);const ar=A(i)[7];let a=0,b=ws.length;if(b>9){a=Math.random()*(b-8)|0;b=a+8}
-  const need=ws.slice(a,b).map(d=>d[0]).filter(Boolean);if(need.length<2)return null;
-  const pool=[];for(const j of shuffle(range(SI[A(i)[0]],SI[A(i)[0]]+D.surahs[A(i)[0]-1][7]-1)).slice(0,6))for(const d of await W(j))if(d[0]&&!need.some(n=>nk(n)===nk(d[0])))pool.push(d[0]);
+  const need=ws.slice(a,b).map(d=>gl(d[0])).filter(Boolean);if(need.length<2)return null;
+  const pool=[];for(const j of shuffle(range(SI[A(i)[0]],SI[A(i)[0]]+D.surahs[A(i)[0]-1][7]-1)).slice(0,6))for(const d of await W(j))if(d[0]&&!need.some(n=>nk(n)===nk(gl(d[0]))))pool.push(gl(d[0]));
   const extra=[...new Set(shuffle(pool))].slice(0,2);
-  return {type:'tiles',kind:'Meaning · word by word',prompt:`<h2>Tap the meanings in the order of the words</h2>${qwrap(ar.map((x,k)=>k>=a&&k<b?`<span class="mark">${esc(x)}</span>`:esc(x)).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`)}<div class="small muted">Arabic reads right to left: start with the rightmost highlighted word.</div>`,
+  return {type:'tiles',kind:'Meaning · word by word',prompt:`<h2>Tap the meanings in the order of the words</h2>${qwrap(ar.map((x,k)=>k>=a&&k<b?`<span class="mark">${esc(x)}</span>`:esc(x)).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`)}${tlx()?tlLine(i):''}<div class="small muted">Arabic reads right to left: start with the rightmost highlighted word.</div>`,
     tiles:shuffle([...need,...extra]),answer:need,cmp:nk,sol:`<div class="small">${need.map(esc).join(' · ')}</div><div class="small muted">${esc(A(i)[12])}</div>`}}
 function chRecite(i,grade4,cue){return {type:'recite',kind:'Hifz · recite',i,grade4,cue}}
 function chIntroAyah(i){return {type:'introAyah',kind:'New āyah',i}}
 async function chWordQ(i,k,dr,a,pool){const d=(await W(i))[k];const opts=dr.opts(a,pool||glossDistractors(a,6));
-  return chMCQ({kind:'Arabic',prompt:`<h2>${dr.ask}</h2><div class="small muted">${ref(i)}</div>${qwrap(wordInAyahTJ(i,k))}`,opts:opts.includes(a)?opts:shuffle([a,...opts.slice(0,3)]),ans:a,ar:dr.ar,sol:`<b class="ar">${esc(A(i)[7][k])}</b> “${esc(d[0])}”: ${esc(parseWord(d))}${d[4]>=0?` · root ${esc(D.roots[d[4]][0])}`:''}`})}
+  return chMCQ({kind:'Arabic',prompt:`<h2>${dr.ask}</h2><div class="small muted">${ref(i)}</div>${qwrap(wordInAyahTJ(i,k))}${tlx()?`<div class="tl">${esc(tlWord(i,k))}</div>`:''}`,opts:opts.includes(a)?opts:shuffle([a,...opts.slice(0,3)]),ans:a,ar:dr.ar,sol:`<b class="ar">${esc(A(i)[7][k])}</b> <i>${esc(tlWord(i,k))}</i> “${esc(gl(d[0]))}”: ${esc(parseWord(d))}${d[4]>=0?` · root ${rootHTML(D.roots[d[4]][0])}`:''}`})}
 function wordInAyahTJ(i,k){const t=S.set.tjc?tjSync(i):null;return A(i)[7].map((x,j)=>j===k?`<span class="mark">${t?t[j]:esc(x)}</span>`:(t?t[j]:esc(x))).join(' ')+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`}
 function chMutash(i){const right=A(i)[7].join(' ');const others=[...new Set((SIM[i]||[]).map(([j])=>A(j)[7].join(' ')).filter(x=>x!==right))].slice(0,3);if(!others.length)return null;const prev=i>0&&A(i-1)[0]===A(i)[0]?i-1:null;
   return chMCQ({kind:'Hifz · mutashābihāt',prompt:`<h2>Which wording belongs here?</h2><div class="small muted">${esc(sName(A(i)[0]))} ${ref(i)}</div>${prev!=null?qwrap(ayahText(prev),'q sm muted'):'<div class="small muted">(first āyah of the sūrah)</div>'}`,opts:shuffle([right,...others]),ans:right,ar:true,wide:true,sol:(SIM[i]||[]).filter(([j])=>A(j)[7].join(' ')!==right).slice(0,2).map(([j])=>diffPair(i,j)).join('')})}
@@ -793,7 +991,7 @@ function chOrder(list){return {type:'order',kind:'Hifz · order',list}}
 /* ========== lesson builders ========== */
 async function reviewBits(n=2){const out=[];const due=shuffle(dueAyat()).slice(0,n);for(const i of due){const c=Math.random()<.5&&i<6235&&A(i+1)[0]===A(i)[0]?chNext(i):chGap(i);if(c){c.kind='Review · '+c.kind;out.push(c)}}
   const t=TD();const dl=shuffle(Object.keys(S.lex).map(Number).filter(k=>S.lex[k].n>0&&S.lex[k].due<=t)).slice(0,n);for(const li of dl)out.push(chLemma(li,'Review · word'));return out}
-function chLemma(li,kind='Words'){const L=D.lemmas[li];return chMCQ({kind,prompt:`<h2>What does this word mean?</h2><div class="lex">${esc(L[0])}</div>`,opts:shuffle([L[4],...glossDistractors(L[4])]),ans:L[4],lex:li,sol:`<span class="ar">${esc(L[0])}</span> = ${esc(L[4])}${L[2]?` · root ${esc(L[2])}`:''}`})}
+function chLemma(li,kind='Words'){const L=D.lemmas[li];return chMCQ({kind,prompt:`<h2>What does this word mean?</h2><div class="lex" style="text-align:center">${esc(L[0])}</div>${tlx()?`<div class="tlbig">${esc(tlText(L[0]))}</div>`:''}`,opts:shuffle([L[4],...glossDistractors(L[4])]),ans:L[4],lex:li,sol:`<span class="ar">${esc(L[0])}</span> <i>${esc(tlText(L[0]))}</i> = ${esc(L[4])}${L[2]?` · root ${rootHTML(L[2])}`:''}`})}
 async function passageLemmas(list){const m=new Map();for(const i of list){const ws=await W(i);ws.forEach((d,k)=>{if(d[3]<0)return;const L=D.lemmas[d[3]];if(L[0].replace(/[ً-ٰۖ-ۭ]/g,'').length<2||!L[4])return;if(!m.has(d[3]))m.set(d[3],{li:d[3],i,k})})}return [...m.values()]}
 async function buildWords(n){const u=n.u;await ensureTJ(u.list);const all=await passageLemmas(u.list);
   let fresh=all.filter(x=>!(S.lex[x.li]&&S.lex[x.li].n>0)).sort((a,b)=>D.lemmas[b.li][3]-D.lemmas[a.li][3]).slice(0,7);let review=false;
@@ -802,7 +1000,7 @@ async function buildWords(n){const u=n.u;await ensureTJ(u.list);const all=await 
   for(const x of fresh)items.push({type:'introWord',kind:review?'Words · review':'New word',...x});
   const qs=[];for(const x of fresh)qs.push(chLemma(x.li));
   for(const x of shuffle(fresh).slice(0,3)){const L=D.lemmas[x.li];const ds=lemmaDistractors(x.li);qs.push(chMCQ({kind:'Words',prompt:`<h2>Which word means “${esc(L[4])}”?</h2>`,opts:shuffle([x.li,...ds]).map(k=>D.lemmas[k][0]),ans:L[0],ar:true,big:true,sol:`<span class="ar">${esc(L[0])}</span> = ${esc(L[4])}`}))}
-  if(!AUD.blocked)for(const x of shuffle(fresh).slice(0,2)){const d=(await W(x.i))[x.k];const u2=wordAudio(d);if(u2){const ds=lemmaDistractors(x.li);qs.push(chMCQ({kind:'Listen',prompt:`<h2>Tap what you hear</h2><div class="row" style="justify-content:center"><button class="speaker" data-url="${u2}" aria-label="Play">${ico('speaker')}</button></div>`,autoplay:u2,opts:shuffle([A(x.i)[7][x.k],...ds.map(k=>D.lemmas[k][0])]),ans:A(x.i)[7][x.k],ar:true,big:true,sol:`<span class="ar">${esc(A(x.i)[7][x.k])}</span> “${esc(d[0])}”`}))}}
+  if(!AUD.blocked)for(const x of shuffle(fresh).slice(0,2)){const d=(await W(x.i))[x.k];const u2=wordAudio(d);if(u2){const ds=lemmaDistractors(x.li);qs.push(chMCQ({kind:'Listen',prompt:`<h2>Tap what you hear</h2><div class="row" style="justify-content:center"><button class="speaker" data-url="${u2}" aria-label="Play">${ico('speaker')}</button></div>`,autoplay:u2,noTL:true,opts:shuffle([A(x.i)[7][x.k],...ds.map(k=>D.lemmas[k][0])]),ans:A(x.i)[7][x.k],ar:true,big:true,sol:`<span class="ar">${esc(A(x.i)[7][x.k])}</span> “${esc(d[0])}”`}))}}
   items.push(...shuffle(qs));
   if(fresh.length>=3)items.push({type:'pairs',kind:'Words · match',pairs:shuffle(fresh).slice(0,5).map(x=>[D.lemmas[x.li][0],D.lemmas[x.li][4]])});
   items.push(...await reviewBits(1));
@@ -818,7 +1016,6 @@ async function buildAyat(n){const u=n.u,L=u.steps[n.step];await ensureTJ(L.conca
   return {title:nodeTitle(n),node:n,items,onFinish:()=>{L.forEach(i=>S.learn[i]=1)}};
 }
 function tipItems(l){const out=l.body.map((p,k)=>({type:'tip',kind:(l.track==='tajwid'?'Tajwīd':'Arabic')+' · '+l.title,title:k===0?l.title:'',ar:k===0?l.ar:'',html:`<p>${arWrap(esc(p))}</p>`}));out.push({type:'tip',kind:'Key rules',title:'Key rules',html:`<ul>${l.points.map(p=>`<li>${arWrap(esc(p))}</li>`).join('')}</ul>`});return out}
-const arWrap=s=>s.replace(/([؀-ۿ][؀-ۿݐ-ݿ\s]*[؀-ۿ]|[؀-ۿ])/g,'<span class="ar">$1</span>');
 async function grammarDrill(l,want,pref){
   const items=[];
   if(l.drill==='role'){const R2={mutlaq:'Absolute object (mafʿūl muṭlaq)',hal:'State (ḥāl)',tamyiz:'Specifier (tamyīz)',ajlih:'Reason (mafʿūl li-ajlih)',bihi:'Direct object (mafʿūl bihi)'};
@@ -829,7 +1026,7 @@ async function grammarDrill(l,want,pref){
 async function examplesCard(l,pref){let ex=[];if(l.ex)for(const x of l.ex){const [s,a,w]=x.split(':').map(Number);ex.push([SI[s]+a-1,w-1])}
   if(l.items)ex.push(...l.items.slice(0,3).map(([x])=>{const [s,a,w]=x.split(':').map(Number);return [SI[s]+a-1,w-1]}));
   if(ex.length<3&&l.q&&Object.keys(l.q).length)ex.push(...await findExamples(l.q,4,pref));ex=ex.slice(0,3);if(!ex.length)return null;await ensureTJ(ex.map(x=>x[0]));
-  const rows=await Promise.all(ex.map(async([i,k])=>{const d=(await W(i))[k];return `<div class="ex">${qwrap(wordInAyahTJ(i,k),'q sm')}<div class="small"><b class="ar">${esc(A(i)[7][k])}</b> “${esc(d[0])}”: ${esc(parseWord(d))}</div><div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}));
+  const rows=await Promise.all(ex.map(async([i,k])=>{const d=(await W(i))[k];return `<div class="ex">${qwrap(wordInAyahTJ(i,k),'q sm')}${tlLine(i)}<div class="small"><b class="ar">${esc(A(i)[7][k])}</b> <i>${esc(tlWord(i,k))}</i> “${esc(gl(d[0]))}”: ${esc(parseWord(d))}</div><div class="small muted">${ref(i)} · ${esc(A(i)[12])}</div></div>`}));
   return {type:'tip',kind:'Seen in the mushaf',title:'In the āyāt',html:rows.join('')}}
 async function buildGrammar(n){const l=(S.done[n.id]&&LESSONS.find(x=>x.id===S.done[n.id].lesson))||nextLessonOf('arabic');return grammarLesson(l,n,n.u.list)}
 async function grammarLesson(l,n,pref=[]){await ensureTJ(pref);const items=tipItems(l);const ex=await examplesCard(l,pref);if(ex)items.push(ex);
@@ -851,7 +1048,7 @@ async function tajwidDrill(l,want,pref){const items=[];
     let ans,opts;
     if(l.drill==='sila'){ans=/ۥ/.test(txt)?'Lengthened like a wāw (ṣila)':'Lengthened like a yāʾ (ṣila)';opts=['Lengthened like a wāw (ṣila)','Lengthened like a yāʾ (ṣila)','Short: no lengthening']}
     else{ans=TJN[cl];const grp=TJGROUP.find(g=>g.includes(cl))||[];opts=[...new Set([ans,...shuffle(cls.filter(x=>x!==cl).map(x=>TJN[x])),...shuffle(grp.filter(x=>x!==cl).map(x=>TJN[x]))])].slice(0,4);opts=shuffle(opts)}
-    items.push(chMCQ({kind:'Tajwīd · '+l.title,prompt:`<h2>Which rule applies to the letters in red?</h2><div class="small muted">${ref(i)}</div><div class="q md">${html}</div>`,opts,ans,sol:`<div class="q sm tjon">${t.join(' ')}</div>`}))}
+    items.push(chMCQ({kind:'Tajwīd · '+l.title,prompt:`<h2>Which rule applies to the letters in red?</h2><div class="small muted">${ref(i)}</div><div class="q md">${html}</div>${tlx()?tlLine(i):''}`,opts,ans,sol:`<div class="q sm tjon">${t.join(' ')}</div>`}))}
   return items}
 async function buildTajwid(n){const l=(S.done[n.id]&&LESSONS.find(x=>x.id===S.done[n.id].lesson))||nextLessonOf('tajwid');return tajwidLesson(l,n,n.u.list)}
 async function tajwidLesson(l,n,pref=[]){await ensureTJ(pref);const items=tipItems(l);
@@ -901,7 +1098,7 @@ async function renderItem(it){
   };
   const head=`<div class="kind">${esc(it.kind||'')}</div>`;
   if(it.type==='mcq'){
-    body.innerHTML=head+it.prompt+`<div class="opts ${it.big?'grid g2':it.opts.length>3&&!it.wide?'grid g2':''}">${it.opts.map((o,k)=>`<button class="opt${it.ar?' arq':''}${it.big?' big':''}" data-k="${k}"><span class="k">${k+1}</span>${it.big?`<span class="arw">${esc(o)}</span>`:`<span>${esc(o)}</span>`}</button>`).join('')}</div>`;
+    body.innerHTML=head+it.prompt+`<div class="opts ${it.big?'grid g2':it.opts.length>3&&!it.wide?'grid g2':''}">${it.opts.map((o,k)=>{const t=it.ar&&tlx()&&!it.noTL?`<span class="otl">${esc(tlText(o))}</span>`:'';return `<button class="opt${it.ar?' arq':''}${it.big?' big':''}" data-k="${k}"><span class="k">${k+1}</span>${it.big?`<span class="arw">${esc(o)}${t}</span>`:`<span>${esc(o)}${t}</span>`}</button>`}).join('')}</div>`;
     let sel=-1;const bs=[...body.querySelectorAll('.opt')];
     const choose=k=>{if(answered)return;sel=k;bs.forEach((b,j)=>b.classList.toggle('sel',j===k));beep('tap');setFoot('Check',true,check)};
     const check=()=>{if(sel<0||answered)return;const ok=it.opts[sel]===it.ans;bs.forEach((b,j)=>{b.classList.remove('sel');if(it.opts[j]===it.ans)b.classList.add('ok');else if(j===sel)b.classList.add('no')});judge(ok,ok?(it.solOk||''):(it.ar?`<span class="ar">${esc(it.ans)}</span>`:esc(it.ans))+(it.sol?'<div style="margin-top:4px">'+it.sol+'</div>':''))};
@@ -911,8 +1108,8 @@ async function renderItem(it){
   }
   else if(it.type==='tiles'){
     const placed=[];const bank=it.tiles.map((t,k)=>({t,k}));
-    const draw=()=>{body.querySelector('.answer').innerHTML=placed.map((x,p)=>`<button class="tile${it.ar?' ar':''}" data-p="${p}">${esc(x.t)}</button>`).join('');
-      body.querySelector('.bank').innerHTML=bank.map(x=>`<button class="tile${it.ar?' ar':''}${placed.includes(x)?' ghost':''}" data-b="${x.k}" ${placed.includes(x)?'disabled':''}>${esc(x.t)}</button>`).join('');
+    const tt=x=>it.ar&&tlx()?`<small class="ttl">${esc(tlText(x.t))}</small>`:'';const draw=()=>{body.querySelector('.answer').innerHTML=placed.map((x,p)=>`<button class="tile${it.ar?' ar':''}" data-p="${p}">${esc(x.t)}${tt(x)}</button>`).join('');
+      body.querySelector('.bank').innerHTML=bank.map(x=>`<button class="tile${it.ar?' ar':''}${placed.includes(x)?' ghost':''}" data-b="${x.k}" ${placed.includes(x)?'disabled':''}>${esc(x.t)}${tt(x)}</button>`).join('');
       body.querySelectorAll('[data-p]').forEach(b=>b.onclick=()=>{if(answered)return;placed.splice(+b.dataset.p,1);draw()});
       body.querySelectorAll('[data-b]').forEach(b=>b.onclick=()=>{if(answered)return;const x=bank.find(y=>y.k===+b.dataset.b);if(!placed.includes(x)){placed.push(x);beep('tap')}draw()});
       setFoot('Check',placed.length>0,check)};
@@ -921,7 +1118,7 @@ async function renderItem(it){
   }
   else if(it.type==='pairs'){
     const L=shuffle(it.pairs.map((p,k)=>({k,t:p[0]}))),Rr=shuffle(it.pairs.map((p,k)=>({k,t:p[1]})));let a=null,b=null,matched=0,slip=false;
-    body.innerHTML=head+`<h2>Match the pairs</h2><div class="pairs">${L.map((x,j)=>`<button class="opt arq" data-l="${x.k}" style="justify-content:center">${esc(x.t)}</button><button class="opt" data-r="${Rr[j].k}">${esc(Rr[j].t)}</button>`).join('')}</div>`;
+    body.innerHTML=head+`<h2>Match the pairs</h2><div class="pairs">${L.map((x,j)=>`<button class="opt arq" data-l="${x.k}" style="justify-content:center"><span>${esc(x.t)}${tlx()?`<span class="otl">${esc(tlText(x.t))}</span>`:''}</span></button><button class="opt" data-r="${Rr[j].k}">${esc(Rr[j].t)}</button>`).join('')}</div>`;
     const tryMatch=()=>{if(a==null||b==null)return;const la=body.querySelector(`[data-l="${a}"]`),rb=body.querySelector(`[data-r="${b}"]`);
       if(a===b){[la,rb].forEach(x=>{x.classList.remove('sel');x.classList.add('ok','done');x.disabled=true});beep('ok');matched++;if(matched===it.pairs.length){judge(!slip,'')}}
       else{slip=true;[la,rb].forEach(x=>{x.classList.add('no')});beep('no');setTimeout(()=>[la,rb].forEach(x=>x.classList.remove('no','sel')),450)}a=b=null};
@@ -930,16 +1127,16 @@ async function renderItem(it){
     foot.innerHTML=`<div class="in"><span class="muted small">Tap an Arabic word, then its meaning.</span></div>`;
   }
   else if(it.type==='introWord'){const L=D.lemmas[it.li];const d=(await W(it.i))[it.k];const rt=L[2]?D.roots.find(r=>r[0]===L[2]):null;const u2=wordAudio(d);
-    body.innerHTML=head+`<div class="card introcard"><div class="lex">${esc(L[0])}</div><h2>${esc(L[4])}</h2><div class="row" style="justify-content:center"><span class="chip">${{N:'noun',V:'verb',P:'particle'}[L[1]]||''}</span><span class="chip">${L[3]}× in the Quran</span>${rt?`<span class="chip m">root <span class="ar" style="font-size:16px">${esc(L[2].split('').join(' '))}</span> · ${rt[2].length} words</span>`:''}</div>
+    body.innerHTML=head+`<div class="card introcard"><div class="lex">${esc(L[0])}</div>${S.set.tl!=='off'?`<div class="tlbig">${esc(tlText(L[0]))}</div>`:''}<h2>${esc(L[4])}</h2><div class="row" style="justify-content:center"><span class="chip">${{N:'noun',V:'verb',P:'particle'}[L[1]]||''}</span><span class="chip">${L[3]}× in the Quran</span></div>${rt?`<div class="small">Root: ${rootHTML(L[2])} · a family of ${rt[2].length} words</div>`:''}
       ${u2&&!AUD.blocked?`<button class="btn sm" id="iwp">${ico('speaker')} Hear it</button>`:''}</div>
-      <div class="ex">${qwrap(wordInAyahTJ(it.i,it.k),'q sm')}<div class="small muted">${ref(it.i)} · here: “${esc(d[0])}” (${esc(d[1])})</div></div>`;
+      <div class="ex">${qwrap(wordInAyahTJ(it.i,it.k),'q sm')}${tlLine(it.i)}<div class="small muted">${ref(it.i)} · here: <i>${esc(tlWord(it.i,it.k))}</i>, “${esc(gl(d[0]))}”</div></div>`;
     if($('#iwp'))$('#iwp').onclick=()=>playURL(u2);if(u2&&!AUD.blocked)setTimeout(()=>playURL(u2),250);
     it.scoredKind=false;setFoot('Continue',true,()=>{LS.done++;nextItem()},'pri');
   }
   else if(it.type==='introAyah'){const i=it.i;const ws=await W(i);
-    body.innerHTML=head+`<h2>Listen, read and understand</h2><div class="small muted">${esc(sName(A(i)[0]))} ${ref(i)}</div>${qwrap(ayahText(i),'q lg')}<div class="tr">${esc(A(i)[12])}</div>
+    body.innerHTML=head+`<h2>Listen, read and understand</h2><div class="small muted">${esc(sName(A(i)[0]))} ${ref(i)}</div>${qwrap(ayahText(i),'q lg')}${tlLine(i)}<div class="tr">${esc(A(i)[12])}</div>
       <div class="row"><button class="btn sm pri" id="iap">${ico('speaker')} Play</button><button class="btn sm" id="iap3">Play ×3</button><a class="btn sm ghost" href="https://quran.com/${A(i)[0]}/${A(i)[1]}" target="_blank" rel="noopener">Quran.com ↗</a></div>
-      <div class="wbw">${ws.map((d,k)=>`<div data-wi="${i}" data-wk="${k}"><span class="wa">${esc(A(i)[7][k])}</span><span class="wt">${esc(d[1])}</span><span class="wg">${esc(d[0])}</span></div>`).join('')}</div>`;
+      <div class="wbw">${ws.map((d,k)=>`<div data-wi="${i}" data-wk="${k}"><span class="wa">${esc(A(i)[7][k])}</span><span class="wt">${esc(tlWord(i,k)||d[1])}</span><span class="wg">${esc(gl(d[0]))}</span></div>`).join('')}</div>`;
     $('#iap').onclick=()=>playAyat([i],1);$('#iap3').onclick=()=>playAyat([i],3);if(!AUD.blocked)setTimeout(()=>playAyat([i],1),300);
     setFoot('Continue',true,()=>{LS.done++;nextItem()},'pri');
   }
@@ -948,7 +1145,7 @@ async function renderItem(it){
     const cue=it.cue!=null?`<div class="small muted">Cue: the āyah before</div>${qwrap(ayahText(it.cue),'q sm muted')}`:'';
     const draw=()=>{body.innerHTML=head+`<h2>${it.grade4?'Recite this āyah from memory':'Recite it with only the first letters'}</h2><div class="small muted">${ref(i)} · say it aloud, then check</div>${cue}
       ${shown?qwrap(ayahText(i),'q lg'):it.grade4?qwrap(`${A(i)[7].slice(0,hint).map(esc).join(' ')} <span class="hint">…</span>`,'q lg'):qwrap(fadeHTML(i,2,0),'q lg')}
-      ${shown?`<div class="tr muted">${esc(A(i)[12])}</div>`:`<div class="row"><button class="btn sm" id="rh">Next word</button><button class="btn sm ghost" id="rl">${ico('speaker')} Listen</button></div>`}
+      ${shown?`${tlLine(i)}<div class="tr muted">${esc(A(i)[12])}</div>`:`<div class="row"><button class="btn sm" id="rh">Next word</button><button class="btn sm ghost" id="rl">${ico('speaker')} Listen</button></div>`}
       ${shown&&it.grade4?`<div class="grades"><button class="btn bad" data-gr="0">Again<small>forgot</small></button><button class="btn gold" data-gr="1">Hard<small>hesitated</small></button><button class="btn good" data-gr="2">Good<small>correct</small></button><button class="btn pri" data-gr="3">Easy<small>fluent</small></button></div>`:''}`;
       if(!shown){$('#rh').onclick=()=>{hint++;if(hint>=A(i)[7].length){shown=true;draw()}else draw()};$('#rl').onclick=()=>playAyat([i],1);setFoot('Check',true,()=>{shown=true;draw()},'pri')}
       else if(it.grade4){foot.innerHTML=`<div class="in"><span class="muted small">Grade yourself honestly: it sets when this āyah returns.</span></div>`;body.querySelectorAll('[data-gr]').forEach(b=>b.onclick=()=>{const g=+b.dataset.gr;S.ay[i]=sched(S.ay[i]&&S.ay[i].n!=null?S.ay[i]:null,g);if(!S.ay[i].t0)S.ay[i].t0=TD();S.stats.reviews++;dayLog('rev');it.noHeart=true;it.requeued=true;judge(g>0,g>0?'':'It will come back today.')})}
@@ -956,7 +1153,7 @@ async function renderItem(it){
     draw();
   }
   else if(it.type==='order'){const set=it.list;const sh=shuffle(set);let got=[];let slip=false;
-    const draw=()=>{body.innerHTML=head+`<h2>Tap the āyāt in order</h2><div class="small muted">${esc(sName(A(set[0])[0]))}</div><div class="opts">${sh.map(j=>`<button class="opt arq ${got.includes(j)?'ok':''}" data-j="${j}" ${got.includes(j)?'disabled':''}>${esc(A(j)[7].join(' '))}</button>`).join('')}</div>`;
+    const draw=()=>{body.innerHTML=head+`<h2>Tap the āyāt in order</h2><div class="small muted">${esc(sName(A(set[0])[0]))}</div><div class="opts">${sh.map(j=>`<button class="opt arq ${got.includes(j)?'ok':''}" data-j="${j}" ${got.includes(j)?'disabled':''}><span>${esc(A(j)[7].join(' '))}${tlx()?`<span class="otl">${esc(tlAyah(j))}</span>`:''}</span></button>`).join('')}</div>`;
       body.querySelectorAll('[data-j]').forEach(b=>b.onclick=()=>{const j=+b.dataset.j;if(j===set[got.length]){got.push(j);beep('tap');if(got.length===set.length){draw();judge(!slip,'')}else draw()}else{slip=true;b.classList.add('no');beep('no');setTimeout(()=>b.classList.remove('no'),450)}})};
     draw();foot.innerHTML=`<div class="in"><span class="muted small">First āyah first.</span></div>`;
   }
@@ -1017,12 +1214,13 @@ R.hifz=(arg)=>{if(!arg||!arg.list||!arg.list.length){go('learn');return}const L=
 /* ========== library ========== */
 let LIBTAB='arabic';
 R.library=(arg)=>{if(arg&&arg.lesson){libLesson(LESSONS.find(l=>l.id===arg.lesson));return}
-  const tabs=[['arabic','Arabic'],['tajwid','Tajwīd'],['words','Words & roots']];
+  const tabs=[['letters','Alphabet'],['arabic','Arabic'],['tajwid','Tajwīd'],['words','Words & roots']];
   V().innerHTML=`<div class="spread"><div><div class="eyebrow">Library</div><h1>Everything you have unlocked, and what is next</h1></div></div>
   <div class="seg" id="ltabs">${tabs.map(([k,l])=>`<button data-t="${k}" aria-pressed="${LIBTAB===k}">${l}</button>`).join('')}</div><div id="lbody" class="wrap" style="gap:14px"></div>`;
   $('#ltabs').onclick=e=>{const b=e.target.closest('button');if(b){LIBTAB=b.dataset.t;R.library()}};
   const B=$('#lbody');
   if(LIBTAB==='words'){wordsLib(B);return}
+  if(LIBTAB==='letters'){lettersLib(B);return}
   const ls=LESSONS.filter(l=>l.track===LIBTAB);const units=[...new Set(ls.map(l=>l.unit))];const done=ls.filter(l=>S.gram[l.id]&&S.gram[l.id].done).length;
   B.innerHTML=`<div class="card"><div class="spread"><b>${done} of ${ls.length} passed</b><span class="small muted">${LIBTAB==='tajwid'?'Follows Safina Society’s Science of Tajwid.':'Follows Safina Society’s Arabic Grammar in 40 Lessons, with the sarf of From the Treasures of Arabic Morphology.'}</span></div><div class="bar gold"><i style="width:${pct(done,ls.length)}%"></i></div></div>`+
    units.map(u=>`<div class="card"><h2>${esc(u)}</h2><div class="list">${ls.filter(l=>l.unit===u).map(l=>{const g=S.gram[l.id];return `<div data-l="${l.id}" style="cursor:pointer"><span class="row"><b>${esc(l.title)}</b><span class="ar">${esc(l.ar)}</span></span><span class="chip ${g&&g.done?'g':''}">${g?(g.done?'passed · ':'')+g.best+'/10':'not yet'}</span></div>`}).join('')}</div></div>`).join('');
@@ -1036,19 +1234,36 @@ async function libLesson(l){V().innerHTML=`<div class="spread"><div><div class="
   const ex=await examplesCard(l,memList());if(ex)$('#lex2').innerHTML=`<div class="card"><h3>In the āyāt</h3>${ex.html}</div>`;}
 function wordsLib(B){const t=TD();const known=Object.keys(S.lex).filter(k=>S.lex[k].n>0).map(Number);const cov=known.reduce((s,k)=>s+D.lemmas[k][3],0);
   B.innerHTML=`<div class="grid g3"><div class="card stat"><b>${pct(cov,D.tokens)}%</b><span>of the Quran’s ${D.tokens.toLocaleString()} words covered by lemmas you know</span></div><div class="card stat"><b>${known.length}</b><span>lemmas met of ${D.lemmas.length.toLocaleString()}</span></div><div class="card stat"><b>${Object.keys(S.lex).filter(k=>S.lex[k].due<=t).length}</b><span>due for review</span></div></div>
-  <div class="card"><div class="spread"><h2>Find a word or root</h2><input class="search" id="wsq" placeholder="Arabic, a root like رحم, or English" style="flex:1;min-width:200px"></div><div class="tbl"><table><thead><tr><th>Word</th><th>Meaning</th><th>Root</th><th class="n">Uses</th><th></th></tr></thead><tbody id="wtb"></tbody></table></div></div>`;
+  <div class="card"><div class="spread"><h2>Find a word or root</h2><input class="search" id="wsq" placeholder="Arabic, a root like رحم, English, or how it sounds (rahma)" style="flex:1;min-width:200px"></div><div class="tbl"><table><thead><tr><th>Word</th><th>Say it</th><th>Meaning</th><th>Root</th><th class="n">Uses</th><th></th></tr></thead><tbody id="wtb"></tbody></table></div></div>`;
   const all=D.lemmas.map((l,k)=>k).sort((a,b)=>D.lemmas[b][3]-D.lemmas[a][3]);
-  const fill=q=>{let list;if(!q)list=all.slice(0,60);else if(/[؀-ۿ]/.test(q)){const k=sk(q);list=all.filter(i=>sk(D.lemmas[i][0]).includes(k)||sk(D.lemmas[i][2]||'')===k)}else{const k=q.toLowerCase();list=all.filter(i=>(D.lemmas[i][4]||'').toLowerCase().includes(k))}
-    $('#wtb').innerHTML=list.slice(0,80).map(i=>{const L=D.lemmas[i];const ri=L[2]?D.roots.findIndex(r=>r[0]===L[2]):-1;return `<tr><td class="ar" style="font-size:24px">${esc(L[0])}</td><td>${esc(L[4])}${S.lex[i]&&S.lex[i].n>0?' <span class="chip g">known</span>':''}</td><td>${ri>=0?`<button class="btn sm ghost ar" data-r="${ri}" style="font-size:18px">${esc(L[2].split('').join(' '))}</button>`:''}</td><td class="n">${L[3]}</td><td>${L[1]==='V'?`<button class="btn sm" data-v="${i}">Conjugations</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="5" class="muted">No match.</td></tr>';
+  const fill=q=>{let list;if(!q)list=all.slice(0,60);else if(/[؀-ۿ]/.test(q)){const k=sk(q);list=all.filter(i=>sk(D.lemmas[i][0]).includes(k)||sk(D.lemmas[i][2]||'')===k)}else{const k=q.toLowerCase();list=all.filter(i=>(D.lemmas[i][4]||'').toLowerCase().includes(k)||tlText(D.lemmas[i][0]).toLowerCase().replace(/['-]/g,'').includes(k.replace(/['-]/g,'')))}
+    $('#wtb').innerHTML=list.slice(0,80).map(i=>{const L=D.lemmas[i];const ri=L[2]?D.roots.findIndex(r=>r[0]===L[2]):-1;return `<tr><td class="ar" style="font-size:24px">${esc(L[0])}</td><td class="tli">${esc(tlText(L[0]))}</td><td>${esc(L[4])}${S.lex[i]&&S.lex[i].n>0?' <span class="chip g">known</span>':''}</td><td>${ri>=0?`<button class="btn sm ghost" data-r="${ri}">${rootHTML(L[2])}</button>`:''}</td><td class="n">${L[3]}</td><td>${L[1]==='V'?`<button class="btn sm" data-v="${i}">Conjugations</button>`:''}</td></tr>`}).join('')||'<tr><td colspan="5" class="muted">No match.</td></tr>';
     $('#wtb').querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>rootView(+b.dataset.r));$('#wtb').querySelectorAll('[data-v]').forEach(b=>b.onclick=()=>verbSheet(+b.dataset.v))};
   fill('');$('#wsq').oninput=e=>fill(e.target.value.trim());}
 R.words=(arg)=>{if(arg&&arg.root!=null){rootView(arg.root);return}LIBTAB='words';R.library()};
+function lettersLib(B){
+  const ex={};for(const [ch] of LETTERS){const set=ch==='ا'?'اأإآ':ch==='ء'?'ءأإؤئ':ch;let best=-1;D.lemmas.forEach((l,k)=>{const f=l[0].replace(/^[\u064b-\u0670]+/,'')[0];if(set.includes(f)&&l[1]!=='P'&&l[4]&&(best<0||l[3]>D.lemmas[best][3]))best=k});ex[ch]=best}
+  const joins=c=>!'اأإآدذرزوؤءة'.includes(c);
+  const forms=c=>joins(c)?[c,c+'\u200d','\u200d'+c+'\u200d','\u200d'+c]:[c,c,'\u200d'+c,'\u200d'+c];
+  B.innerHTML=`<div class="card"><h2>The Arabic alphabet</h2><div class="small muted">28 letters plus the hamza, read right to left. Each is shown in Arabic with its name, its sound and how it changes shape inside a word. Tap a letter's example to open the word.</div><div class="row"><button class="btn pri" id="lpq">Practise the letters</button><button class="btn" id="lpm">Practise the marks</button></div></div>
+  <div class="letters">${LETTERS.map(([ch,en,ac,snd,tip])=>{const k=ex[ch];const f=forms(ch);return `<div class="lcard"><div class="lbig">${ch}</div><div><b>${esc(tlStyle()==='easy'?en:ac)}</b> <span class="muted small">${esc(tlStyle()==='easy'?ac:en)}</span></div><div class="lsound">says <b>${esc(snd)}</b></div><div class="small muted">${esc(tip)}</div><div class="lforms" title="end · middle · start · alone"><span>${f[3]}</span><span>${f[2]}</span><span>${f[1]}</span><span>${f[0]}</span></div><div class="lcap"><span>end</span><span>middle</span><span>start</span><span>alone</span></div>${k>=0?`<button class="lex-ex" data-lem="${k}"><span class="ar">${esc(D.lemmas[k][0])}</span> <i>${esc(tlText(D.lemmas[k][0]))}</i> · ${esc(D.lemmas[k][4])}</button>`:''}</div>`}).join('')}</div>
+  <div class="card"><h2>Other letter shapes</h2><div class="tbl"><table><thead><tr><th>Shape</th><th>Name</th><th>What it does</th></tr></thead><tbody>${[['أ','A hamza carried on an alif: a glottal stop with a vowel.'],['إ','A hamza under the alif, read with i.'],['ؤ','A hamza carried on a wāw.'],['ئ','A hamza carried on a yāʾ (no dots).'],['آ','Alif with madda: a long “aa” after a hamza.'],['ٱ','Alif waṣl: silent when joined to the word before.'],['ة','Tāʾ marbūṭa: a “t” when joined, an “h” when you stop. Usually marks a feminine word.'],['ى','Alif maqṣūra: looks like yāʾ without dots, read as a long “aa”.']].map(([c,d])=>`<tr><td class="ar" style="font-size:30px">${c}</td><td><b>${esc(letterName(c))}</b></td><td>${esc(d)}</td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card"><h2>Vowels and marks</h2><div class="tbl"><table><thead><tr><th>Mark</th><th>Name</th><th>Sound</th><th>On bāʾ</th><th>What it does</th></tr></thead><tbody>${MARKS.map(([m,en,ac,snd,d])=>`<tr><td class="ar" style="font-size:30px">ـ${m}</td><td><b>${esc(tlStyle()==='easy'?en:ac)}</b></td><td>${esc(snd)}</td><td class="ar" style="font-size:28px">ب${m}</td><td>${esc(d)}</td></tr>`).join('')}</tbody></table></div></div>`;
+  B.querySelectorAll('[data-lem]').forEach(b=>b.onclick=()=>{const [s,a,w]=D.lemmas[+b.dataset.lem][5].split(':').map(Number);openWord(SI[s]+a-1,w-1)});
+  $('#lpq').onclick=()=>{const items=[];for(const [ch,en,ac] of shuffle(LETTERS).slice(0,12)){const name=tlStyle()==='easy'?en:ac;const others=shuffle(LETTERS.filter(x=>x[0]!==ch)).slice(0,3);
+      if(Math.random()<.5)items.push(chMCQ({kind:'Alphabet',noTL:true,prompt:`<h2>What is this letter called?</h2><div class="lex" style="text-align:center">${ch}</div>`,opts:shuffle([name,...others.map(x=>tlStyle()==='easy'?x[1]:x[2])]),ans:name,sol:`${ch} is ${esc(name)}`}));
+      else items.push(chMCQ({kind:'Alphabet',noTL:true,prompt:`<h2>Which letter is ${esc(name)}?</h2>`,opts:shuffle([ch,...others.map(x=>x[0])]),ans:ch,ar:true,big:true,sol:`${esc(name)} is ${ch}`}))}
+    startLesson({title:'Alphabet',practice:true,back:'library',items})};
+  $('#lpm').onclick=()=>{const items=[];for(const [m,en,ac,snd] of shuffle(MARKS)){const others=shuffle(MARKS.filter(x=>x[0]!==m)).slice(0,3);const L=pick(LETTERS.slice(1,28))[0];
+      items.push(chMCQ({kind:'Vowels and marks',noTL:true,prompt:`<h2>How do you read this?</h2><div class="lex" style="text-align:center">${L}${m}</div>`,opts:shuffle([en+' · '+snd,...others.map(x=>x[1]+' · '+x[3])]),ans:en+' · '+snd,sol:`${L}${m}: ${esc(letterName(L))} with ${esc(en)}`}))}
+    startLesson({title:'Vowels and marks',practice:true,back:'library',items})};
+}
 let VERBS=null;
 async function verbSheet(li){if(!VERBS)VERBS=await J('data/verbs.json');const L=D.lemmas[li];const rows=(VERBS[li]||[]).slice().sort((a,b)=>({PERF:0,IMPF:1,IMPV:2}[a[0]]-{PERF:0,IMPF:1,IMPV:2}[b[0]])||a[1].localeCompare(b[1]));
   const T={PERF:'Past',IMPF:'Present',IMPV:'Command'};const M={IND:'',SUBJ:'subjunctive',JUS:'jussive'};
-  sheet(`<div class="spread"><span class="eyebrow">Conjugations found in the Quran</span><button class="btn sm ghost" data-close>Close</button></div><div class="lex" style="text-align:center">${esc(L[0])}</div><div style="text-align:center"><b>${esc(L[4])}</b> · root <bdi class="ar">${esc(L[2].split('').join(' '))}</bdi> · ${L[3]} uses</div>
+  sheet(`<div class="spread"><span class="eyebrow">Conjugations found in the Quran</span><button class="btn sm ghost" data-close>Close</button></div><div class="lex" style="text-align:center">${esc(L[0])}</div><div class="tlbig">${esc(tlText(L[0]))}</div><div style="text-align:center"><b>${esc(L[4])}</b> · ${L[3]} uses</div><div style="text-align:center">Root ${rootHTML(L[2])}</div>
    <div class="note">Every form below is attested in the mushaf, with how often it occurs. Prefixes such as wa- and fa- and attached pronouns are shown as they appear.</div>
-   <div class="tbl"><table><thead><tr><th>Tense</th><th>Person</th><th>Form</th><th class="n">×</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${T[r[0]]||''}${r[2]?' passive':''}${M[r[3]]?' · '+M[r[3]]:''}</td><td class="small">${esc(pgnName(r[1])||'')}</td><td class="ar" style="font-size:22px;cursor:pointer" data-loc="${r[6]}">${esc(r[4])}</td><td class="n">${r[5]}</td></tr>`).join('')}</tbody></table></div>`);
+   <div class="tbl"><table><thead><tr><th>Tense</th><th>Person</th><th>Form</th><th>Say it</th><th class="n">×</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${T[r[0]]||''}${r[2]?' passive':''}${M[r[3]]?' · '+M[r[3]]:''}</td><td class="small">${esc(pgnName(r[1])||'')}</td><td class="ar" style="font-size:22px;cursor:pointer" data-loc="${r[6]}">${esc(r[4])}</td><td class="tli">${esc(tlText(r[4]))}</td><td class="n">${r[5]}</td></tr>`).join('')}</tbody></table></div>`);
   $('#sheet').querySelectorAll('[data-loc]').forEach(x=>x.onclick=()=>{const [s,a,w]=x.dataset.loc.split(':').map(Number);openWord(SI[s]+a-1,w-1)})}
 
 /* ========== profile ========== */
@@ -1075,6 +1290,9 @@ R.profile=()=>{checkAch();const mem=memList();const per={},tot={};D.ayahs.forEac
     <label class="field">Daily goal<select id="sgoal">${[10,20,30,50,80].map(n=>`<option ${n===S.set.goal?'selected':''} value="${n}">${n} XP</option>`).join('')}</select></label>
     <label class="field">Hearts<select id="shrt"><option value="1" ${S.set.hearts?'selected':''}>On</option><option value="0" ${S.set.hearts?'':'selected'}>Off</option></select></label>
     <label class="field">Sounds<select id="ssnd"><option value="1" ${S.set.sound?'selected':''}>On</option><option value="0" ${S.set.sound?'':'selected'}>Off</option></select></label>
+    <label class="field">Transliteration<select id="stl"><option value="easy" ${S.set.tl==='easy'?'selected':''}>Easy English (Bismillaahir-Rahmaan)</option><option value="academic" ${S.set.tl==='academic'?'selected':''}>Academic (bismillāhir-raḥmān)</option><option value="off" ${S.set.tl==='off'?'selected':''}>Off</option></select></label>
+    <label class="field">Transliteration in exercises<select id="stlx"><option value="1" ${S.set.tlx!==false?'selected':''}>Show</option><option value="0" ${S.set.tlx===false?'selected':''}>Hide (harder)</option></select></label>
+    <label class="field">Language<select id="slang">${LANGS.map(l=>`<option value="${l.code}" ${l.code===S.set.lang?'selected':''}>${esc(l.name)}</option>`).join('')}</select></label>
     <label class="field">Tajwīd colours<select id="stjc"><option value="1" ${S.set.tjc?'selected':''}>On</option><option value="0" ${S.set.tjc?'':'selected'}>Off</option></select></label>
     <label class="field">Path<select id="so"><option value="back" ${S.set.order==='back'?'selected':''}>al-Fātiḥah, then an-Nās → al-Baqarah</option><option value="fwd" ${S.set.order==='fwd'?'selected':''}>Mushaf order</option></select></label>
     <label class="field">Translation<select id="st">${TRO().map(k=>`<option value="${k}" ${k===trSel()?'selected':''}>${TRN[k]}</option>`).join('')}</select></label>
@@ -1087,7 +1305,7 @@ R.profile=()=>{checkAch();const mem=memList();const per={},tot={};D.ayahs.forEac
   $('#jm').onclick=e=>{const d=e.target.closest('[data-j]');if(d)go('mushaf',{page:A(D.ayahs.findIndex(a=>a[3]==d.dataset.j))[2]})};
   V().querySelectorAll('[data-know]').forEach(b=>b.onclick=()=>{const s=+b.dataset.know;markKnown(range(SI[s],SI[s]+D.surahs[s-1][7]-1));R.profile();toast(`${sName(s)} added to review`)});
   const on=(id,f)=>$('#'+id).onchange=e=>{f(e.target.value);save();nav()};
-  on('sgoal',v=>S.set.goal=+v);on('shrt',v=>S.set.hearts=v==='1');on('ssnd',v=>S.set.sound=v==='1');on('stjc',v=>S.set.tjc=v==='1');on('so',v=>{S.set.order=v;buildOrder();buildUnits()});on('st',v=>S.set.tr=+v);on('sr',v=>S.set.rev=+v);
+  on('sgoal',v=>S.set.goal=+v);on('shrt',v=>S.set.hearts=v==='1');on('ssnd',v=>S.set.sound=v==='1');on('stjc',v=>S.set.tjc=v==='1');on('so',v=>{S.set.order=v;buildOrder();buildUnits()});on('st',v=>{S.set.tr=+v;S.set.trPicked=1});on('stl',v=>{S.set.tl=v});on('stlx',v=>{S.set.tlx=v==='1'});on('slang',v=>{S.set.lang=v;save();location.reload()});on('sr',v=>S.set.rev=+v);
   $('#bk').onclick=()=>{const t=JSON.stringify(S);$('#bkbox').innerHTML=`<textarea id="bkt" rows="4" style="width:100%;margin-top:8px" readonly>${esc(t)}</textarea>`;const ta=$('#bkt');(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Backup copied')).catch(()=>{ta.select();toast('Select all and copy the text')})};
   $('#rs2').onclick=()=>{$('#bkbox').innerHTML=`<textarea id="rst" rows="4" style="width:100%;margin-top:8px" placeholder="Paste a backup here"></textarea><button class="btn sm pri" id="rsg">Restore</button>`;$('#rsg').onclick=()=>{try{const o=JSON.parse($('#rst').value);if(!o.ay||!o.set)throw 0;S=o;save();location.reload()}catch(e){toast('That text is not a Sabaq backup')}}};
   $('#rz').onclick=()=>{$('#bkbox').innerHTML=`<div class="note">This erases every memorised āyah, word, XP and streak in this browser. <button class="btn sm bad" id="rzy">Erase everything</button> <button class="btn sm ghost" id="rzn">Keep it</button></div>`;$('#rzy').onclick=()=>{try{localStorage.removeItem(SK)}catch(e){}location.reload()};$('#rzn').onclick=()=>$('#bkbox').innerHTML=''};
@@ -1112,7 +1330,7 @@ document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textar
   try{
     [D,LESSONS,SIM]=await Promise.all([J('data/core.json'),J('data/lessons.json'),J('data/sim.json')]);
     D.ayahs.forEach((a,i)=>{KEY[a[0]+':'+a[1]]=i;if(a[1]===1)SI[a[0]]=i});
-    buildOrder();buildUnits();hearts();nav();
+    buildOrder();buildUnits();hearts();await loadLang(S.set.lang);i18nWatch();nav();
     const h=(location.hash||'').slice(1);go(VIEWS.some(v=>v[0]===h)?h:'learn');
   }catch(e){console.error(e);V().innerHTML=`<div class="card"><h2>The mushaf data did not load</h2><div class="muted">${esc(e.message)}. Reload the page; if it persists, the data files are missing from this copy.</div></div>`}
 })();
