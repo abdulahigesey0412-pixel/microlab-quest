@@ -1421,6 +1421,8 @@ const SHQ=[{"id": "s-pr-m1", "sh": "pr", "k": "m", "n": 1, "t": "intro", "s": "M
 /* ======================= LAYER 4: exam sheets =======================
    Three revision sheets kept in the sheets' own order and lettering. SHEETS and SHQ are injected above by build.py. */
 S.sheet=S.sheet||{};
+/* sheet questions keep their own miss list; keep them out of the MCQ review queue and danger zone */
+[S.danger,S.sr].forEach(o=>Object.keys(o||{}).forEach(k=>{if(k.startsWith("s-"))delete o[k];}));
 TABS.splice(TABS.indexOf("learn")+1,0,"sheets");
 let SH=null;
 const shOf=sh=>SHQ.filter(q=>q.sh===sh);
@@ -1452,7 +1454,7 @@ function renderSheet(){$("#p-sheets").classList.add("playing");const z=SH,q=z.qs
   $("#shQuit").onclick=sheetMenu;$("#sheetArea").querySelectorAll(".opt").forEach(b=>b.onclick=()=>sheetAnswer(+b.dataset.i));z.answered=false;}
 function sheetAnswer(i){const z=SH;if(!z||z.answered)return;z.answered=true;const q=z.qs[z.i],tf=q.k==="t",right=tf?(q.a?0:1):q.a,ok=i===right,opts=tf?["True","False"]:q.o;
   $("#sheetArea").querySelectorAll(".opt").forEach((b,k)=>{b.disabled=true;if(k===right)b.classList.add("ok");else if(k===i)b.classList.add("no");});
-  const r=S.sheet[q.id]||{n:0,c:0,l:0};r.n++;if(ok)r.c++;r.l=ok?1:0;S.sheet[q.id]=r;record(q.id,ok);
+  const r=S.sheet[q.id]||{n:0,c:0,l:0};r.n++;if(ok)r.c++;r.l=ok?1:0;S.sheet[q.id]=r;record(q.id,ok);delete S.danger[q.id];delete S.sr[q.id];save();renderDue();
   if(ok){z.score++;addXP(10);}else z.missed.push(q);
   const ans=(tf?"":"abcde"[right]+". ")+opts[right];
   $("#shFb").innerHTML=`<div class="fb ${ok?"ok":"no"}"><b>${ok?"Correct: ":"Not quite. Answer: "}${esc(ans)}</b> ${q.s?sref(q.s):""} ${esc(q.e)}${q.f?`<div class="note2">${FLAGNOTE[q.f]}</div>`:""}${readLink(q.t)}</div>
