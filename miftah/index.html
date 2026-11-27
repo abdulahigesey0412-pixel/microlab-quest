@@ -1,0 +1,593 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1E5A4A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Miftāḥ"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><script>window.MIFTAH_API="https://miftah-study.netlify.app/api/progress";</script><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}img{max-width:100%}</style></head><body><title>Miftāḥ</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one column, a phone in the hand; four rooms on a bottom bar; the day's work on one card. */
+:root{
+  --paper:#F4F6F1; --surface:#FFFFFF; --ink:#18261F; --muted:#5B6A62; --line:#D7DDD4;
+  --green:#1E5A4A; --green-soft:#E3EEE8; --gold:#A8781E; --gold-soft:#F5ECD8; --warn:#9B3B2C;
+  --t-gr:#9A9385; --t-gn:#2E7D3B; --t-bl:#2463A8; --t-m2:#A87A0B; --t-m246:#D2621A; --t-m45:#BF2A2A; --t-m6:#7A1C1C;
+  --f-ar:"Amiri","Geeza Pro","Noto Naskh Arabic",serif; --f-q:"Amiri Quran","Amiri","Geeza Pro",serif;
+  --f-read:"Newsreader","Iowan Old Style","Georgia",serif; --f-ui:"IBM Plex Sans",-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --paper:#0E1713; --surface:#15211C; --ink:#E7EEE9; --muted:#9DADA4; --line:#26362F;
+  --green:#79C7AC; --green-soft:#1C3029; --gold:#E2B55C; --gold-soft:#2C2616; --warn:#E58A79;
+  --t-gr:#8E887C; --t-gn:#6BC27A; --t-bl:#7FB1EE; --t-m2:#E3B544; --t-m246:#F09553; --t-m45:#F07070; --t-m6:#D27B7B; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#0E1713; --surface:#15211C; --ink:#E7EEE9; --muted:#9DADA4; --line:#26362F;
+  --green:#79C7AC; --green-soft:#1C3029; --gold:#E2B55C; --gold-soft:#2C2616; --warn:#E58A79;
+  --t-gr:#8E887C; --t-gn:#6BC27A; --t-bl:#7FB1EE; --t-m2:#E3B544; --t-m246:#F09553; --t-m45:#F07070; --t-m6:#D27B7B; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--f-ui);margin:0}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
+.wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px calc(96px + env(safe-area-inset-bottom,0px))}
+h1,h2,h3{font-family:var(--f-read);font-weight:600;text-wrap:balance;margin:0}
+h1{font-size:1.75rem;line-height:1.15}
+h2{font-size:1.3rem;line-height:1.2}
+h3{font-size:1.05rem}
+p{margin:0}
+.read{font-family:var(--f-read);font-size:1.06rem;line-height:1.55}
+.muted{color:var(--muted)}
+.small{font-size:.84rem}
+.eyebrow{font-size:.72rem;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.stack{display:flex;flex-direction:column;gap:14px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;padding-block:8px 16px}
+.date-ar{font-family:var(--f-ar);font-size:1.15rem;color:var(--green)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card.main{border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
+.note{background:var(--gold-soft);border-radius:12px;padding:12px 14px;font-size:.93rem}
+.btn{appearance:none;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .95rem var(--f-ui);padding:10px 14px;border-radius:10px;cursor:pointer;min-height:44px}
+.btn.primary{background:var(--green);border-color:var(--green);color:var(--paper)}
+.btn.ghost{background:transparent}
+.btn:focus-visible,a:focus-visible,textarea:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid color-mix(in srgb,var(--gold) 70%,transparent);outline-offset:2px}
+.btn[disabled]{opacity:.5}
+a{color:var(--green)}
+textarea,input[type=text],input[type=date],select{width:100%;font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px}
+textarea{min-height:84px;resize:vertical;font-family:var(--f-read);font-size:1.02rem}
+.ar{font-family:var(--f-ar);direction:rtl;text-align:right;font-size:1.45rem;line-height:2.1}
+.q{font-family:var(--f-q);direction:rtl;text-align:right;font-size:1.75rem;line-height:2.35}
+.src{font-size:.82rem;color:var(--muted);font-style:italic;font-family:var(--f-read)}
+blockquote{margin:0;padding:0 0 0 14px;border-left:3px solid var(--gold)}
+/* steps */
+.steps{display:flex;flex-direction:column;gap:8px}
+.step{display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;padding:12px;border-radius:12px;border:1px solid var(--line);background:var(--paper);cursor:pointer;text-align:left;font:inherit;color:inherit;width:100%}
+.step .dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:.85rem;font-weight:600;color:var(--muted)}
+.step.done .dot{background:var(--green);border-color:var(--green);color:var(--paper)}
+.step b{display:block;font-weight:600}
+.step span.sub{font-size:.85rem;color:var(--muted)}
+.step .min{font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.week{display:flex;flex-direction:column;gap:0}
+.wk{display:grid;grid-template-columns:22px 1fr auto;gap:12px;align-items:center;padding:12px 2px;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+.wk:last-child{border-bottom:0}
+.tick{width:20px;height:20px;border-radius:6px;border:2px solid var(--line)}
+.wk.done .tick{background:var(--green);border-color:var(--green)}
+.wk .when{font-size:.8rem;color:var(--muted)}
+.pill{font-size:.75rem;padding:3px 9px;border-radius:99px;background:var(--green-soft);color:var(--green);font-weight:600;white-space:nowrap}
+.pill.gold{background:var(--gold-soft);color:var(--gold)}
+/* panel */
+.panel{position:fixed;inset:0;background:var(--paper);z-index:20;overflow:auto}
+.panel .wrap{padding-top:calc(12px + env(safe-area-inset-top,0px))}
+.back{display:inline-flex;align-items:center;gap:6px;background:none;border:0;color:var(--green);font:500 1rem var(--f-ui);padding:8px 0;cursor:pointer;min-height:44px}
+/* tabs */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:15;background:color-mix(in srgb,var(--surface) 94%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px);padding-left:max(8px,env(safe-area-inset-left,0px));padding-right:max(8px,env(safe-area-inset-right,0px))}
+nav.tabs .in{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr)}
+nav.tabs button{background:none;border:0;font:500 .78rem var(--f-ui);color:var(--muted);padding:10px 4px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px;min-height:52px}
+nav.tabs button .ar-l{font-family:var(--f-ar);font-size:1.15rem;line-height:1.2}
+nav.tabs button[aria-current="page"]{color:var(--green)}
+/* fatiha */
+.ayah{display:flex;flex-direction:column;gap:6px;padding:14px 0;border-bottom:1px solid var(--line)}
+.ayah:last-child{border-bottom:0}
+.ayah .tl{font-family:var(--f-read);font-style:italic;font-size:1.02rem}
+.ayah .en{font-family:var(--f-read);font-size:.95rem;color:var(--muted)}
+.ayah .ctl{display:flex;gap:8px;flex-wrap:wrap}
+.g-gr{color:var(--t-gr)}.g-gn{color:var(--t-gn)}.g-bl{color:var(--t-bl)}.g-m2{color:var(--t-m2)}.g-m246{color:var(--t-m246)}.g-m45{color:var(--t-m45)}.g-m6{color:var(--t-m6)}
+.end{color:var(--gold);font-family:var(--f-q)}
+.keyrow{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:.82rem}
+.keyrow span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;background:currentColor;vertical-align:-1px}
+.playing{background:var(--green-soft);border-radius:10px}
+/* flash */
+.flash{min-height:230px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;cursor:pointer}
+.flash .big{font-family:var(--f-q);font-size:3rem;line-height:1.6;direction:rtl}
+.flash .gloss{font-family:var(--f-read);font-size:1.35rem}
+.meter{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--green);border-radius:99px}
+.big-num{font-family:var(--f-read);font-size:2.2rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box4{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.box4 > div{border:1px solid var(--line);border-radius:12px;padding:12px;background:var(--paper);min-width:0}
+.box4 .ar-t{font-family:var(--f-ar);color:var(--green);font-size:1.2rem}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+td,th{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left;vertical-align:top}
+th{font-size:.72rem;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}
+tr.now td{background:var(--green-soft)}
+.scroll{overflow-x:auto}
+.month{padding:12px 16px}
+.month summary{list-style:none}
+.month summary::-webkit-details-marker{display:none}
+.mdl{display:grid;grid-template-columns:84px 1fr;gap:6px 12px;margin:10px 0 0;font-size:.92rem}
+.mdl dt{color:var(--muted);font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;padding-top:2px}
+.mdl dd{margin:0;font-family:var(--f-read)}
+.grades{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
+.grades button{min-height:42px;border-radius:9px;border:1px solid var(--line);background:var(--paper);font:600 .95rem var(--f-ui);color:var(--ink);cursor:pointer}
+.grades button[aria-pressed="true"]{background:var(--green);color:var(--paper);border-color:var(--green)}
+.qitem{border:1px solid var(--line);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.qitem.ans{border-color:color-mix(in srgb,var(--green) 40%,var(--line))}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:9px 14px;font:500 .92rem var(--f-ui);color:var(--ink);cursor:pointer;min-height:42px}
+.chip[aria-pressed="true"]{background:var(--green);color:var(--paper);border-color:var(--green)}
+.progress-dots{display:flex;gap:6px}
+.progress-dots i{width:22px;height:4px;border-radius:2px;background:var(--line)}
+.progress-dots i.on{background:var(--green)}
+.person{display:flex;flex-direction:column;gap:6px;padding:12px 0;border-bottom:1px solid var(--line)}
+.person:last-child{border-bottom:0}
+.days{display:flex;gap:5px}
+.days i{flex:1;height:8px;border-radius:4px;background:var(--line);max-width:34px}
+.days i.on{background:var(--green)}
+.honest{font-size:.78rem;color:var(--muted);text-align:center;padding-top:8px}
+.switch{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.toggle{width:52px;height:30px;border-radius:99px;background:var(--line);border:0;position:relative;cursor:pointer;flex:none}
+.toggle::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:var(--surface);transition:left .2s}
+.toggle[aria-checked="true"]{background:var(--gold)}
+.toggle[aria-checked="true"]::after{left:25px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<div id="app"></div>
+<nav class="tabs" id="tabs" hidden><div class="in">
+  <button data-tab="today"><span class="ar-l">اليوم</span>Today</button>
+  <button data-tab="words"><span class="ar-l">كلمات</span>Words</button>
+  <button data-tab="ask"><span class="ar-l">سؤال</span>Ask</button>
+  <button data-tab="year"><span class="ar-l">السنة</span>Year</button>
+</div></nav>
+<div id="panel" class="panel" hidden></div>
+
+<script>
+const DATA = {"words": [{"a": "مِن", "g": "from, of", "r": "", "p": "particle", "f": 3226}, {"a": "اللَّه", "g": "Allah", "r": "أ ل ه", "p": "noun", "f": 2699}, {"a": "فِي", "g": "in", "r": "", "p": "particle", "f": 1701}, {"a": "لا", "g": "no, not", "r": "", "p": "particle", "f": 1691}, {"a": "إِنّ", "g": "indeed, truly", "r": "", "p": "particle", "f": 1682}, {"a": "قالَ", "g": "to say", "r": "ق و ل", "p": "verb", "f": 1618}, {"a": "الَّذِي", "g": "who, which (relative)", "r": "", "p": "noun", "f": 1468}, {"a": "عَلَى", "g": "take care of (yourselves), upon you", "r": "", "p": "particle", "f": 1444}, {"a": "ما", "g": "what, that which", "r": "", "p": "noun", "f": 1379}, {"a": "كانَ", "g": "to be", "r": "ك و ن", "p": "verb", "f": 1358}, {"a": "ذا", "g": "this, that (demonstrative)", "r": "", "p": "noun", "f": 1058}, {"a": "رَبّ", "g": "Lord", "r": "ر ب ب", "p": "noun", "f": 975}, {"a": "مَن", "g": "who, whoever", "r": "", "p": "noun", "f": 824}, {"a": "ما", "g": "not (negation)", "r": "", "p": "particle", "f": 798}, {"a": "إِلَى", "g": "to, toward", "r": "", "p": "particle", "f": 742}, {"a": "إِن", "g": "if", "r": "", "p": "particle", "f": 703}, {"a": "إِلّا", "g": "except, but", "r": "", "p": "particle", "f": 659}, {"a": "أَن", "g": "that, to (with a verb)", "r": "", "p": "particle", "f": 616}, {"a": "آمَنَ", "g": "to believe", "r": "أ م ن", "p": "verb", "f": 537}, {"a": "يَوْم", "g": "day", "r": "ي و م", "p": "noun", "f": 475}, {"a": "عَن", "g": "from, about", "r": "", "p": "particle", "f": 465}, {"a": "أَرْض", "g": "earth, land", "r": "أ ر ض", "p": "noun", "f": 461}, {"a": "قَد", "g": "already, indeed", "r": "", "p": "particle", "f": 406}, {"a": "إِذا", "g": "when, whenever", "r": "", "p": "noun", "f": 383}, {"a": "قَوْم", "g": "people, nation", "r": "ق و م", "p": "noun", "f": 383}, {"a": "عَلِمَ", "g": "to know", "r": "ع ل م", "p": "verb", "f": 382}, {"a": "آيَة", "g": "sign, verse", "r": "أ ي ي", "p": "noun", "f": 382}, {"a": "أَنّ", "g": "that (with a noun)", "r": "", "p": "particle", "f": 362}, {"a": "كُلّ", "g": "all, every", "r": "ك ل ل", "p": "noun", "f": 359}, {"a": "لَم", "g": "did not", "r": "", "p": "particle", "f": 347}, {"a": "جَعَلَ", "g": "to make, to place", "r": "ج ع ل", "p": "verb", "f": 340}, {"a": "ثُمّ", "g": "then, thereafter", "r": "", "p": "particle", "f": 338}, {"a": "رَسُول", "g": "messenger", "r": "ر س ل", "p": "noun", "f": 332}, {"a": "عَذاب", "g": "punishment, torment", "r": "ع ذ ب", "p": "noun", "f": 322}, {"a": "سَماء", "g": "sky, heaven", "r": "س م و", "p": "noun", "f": 310}, {"a": "نَفْس", "g": "soul, self", "r": "ن ف س", "p": "noun", "f": 295}, {"a": "كَفَرَ", "g": "to disbelieve, to deny", "r": "ك ف ر", "p": "verb", "f": 289}, {"a": "شَىْء", "g": "thing", "r": "ش ي أ", "p": "noun", "f": 283}, {"a": "أَو", "g": "or", "r": "", "p": "particle", "f": 280}, {"a": "جاءَ", "g": "to come", "r": "ج ي أ", "p": "verb", "f": 278}, {"a": "عَمِلَ", "g": "to do, to work", "r": "ع م ل", "p": "verb", "f": 276}, {"a": "آتَى", "g": "to give, to bring", "r": "أ ت ي", "p": "verb", "f": 271}, {"a": "رَأَى", "g": "to see", "r": "ر أ ي", "p": "verb", "f": 271}, {"a": "بَيْن", "g": "between", "r": "ب ي ن", "p": "noun", "f": 266}, {"a": "أَتَى", "g": "to come, to bring", "r": "أ ت ي", "p": "verb", "f": 264}, {"a": "كِتاب", "g": "book, scripture", "r": "ك ت ب", "p": "noun", "f": 260}, {"a": "حَقّ", "g": "truth, right", "r": "ح ق ق", "p": "noun", "f": 247}, {"a": "قَبْل", "g": "before", "r": "ق ب ل", "p": "noun", "f": 242}, {"a": "ناس", "g": "people, mankind", "r": "أ ن س", "p": "noun", "f": 241}, {"a": "إِذ", "g": "when, since", "r": "", "p": "noun", "f": 239}, {"a": "شاءَ", "g": "to will, to wish", "r": "ش ي أ", "p": "verb", "f": 236}, {"a": "أَيّ", "g": "which, what", "r": "أ ي ي", "p": "noun", "f": 215}, {"a": "مُؤْمِن", "g": "believer", "r": "أ م ن", "p": "noun", "f": 202}, {"a": "لَو", "g": "if (unreal), would that", "r": "", "p": "particle", "f": 200}, {"a": "بَعْد", "g": "after", "r": "ب ع د", "p": "noun", "f": 199}, {"a": "عِند", "g": "with, at, near", "r": "ع ن د", "p": "noun", "f": 197}, {"a": "خَلَقَ", "g": "to create", "r": "خ ل ق", "p": "verb", "f": 184}, {"a": "أَنزَلَ", "g": "to send down, to reveal", "r": "ن ز ل", "p": "verb", "f": 183}, {"a": "خَيْر", "g": "good, better", "r": "خ ي ر", "p": "noun", "f": 178}, {"a": "كَذَّبَ", "g": "to deny, to call a liar", "r": "ك ذ ب", "p": "verb", "f": 176}, {"a": "سَبِيل", "g": "way, path", "r": "س ب ل", "p": "noun", "f": 176}, {"a": "دَعا", "g": "to call, to invoke", "r": "د ع و", "p": "verb", "f": 170}, {"a": "اتَّقَى", "g": "to be mindful of Allah, to fear Allah", "r": "و ق ي", "p": "verb", "f": 166}, {"a": "أَمْر", "g": "command, matter, affair", "r": "أ م ر", "p": "noun", "f": 166}, {"a": "مَع", "g": "with", "r": "", "p": "noun", "f": 164}, {"a": "عَلِيم", "g": "All Knowing", "r": "ع ل م", "p": "noun", "f": 163}, {"a": "بَعْض", "g": "some, part", "r": "ب ع ض", "p": "noun", "f": 157}, {"a": "كافِر", "g": "disbeliever", "r": "ك ف ر", "p": "noun", "f": 156}, {"a": "ذُو", "g": "possessor of, owner of", "r": "", "p": "noun", "f": 156}, {"a": "آخِر", "g": "last, the Hereafter", "r": "أ خ ر", "p": "noun", "f": 155}, {"a": "لَمّا", "g": "when; not yet", "r": "", "p": "noun", "f": 154}, {"a": "غَيْر", "g": "other than, without", "r": "غ ي ر", "p": "noun", "f": 147}, {"a": "جَنَّة", "g": "garden, Paradise", "r": "ج ن ن", "p": "noun", "f": 147}, {"a": "إِلٰه", "g": "god, deity", "r": "أ ل ه", "p": "noun", "f": 147}, {"a": "نار", "g": "fire", "r": "ن و ر", "p": "noun", "f": 145}, {"a": "هَدَى", "g": "to guide", "r": "ه د ي", "p": "verb", "f": 144}, {"a": "دُون", "g": "besides, other than", "r": "د و ن", "p": "noun", "f": 144}, {"a": "حَتَّى", "g": "until, even", "r": "", "p": "particle", "f": 142}, {"a": "أَرادَ", "g": "to want, to intend", "r": "ر و د", "p": "verb", "f": 139}, {"a": "أَم", "g": "or (in questions)", "r": "", "p": "particle", "f": 137}, {"a": "مُوسَى", "g": "Mūsā (Moses)", "r": "", "p": "noun", "f": 136}, {"a": "اتَّبَعَ", "g": "to follow", "r": "ت ب ع", "p": "verb", "f": 136}, {"a": "قَلْب", "g": "heart", "r": "ق ل ب", "p": "noun", "f": 132}, {"a": "عَبْد", "g": "servant, slave", "r": "ع ب د", "p": "noun", "f": 131}, {"a": "أَرْسَلَ", "g": "to send", "r": "ر س ل", "p": "verb", "f": 130}, {"a": "لَعَلّ", "g": "perhaps, so that", "r": "", "p": "particle", "f": 129}, {"a": "ظالِم", "g": "wrongdoer, unjust", "r": "ظ ل م", "p": "noun", "f": 129}, {"a": "أَخَذَ", "g": "to take, to seize", "r": "أ خ ذ", "p": "verb", "f": 127}, {"a": "بَل", "g": "rather, nay", "r": "", "p": "particle", "f": 127}, {"a": "أَهْل", "g": "people, family, folk", "r": "أ ه ل", "p": "noun", "f": 127}, {"a": "اتَّخَذَ", "g": "to take (as)", "r": "أ خ ذ", "p": "verb", "f": 124}, {"a": "عَبَدَ", "g": "to worship", "r": "ع ب د", "p": "verb", "f": 122}, {"a": "يَد", "g": "hand", "r": "ي د ي", "p": "noun", "f": 120}, {"a": "مُبِين", "g": "clear, manifest", "r": "ب ي ن", "p": "noun", "f": 119}, {"a": "رَحِيم", "g": "Most Merciful", "r": "ر ح م", "p": "noun", "f": 116}, {"a": "دُنْيا", "g": "this world, worldly life", "r": "د ن و", "p": "noun", "f": 115}, {"a": "رَحْمَة", "g": "mercy", "r": "ر ح م", "p": "noun", "f": 114}, {"a": "ظَلَمَ", "g": "to wrong, to do injustice", "r": "ظ ل م", "p": "verb", "f": 110}, {"a": "عَظِيم", "g": "great, mighty", "r": "ع ظ م", "p": "noun", "f": 107}, {"a": "سَأَلَ", "g": "to ask", "r": "س أ ل", "p": "verb", "f": 106}, {"a": "وَجَدَ", "g": "to find", "r": "و ج د", "p": "verb", "f": 106}, {"a": "عِلْم", "g": "knowledge", "r": "ع ل م", "p": "noun", "f": 105}, {"a": "أَجْر", "g": "reward, wage", "r": "أ ج ر", "p": "noun", "f": 105}, {"a": "لَن", "g": "will never", "r": "", "p": "particle", "f": 104}, {"a": "عَزِيز", "g": "All Mighty", "r": "ع ز ز", "p": "noun", "f": 101}, {"a": "أَخْرَجَ", "g": "to bring out, to expel", "r": "خ ر ج", "p": "verb", "f": 99}, {"a": "حَكِيم", "g": "All Wise", "r": "ح ك م", "p": "noun", "f": 97}, {"a": "أَكَلَ", "g": "to eat", "r": "أ ك ل", "p": "verb", "f": 93}, {"a": "هَل", "g": "is? (question), whether", "r": "", "p": "particle", "f": 93}, {"a": "دِين", "g": "religion, judgement", "r": "د ي ن", "p": "noun", "f": 92}, {"a": "قَوْل", "g": "saying, word", "r": "ق و ل", "p": "noun", "f": 92}, {"a": "غَفُور", "g": "Oft Forgiving", "r": "غ ف ر", "p": "noun", "f": 91}, {"a": "لَيْسَ", "g": "is not", "r": "ل ي س", "p": "verb", "f": 89}, {"a": "شَيْطان", "g": "Satan, devil", "r": "ش ط ن", "p": "noun", "f": 88}, {"a": "مَثَل", "g": "example, parable", "r": "م ث ل", "p": "noun", "f": 88}, {"a": "فَعَلَ", "g": "to do", "r": "ف ع ل", "p": "verb", "f": 88}, {"a": "مَلَك", "g": "angel", "r": "م ل ك", "p": "noun", "f": 88}, {"a": "نَظَرَ", "g": "to look, to consider", "r": "ن ظ ر", "p": "verb", "f": 87}, {"a": "وَلِيّ", "g": "protector, ally, friend", "r": "و ل ي", "p": "noun", "f": 86}, {"a": "مال", "g": "wealth, property", "r": "م و ل", "p": "noun", "f": 86}, {"a": "هُدًى", "g": "guidance", "r": "ه د ي", "p": "noun", "f": 85}, {"a": "ذَكَرَ", "g": "to remember, to mention", "r": "ذ ك ر", "p": "verb", "f": 84}, {"a": "فَضْل", "g": "bounty, favour", "r": "ف ض ل", "p": "noun", "f": 84}, {"a": "لَيْل", "g": "night", "r": "ل ي ل", "p": "noun", "f": 84}, {"a": "صَلاة", "g": "prayer", "r": "ص ل و", "p": "noun", "f": 83}, {"a": "كَيْف", "g": "how", "r": "ك ي ف", "p": "noun", "f": 83}, {"a": "قَتَلَ", "g": "to kill", "r": "ق ت ل", "p": "verb", "f": 83}, {"a": "خافَ", "g": "to fear", "r": "خ و ف", "p": "verb", "f": 83}, {"a": "أَوَّل", "g": "first", "r": "أ و ل", "p": "noun", "f": 82}, {"a": "بُنَىّ", "g": "my little son, my son", "r": "ب ن ي", "p": "noun", "f": 80}, {"a": "أَكْثَر", "g": "more, most", "r": "ك ث ر", "p": "noun", "f": 80}, {"a": "رَجَعَ", "g": "to return", "r": "ر ج ع", "p": "verb", "f": 79}, {"a": "أَصْحاب", "g": "companions, inhabitants", "r": "ص ح ب", "p": "noun", "f": 78}, {"a": "تَوَلَّى", "g": "to turn away; to take as ally", "r": "و ل ي", "p": "verb", "f": 78}, {"a": "سَمِعَ", "g": "to hear", "r": "س م ع", "p": "verb", "f": 78}, {"a": "أَمَرَ", "g": "to command, to order", "r": "أ م ر", "p": "verb", "f": 77}, {"a": "جَهَنَّم", "g": "Jahannam (Hell)", "r": "", "p": "noun", "f": 77}, {"a": "زَوْج", "g": "spouse, pair, kind", "r": "ز و ج", "p": "noun", "f": 76}, {"a": "دَخَلَ", "g": "to enter", "r": "د خ ل", "p": "verb", "f": 76}, {"a": "حَياة", "g": "life", "r": "ح ي ي", "p": "noun", "f": 76}, {"a": "ذِكْر", "g": "remembrance, reminder", "r": "ذ ك ر", "p": "noun", "f": 76}, {"a": "مِثْل", "g": "like, the same as", "r": "م ث ل", "p": "noun", "f": 75}, {"a": "نَبِيّ", "g": "prophet", "r": "ن ب أ", "p": "noun", "f": 75}, {"a": "لَوْلا", "g": "if not for; why not", "r": "", "p": "particle", "f": 75}, {"a": "أَخ", "g": "brother", "r": "أ خ و", "p": "noun", "f": 75}, {"a": "خالِد", "g": "abiding forever", "r": "خ ل د", "p": "noun", "f": 74}, {"a": "فِرْعَوْن", "g": "Firʿawn (Pharaoh)", "r": "", "p": "noun", "f": 74}, {"a": "صالِح", "g": "righteous", "r": "ص ل ح", "p": "noun", "f": 74}, {"a": "أَحَد", "g": "one, anyone", "r": "أ ح د", "p": "noun", "f": 74}, {"a": "عالَم", "g": "world (of beings)", "r": "ع ل م", "p": "noun", "f": 73}, {"a": "جَزَى", "g": "to recompense, to reward", "r": "ج ز ي", "p": "verb", "f": 73}, {"a": "أَلِيم", "g": "painful", "r": "أ ل م", "p": "noun", "f": 72}, {"a": "وَجْه", "g": "face", "r": "و ج ه", "p": "noun", "f": 72}, {"a": "أَطاعَ", "g": "to obey", "r": "ط و ع", "p": "verb", "f": 72}, {"a": "أَوْحَى", "g": "to reveal, to inspire", "r": "و ح ي", "p": "verb", "f": 72}, {"a": "إِنسان", "g": "human being, man", "r": "أ ن س", "p": "noun", "f": 71}, {"a": "بَيِّنَة", "g": "clear proof, evidence", "r": "ب ي ن", "p": "noun", "f": 71}, {"a": "أَشْرَكَ", "g": "to associate partners with Allah", "r": "ش ر ك", "p": "verb", "f": 71}, {"a": "عَمَل", "g": "deed, work", "r": "ع م ل", "p": "noun", "f": 71}, {"a": "أَلْقَى", "g": "to throw, to cast", "r": "ل ق ي", "p": "verb", "f": 71}, {"a": "قَلِيل", "g": "few, little", "r": "ق ل ل", "p": "noun", "f": 70}, {"a": "قِيامَة", "g": "resurrection", "r": "ق و م", "p": "noun", "f": 70}, {"a": "آخَر", "g": "other, another", "r": "أ خ ر", "p": "noun", "f": 70}, {"a": "قُرْءان", "g": "Qurʾān, recitation", "r": "ق ر أ", "p": "noun", "f": 70}, {"a": "وَعَدَ", "g": "to promise", "r": "و ع د", "p": "verb", "f": 70}, {"a": "إِبْراهِيم", "g": "Ibrāhīm (Abraham)", "r": "", "p": "noun", "f": 69}, {"a": "أَنفَقَ", "g": "to spend", "r": "ن ف ق", "p": "verb", "f": 68}, {"a": "لٰكِن", "g": "but", "r": "", "p": "particle", "f": 65}, {"a": "غَفَرَ", "g": "to forgive", "r": "غ ف ر", "p": "verb", "f": 65}, {"a": "لٰكِنّ", "g": "but (with a noun)", "r": "", "p": "particle", "f": 65}, {"a": "بَيْت", "g": "house", "r": "ب ي ت", "p": "noun", "f": 65}, {"a": "يَمِين", "g": "right hand, oath", "r": "ي م ن", "p": "noun", "f": 65}, {"a": "أَضَلَّ", "g": "to lead astray", "r": "ض ل ل", "p": "verb", "f": 64}, {"a": "أُمَّة", "g": "community, nation", "r": "أ م م", "p": "noun", "f": 64}, {"a": "آباء", "g": "fathers, forefathers", "r": "أ ب و", "p": "noun", "f": 64}, {"a": "أَصابَ", "g": "to strike, to befall", "r": "ص و ب", "p": "verb", "f": 64}, {"a": "أَحْبَبْ", "g": "to love", "r": "ح ب ب", "p": "verb", "f": 64}, {"a": "ماء", "g": "water", "r": "م و ه", "p": "noun", "f": 63}, {"a": "كَثِير", "g": "much, many", "r": "ك ث ر", "p": "noun", "f": 63}, {"a": "تابَ", "g": "to repent, to turn", "r": "ت و ب", "p": "verb", "f": 63}, {"a": "ابْن", "g": "son", "r": "ب ن ي", "p": "noun", "f": 63}, {"a": "نَزَّلَ", "g": "to send down (gradually)", "r": "ن ز ل", "p": "verb", "f": 62}, {"a": "صالِحَة", "g": "righteous deed", "r": "ص ل ح", "p": "noun", "f": 62}, {"a": "كَسَبَ", "g": "to earn", "r": "ك س ب", "p": "verb", "f": 62}, {"a": "رَزَقَ", "g": "to provide", "r": "ر ز ق", "p": "verb", "f": 61}, {"a": "تَلَى", "g": "to recite, to follow", "r": "ت ل و", "p": "verb", "f": 61}, {"a": "صادِق", "g": "truthful", "r": "ص د ق", "p": "noun", "f": 59}, {"a": "نَصَرَ", "g": "to help, to give victory", "r": "ن ص ر", "p": "verb", "f": 59}, {"a": "نِساء", "g": "women", "r": "ن س و", "p": "noun", "f": 59}, {"a": "قَضَى", "g": "to decree, to complete", "r": "ق ض ي", "p": "verb", "f": 59}, {"a": "صَبَرَ", "g": "to be patient", "r": "ص ب ر", "p": "verb", "f": 58}, {"a": "سَيِّئَة", "g": "evil deed, misdeed", "r": "س و أ", "p": "noun", "f": 58}, {"a": "نَذِير", "g": "warner", "r": "ن ذ ر", "p": "noun", "f": 58}, {"a": "رَحْمٰن", "g": "Most Gracious", "r": "ر ح م", "p": "noun", "f": 57}, {"a": "جَرَيْ", "g": "to flow, to run", "r": "ج ر ي", "p": "verb", "f": 57}, {"a": "قَرْيَة", "g": "town, city", "r": "ق ر ي", "p": "noun", "f": 57}, {"a": "عَيْن", "g": "eye, spring", "r": "ع ي ن", "p": "noun", "f": 57}, {"a": "نَهار", "g": "day (daytime)", "r": "ن ه ر", "p": "noun", "f": 57}, {"a": "شَهِيد", "g": "witness", "r": "ش ه د", "p": "noun", "f": 56}, {"a": "مَسَّ", "g": "to touch, to afflict", "r": "م س س", "p": "verb", "f": 56}, {"a": "وَلَد", "g": "child, son", "r": "و ل د", "p": "noun", "f": 56}, {"a": "شَدِيد", "g": "severe, intense", "r": "ش د د", "p": "noun", "f": 56}, {"a": "رِزْق", "g": "provision, sustenance", "r": "ر ز ق", "p": "noun", "f": 55}, {"a": "ضَرَبَ", "g": "to strike; to set forth (an example)", "r": "ض ر ب", "p": "verb", "f": 55}, {"a": "أَمّا", "g": "as for", "r": "", "p": "particle", "f": 55}, {"a": "أَقامَ", "g": "to establish, to keep up", "r": "ق و م", "p": "verb", "f": 54}, {"a": "نَهَر", "g": "river", "r": "ن ه ر", "p": "noun", "f": 54}, {"a": "قاتَلَ", "g": "to fight", "r": "ق ت ل", "p": "verb", "f": 54}, {"a": "جَمِيع", "g": "all, together", "r": "ج م ع", "p": "noun", "f": 53}, {"a": "خَرَجَ", "g": "to go out, to come forth", "r": "خ ر ج", "p": "verb", "f": 53}, {"a": "ضَلَّ", "g": "to go astray, to err", "r": "ض ل ل", "p": "verb", "f": 53}, {"a": "بَعَثَ", "g": "to raise, to send", "r": "ب ع ث", "p": "verb", "f": 52}, {"a": "خَلْق", "g": "creation", "r": "خ ل ق", "p": "noun", "f": 52}, {"a": "أَجَل", "g": "term, appointed time", "r": "أ ج ل", "p": "noun", "f": 52}, {"a": "مُجْرِم", "g": "criminal, sinner", "r": "ج ر م", "p": "noun", "f": 52}, {"a": "تَحْت", "g": "under, beneath", "r": "ت ح ت", "p": "noun", "f": 51}, {"a": "أَحْيا", "g": "to give life, to revive", "r": "ح ي ي", "p": "verb", "f": 51}, {"a": "بَصِير", "g": "All Seeing", "r": "ب ص ر", "p": "noun", "f": 51}, {"a": "أَهْلَكَ", "g": "to destroy", "r": "ه ل ك", "p": "verb", "f": 51}, {"a": "تَذَكَّرَ", "g": "to take heed, to remember", "r": "ذ ك ر", "p": "verb", "f": 51}, {"a": "مَوْت", "g": "death", "r": "م و ت", "p": "noun", "f": 50}, {"a": "عَدُوّ", "g": "enemy", "r": "ع د و", "p": "noun", "f": 50}, {"a": "نِعْمَة", "g": "favour, blessing", "r": "ن ع م", "p": "noun", "f": 50}, {"a": "سُوء", "g": "evil, harm", "r": "س و أ", "p": "noun", "f": 50}, {"a": "افْتَرَى", "g": "to fabricate, to invent (a lie)", "r": "ف ر ي", "p": "verb", "f": 50}, {"a": "مُتَّقي", "g": "the mindful (of Allah), the pious", "r": "و ق ي", "p": "noun", "f": 49}, {"a": "غَيْب", "g": "the unseen", "r": "غ ي ب", "p": "noun", "f": 49}, {"a": "زادَ", "g": "to increase", "r": "ز ي د", "p": "verb", "f": 49}, {"a": "عَقَلُ", "g": "to reason, to understand", "r": "ع ق ل", "p": "verb", "f": 49}, {"a": "كَتَبَ", "g": "to write, to prescribe", "r": "ك ت ب", "p": "verb", "f": 49}, {"a": "أَعْلَم", "g": "most knowing, knows best", "r": "ع ل م", "p": "noun", "f": 49}, {"a": "وَعْد", "g": "promise", "r": "و ع د", "p": "noun", "f": 49}, {"a": "بَصَر", "g": "sight, eyes", "r": "ب ص ر", "p": "noun", "f": 48}, {"a": "دار", "g": "home, abode", "r": "د و ر", "p": "noun", "f": 48}, {"a": "مُلْك", "g": "dominion, sovereignty", "r": "م ل ك", "p": "noun", "f": 48}, {"a": "ساعَة", "g": "hour, the Hour", "r": "س و ع", "p": "noun", "f": 48}, {"a": "ظَنَّ", "g": "to think, to assume", "r": "ظ ن ن", "p": "verb", "f": 47}, {"a": "سَمِيع", "g": "All Hearing", "r": "س م ع", "p": "noun", "f": 47}, {"a": "شَكَرَ", "g": "to give thanks, to be grateful", "r": "ش ك ر", "p": "verb", "f": 46}, {"a": "نَبَّأَ", "g": "to inform", "r": "ن ب أ", "p": "verb", "f": 46}, {"a": "أَب", "g": "father", "r": "أ ب و", "p": "noun", "f": 46}, {"a": "صِراط", "g": "path", "r": "ص ر ط", "p": "noun", "f": 45}, {"a": "قَدِير", "g": "All Powerful", "r": "ق د ر", "p": "noun", "f": 45}, {"a": "إِيمان", "g": "faith, belief", "r": "أ م ن", "p": "noun", "f": 45}, {"a": "حَكَمَ", "g": "to judge, to rule", "r": "ح ك م", "p": "verb", "f": 45}, {"a": "يَذَرَ", "g": "to leave, to let be", "r": "و ذ ر", "p": "verb", "f": 45}, {"a": "خَبِير", "g": "All Aware", "r": "خ ب ر", "p": "noun", "f": 45}, {"a": "أَنذَرَ", "g": "to warn", "r": "ن ذ ر", "p": "verb", "f": 44}, {"a": "شَهِدَ", "g": "to witness, to bear witness", "r": "ش ه د", "p": "verb", "f": 44}, {"a": "مُشْرِك", "g": "polytheist, idolater", "r": "ش ر ك", "p": "noun", "f": 44}, {"a": "حَسِبَ", "g": "to think, to reckon", "r": "ح س ب", "p": "verb", "f": 44}, {"a": "صَدْر", "g": "breast, chest", "r": "ص د ر", "p": "noun", "f": 44}, {"a": "نادَى", "g": "to call out", "r": "ن د ي", "p": "verb", "f": 44}, {"a": "مَلَكَتْ", "g": "to possess, to own", "r": "م ل ك", "p": "verb", "f": 44}, {"a": "حَمْد", "g": "praise", "r": "ح م د", "p": "noun", "f": 43}, {"a": "نُور", "g": "light", "r": "ن و ر", "p": "noun", "f": 43}, {"a": "إِسْرائِيل", "g": "Isrāʾīl (Israel, Jacob)", "r": "", "p": "noun", "f": 43}, {"a": "نُوح", "g": "Nūḥ (Noah)", "r": "", "p": "noun", "f": 43}, {"a": "سَبَّحَ", "g": "to glorify", "r": "س ب ح", "p": "verb", "f": 42}, {"a": "كَلِمَة", "g": "word", "r": "ك ل م", "p": "noun", "f": 42}, {"a": "جَزاء", "g": "recompense, reward", "r": "ج ز ي", "p": "noun", "f": 42}, {"a": "اسْتَطاعَ", "g": "to be able", "r": "ط و ع", "p": "verb", "f": 42}, {"a": "أُدْخِلَ", "g": "to be admitted, to be made to enter", "r": "د خ ل", "p": "verb", "f": 42}, {"a": "سَوْف", "g": "will (soon)", "r": "", "p": "particle", "f": 42}, {"a": "سَلام", "g": "peace", "r": "س ل م", "p": "noun", "f": 42}, {"a": "فَوْق", "g": "above, over", "r": "ف و ق", "p": "noun", "f": 41}, {"a": "عَلَّمَ", "g": "to teach", "r": "ع ل م", "p": "verb", "f": 41}, {"a": "سُبْحان", "g": "glory be, exalted is", "r": "س ب ح", "p": "noun", "f": 41}, {"a": "بَحْر", "g": "sea", "r": "ب ح ر", "p": "noun", "f": 41}, {"a": "حَمَلَ", "g": "to carry, to bear", "r": "ح م ل", "p": "verb", "f": 41}, {"a": "عَذَّبَ", "g": "to punish", "r": "ع ذ ب", "p": "verb", "f": 41}, {"a": "تَرَكَ", "g": "to leave, to abandon", "r": "ت ر ك", "p": "verb", "f": 40}, {"a": "اسْتَكْبَرَ", "g": "to be arrogant", "r": "ك ب ر", "p": "verb", "f": 40}, {"a": "اهْتَدَى", "g": "to be guided", "r": "ه د ي", "p": "verb", "f": 40}, {"a": "أَرَيْ", "g": "to show", "r": "ر أ ي", "p": "verb", "f": 40}, {"a": "وَيْل", "g": "woe", "r": "", "p": "noun", "f": 40}, {"a": "بِئْسَ", "g": "how wretched", "r": "ب أ س", "p": "verb", "f": 40}, {"a": "خَشِيَ", "g": "to fear, to dread", "r": "خ ش ي", "p": "verb", "f": 40}, {"a": "بَلَغَ", "g": "to reach", "r": "ب ل غ", "p": "verb", "f": 40}, {"a": "اسْتَغْفَرَ", "g": "to ask forgiveness", "r": "غ ف ر", "p": "verb", "f": 40}, {"a": "كَبِير", "g": "great, big", "r": "ك ب ر", "p": "noun", "f": 40}, {"a": "تَوَكَّلْ", "g": "to put trust (in)", "r": "و ك ل", "p": "verb", "f": 40}, {"a": "شَرِيك", "g": "partner", "r": "ش ر ك", "p": "noun", "f": 40}, {"a": "إِذا", "g": "behold, suddenly", "r": "", "p": "particle", "f": 40}, {"a": "اسْم", "g": "name", "r": "س م و", "p": "noun", "f": 39}, {"a": "أَلا", "g": "surely, unquestionably", "r": "", "p": "particle", "f": 39}, {"a": "إِذْن", "g": "permission, leave", "r": "أ ذ ن", "p": "noun", "f": 39}, {"a": "مُسْلِم", "g": "Muslim, one who submits", "r": "س ل م", "p": "noun", "f": 39}, {"a": "ماتَ", "g": "to die", "r": "م و ت", "p": "verb", "f": 39}, {"a": "حَرَّمَ", "g": "to forbid, to make unlawful", "r": "ح ر م", "p": "verb", "f": 39}, {"a": "حِساب", "g": "reckoning, account", "r": "ح س ب", "p": "noun", "f": 39}, {"a": "جَبَل", "g": "mountain", "r": "ج ب ل", "p": "noun", "f": 39}, {"a": "بُشِّرَ", "g": "to be given good news", "r": "ب ش ر", "p": "verb", "f": 38}, {"a": "مَيِّت", "g": "dead", "r": "م و ت", "p": "noun", "f": 38}, {"a": "مُحْسِن", "g": "good doer", "r": "ح س ن", "p": "noun", "f": 38}, {"a": "رَضِيَ", "g": "to be pleased", "r": "ر ض و", "p": "verb", "f": 38}, {"a": "مَعْرُوف", "g": "what is right, kindness", "r": "ع ر ف", "p": "noun", "f": 38}, {"a": "ضَلال", "g": "error, going astray", "r": "ض ل ل", "p": "noun", "f": 38}, {"a": "مُسْتَقِيم", "g": "straight", "r": "ق و م", "p": "noun", "f": 37}, {"a": "فاسِق", "g": "defiantly disobedient", "r": "ف س ق", "p": "noun", "f": 37}, {"a": "يَحْزُن", "g": "to grieve, to sadden", "r": "ح ز ن", "p": "verb", "f": 37}, {"a": "نَجَّى", "g": "to save, to deliver", "r": "ن ج و", "p": "verb", "f": 37}, {"a": "كُفْر", "g": "disbelief", "r": "ك ف ر", "p": "noun", "f": 37}, {"a": "حَشَرَ", "g": "to gather", "r": "ح ش ر", "p": "verb", "f": 37}, {"a": "ذَنب", "g": "sin", "r": "ذ ن ب", "p": "noun", "f": 37}, {"a": "بَشَر", "g": "human being, mortal", "r": "ب ش ر", "p": "noun", "f": 37}, {"a": "صَدَّ", "g": "to turn away, to bar", "r": "ص د د", "p": "verb", "f": 37}, {"a": "سُلْطان", "g": "authority, proof", "r": "س ل ط", "p": "noun", "f": 37}, {"a": "رَدَّ", "g": "to return, to turn back", "r": "ر د د", "p": "verb", "f": 36}, {"a": "أَحْسَن", "g": "best, better", "r": "ح س ن", "p": "noun", "f": 36}, {"a": "ذاقُ", "g": "to taste", "r": "ذ و ق", "p": "verb", "f": 36}, {"a": "ذَهَبَ", "g": "to go", "r": "ذ ه ب", "p": "verb", "f": 35}, {"a": "اسْتَوَى", "g": "to rise, to establish oneself", "r": "س و ي", "p": "verb", "f": 35}, {"a": "سَجَدَ", "g": "to prostrate", "r": "س ج د", "p": "verb", "f": 35}, {"a": "مَتاع", "g": "enjoyment, provision", "r": "م ت ع", "p": "noun", "f": 35}, {"a": "حِين", "g": "time, period", "r": "ح ي ن", "p": "noun", "f": 35}, {"a": "نَسِيَ", "g": "to forget", "r": "ن س ي", "p": "verb", "f": 35}, {"a": "بَيَّنُ", "g": "to make clear", "r": "ب ي ن", "p": "verb", "f": 35}, {"a": "إِثْم", "g": "sin", "r": "أ ث م", "p": "noun", "f": 35}, {"a": "نَصِير", "g": "helper", "r": "ن ص ر", "p": "noun", "f": 35}, {"a": "اخْتَلَفَ", "g": "to differ, to disagree", "r": "خ ل ف", "p": "verb", "f": 35}, {"a": "مُرْسَل", "g": "one who is sent, messenger", "r": "ر س ل", "p": "noun", "f": 35}, {"a": "مَرْيَم", "g": "Maryam (Mary)", "r": "", "p": "noun", "f": 34}, {"a": "فِتْنَة", "g": "trial, temptation", "r": "ف ت ن", "p": "noun", "f": 34}, {"a": "ابْتَغَى", "g": "to seek", "r": "ب غ ي", "p": "verb", "f": 34}, {"a": "أُمّ", "g": "mother", "r": "أ م م", "p": "noun", "f": 34}, {"a": "آلاء", "g": "favours, blessings", "r": "أ ل و", "p": "noun", "f": 34}, {"a": "قامَ", "g": "to stand, to rise", "r": "ق و م", "p": "verb", "f": 33}, {"a": "فَرِيق", "g": "party, group", "r": "ف ر ق", "p": "noun", "f": 33}, {"a": "حَرام", "g": "sacred, forbidden", "r": "ح ر م", "p": "noun", "f": 33}, {"a": "شَمْس", "g": "sun", "r": "ش م س", "p": "noun", "f": 33}, {"a": "نَعَم", "g": "livestock, cattle", "r": "ن ع م", "p": "noun", "f": 33}, {"a": "كَذِب", "g": "lie, falsehood", "r": "ك ذ ب", "p": "noun", "f": 33}, {"a": "كَلّا", "g": "no indeed, by no means", "r": "", "p": "particle", "f": 33}, {"a": "خاسِر", "g": "loser", "r": "خ س ر", "p": "noun", "f": 32}, {"a": "زَكاة", "g": "zakāh, purity", "r": "ز ك و", "p": "noun", "f": 32}, {"a": "ذُرِّيَّة", "g": "offspring, descendants", "r": "ذ ر ر", "p": "noun", "f": 32}, {"a": "كَفَى", "g": "to suffice", "r": "ك ف ي", "p": "verb", "f": 32}, {"a": "كاذِب", "g": "liar", "r": "ك ذ ب", "p": "noun", "f": 32}, {"a": "نَهَى", "g": "to forbid, to prohibit", "r": "ن ه ي", "p": "verb", "f": 32}, {"a": "عاقِبَة", "g": "end, outcome", "r": "ع ق ب", "p": "noun", "f": 32}, {"a": "أَعْرَضَ", "g": "to turn away", "r": "ع ر ض", "p": "verb", "f": 32}, {"a": "حَيْث", "g": "where, wherever", "r": "ح ي ث", "p": "noun", "f": 31}, {"a": "أَشَدّ", "g": "more severe, stronger", "r": "ش د د", "p": "noun", "f": 31}, {"a": "نَفَعَ", "g": "to benefit", "r": "ن ف ع", "p": "verb", "f": 31}, {"a": "إِذًا", "g": "then, in that case", "r": "", "p": "particle", "f": 31}, {"a": "حَسَنَة", "g": "good deed", "r": "ح س ن", "p": "noun", "f": 31}, {"a": "واحِدَة", "g": "one (feminine), single", "r": "و ح د", "p": "noun", "f": 31}, {"a": "طَيِّبَة", "g": "good, pure (feminine)", "r": "ط ي ب", "p": "noun", "f": 30}, {"a": "واحِد", "g": "one", "r": "و ح د", "p": "noun", "f": 30}, {"a": "قُوَّة", "g": "strength, power", "r": "ق و ي", "p": "noun", "f": 30}, {"a": "وَلَّى", "g": "to turn (one’s back)", "r": "و ل ي", "p": "verb", "f": 30}, {"a": "عاد", "g": "ʿĀd (a people)", "r": "ع د و", "p": "noun", "f": 30}, {"a": "عَسَى", "g": "perhaps, it may be", "r": "ع س ي", "p": "verb", "f": 30}, {"a": "شَرّ", "g": "evil", "r": "ش ر ر", "p": "noun", "f": 30}, {"a": "مَلَأ", "g": "chiefs, assembly", "r": "م ل أ", "p": "noun", "f": 30}, {"a": "لَبِثَ", "g": "to stay, to remain", "r": "ل ب ث", "p": "verb", "f": 30}, {"a": "حُكْم", "g": "judgement, wisdom", "r": "ح ك م", "p": "noun", "f": 30}, {"a": "ساءَ", "g": "to be evil", "r": "س و أ", "p": "verb", "f": 30}, {"a": "كَرِيم", "g": "noble, generous", "r": "ك ر م", "p": "noun", "f": 30}, {"a": "أَبْصَرَ", "g": "to see", "r": "ب ص ر", "p": "verb", "f": 29}, {"a": "عَهْد", "g": "covenant, pledge", "r": "ع ه د", "p": "noun", "f": 29}, {"a": "كَأَنّ", "g": "as if", "r": "", "p": "particle", "f": 29}, {"a": "رِيح", "g": "wind", "r": "ر و ح", "p": "noun", "f": 29}, {"a": "جُند", "g": "army, soldiers", "r": "ج ن د", "p": "noun", "f": 29}, {"a": "عَرْش", "g": "throne", "r": "ع ر ش", "p": "noun", "f": 29}, {"a": "رَجُل", "g": "man", "r": "ر ج ل", "p": "noun", "f": 29}, {"a": "نَبَأ", "g": "news, tidings", "r": "ن ب أ", "p": "noun", "f": 29}, {"a": "أَبَدًا", "g": "ever, forever", "r": "أ ب د", "p": "noun", "f": 28}, {"a": "سِحْر", "g": "magic, sorcery", "r": "س ح ر", "p": "noun", "f": 28}, {"a": "مَسْجِد", "g": "mosque, place of prostration", "r": "س ج د", "p": "noun", "f": 28}, {"a": "مَصِير", "g": "destination, journey’s end", "r": "ص ي ر", "p": "noun", "f": 28}, {"a": "أَصْلَحَ", "g": "to reform, to make right", "r": "ص ل ح", "p": "verb", "f": 28}, {"a": "مَغْفِرَة", "g": "forgiveness", "r": "غ ف ر", "p": "noun", "f": 28}, {"a": "اسْتَجابَ", "g": "to respond, to answer", "r": "ج و ب", "p": "verb", "f": 28}, {"a": "مُؤْمِنَة", "g": "believing woman", "r": "أ م ن", "p": "noun", "f": 28}, {"a": "أَنَّى", "g": "how, from where", "r": "", "p": "noun", "f": 28}, {"a": "رِجال", "g": "men", "r": "ر ج ل", "p": "noun", "f": 28}, {"a": "رَحِمَ", "g": "to have mercy", "r": "ر ح م", "p": "verb", "f": 28}, {"a": "أَغْنَتْ", "g": "to avail, to be of use", "r": "غ ن ي", "p": "verb", "f": 28}, {"a": "أَصْبَحَ", "g": "to become; to be at morning", "r": "ص ب ح", "p": "verb", "f": 28}, {"a": "حَدِيث", "g": "speech, account, narration", "r": "ح د ث", "p": "noun", "f": 28}, {"a": "سَواء", "g": "equal, the same", "r": "س و ي", "p": "noun", "f": 27}, {"a": "عَفا", "g": "to pardon", "r": "ع ف و", "p": "verb", "f": 27}, {"a": "باب", "g": "door, gate", "r": "ب و ب", "p": "noun", "f": 27}, {"a": "عَصا", "g": "to disobey", "r": "ع ص ي", "p": "verb", "f": 27}, {"a": "غافِل", "g": "heedless, unaware", "r": "غ ف ل", "p": "noun", "f": 27}, {"a": "قَدَّمَ", "g": "to send ahead, to put forward", "r": "ق د م", "p": "verb", "f": 27}, {"a": "أَفْلَحَ", "g": "to succeed, to prosper", "r": "ف ل ح", "p": "verb", "f": 27}, {"a": "جاهَدَ", "g": "to strive", "r": "ج ه د", "p": "verb", "f": 27}, {"a": "مَكان", "g": "place", "r": "ك و ن", "p": "noun", "f": 27}, {"a": "مُنافِق", "g": "hypocrite", "r": "ن ف ق", "p": "noun", "f": 27}, {"a": "قَمَر", "g": "moon", "r": "ق م ر", "p": "noun", "f": 27}, {"a": "يُوسُف", "g": "Yūsuf (Joseph)", "r": "", "p": "noun", "f": 27}, {"a": "لُوط", "g": "Lūṭ (Lot)", "r": "", "p": "noun", "f": 27}, {"a": "ماذا", "g": "what", "r": "", "p": "noun", "f": 26}, {"a": "خَوْف", "g": "fear", "r": "خ و ف", "p": "noun", "f": 26}, {"a": "باطِل", "g": "falsehood, vain", "r": "ب ط ل", "p": "noun", "f": 26}, {"a": "آل", "g": "family, people (of)", "r": "أ و ل", "p": "noun", "f": 26}, {"a": "جَحِيم", "g": "blazing fire, Hellfire", "r": "ج ح م", "p": "noun", "f": 26}, {"a": "شَهادَة", "g": "testimony, witnessing", "r": "ش ه د", "p": "noun", "f": 26}, {"a": "أَجْمَع", "g": "all, all together", "r": "ج م ع", "p": "noun", "f": 26}, {"a": "قَرِيب", "g": "near, close", "r": "ق ر ب", "p": "noun", "f": 26}, {"a": "زَيَّنَ", "g": "to make attractive, to adorn", "r": "ز ي ن", "p": "verb", "f": 26}, {"a": "امْرَأَت", "g": "woman, wife", "r": "م ر أ", "p": "noun", "f": 26}, {"a": "كَيْد", "g": "plot, scheme", "r": "ك ي د", "p": "noun", "f": 26}, {"a": "ثَمُود", "g": "Thamūd (a people)", "r": "", "p": "noun", "f": 26}, {"a": "يَشْعُرُ", "g": "to perceive, to sense", "r": "ش ع ر", "p": "verb", "f": 25}, {"a": "خَلا", "g": "to pass away; to be alone with", "r": "خ ل و", "p": "verb", "f": 25}, {"a": "مِيثاق", "g": "covenant, solemn pledge", "r": "و ث ق", "p": "noun", "f": 25}, {"a": "آدَم", "g": "Ādam (Adam)", "r": "أ د م", "p": "noun", "f": 25}, {"a": "عِيسَى", "g": "ʿĪsā (Jesus)", "r": "", "p": "noun", "f": 25}, {"a": "جُناح", "g": "blame, sin", "r": "ج ن ح", "p": "noun", "f": 25}, {"a": "بَعِيد", "g": "far, distant", "r": "ب ع د", "p": "noun", "f": 25}, {"a": "بَأْس", "g": "might, harm, distress", "r": "ب أ س", "p": "noun", "f": 25}, {"a": "قَدَرَ", "g": "to measure, to determine; to have power", "r": "ق د ر", "p": "verb", "f": 25}, {"a": "لِسان", "g": "tongue, language", "r": "ل س ن", "p": "noun", "f": 25}, {"a": "بَغَى", "g": "to transgress, to rebel", "r": "ب غ ي", "p": "verb", "f": 25}, {"a": "جادَلُ", "g": "to dispute, to argue", "r": "ج د ل", "p": "verb", "f": 25}, {"a": "إِيّا", "g": "(object marker) you, him: alone", "r": "", "p": "noun", "f": 24}, {"a": "كادَ", "g": "to be about to, almost", "r": "ك و د", "p": "verb", "f": 24}, {"a": "طَعام", "g": "food", "r": "ط ع م", "p": "noun", "f": 24}, {"a": "وَراء", "g": "behind, beyond", "r": "و ر ي", "p": "noun", "f": 24}, {"a": "حَيّ", "g": "living, alive", "r": "ح ي ي", "p": "noun", "f": 24}, {"a": "أُنثَى", "g": "female", "r": "أ ن ث", "p": "noun", "f": 24}, {"a": "أَكْبَر", "g": "greater, greatest", "r": "ك ب ر", "p": "noun", "f": 24}, {"a": "تَوَفَّى", "g": "to take (the soul), to cause to die", "r": "و ف ي", "p": "verb", "f": 24}, {"a": "غَنِيّ", "g": "rich, free of need", "r": "غ ن ي", "p": "noun", "f": 24}, {"a": "طائِفَة", "g": "group, party", "r": "ط و ف", "p": "noun", "f": 24}, {"a": "وَكِيل", "g": "guardian, trustee", "r": "و ك ل", "p": "noun", "f": 24}, {"a": "لِقاء", "g": "meeting, encounter", "r": "ل ق ي", "p": "noun", "f": 24}, {"a": "ظُلُمَة", "g": "darkness", "r": "ظ ل م", "p": "noun", "f": 23}, {"a": "سَبْع", "g": "seven", "r": "س ب ع", "p": "noun", "f": 23}, {"a": "إِمّا", "g": "either, whether", "r": "", "p": "particle", "f": 23}, {"a": "أَنجَى", "g": "to rescue, to save", "r": "ن ج و", "p": "verb", "f": 23}, {"a": "ساجِد", "g": "one who prostrates", "r": "س ج د", "p": "noun", "f": 23}, {"a": "بَدَّلَ", "g": "to change, to exchange", "r": "ب د ل", "p": "verb", "f": 23}, {"a": "يَتِيم", "g": "orphan", "r": "ي ت م", "p": "noun", "f": 23}, {"a": "مِسْكِين", "g": "poor person, needy", "r": "س ك ن", "p": "noun", "f": 23}, {"a": "لَعَنَ", "g": "to curse", "r": "ل ع ن", "p": "verb", "f": 23}, {"a": "فُلْك", "g": "ship, ark", "r": "ف ل ك", "p": "noun", "f": 23}, {"a": "أَذِنَ", "g": "to permit, to allow", "r": "أ ذ ن", "p": "verb", "f": 23}, {"a": "فَتَنُ", "g": "to test, to try", "r": "ف ت ن", "p": "verb", "f": 23}, {"a": "قَرْن", "g": "generation, age", "r": "ق ر ن", "p": "noun", "f": 23}, {"a": "ذِكْرَى", "g": "reminder", "r": "ذ ك ر", "p": "noun", "f": 23}, {"a": "سَمْع", "g": "hearing", "r": "س م ع", "p": "noun", "f": 22}, {"a": "رَفَعَ", "g": "to raise, to lift", "r": "ر ف ع", "p": "verb", "f": 22}, {"a": "خَلْف", "g": "behind; successors", "r": "خ ل ف", "p": "noun", "f": 22}, {"a": "بَلَى", "g": "yes indeed (to a negative)", "r": "", "p": "particle", "f": 22}, {"a": "أَسْلَمَ", "g": "to submit, to become Muslim", "r": "س ل م", "p": "verb", "f": 22}, {"a": "دُعاء", "g": "call, supplication", "r": "د ع و", "p": "noun", "f": 22}, {"a": "نَصْر", "g": "help, victory", "r": "ن ص ر", "p": "noun", "f": 22}, {"a": "يَرْجُوا۟", "g": "to hope", "r": "ر ج و", "p": "verb", "f": 22}, {"a": "وَهَبَ", "g": "to grant, to bestow", "r": "و ه ب", "p": "verb", "f": 22}, {"a": "جَمَعَ", "g": "to gather, to collect", "r": "ج م ع", "p": "verb", "f": 22}, {"a": "لَدَى", "g": "with, at, before", "r": "", "p": "noun", "f": 22}, {"a": "مَكَرَ", "g": "to plot, to scheme", "r": "م ك ر", "p": "verb", "f": 22}, {"a": "مَأْوَى", "g": "refuge, abode", "r": "أ و ي", "p": "noun", "f": 22}, {"a": "بَرّ", "g": "dutiful, kind", "r": "ب ر ر", "p": "noun", "f": 22}, {"a": "أَذاقَ", "g": "to make taste", "r": "ذ و ق", "p": "verb", "f": 22}, {"a": "جِنّ", "g": "jinn", "r": "ج ن ن", "p": "noun", "f": 22}, {"a": "ساحِر", "g": "magician, sorcerer", "r": "س ح ر", "p": "noun", "f": 22}, {"a": "سَخَّرَ", "g": "to subject, to make subservient", "r": "س خ ر", "p": "verb", "f": 22}, {"a": "مُفْسِد", "g": "corrupter, mischief maker", "r": "ف س د", "p": "noun", "f": 21}, {"a": "اسْتُهْزِئَ", "g": "to be mocked", "r": "ه ز أ", "p": "verb", "f": 21}, {"a": "اشْتَرَى", "g": "to buy, to purchase", "r": "ش ر ي", "p": "verb", "f": 21}, {"a": "أَعْمَى", "g": "blind", "r": "ع م ي", "p": "noun", "f": 21}, {"a": "مَشَ", "g": "to walk", "r": "م ش ي", "p": "verb", "f": 21}, {"a": "أَماتَ", "g": "to cause to die", "r": "م و ت", "p": "verb", "f": 21}, {"a": "كَتَمَ", "g": "to conceal, to hide", "r": "ك ت م", "p": "verb", "f": 21}, {"a": "رُوح", "g": "spirit, soul", "r": "ر و ح", "p": "noun", "f": 21}, {"a": "شَهْر", "g": "month", "r": "ش ه ر", "p": "noun", "f": 21}, {"a": "أَحْسَنَ", "g": "to do good", "r": "ح س ن", "p": "verb", "f": 21}, {"a": "نَصِيب", "g": "share, portion", "r": "ن ص ب", "p": "noun", "f": 21}, {"a": "كَم", "g": "how many, how much", "r": "", "p": "noun", "f": 21}, {"a": "حَسَن", "g": "good, beautiful", "r": "ح س ن", "p": "noun", "f": 21}, {"a": "مُسَمًّى", "g": "named, appointed", "r": "س م و", "p": "noun", "f": 21}, {"a": "وَضَعَ", "g": "to put, to lay down", "r": "و ض ع", "p": "verb", "f": 21}, {"a": "شاهِد", "g": "witness", "r": "ش ه د", "p": "noun", "f": 21}, {"a": "مُكَذِّب", "g": "denier", "r": "ك ذ ب", "p": "noun", "f": 21}, {"a": "ظَنّ", "g": "assumption, conjecture", "r": "ظ ن ن", "p": "noun", "f": 21}, {"a": "أَعَدَّ", "g": "to prepare", "r": "ع د د", "p": "verb", "f": 20}, {"a": "عَرَفَ", "g": "to know, to recognize", "r": "ع ر ف", "p": "verb", "f": 20}, {"a": "سَعَى", "g": "to strive, to hasten", "r": "س ع ي", "p": "verb", "f": 20}, {"a": "كَلَّمَ", "g": "to speak to", "r": "ك ل م", "p": "verb", "f": 20}, {"a": "حِكْمَة", "g": "wisdom", "r": "ح ك م", "p": "noun", "f": 20}, {"a": "صابِر", "g": "patient", "r": "ص ب ر", "p": "noun", "f": 20}, {"a": "بَلَوْ", "g": "to test, to try", "r": "ب ل و", "p": "verb", "f": 20}, {"a": "أَحَلَّ", "g": "to make lawful", "r": "ح ل ل", "p": "verb", "f": 20}, {"a": "أَمِنَ", "g": "to feel secure, to trust", "r": "أ م ن", "p": "verb", "f": 20}, {"a": "عِقاب", "g": "punishment, penalty", "r": "ع ق ب", "p": "noun", "f": 20}, {"a": "مَرَّة", "g": "time, once", "r": "م ر ر", "p": "noun", "f": 20}, {"a": "هارُون", "g": "Hārūn (Aaron)", "r": "", "p": "noun", "f": 20}, {"a": "ظُلْم", "g": "injustice, wrongdoing", "r": "ظ ل م", "p": "noun", "f": 20}, {"a": "قَصَّ", "g": "to narrate, to relate", "r": "ق ص ص", "p": "verb", "f": 20}, {"a": "أَقْسَمُ", "g": "to swear", "r": "ق س م", "p": "verb", "f": 20}, {"a": "حِزْب", "g": "party, faction", "r": "ح ز ب", "p": "noun", "f": 20}, {"a": "أَنشَأَ", "g": "to produce, to bring into being", "r": "ن ش أ", "p": "verb", "f": 20}, {"a": "حَمِيم", "g": "boiling water; close friend", "r": "ح م م", "p": "noun", "f": 20}, {"a": "حَقَّ", "g": "to be true, to be due", "r": "ح ق ق", "p": "verb", "f": 20}], "fatiha": [{"n": 1, "ar": "بِسْمِ <span class=\"g-gr\">ٱ</span>للَّهِ <span class=\"g-gr\">ٱل</span>رَّحْ<span class=\"g-m2\">مَٰ</span>نِ <span class=\"g-gr\">ٱل</span>رَّحِ<span class=\"g-m246\">ي</span>مِ <span class=\"end\">۝١</span>", "tl": "bi-⁠smi llāhi r-⁠raḥm<span class=\"g-⁠m2\">ā</span>ni r-⁠raḥ<span class=\"g-⁠m246\">ī</span>m", "en": "In the Name of Allah, the All-beneficent, the All-merciful.", "au": "audio/001001.mp3"}, {"n": 2, "ar": "ٱلْحَمْدُ لِلَّهِ رَبِّ <span class=\"g-gr\">ٱ</span>لْ<span class=\"g-m2\">عَٰ</span>لَمِ<span class=\"g-m246\">ي</span>نَ <span class=\"end\">۝٢</span>", "tl": "al-⁠ḥamdu li-⁠llāhi rabbi l-⁠ʿ<span class=\"g-⁠m2\">ā</span>lam<span class=\"g-⁠m246\">ī</span>n", "en": "All praise belongs to Allah, Lord of all the worlds,", "au": "audio/001002.mp3"}, {"n": 3, "ar": "ٱ<span class=\"g-gr\">ل</span>رَّحْ<span class=\"g-m2\">مَٰ</span>نِ <span class=\"g-gr\">ٱل</span>رَّحِ<span class=\"g-m246\">ي</span>مِ <span class=\"end\">۝٣</span>", "tl": "ar-⁠raḥm<span class=\"g-⁠m2\">ā</span>ni r-⁠raḥ<span class=\"g-⁠m246\">ī</span>m", "en": "the All-beneficent, the All-merciful,", "au": "audio/001003.mp3"}, {"n": 4, "ar": "<span class=\"g-m2\">مَٰ</span>لِكِ يَوْمِ <span class=\"g-gr\">ٱل</span>دِّ<span class=\"g-m246\">ي</span>نِ <span class=\"end\">۝٤</span>", "tl": "m<span class=\"g-⁠m2\">ā</span>liki yawmi d-⁠d<span class=\"g-⁠m246\">ī</span>n", "en": "Master of the Day of Retribution.", "au": "audio/001004.mp3"}, {"n": 5, "ar": "إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِ<span class=\"g-m246\">ي</span>نُ <span class=\"end\">۝٥</span>", "tl": "iyyāka naʿbudu wa iyyāka nastaʿ<span class=\"g-⁠m246\">ī</span>n", "en": "You [alone] do we worship, and to You [alone] do we turn for help.", "au": "audio/001005.mp3"}, {"n": 6, "ar": "ٱهْدِنَا <span class=\"g-gr\">ٱل</span>صِّ<span class=\"g-m2\">رَٰ</span>طَ <span class=\"g-gr\">ٱ</span>لْمُسْتَقِ<span class=\"g-m246\">ي</span>مَ <span class=\"end\">۝٦</span>", "tl": "ihdina ṣ-⁠ṣir<span class=\"g-⁠m2\">ā</span>ṭa l-⁠mustaq<span class=\"g-⁠m246\">ī</span>m", "en": "Guide us on the straight path,", "au": "audio/001006.mp3"}, {"n": 7, "ar": "صِ<span class=\"g-m2\">رَٰ</span>طَ <span class=\"g-gr\">ٱ</span>لَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ <span class=\"g-gr\">ٱ</span>لْمَغْضُوبِ عَلَيْهِمْ وَلَا <span class=\"g-gr\">ٱل</span>ضَّ<span class=\"g-m6\">آ</span>لِّ<span class=\"g-m246\">ي</span>نَ <span class=\"end\">۝٧</span>", "tl": "ṣir<span class=\"g-⁠m2\">ā</span>ṭa lladhīna anʿamta ʿalayhim ghayri l-⁠maghḍūbi ʿalayhim wa la ḍ-⁠ḍ<span class=\"g-⁠m6\">ā</span>ll<span class=\"g-⁠m246\">ī</span>n", "en": "the path of those whom You have blessed — such as have not incurred Your wrath, nor are astray.", "au": "audio/001007.mp3"}], "total": 77429, "cov500": 77.5};
+const LINK_KEY = (() => { try{ const k=new URL(location.href).searchParams.get("k"); if(k){ localStorage.setItem("miftah.key",k); return k; } return localStorage.getItem("miftah.key"); }catch(e){ return null; } })();
+const STORE = window.MIFTAH_API && LINK_KEY ? "miftah.v1." + LINK_KEY : "miftah.v1";
+const $ = (s, r=document) => r.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S = load();
+load.fresh = () => ({log:{}, srs:{}, questions:[], cards:{}, sessions:{arabic:0, belief:0}, days:{arabic:6, belief:2}, exam:false});
+function load(){ try{ const t = localStorage.getItem(STORE); if(t) return JSON.parse(t); }catch(e){} return {log:{}, srs:{}, questions:[], cards:{}, sessions:{arabic:0, belief:0}, days:{arabic:6, belief:2}, exam:false}; }
+function save(){ S.updatedAt = new Date().toISOString(); try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} schedulePush(); }
+
+/* ---------- shared progress (works when the course page is opened on claude.ai; otherwise this phone only) ---------- */
+let DB=null, USER=null, UID=null, PEOPLE={}, NAMES={}, SYNC="local", pushTimer=null, pushing=false, pushAgain=false;
+function summary(){
+  const last7=[...Array(7)].map((_,i)=>{ const d=iso(new Date(Date.now()-(6-i)*DAY)); return !!(S.log[d]||{}).daily; });
+  const lastCardKey=Object.keys(S.cards||{}).sort((a,b)=>+b.slice(1)-+a.slice(1))[0];
+  return {label:S.label||"", start:S.start||null, week:started()?weekNo():0, last7, days:Object.values(S.log).filter(v=>v.daily).length,
+    lessons:(S.sessions.arabic||0)+(S.sessions.belief||0), arabic:S.sessions.arabic||0, belief:S.sessions.belief||0,
+    known:knownCount(), cov:coverage(), openQ:S.questions.filter(q=>!q.ans).length, exam:!!S.exam,
+    card: lastCardKey ? {week:+lastCardKey.slice(1), ...S.cards[lastCardKey]} : null, active:today()};
+}
+function schedulePush(){ if(!DB||!UID||!S.start) return; clearTimeout(pushTimer); pushTimer=setTimeout(push,1200); }
+async function push(){
+  if(pushing){ pushAgain=true; return; }
+  pushing=true;
+  try{
+    if(DB==="rest"){ const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:KEY,state:S,summary:summary()})}); if(!r.ok) throw {code:"http"}; PEOPLE[UID]={summary:summary()}; paintTogether(); }
+    else await DB.doc("progress/"+UID).set({state:JSON.parse(JSON.stringify(S)), summary:summary(), updated:new Date().toISOString()});
+    SYNC="shared"; }
+  catch(e){ SYNC = (e&&e.code==="invalid_argument") ? "readonly" : SYNC; }
+  pushing=false; if(pushAgain){ pushAgain=false; push(); }
+}
+async function connect(){
+  try{
+    if(!window.claude||!window.claude.use) return;
+    USER = await window.claude.use("user"); DB = await window.claude.use("db");
+    if(!DB||!USER){ DB=null; return; }
+    UID = await USER.id(); if(!UID){ DB=null; return; }
+    if(!S.label){ try{ const me=await USER.me(); if(me&&me.name) S.label=me.name.split(" ")[0]; }catch(e){} }
+    const snap = await DB.doc("progress/"+UID).get();
+    if(snap.exists){ const r=snap.data(); if(r&&r.state&&(!S.updatedAt || (r.state.updatedAt||"")>S.updatedAt)){ S=JSON.parse(JSON.stringify(r.state)); try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} if(panel.hidden) render(); } else if(S.start) push(); }
+    else if(S.start) push();
+    SYNC = SYNC==="readonly" ? SYNC : "shared";
+    DB.collection("progress").onSnapshot(async qs => {
+      PEOPLE={}; qs.docs.forEach(d=>{ const v=d.data(); if(v&&v.summary) PEOPLE[d.id]=v; });
+      try{ const ps=await USER.profiles(Object.keys(PEOPLE)); for(const id in ps) NAMES[id]=ps[id].name||""; }catch(e){}
+      paintTogether();
+    }, () => {});
+  }catch(e){ DB=null; }
+}
+/* hosted version: personal link (?k=...) and a small progress service */
+const API = window.MIFTAH_API || null; let KEY=null;
+async function connectRest(){
+  try{
+    KEY=LINK_KEY;
+    if(!KEY){ SYNC="nokey"; paintTogether(); return; }
+    const r=await fetch(API+"?k="+encodeURIComponent(KEY),{cache:"no-store"});
+    if(!r.ok){ SYNC = r.status===403 ? "badkey" : "local"; paintTogether(); return; }
+    const j=await r.json(); DB="rest"; UID=j.me.id;
+    if(S.owner && S.owner!==UID){ S=load.fresh(); }
+    S.owner=UID; if(!S.label) S.label=j.me.label;
+    const rs=j.me.state;
+    if(rs && (!S.updatedAt || (rs.updatedAt||"")>S.updatedAt)){ S=rs; try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} if(panel.hidden) render(); }
+    else if(S.start) push();
+    SYNC="shared"; PEOPLE=j.people||{}; paintTogether();
+    document.addEventListener("visibilitychange", async () => { if(document.visibilityState!=="visible") return; try{ const r2=await fetch(API+"?k="+encodeURIComponent(KEY),{cache:"no-store"}); if(r2.ok){ PEOPLE=(await r2.json()).people||{}; paintTogether(); } }catch(e){} });
+  }catch(e){ SYNC="local"; paintTogether(); }
+}
+const personName = id => id===UID ? "You" : ((PEOPLE[id]&&PEOPLE[id].summary.label) || NAMES[id] || "Your study partner");
+function togetherHTML(full){
+  const ids=Object.keys(PEOPLE).sort((a,b)=>a===UID?-1:b===UID?1:0);
+  if(SYNC==="nokey") return `<p class="small muted">Open the course from your personal link once, and your progress will be kept with your study partner’s.</p>`;
+  if(SYNC==="badkey") return `<p class="small muted">This link is not one of the course’s personal links. Your progress is kept on this phone.</p>`;
+  if(!DB) return `<p class="small muted">Progress is kept on this phone. When you are online it is shared with your study partner.</p>`;
+  if(SYNC==="readonly") return `<p class="small muted">You can see this course but cannot save to it yet. Ask Abdulahi to give you edit access; until then your progress stays on this phone.</p>`;
+  if(ids.length<2) return `<p class="small muted">When your study partner opens the course and begins Day One, their week appears here beside yours.</p>` + ids.map(id=>personRow(id,full)).join("");
+  return ids.map(id=>personRow(id,full)).join("");
+}
+function personRow(id, full){
+  const s=PEOPLE[id].summary, nm=esc(personName(id));
+  const dots=`<div class="days" aria-label="Last seven days">${(s.last7||[]).map(on=>`<i class="${on?"on":""}"></i>`).join("")}</div>`;
+  const quiet = s.active && s.active < iso(new Date(Date.now()-2*DAY));
+  return `<div class="person"><div class="row" style="justify-content:space-between"><b>${nm}</b>${s.exam?`<span class="pill gold">Exam mode</span>`:quiet?`<span class="pill gold">Quiet since ${parse(s.active).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span>`:s.start?`<span class="pill">Week ${s.week}</span>`:`<span class="pill gold">Not started</span>`}</div>
+    ${dots}<p class="small muted">${s.days} day${s.days===1?"":"s"} kept · ${s.lessons} lessons · ${s.known} words known (${s.cov}% of the Qurʾān) · ${s.openQ} open question${s.openQ===1?"":"s"}</p>
+    ${full && s.card ? `<p class="small">Week ${s.card.week} card: Qurʾān ${esc(s.card.q||"·")}, Arabic ${esc(s.card.a||"·")}, Belief ${esc(s.card.b||"·")}, Practice ${esc(s.card.p||"·")}${s.card.hard?`<br><span class="muted">Hard: ${esc(s.card.hard)}</span>`:""}</p>`:""}</div>`;
+}
+function paintTogether(){ document.querySelectorAll("[data-together]").forEach(el => el.innerHTML = togetherHTML(el.dataset.together==="full")); }
+
+/* ---------- dates ---------- */
+const DAY = 86400000;
+const iso = d => { const z = new Date(d.getTime() - d.getTimezoneOffset()*60000); return z.toISOString().slice(0,10); };
+const today = () => iso(new Date());
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); };
+const daysBetween = (a,b) => Math.round((parse(b) - parse(a))/DAY);
+const WD = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+/* tabular Islamic calendar; the moon may move a date by a day */
+const HM = ["Muḥarram","Ṣafar","Rabīʿ al‑Awwal","Rabīʿ al‑Thānī","Jumādā al‑Ūlā","Jumādā al‑Ākhira","Rajab","Shaʿbān","Ramaḍān","Shawwāl","Dhū al‑Qaʿda","Dhū al‑Ḥijja"];
+const HMA = ["محرّم","صفر","ربيع الأوّل","ربيع الثاني","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوّال","ذو القعدة","ذو الحجّة"];
+function hijri(d){
+  const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate();
+  const a=Math.floor((14-m)/12), yy=y+4800-a, mm=m+12*a-3;
+  const jd = day+Math.floor((153*mm+2)/5)+365*yy+Math.floor(yy/4)-Math.floor(yy/100)+Math.floor(yy/400)-32045;
+  const l0 = jd-1948440+10632, n = Math.floor((l0-1)/10631);
+  let l = l0-10631*n+354;
+  const j = Math.floor((10985-l)/5316)*Math.floor(50*l/17719)+Math.floor(l/5670)*Math.floor(43*l/15238);
+  l = l-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
+  const hm = Math.floor(24*l/709), hd = l-Math.floor(709*hm/24), hy = 30*n+j-30;
+  return {y:hy, m:hm, d:hd};
+}
+const toAr = n => String(n).replace(/\d/g, x => "٠١٢٣٤٥٦٧٨٩"[x]);
+
+/* ---------- the course ---------- */
+const started = () => !!S.start;
+const weekNo = () => started() ? Math.max(1, Math.floor(daysBetween(S.start, today())/7)+1) : 1;
+const weekKey = () => "w"+weekNo();
+const weekStart = () => iso(new Date(parse(S.start).getTime() + (weekNo()-1)*7*DAY));
+const doneIn = (what, from) => Object.entries(S.log).some(([d,v]) => d >= from && v[what]);
+const unlocked = () => Math.min(DATA.words.length, 10*weekNo());
+
+const MONTHS = [
+ ["Rajab","Tajwīd from zero; al‑Fātiḥa and the prayer’s recitation","Morphology: the root and the pattern","Shomali 1 to 4","Munyat: intention; taqlīd from the office’s own answers"],
+ ["Shaʿbān","Tajwīd; the short sūras of the prayer","Morphology: past and present verb","Shomali 5 to 8","Purity, from Women’s Religious Rules"],
+ ["Ramaḍān","Daily recitation; Juzʾ 30 heard in full","Maintenance if exams","Shomali 9 to 12","Fasting; Duʿāʾ al‑Iftitāḥ"],
+ ["Shawwāl","Memorise al‑Nās to al‑Kawthar","Morphology: derived forms","Shomali 13 to 16","Prayer, part one"],
+ ["Dhū al‑Qaʿda","Memorise al‑Māʿūn to al‑Takāthur","Morphology finished; review","Shomali 17 to 20","Prayer, part two"],
+ ["Dhū al‑Ḥijja","Memorise al‑Qāriʿa to al‑Zalzala","Syntax: the sentence and iʿrāb","Shomali 21 to 24","ʿArafa and the month’s aʿmāl"],
+ ["Muḥarram","Review; recitation heard by your teacher","Syntax","Shomali 25 to 28","Ziyārat ʿĀshūrāʾ, with the debate about its closing passage"],
+ ["Ṣafar","Memorise al‑Bayyina and al‑Qadr","Syntax","Shomali 29 to 32, the end","Khums"],
+ ["Rabīʿ al‑Awwal","Memorise al‑ʿAlaq and al‑Tīn","Syntax","Your own questions to your teacher","Munyat: the student and the teacher"],
+ ["Rabīʿ al‑Thānī","Memorise al‑Sharḥ, al‑Ḍuḥā and al‑Layl","Syntax; parse a line of Kumayl","Review","Money, work, study"],
+ ["Jumādā al‑Ūlā","Memorise al‑Shams and al‑Balad","Syntax","Review","Family and dealings with people"],
+ ["Jumādā al‑Ākhira","Memorise al‑Fajr, al‑Ghāshiya and al‑Aʿlā; recite the half juzʾ to your teacher","Read a vowelled page aloud with its iʿrāb","Write: why I believe what I believe","Reread Munyat; plan Year Two"]
+];
+const LATER = ["Logic","Legal theory (al‑Mūjaz, al‑Ḥalaqa al‑Ūlā)","Ḥadīth sciences as a subject","Philosophy (Bidāyat al‑Ḥikma)","Nahj al‑Balāgha as a set text","Tafsīr al‑Mīzān","The lives of the Imams (ʿa) as a strand","Sunni and Shia comparison","al‑Bāb al‑Ḥādī ʿAshar","Sharāʾiʿ al‑Islām","Any seminary programme or certificate"];
+
+const LINKS = {
+  shomali:"https://www.youtube.com/playlist?list=PLWDyY0v4a8BD_JPqIYFlptb5Blf0u611P",
+  faithText:"https://www.al-islam.org/faith-shia-islam-muhammad-rida-al-muzaffar",
+  sarf:"https://www.youtube.com/playlist?list=PLzn0qdi6JpdvWf0IDGNfaiM-okPqDuQoc",
+  sistaniQA:"https://www.sistani.org/english/qa/01191/",
+  sistaniBooks:"https://www.sistani.org/english/book/",
+};
+
+const W1 = {
+  arabic:{before:["Why do so many Arabic words share the same three letters?","What is the difference between a root and a pattern?","Find the three root letters of قَالَ."],
+          key:["Most Arabic words grow from a root of three letters that carries the meaning; the pattern around it adds the shade: who does it, what is done, the place of it.","The root is the three letters; the pattern is the shape set around them.","ق و ل. The middle letter is a wāw, hidden as an alif in قَالَ. If you wrote ق ا ل, that is the usual first mistake, and the lesson explains why."]},
+  belief:{before:["Why, in this tradition, can belief not be borrowed from someone else?","Then in what may a person follow someone else?"],
+          key:["The office’s answer: the fundamentals of faith are held “with his own insight and understanding”; no one may accept them “simply because he has said it”.","Practice: the rulings of religious law, followed from the most learned mujtahid."]},
+  recall:[["What is the first discipline of a student, before any book?","To make the intention good and cleanse the heart (Munyat al‑Murīd, p. 224)."],
+          ["What is the key to this knowledge, in the report of Imam al‑Ṣādiq (ʿa)?","The question: «وَمِفْتَاحُهُ الْمَسْأَلَةُ»."],
+          ["Which three of your words mean in, on and from?","فِي, عَلَى, مِنْ"]]
+};
+const PRACTICE = {
+  1:{t:"Taqlīd: whom you follow in practice, and how you know", body:`<p class="read">Read the office’s first two answers on following a mujtahid (sistani.org/15510 and sistani.org/15307). Then write one sentence: whom do you follow in practice, and how do you know? If you are not sure, that is a question for your teacher.</p><p><a href="${LINKS.sistaniQA}" target="_blank" rel="noopener">Open the office’s answers</a></p>`},
+  2:{t:"The student’s intention", body:`<p class="read">Reread the passage from Day One. Write how your reason for studying has changed, or not, in one week. If you have <i>Desire of the Aspirant</i> (Khaleeli’s translation of Munyat al‑Murīd), read the section on the student’s disciplines in himself.</p>`},
+  3:{t:"Purity: what a woman needs to know first", body:`<p class="read">Open <i>Women’s Religious Rules</i> from the office’s books page and read the opening section on purity. Write down one ruling you did not know, and one question it raises.</p><p><a href="${LINKS.sistaniBooks}" target="_blank" rel="noopener">The office’s books (free)</a></p>`},
+  4:{t:"Your questions, gathered", body:`<p class="read">Read every question in your Ask list. Mark the ones you can now answer yourself. Choose the three most important for your teacher.</p>`},
+};
+
+/* ---------- SRS ---------- */
+const BOX = [0,1,3,7,16,35];
+function dueWords(){ const n=unlocked(), t=today(), out=[]; for(let i=0;i<n;i++){ const s=S.srs[i]; if(!s || s.due<=t) out.push(i);} return out; }
+function knownCount(){ return Object.values(S.srs).filter(s=>s.box>=3).length; }
+function coverage(){ let f=0; for(const [i,s] of Object.entries(S.srs)) if(s.box>=2) f+=DATA.words[i].f; return Math.round(1000*f/DATA.total)/10; }
+function grade(i, ok){ const s=S.srs[i]||{box:0}; s.box = ok ? Math.min(5,s.box+1) : 0; s.due = iso(new Date(Date.now()+BOX[s.box]*DAY)); S.srs[i]=s; save(); }
+
+/* ---------- speech ---------- */
+function speak(t){ try{ const u=new SpeechSynthesisUtterance(t.replace(/[ً-ْٰ]/g, m=>m)); const v=speechSynthesis.getVoices().find(v=>/^ar/i.test(v.lang)); if(!v) return false; u.voice=v; u.lang=v.lang; u.rate=.8; speechSynthesis.cancel(); speechSynthesis.speak(u); return true; }catch(e){ return false; } }
+
+/* ---------- rendering ---------- */
+let TAB = "today";
+const app = $("#app"), panel = $("#panel"), tabs = $("#tabs");
+function render(){
+  if(!started()){ tabs.hidden=true; return dayOne(0); }
+  tabs.hidden=false;
+  tabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.tab===TAB ? "page" : "false"));
+  ({today:renderToday, words:renderWords, ask:renderAsk, year:renderYear})[TAB]();
+  window.scrollTo(0,0);
+}
+tabs.addEventListener("click", e => { const b=e.target.closest("button"); if(!b) return; TAB=b.dataset.tab; render(); });
+
+function header(){
+  const d=new Date(), h=hijri(d);
+  return `<div class="top"><div><div class="eyebrow">Week ${weekNo()} of Year One</div><h1>${WD[d.getDay()]}</h1></div>
+  <div style="text-align:right"><div class="date-ar">${toAr(h.d)} ${HMA[h.m-1]} ${toAr(h.y)}</div><div class="small muted">${d.toLocaleDateString("en-GB",{day:"numeric",month:"long"})}</div></div></div>`;
+}
+
+/* Day One */
+function dayOne(step){
+  const dots = `<div class="progress-dots">${[0,1,2,3].map(i=>`<i class="${i<=step?"on":""}"></i>`).join("")}</div>`;
+  const shell = (inner, next, label="Next") => { app.innerHTML = `<div class="wrap stack" style="padding-top:28px">${dots}${inner}
+    <button class="btn primary" id="nx">${label}</button><p class="honest">Prepared by Basma Press. Not yet read by a teacher.</p></div>`; $("#nx").onclick = next; window.scrollTo(0,0); };
+  if(step===0) return shell(`<div class="stack"><div class="eyebrow">Day One · twenty minutes · nothing to decide</div>
+    <h1>Before any book, the intention.</h1>
+    <p class="ar">أَنْ يُحْسِنَ نِيَّتَهُ، وَيُطَهِّرَ قَلْبَهُ مِنَ الْأَدْنَاسِ، لِيَصْلُحَ لِقَبُولِ الْعِلْمِ وَحِفْظِهِ وَاسْتِمْرَارِهِ</p>
+    <blockquote class="read">“That he make his intention good, and cleanse his heart of stains, so that it is fit to receive knowledge, to keep it, and to go on in it.”</blockquote>
+    <p class="src">al‑Shahīd al‑Thānī (d. 965 AH / 1558 CE), Munyat al‑Murīd: the first of the student’s disciplines in himself, ed. al‑Mukhtārī, p. 224. English ours.</p>
+    <p class="read">He likens it to preparing the ground before planting. Write one sentence: why are you doing this? No one grades it.</p>
+    <label class="small muted" for="why">Why I am doing this</label><textarea id="why" placeholder="In your own words">${esc(S.why)}</textarea></div>`,
+    () => { S.why = $("#why").value.trim(); save(); dayOne(1); });
+  if(step===1) return shell(`<div class="stack"><div class="eyebrow">The key</div><h1>Its key is the question.</h1>
+    <p class="ar">إِنَّ هٰذَا الْعِلْمَ عَلَيْهِ قُفْلٌ، وَمِفْتَاحُهُ الْمَسْأَلَةُ</p>
+    <blockquote class="read">“This knowledge has a lock on it, and its key is the question.”</blockquote>
+    <p class="src">Imam Jaʿfar al‑Ṣādiq (ʿa), in al‑Kulaynī (d. 329 AH / 941 CE), al‑Kāfī, vol. 1, Kitāb Faḍl al‑ʿIlm, chapter on asking the scholar, ḥadīth 3, by two chains.</p>
+    <p class="read">Write the first question you want answered. Anything at all. It goes to your teacher, and a person will answer it.</p>
+    <label class="small muted" for="fq">My first question</label><textarea id="fq" placeholder="Ask anything"></textarea></div>`,
+    () => { const t=$("#fq").value.trim(); if(t){ S.questions.push({id:Date.now(), t, date:today()}); save(); } dayOne(2); });
+  if(step===2){ shell(`<div class="stack"><div class="eyebrow">The first recitation · ten minutes</div><h1>Listen, then repeat.</h1>
+    <p class="read">Tap an āyah to hear it from a teacher of recitation, then say it after him. Do not try to be right yet. Only listen and repeat.</p>
+    <div class="card" id="fat"></div></div>`, () => dayOne(3)); fatiha($("#fat")); return; }
+  if(step===3){
+    const opts=["After Fajr","After Maghrib","Before sleep","On the way to university"];
+    shell(`<div class="stack"><div class="eyebrow">Your plan</div><h1>Fifteen minutes, at one moment.</h1>
+    <p class="read">The scholars of learning name dawn, and the time between Maghrib and ʿIshāʾ, as the best times. Choose the moment that already happens every day.</p>
+    <div class="chips" id="mo">${opts.map(o=>`<button class="chip" aria-pressed="${S.moment===o}">${o}</button>`).join("")}</div>
+    <div class="note"><b>A plan, not a vow.</b> Nothing here is a nadhr, an ʿahd or an oath, and nothing is owed if a day is missed. Missing one day does no harm. Never miss two.</div>
+    <p class="read">The size of it has a report behind it:</p>
+    <p class="ar">أَحَبُّ الْأَعْمَالِ إِلَى اللّٰهِ عَزَّ وَجَلَّ مَا دَاوَمَ عَلَيْهِ الْعَبْدُ وَإِنْ قَلَّ</p>
+    <blockquote class="read">“The most beloved of deeds to Allah is the one the servant keeps up, even if it is little.”</blockquote>
+    <p class="src">Imam al‑Bāqir (ʿa), al‑Kāfī, vol. 2, chapter on balance and constancy in deeds, ḥadīth 2; al‑Majlisī: ḥasan ka‑l‑ṣaḥīḥ.</p></div>`,
+      () => { S.moment = S.moment || "After Maghrib"; S.start = today(); S.log[today()] = {daily:true, recite:true, dayone:true}; save(); TAB="today"; render(); }, "Begin Year One");
+    $("#mo").addEventListener("click", e => { const b=e.target.closest(".chip"); if(!b) return; S.moment=b.textContent; save(); $("#mo").querySelectorAll(".chip").forEach(c=>c.setAttribute("aria-pressed", c===b)); });
+  }
+}
+
+function fatiha(el){
+  const key = `<div class="keyrow"><span class="g-gr">grey: not said</span><span class="g-gn">green: hum, two counts</span><span class="g-bl">blue: bounce</span><span class="g-m2">gold: long, two counts</span><span class="g-m45">red: longer, four or five</span><span class="g-m246">orange: where you stop, 2, 4 or 6</span></div>`;
+  el.innerHTML = `<div class="row" style="justify-content:space-between"><h3>Sūrat al‑Fātiḥa</h3><button class="btn" id="all">Play all</button></div>${key}` +
+    DATA.fatiha.map(a => `<div class="ayah" data-n="${a.n}"><div class="q">${a.ar}</div><div class="tl">${a.tl}</div><div class="en">${esc(a.en)}</div>
+    <div class="ctl"><button class="btn" data-play="${a.n}">▶ Listen</button><button class="btn ghost" data-rep="${a.n}">Repeat 3 times</button></div></div>`).join("") +
+    `<p class="src" style="margin-top:10px">Recitation: Shaykh Maḥmūd Khalīl al‑Ḥuṣarī, the teaching recitation (al‑Muʿallim), from everyayah.com. English: ʿAlī Qulī Qarāʾī. Colours and transliteration: Basma Press.</p>`;
+  const audio = new Audio(); let queue=[];
+  const play = n => { el.querySelectorAll(".ayah").forEach(x=>x.classList.toggle("playing", x.dataset.n==n)); audio.src = DATA.fatiha[n-1].au; audio.play().catch(()=>{}); };
+  audio.onended = () => { if(queue.length){ play(queue.shift()); } else el.querySelectorAll(".ayah").forEach(x=>x.classList.remove("playing")); };
+  el.addEventListener("click", e => {
+    const p=e.target.closest("[data-play]"), r=e.target.closest("[data-rep]");
+    if(e.target.id==="all"){ queue=[2,3,4,5,6,7]; play(1); }
+    else if(p){ queue=[]; play(+p.dataset.play); }
+    else if(r){ const n=+r.dataset.rep; queue=[n,n]; play(n); }
+  });
+}
+
+/* Today */
+function renderToday(){
+  const t=today(), L=S.log[t]||{};
+  const y=iso(new Date(Date.now()-DAY)), missedYesterday = S.start < y && !(S.log[y]||{}).daily;
+  const ws=weekStart(), dow=new Date().getDay();
+  const wkItems = [
+    {k:"arabic", t:"Arabic", s:`Morphology, lesson ${S.sessions.arabic+1}`, when:WD[S.days.arabic], min:40},
+    {k:"belief", t:"Belief", s:`Shomali, ʿAqāʾid al‑Imāmiyya, part ${Math.min(32,S.sessions.belief+1)}`, when:WD[S.days.belief], min:40},
+    {k:"kumayl", t:"Duʿāʾ Kumayl", s:"From your booklet", when:"Thursday night", min:20},
+    {k:"friday", t:"The Friday hour", s:`Practice, mubāḥatha, your weekly card`, when:"Friday", min:60},
+  ];
+  const due = dueWords().length;
+  app.innerHTML = `<div class="wrap stack">${header()}
+    ${missedYesterday ? `<div class="note"><b>Welcome back.</b> Yesterday was missed, and that does no harm. Never miss two: today, five minutes of recall is enough.</div>`:""}
+    <div class="card main stack">
+      <div class="row" style="justify-content:space-between"><h2>Your fifteen minutes</h2><span class="pill">${esc(S.moment||"")}</span></div>
+      ${S.exam ? `<p class="small muted">Exam mode: recall and words only, no new lessons.${S.restart?` Restart on ${parse(S.restart).toLocaleDateString("en-GB",{day:"numeric",month:"long"})}.`:""}</p>`:""}
+      <div class="steps">
+        ${S.exam ? "" : step("recite","1","Recite","Al‑Fātiḥa with the teacher’s recording",5,L)}
+        ${step("words", S.exam?"1":"2","Words",`${due} card${due===1?"":"s"} waiting · ${unlocked()} unlocked`,5,L)}
+        ${step("recall", S.exam?"2":"3","Three questions","From memory, before you look",5,L)}
+      </div>
+      <button class="btn ${L.daily?"":"primary"}" id="done">${L.daily ? "Done for today ✓" : "Mark today done"}</button>
+    </div>
+    ${S.exam ? "" : `<div class="card"><div class="row" style="justify-content:space-between;margin-bottom:4px"><h2>This week</h2><span class="small muted">from ${parse(ws).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span></div>
+      <div class="week">${wkItems.map(i=>{ const done=doneIn(i.k, ws); const isToday = (i.k==="arabic"&&dow===S.days.arabic)||(i.k==="belief"&&dow===S.days.belief)||(i.k==="kumayl"&&dow===4)||(i.k==="friday"&&dow===5);
+        return `<button class="wk ${done?"done":""}" data-open="${i.k}"><span class="tick"></span><span><b>${i.t}</b><br><span class="when">${esc(i.s)} · ${i.when}</span></span>${isToday&&!done?`<span class="pill gold">Today</span>`:`<span class="small muted">${i.min} min</span>`}</button>`; }).join("")}</div></div>`}
+    <div class="card"><h2 style="margin-bottom:4px">Studying together</h2><div data-together="short">${togetherHTML(false)}</div></div>
+    <div class="card switch"><div><b>Exams this week</b><p class="small muted">Fifteen minutes of recall only. Nothing new until you switch it off.</p></div><button class="toggle" role="switch" aria-checked="${!!S.exam}" aria-label="Exam mode" id="exam"></button></div>
+    ${S.why ? `<div class="card"><div class="eyebrow">Why I am doing this</div><p class="read" style="margin-top:6px">${esc(S.why)}</p></div>`:""}
+    <p class="honest">Prepared by Basma Press. Not yet read by a teacher.</p></div>`;
+  app.querySelectorAll("[data-step]").forEach(b => b.onclick = () => openStep(b.dataset.step));
+  app.querySelectorAll("[data-open]").forEach(b => b.onclick = () => openWeek(b.dataset.open));
+  $("#done").onclick = () => { S.log[t] = {...(S.log[t]||{}), daily:true}; save(); render(); };
+  $("#exam").onclick = () => { S.exam=!S.exam; if(S.exam){ openExam(); } save(); render(); };
+}
+function step(k,n,t,s,min,L){ return `<button class="step ${L[k]?"done":""}" data-step="${k}"><span class="dot">${L[k]?"✓":n}</span><span><b>${t}</b><span class="sub">${esc(s)}</span></span><span class="min">${min} min</span></button>`; }
+function mark(k){ const t=today(); S.log[t]={...(S.log[t]||{}), [k]:true}; save(); }
+
+function openPanel(html, after){ panel.innerHTML = `<div class="wrap stack"><button class="back" id="bk">‹ Back</button>${html}</div>`; panel.hidden=false; panel.scrollTop=0; $("#bk").onclick=closePanel; if(after) after(); }
+function closePanel(){ panel.hidden=true; panel.innerHTML=""; render(); }
+
+function openStep(k){
+  if(k==="recite") return openPanel(`<div class="eyebrow">Recite · five minutes</div><h1>Al‑Fātiḥa</h1><p class="read">Listen to each āyah, then say it after him. Watch the colours: each one is a rule you will learn by ear before you learn it by name.</p><div class="card" id="fat"></div><button class="btn primary" id="ok">I recited today</button>`,
+    () => { fatiha($("#fat")); $("#ok").onclick=()=>{ mark("recite"); closePanel(); }; });
+  if(k==="words"){ TAB="words"; render(); return; }
+  if(k==="recall"){
+    let qs;
+    if(weekNo()===1) qs = W1.recall;
+    else { const pool=[...Array(unlocked()).keys()]; qs=[]; for(let j=0;j<2&&pool.length;j++){ const i=pool.splice(Math.floor(Math.random()*pool.length),1)[0]; qs.push([`What does ${DATA.words[i].a} mean?`, DATA.words[i].g]); }
+      qs.push(["Say aloud, without notes, the main point of your last session.","Check it against your notes. If you could not say it, that lesson is worth a second listen."]); }
+    return openPanel(`<div class="eyebrow">Three questions · five minutes</div><h1>Answer, then look.</h1><p class="read">Answering from memory is what makes it stay. Tap a question when you have answered it in your head.</p>
+      ${qs.map(([q,a])=>`<details class="card"><summary class="read" style="cursor:pointer"><b>${esc(q)}</b></summary><p class="read" style="margin-top:8px">${esc(a)}</p></details>`).join("")}
+      <button class="btn primary" id="ok">Done</button>`, () => $("#ok").onclick=()=>{ mark("recall"); closePanel(); });
+  }
+}
+
+function sessionPanel(k){
+  const w1 = weekNo()===1;
+  const n = k==="arabic" ? S.sessions.arabic+1 : Math.min(32,S.sessions.belief+1);
+  const before = w1 ? W1[k].before : (k==="arabic" ? ["What did the last lesson teach you to recognise?","Which word from your list might this lesson explain?"] : ["What do you already believe about this lesson’s topic, and why?","What question would you ask the teacher before he starts?"]);
+  const after = w1 ? `<details class="card"><summary style="cursor:pointer"><b>The key</b> (open after you answer)</summary><ol class="read">${W1[k].key.map(x=>`<li>${esc(x)}</li>`).join("")}</ol><p class="small muted">Eighty percent is a pass.</p></details>`
+    : `<div class="card"><b>After the lesson, three questions to yourself</b><ol class="read"><li>What is the main claim?</li><li>What does it rest on?</li><li>What would someone who disagrees say, and how would the teacher answer?</li></ol></div>`;
+  const link = k==="arabic"
+    ? `<p class="read">Lesson ${n} of <i>First Steps to Understanding Ṣarf</i> (Al‑Qalam Institute, 22 lessons). Grammar is shared ground across the schools.</p><a class="btn primary" href="${LINKS.sarf}" target="_blank" rel="noopener">Open the lessons</a>`
+    : `<p class="read">Part ${n} of Shaykh Dr Mohammad Ali Shomali, <i>ʿAqāʾid al‑Imāmiyya</i> (32 parts, English). The book itself is al‑Muẓaffar’s <i>The Faith of Shia Islam</i>.</p>
+       ${w1?`<blockquote class="read">“It is necessary for a Muslim to believe in the fundamentals of faith with his own insight and understanding, and he cannot follow anyone in this respect … In matters of religious laws … a person must act according to the verdicts (Fatwa) of the most learned Mujtahid.”</blockquote><p class="src">The office of Sayyid al‑Sīstānī, sistani.org/15510, accessed 27 November 2026. Read this before the lesson.</p>`:""}
+       <div class="row"><a class="btn primary" href="${LINKS.shomali}" target="_blank" rel="noopener">Open the lessons</a><a class="btn" href="${LINKS.faithText}" target="_blank" rel="noopener">The book</a></div>`;
+  openPanel(`<div class="eyebrow">${k==="arabic"?"Arabic":"Belief"} · forty minutes</div><h1>${k==="arabic"?"Morphology":"Belief"}, lesson ${n}</h1>
+    <div class="card"><b>Before you press play</b><p class="small muted">Read these. You do not need to answer them yet.</p><ol class="read">${before.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>
+    ${link}${after}
+    <div class="note"><b>The taqrīr.</b> ${k==="belief"?"Record two minutes on your phone, explaining the lesson as if to a younger cousin. No notes. The recording stays on your phone.":"Write the lesson’s three main points from memory, then check them."}</div>
+    <button class="btn primary" id="ok">Lesson done</button>`, () => $("#ok").onclick=()=>{ S.sessions[k]++; mark(k); closePanel(); });
+}
+function openWeek(k){
+  if(k==="arabic"||k==="belief") return sessionPanel(k);
+  if(k==="kumayl") return openPanel(`<div class="eyebrow">Thursday night · twenty minutes</div><h1>Duʿāʾ Kumayl</h1>
+    <p class="read">Nothing to study tonight. Open your booklet and read. If the Arabic is too fast, read the English beside it; the Arabic will come.</p>
+    <button class="btn primary" id="ok">Read tonight</button>`, () => $("#ok").onclick=()=>{ mark("kumayl"); closePanel(); });
+  if(k==="friday"){
+    const wn=weekNo(), p = PRACTICE[wn] || {t:MONTHS[Math.min(11,Math.floor((wn-1)/4.3))][4], body:`<p class="read">This month’s practice topic, from your fiqh book. Read one section, write one ruling and one question.</p>`};
+    const c = S.cards[weekKey()] || {};
+    openPanel(`<div class="eyebrow">Friday · one hour</div><h1>The Friday hour</h1>
+      <p class="src">Al‑Kāfī preserves a report, attributed to the Prophet ﷺ, reproaching whoever “does not free himself every Friday for the matter of his religion, to look after it and ask about his religion” (vol. 1, chapter on asking the scholar, ḥadīth 5; al‑Majlisī: mursal, so held as a report).</p>
+      <div class="card stack"><div class="eyebrow">1 · Practice · 25 minutes</div><h3>${esc(p.t)}</h3>${p.body}</div>
+      <div class="card stack"><div class="eyebrow">2 · Mubāḥatha · 20 minutes</div><p class="read">Call your partner. Each of you says this week’s belief lesson in your own words, without notes. Then each asks the other one question the lesson did not answer. Add the best one to your Ask list.</p></div>
+      <div class="card stack"><div class="eyebrow">3 · Your weekly card · 10 minutes</div><p class="small muted">Grade honestly. An F is allowed; it tells us what to change.</p>
+        ${["q:Qurʾān","a:Arabic","b:Belief","p:Practice"].map(x=>{const [id,l]=x.split(":"); return `<div><b>${l}</b><div class="grades" data-g="${id}">${["A","B","C","D","E","F"].map(g=>`<button aria-pressed="${c[id]===g}">${g}</button>`).join("")}</div></div>`;}).join("")}
+        <label class="small muted" for="hard">What was hard?</label><textarea id="hard">${esc(c.hard)}</textarea>
+        <div class="row"><button class="btn primary" id="sv">Save the card</button><button class="btn" id="cp">Copy to send</button></div><p class="small muted" id="msg"></p></div>`,
+      () => {
+        panel.querySelectorAll(".grades").forEach(g => g.addEventListener("click", e => { const b=e.target.closest("button"); if(!b) return; g.querySelectorAll("button").forEach(x=>x.setAttribute("aria-pressed", x===b)); }));
+        const read = () => { const o={}; panel.querySelectorAll(".grades").forEach(g=>{ const b=g.querySelector('[aria-pressed="true"]'); if(b) o[g.dataset.g]=b.textContent; }); o.hard=$("#hard").value.trim(); return o; };
+        $("#sv").onclick = () => { S.cards[weekKey()] = read(); mark("friday"); save(); $("#msg").textContent="Saved. Jazāki Allāhu khayran."; };
+        $("#cp").onclick = () => { const o=read(); const txt=`Week ${weekNo()} card\nQurʾān ${o.q||"-"} · Arabic ${o.a||"-"} · Belief ${o.b||"-"} · Practice ${o.p||"-"}\nWhat was hard: ${o.hard||"(nothing written)"}`; copy(txt, $("#msg")); };
+      });
+  }
+}
+function openExam(){
+  openPanel(`<div class="eyebrow">Exam mode</div><h1>Keep the thread, nothing more.</h1>
+    <p class="read">Until you switch it off, the day is fifteen minutes: your words and three questions from memory. No new lessons. This is the plan, not a failure of it.</p>
+    <label class="small muted" for="rs">When do you start again? (the day after your last exam works well)</label><input type="date" id="rs" value="${S.restart||""}">
+    <button class="btn primary" id="ok">Set</button>`, () => $("#ok").onclick=()=>{ S.restart=$("#rs").value; save(); closePanel(); });
+}
+
+/* Words */
+let flashIdx=null, flashShow=false;
+function renderWords(){
+  const due=dueWords(), n=unlocked(), k=knownCount(), cov=coverage();
+  if(flashIdx===null || !due.includes(flashIdx)){ flashIdx = due.length ? due[0] : null; flashShow=false; }
+  const w = flashIdx!==null ? DATA.words[flashIdx] : null;
+  app.innerHTML = `<div class="wrap stack"><div class="top"><div><div class="eyebrow">The words of the Qurʾān</div><h1>Ten a week</h1></div></div>
+    <div class="card stack"><div class="grid2"><div><div class="big-num">${k}</div><div class="small muted">words you know well</div></div><div><div class="big-num">${cov}%</div><div class="small muted">of the Qurʾān’s words they make up</div></div></div>
+      <div class="meter" aria-hidden="true"><i style="width:${Math.min(100,cov/DATA.cov500*100)}%"></i></div>
+      <p class="small muted">The 500 words in this list make up about ${Math.round(DATA.cov500)}% of all the words in the Qurʾān. You unlock ten each week; ${n} are open now.</p></div>
+    ${w ? `<div class="card flash" id="fc" role="button" tabindex="0" aria-label="Show the meaning">
+        <div class="big">${esc(w.a)}</div>
+        ${flashShow ? `<div class="gloss">${esc(w.g)}</div><div class="small muted">${w.p}${w.r?` · root ${esc(w.r)}`:""} · about ${w.f.toLocaleString()} times in the Qurʾān</div>` : `<div class="small muted">Say what it means, then tap</div>`}
+      </div>
+      ${flashShow ? `<div class="grid2"><button class="btn" id="again">Again</button><button class="btn primary" id="knew">I knew it</button></div>` : `<div class="row"><button class="btn" id="say">Hear it</button><span class="small muted">${due.length} waiting</span></div>`}`
+      : `<div class="card"><h3>All caught up.</h3><p class="read muted">Nothing is waiting. The next words arrive as the week turns, and the ones you know come back when they are about to slip.</p></div>`}
+    <details class="card"><summary style="cursor:pointer"><b>All ${n} open words</b></summary><div class="scroll"><table><thead><tr><th>Word</th><th>Meaning</th><th>Times</th></tr></thead><tbody>
+      ${DATA.words.slice(0,n).map(x=>`<tr><td class="ar" style="font-size:1.2rem;line-height:1.6">${esc(x.a)}</td><td>${esc(x.g)}</td><td style="font-variant-numeric:tabular-nums">${x.f}</td></tr>`).join("")}</tbody></table></div></details>
+    <p class="src">Word list and meanings: counted by lemma from the Quranic Arabic Corpus; meanings from the Sabaq word list, Basma Press.</p></div>`;
+  const fc=$("#fc"); if(fc){ const show=()=>{ flashShow=true; renderWords(); }; fc.onclick=show; fc.onkeydown=e=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); show(); } }; }
+  const say=$("#say"); if(say) say.onclick=()=>{ if(!speak(w.a)) say.textContent="No Arabic voice on this phone"; };
+  const ag=$("#again"), kn=$("#knew");
+  if(ag) ag.onclick=()=>{ grade(flashIdx,false); flashIdx=null; renderWords(); };
+  if(kn) kn.onclick=()=>{ grade(flashIdx,true); flashIdx=null; if(!dueWords().length) mark("words"); renderWords(); };
+}
+
+/* Ask */
+function renderAsk(){
+  const open=S.questions.filter(q=>!q.ans), done=S.questions.filter(q=>q.ans);
+  app.innerHTML = `<div class="wrap stack"><div class="top"><div><div class="eyebrow">Its key is the question</div><h1>Ask</h1></div></div>
+    <p class="ar" style="font-size:1.25rem">إِنَّمَا يَهْلِكُ النَّاسُ لِأَنَّهُمْ لَا يَسْأَلُونَ</p>
+    <p class="read">“People perish only because they do not ask.” <span class="src">Imam al‑Ṣādiq (ʿa), al‑Kāfī, vol. 1, chapter on asking the scholar, ḥadīth 2; al‑Majlisī: ṣaḥīḥ.</span></p>
+    <div class="card stack"><label for="nq"><b>A new question</b></label><textarea id="nq" placeholder="Anything you want to understand"></textarea><button class="btn primary" id="add">Add to my list</button></div>
+    <div class="row" style="justify-content:space-between"><h2>For my teacher (${open.length})</h2>${open.length?`<button class="btn" id="cp">Copy all</button>`:""}</div><p class="small muted" id="msg"></p>
+    <div class="stack">${open.map(q=>`<div class="qitem"><p class="read">${esc(q.t)}</p><div class="row"><span class="small muted">${parse(q.date).toLocaleDateString("en-GB",{day:"numeric",month:"short"})}</span><button class="btn ghost" data-ans="${q.id}">Answered</button><button class="btn ghost" data-del="${q.id}">Remove</button></div></div>`).join("") || `<p class="muted read">No open questions. Every lesson should leave you with at least one.</p>`}</div>
+    ${done.length?`<h2>Answered (${done.length})</h2><div class="stack">${done.map(q=>`<div class="qitem ans"><p class="read"><b>${esc(q.t)}</b></p><p class="read">${esc(q.ans)}</p><span class="small muted">${q.by?esc(q.by)+", ":""}${parse(q.ansDate).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}</span></div>`).join("")}</div>`:""}
+    <p class="honest">Questions of belief and law are answered by your teacher, a person. Nothing in this app answers them.</p></div>`;
+  $("#add").onclick=()=>{ const t=$("#nq").value.trim(); if(!t) return; S.questions.push({id:Date.now(), t, date:today()}); save(); renderAsk(); };
+  const cp=$("#cp"); if(cp) cp.onclick=()=>copy("My questions\n\n"+open.map((q,i)=>`${i+1}. ${q.t}`).join("\n"), $("#msg"));
+  app.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ S.questions=S.questions.filter(q=>q.id!=b.dataset.del); save(); renderAsk(); });
+  app.querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>{ const q=S.questions.find(x=>x.id==b.dataset.ans);
+    openPanel(`<div class="eyebrow">Answered</div><h2>${esc(q.t)}</h2><label class="small muted" for="at">The answer, in your words</label><textarea id="at"></textarea><label class="small muted" for="ab">Who answered</label><input type="text" id="ab" placeholder="Your teacher’s name"><button class="btn primary" id="ok">Save</button>`,
+      ()=>$("#ok").onclick=()=>{ q.ans=$("#at").value.trim()||"(answered)"; q.by=$("#ab").value.trim(); q.ansDate=today(); save(); TAB="ask"; closePanel(); }); });
+}
+
+/* Year */
+function renderYear(){
+  const wn=weekNo(), mi=Math.min(11,Math.floor((wn-1)/4.3));
+  const days=Object.values(S.log).filter(v=>v.daily).length;
+  const cards=Object.entries(S.cards).sort((a,b)=>+b[0].slice(1)-+a[0].slice(1));
+  app.innerHTML = `<div class="wrap stack"><div class="top"><div><div class="eyebrow">Year One</div><h1>Where you are going</h1></div></div>
+    <div class="card"><p class="read"><b>To worship knowingly:</b> to pray, fast and live by your religion correctly and with understanding; to read the Qurʾān and the words of the Ahl al‑Bayt (ʿa) in their own Arabic with a teacher; and to know why you believe what you believe.</p></div>
+    <div class="grid2"><div class="card"><div class="big-num">${days}</div><div class="small muted">days kept</div></div><div class="card"><div class="big-num">${S.sessions.arabic+S.sessions.belief}</div><div class="small muted">lessons heard</div></div></div>
+    <div class="card"><h2 style="margin-bottom:4px">Together</h2><p class="small muted">Each of you keeps your own year. Here you see each other’s last seven days, lessons, words and latest weekly card.</p><div data-together="full">${togetherHTML(true)}</div></div>
+    <h2>The four boxes</h2>
+    <div class="box4">
+      <div><div class="ar-t">القرآن</div><b>Qurʾān</b><p class="small muted">Tajwīd from zero, then the second half of Juzʾ 30 by heart.</p></div>
+      <div><div class="ar-t">العربيّة</div><b>Arabic</b><p class="small muted">Morphology, then syntax. Ten words a week.</p></div>
+      <div><div class="ar-t">العقائد</div><b>Belief</b><p class="small muted">Al‑Muẓaffar’s ʿAqāʾid with Shaykh Shomali’s 32 lessons.</p></div>
+      <div><div class="ar-t">العمل</div><b>Practice</b><p class="small muted">Munyat al‑Murīd; the fiqh you live by; Kumayl.</p></div>
+    </div>
+    <h2>The year</h2>
+    <div class="stack" style="gap:8px">${MONTHS.map((m,i)=>`<details class="card month" ${i===mi?"open":""}><summary style="cursor:pointer;display:flex;justify-content:space-between;gap:10px"><b>${i+1}. ${m[0]}</b>${i===mi?`<span class="pill">Now</span>`:""}</summary>
+      <dl class="mdl"><dt>Qurʾān</dt><dd>${m[1]}</dd><dt>Arabic</dt><dd>${m[2]}</dd><dt>Belief</dt><dd>${m[3]}</dd><dt>Practice</dt><dd>${m[4]}</dd></dl></details>`).join("")}</div>
+    <p class="small muted">Months follow the Hijri year from your Day One. Exams will move some of them; the destination does not move.</p>
+    <details class="card"><summary style="cursor:pointer"><b>Waiting for later (${LATER.length})</b></summary><p class="small muted" style="margin-top:8px">Good things, deliberately left for Year Two and after, so that the four boxes get your whole attention.</p><ul class="read">${LATER.map(x=>`<li>${x}</li>`).join("")}</ul></details>
+    ${cards.length?`<details class="card"><summary style="cursor:pointer"><b>Weekly cards (${cards.length})</b></summary><table><thead><tr><th>Week</th><th>Q</th><th>A</th><th>B</th><th>P</th></tr></thead><tbody>${cards.map(([k,c])=>`<tr><td>${k.slice(1)}</td><td>${c.q||""}</td><td>${c.a||""}</td><td>${c.b||""}</td><td>${c.p||""}</td></tr>`).join("")}</tbody></table></details>`:""}
+    <details class="card"><summary style="cursor:pointer"><b>Settings and backup</b></summary><div class="stack" style="margin-top:10px">
+      <label class="small muted" for="lb">My name, as my study partner sees it</label><input type="text" id="lb" value="${esc(S.label)}">
+      <label class="small muted" for="mm">My moment</label><input type="text" id="mm" value="${esc(S.moment)}">
+      <div class="grid2"><div><label class="small muted" for="da">Arabic day</label><select id="da">${WD.map((d,i)=>`<option value="${i}" ${i==S.days.arabic?"selected":""}>${d}</option>`).join("")}</select></div>
+      <div><label class="small muted" for="db">Belief day</label><select id="db">${WD.map((d,i)=>`<option value="${i}" ${i==S.days.belief?"selected":""}>${d}</option>`).join("")}</select></div></div>
+      <label class="small muted" for="wy">Why I am doing this</label><textarea id="wy">${esc(S.why)}</textarea>
+      <button class="btn primary" id="sv">Save</button>
+      <p class="small muted">${DB ? "Your progress is kept on this phone and saved to the course, where only the two personal links can see it." : "Your progress is kept on this phone."} The progress code is a backup: send it to Abdulahi on WhatsApp, or paste it on a new phone.</p>
+      <div class="row"><button class="btn" id="bk1">Copy my progress code</button><button class="btn" id="bk2">Restore from a backup</button></div>
+      <textarea id="bkt" hidden placeholder="Paste a backup here, then press Restore again"></textarea><p class="small muted" id="msg"></p></div></details>
+    <details class="card"><summary style="cursor:pointer"><b>Sources</b></summary><ul class="small read">
+      <li>al‑Shahīd al‑Thānī, Munyat al‑Murīd, ed. Riḍā al‑Mukhtārī (Qom, 1409 AH), pp. 224, 262, 388; English in full: Alexander Khaleeli, <i>Desire of the Aspirant</i> (ICAS Press, 2016).</li>
+      <li>al‑Kulaynī, al‑Kāfī, vol. 1, Kitāb Faḍl al‑ʿIlm, chapter on asking the scholar, ḥadīths 2, 3, 5; vol. 2, chapter on balance and constancy in deeds, ḥadīth 2; gradings from al‑Majlisī, Mirʾāt al‑ʿUqūl, as printed on thaqalayn.net (checked 27 November 2026).</li>
+      <li>The office of Sayyid al‑Sīstānī, sistani.org/15510 and 15307.</li>
+      <li>Qom seminary handbook for 1404 to 1405 SH (the first semester this year follows).</li>
+      <li>Recitation: al‑Ḥuṣarī, the teaching recitation, everyayah.com. English of the Qurʾān: ʿAlī Qulī Qarāʾī.</li>
+      <li>Lessons: Shaykh Dr Mohammad Ali Shomali (belief); Al‑Qalam Institute (morphology).</li></ul></details>
+    <p class="honest">Prepared by Basma Press. Not yet read by a teacher.</p></div>`;
+  $("#sv").onclick=()=>{ S.label=$("#lb").value.trim(); S.moment=$("#mm").value.trim(); S.days={arabic:+$("#da").value, belief:+$("#db").value}; S.why=$("#wy").value.trim(); save(); $("#msg").textContent="Saved."; };
+  $("#bk1").onclick=()=>copy(JSON.stringify(S), $("#msg"));
+  $("#bk2").onclick=()=>{ const t=$("#bkt"); if(t.hidden){ t.hidden=false; t.focus(); return; } try{ const o=JSON.parse(t.value); if(!o.log) throw 0; S=o; save(); $("#msg").textContent="Restored."; render(); }catch(e){ $("#msg").textContent="That does not look like a progress code from this app. Copy it again and paste the whole text."; } };
+}
+
+function copy(txt, msgEl){
+  const fall = () => { const t=document.createElement("textarea"); t.value=txt; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); msgEl.textContent="Copied."; }catch(e){ msgEl.textContent="Select the text and copy it."; } t.remove(); };
+  try{ navigator.clipboard.writeText(txt).then(()=>msgEl.textContent="Copied.", fall); }catch(e){ fall(); }
+}
+render();
+(API ? connectRest : connect)();
+if(API && "serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
+try{ if(navigator.storage && navigator.storage.persist) navigator.storage.persist().catch(()=>{}); }catch(e){}
+</script>
+</body></html>
