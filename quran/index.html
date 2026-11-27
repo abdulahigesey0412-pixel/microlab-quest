@@ -353,7 +353,7 @@ const SK='sabaq_v1';
 let S={};try{S=JSON.parse(localStorage.getItem(SK))||{}}catch(e){S={}}
 S=Object.assign({ay:{},lex:{},gram:{},days:{},games:{},set:{}},S);
 S.set=Object.assign({daily:5,order:'back',tr:20,tf:16,rev:150,lexNew:10,pool:'mem'},S.set);
-function save(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}}
+function save(){try{localStorage.setItem(SK,JSON.stringify(S))}catch(e){}if(window.sabaqSyncSoon)window.sabaqSyncSoon()}
 const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
 const dnum=s=>Math.round(Date.parse(s+'T00:00:00Z')/864e5);
 const TD=()=>dnum(ymd(new Date()));
@@ -861,6 +861,9 @@ const ico=(n,cls='i')=>`<svg class="${cls}" viewBox="0 0 24 24" aria-hidden="tru
 S.v=2;S.xp=S.xp||0;S.done=S.done||{};S.hearts=S.hearts||{n:5,t:Date.now()};S.ach=S.ach||{};S.learn=S.learn||{};
 S.stats=Object.assign({lessons:0,perfect:0,correct:0,answered:0,reviews:0},S.stats||{});
 S.set=Object.assign({goal:30,hearts:true,sound:true,tjc:true,tl:'easy',tlx:true,lang:'en'},S.set);
+/* where this learner first came from, kept once: each channel's short address (/yt, /li and so on) carries utm_source, and the
+   homepage keeps it in tfp_src on the way to Sabaq. The Press's figures count learners by it; nothing else reads it. */
+if(!S.src){try{const q=new URLSearchParams(location.search).get('utm_source')||(JSON.parse(localStorage.getItem('tfp_src')||'null')||{}).s;if(q&&/^[a-z0-9_]{1,24}$/.test(q))S.src=q}catch(e){}}
 /* The Foundations Press edition is a book, not a game: no hearts, no points on show, no flames, no locks, no confetti. */
 const PRESS=!!window.SABAQ_PRESS;
 const MAXH=5,HREGEN=30*60*1000;
@@ -869,7 +872,7 @@ function loseHeart(){if(PRESS||!S.set.hearts)return;hearts();if(S.hearts.n>=MAXH
 function gainHeart(n=1){hearts();S.hearts.n=Math.min(MAXH,S.hearts.n+n);save()}
 const todayXP=()=>(S.days[ymd(new Date())]||{}).xp||0;
 function addXP(n){S.xp+=n;dayLog('xp',n)}
-function streak(){const t=ymd(new Date());let n=0,d=new Date();for(let k=0;k<4000;k++){const s=ymd(d),o=S.days[s];if(o&&(o.xp||o.new||o.rev))n++;else if(s!==t)break;d.setDate(d.getDate()-1)}return n}
+function streak(){if(PRESS)return pressDays().n;const t=ymd(new Date());let n=0,d=new Date();for(let k=0;k<4000;k++){const s=ymd(d),o=S.days[s];if(o&&(o.xp||o.new||o.rev))n++;else if(s!==t)break;d.setDate(d.getDate()-1)}return n}
 
 /* ========== tajwīd data ========== */
 const TJC={},TJS={};
@@ -967,15 +970,18 @@ function outOfHearts(){const ms=HREGEN-(Date.now()-S.hearts.t);
 /* ========== challenge helpers ========== */
 const nk=x=>String(x).toLowerCase().replace(/[()\[\].,;:!?'"“”‘’-]/g,' ').replace(/\s+/g,' ').trim();
 let GLOSSPOOL=null;
-function glossPool(){if(!GLOSSPOOL)GLOSSPOOL=D.lemmas.map((l,k)=>k).filter(k=>D.lemmas[k][4]&&D.lemmas[k][3]>=3&&D.lemmas[k][1]!=='P');return GLOSSPOOL}
-function glossDistractors(right,n=3){const seen=new Set([nk(right)]);const o=[];for(const k of shuffle(glossPool()).slice(0,60)){const g=D.lemmas[k][4];if(seen.has(nk(g)))continue;seen.add(nk(g));o.push(g);if(o.length>=n)break}return o}
-function lemmaDistractors(li,n=3){const L=D.lemmas[li];const pool=shuffle(glossPool()).filter(k=>k!==li&&sk(D.lemmas[k][0])!==sk(L[0])&&nk(D.lemmas[k][4])!==nk(L[4]));return pool.slice(0,n)}
+function glossPool(pos){if(!GLOSSPOOL){GLOSSPOOL={all:D.lemmas.map((l,k)=>k).filter(k=>D.lemmas[k][4]&&D.lemmas[k][3]>=3&&D.lemmas[k][1]!=='P'&&!/\(/.test(D.lemmas[k][4]))};for(const k of GLOSSPOOL.all)(GLOSSPOOL[D.lemmas[k][1]]=GLOSSPOOL[D.lemmas[k][1]]||[]).push(k)}return (pos&&GLOSSPOOL[pos])||GLOSSPOOL.all}   // wrong options of the same kind: a verb's options are verbs
+function glossDistractors(right,n=3,pos,li){const seen=new Set([nk(right)]);if(li!=null){const h=sk(D.lemmas[li][0]);for(const x of D.lemmas)if(sk(x[0])===h)seen.add(nk(x[4]))}   /* a word spelt the same (كادَ to plot, كادَ to be about to) never gives a wrong option that is also right */
+  const o=[];for(const k of shuffle(glossPool(pos)).slice(0,60)){const g=D.lemmas[k][4];if(seen.has(nk(g)))continue;seen.add(nk(g));o.push(g);if(o.length>=n)break}return o}
+function lemmaDistractors(li,n=3){const L=D.lemmas[li];const pool=shuffle(glossPool(L[1])).filter(k=>k!==li&&sk(D.lemmas[k][0])!==sk(L[0])&&nk(D.lemmas[k][4])!==nk(L[4]));return pool.slice(0,n)}
 const surahWords=s=>[...new Set(D.ayahs.slice(SI[s],SI[s]+D.surahs[s-1][7]).flatMap(a=>a[7]))];
 const ayahText=(i,tj=true)=>{const t=tj&&S.set.tjc?tjSync(i):null;return (t?t.join(' '):A(i)[7].map(esc).join(' '))+` <span class="num">﴿${AD(A(i)[1])}﴾</span>`};
 const qwrap=(h,cls='q md')=>`<div class="${cls}${S.set.tjc?' tjon':''}">${h}</div>`;
 async function ensureTJ(list){await Promise.all([...new Set(list.map(i=>A(i)[3]))].map(tjJuz))}
 
 /* challenge factories (return plain objects; the stage renders them) */
+/* a matching exercise must not offer the same meaning twice (lā and ghayr both gloss as “not”): keep the first of each */
+function uniqGloss(list){const seen=new Set();return list.filter(li=>{const g=nk(D.lemmas[li][4]||'');if(!g||seen.has(g))return false;seen.add(g);return true})}
 function chMCQ(o){return Object.assign({type:'mcq'},o)}
 function chNext(i,P){const t=i+1;const right=start(t);const sims=(SIM[t]||[]).map(([j])=>start(j));const near=shuffle(range(SI[A(i)[0]],SI[A(i)[0]]+D.surahs[A(i)[0]-1][7]-1).filter(j=>j!==t&&j!==i)).map(j=>start(j));
   const opts=shuffle([right,...distinctStarts(right,[...sims,...near,...shuffle(P||[]).map(j=>start(j))])]);
@@ -1007,7 +1013,7 @@ function chOrder(list){return {type:'order',kind:'Hifz · order',list}}
 /* ========== lesson builders ========== */
 async function reviewBits(n=2){const out=[];const due=shuffle(dueAyat()).slice(0,n);for(const i of due){const c=Math.random()<.5&&i<6235&&A(i+1)[0]===A(i)[0]?chNext(i):chGap(i);if(c){c.kind='Review · '+c.kind;out.push(c)}}
   const t=TD();const dl=shuffle(Object.keys(S.lex).map(Number).filter(k=>S.lex[k].n>0&&S.lex[k].due<=t)).slice(0,n);for(const li of dl)out.push(chLemma(li,'Review · word'));return out}
-function chLemma(li,kind='Words'){const L=D.lemmas[li];return chMCQ({kind,prompt:`<h2>What does this word mean?</h2><div class="lex" style="text-align:center">${esc(L[0])}</div>${tlx()?`<div class="tlbig">${esc(tlText(L[0]))}</div>`:''}`,opts:shuffle([L[4],...glossDistractors(L[4])]),ans:L[4],lex:li,sol:`<span class="ar">${esc(L[0])}</span> <i>${esc(tlText(L[0]))}</i> = ${esc(L[4])}${L[2]?` · root ${rootHTML(L[2])}`:''}`})}
+function chLemma(li,kind='Words'){const L=D.lemmas[li];return chMCQ({kind,prompt:`<h2>What does this word mean?</h2><div class="lex" style="text-align:center">${esc(L[0])}</div>${tlx()?`<div class="tlbig">${esc(tlText(L[0]))}</div>`:''}`,opts:shuffle([L[4],...glossDistractors(L[4],3,L[1],li)]),ans:L[4],lex:li,sol:`<span class="ar">${esc(L[0])}</span> <i>${esc(tlText(L[0]))}</i> = ${esc(L[4])}${L[2]?` · root ${rootHTML(L[2])}`:''}`})}
 async function passageLemmas(list){const m=new Map();for(const i of list){const ws=await W(i);ws.forEach((d,k)=>{if(d[3]<0)return;const L=D.lemmas[d[3]];if(L[0].replace(/[ً-ٰۖ-ۭ]/g,'').length<2||!L[4])return;if(!m.has(d[3]))m.set(d[3],{li:d[3],i,k})})}return [...m.values()]}
 async function buildWords(n){const u=n.u;await ensureTJ(u.list);const all=await passageLemmas(u.list);
   let fresh=all.filter(x=>!(S.lex[x.li]&&S.lex[x.li].n>0)).sort((a,b)=>D.lemmas[b.li][3]-D.lemmas[a.li][3]).slice(0,7);let review=false;
@@ -1018,7 +1024,7 @@ async function buildWords(n){const u=n.u;await ensureTJ(u.list);const all=await 
   for(const x of shuffle(fresh).slice(0,3)){const L=D.lemmas[x.li];const ds=lemmaDistractors(x.li);qs.push(chMCQ({kind:'Words',prompt:`<h2>Which word means “${esc(L[4])}”?</h2>`,opts:shuffle([x.li,...ds]).map(k=>D.lemmas[k][0]),ans:L[0],ar:true,big:true,sol:`<span class="ar">${esc(L[0])}</span> = ${esc(L[4])}`}))}
   if(!AUD.blocked)for(const x of shuffle(fresh).slice(0,2)){const d=(await W(x.i))[x.k];const u2=wordAudio(d);if(u2){const ds=lemmaDistractors(x.li);qs.push(chMCQ({kind:'Listen',prompt:`<h2>Tap what you hear</h2><div class="row" style="justify-content:center"><button class="speaker" data-url="${u2}" aria-label="Play">${ico('speaker')}</button></div>`,autoplay:u2,noTL:true,opts:shuffle([A(x.i)[7][x.k],...ds.map(k=>D.lemmas[k][0])]),ans:A(x.i)[7][x.k],ar:true,big:true,sol:`<span class="ar">${esc(A(x.i)[7][x.k])}</span> “${esc(d[0])}”`}))}}
   items.push(...shuffle(qs));
-  if(fresh.length>=3)items.push({type:'pairs',kind:'Words · match',pairs:shuffle(fresh).slice(0,5).map(x=>[D.lemmas[x.li][0],D.lemmas[x.li][4]])});
+  if(fresh.length>=3)items.push({type:'pairs',kind:'Words · match',pairs:uniqGloss(shuffle(fresh).map(x=>x.li)).slice(0,5).map(li=>[D.lemmas[li][0],D.lemmas[li][4]])});
   items.push(...await reviewBits(1));
   return {title:review?'Words · review':'New words',node:n,items,onFinish:()=>{for(const x of fresh)if(!(S.lex[x.li]&&S.lex[x.li].n>0))S.lex[x.li]=sched(null,2)}};
 }
@@ -1092,12 +1098,12 @@ function startLesson(cfg){
   const items=cfg.items.filter(Boolean);if(!items.length){closeStage();toast('Nothing to practise here yet.');return}
   LS={...cfg,q:items,done:0,mist:0,ok:0,scoredOk:0,combo:0,best:0,t0:Date.now()};
   if(!$('#stage'))stageLoading();
-  const st=$('#stage');st.querySelector('header').innerHTML=`<button class="x" id="sx" aria-label="Quit lesson">${ico('x')}</button><div class="bar"><i id="sbar" style="width:0%"></i></div>${PRESS?'<span class="scount" id="scount"></span>':S.set.hearts&&!LS.practice?`<span class="ts heart" id="shearts">${ico('heart')}${hearts()}</span>`:''}`;
+  const st=$('#stage');st.querySelector('header').innerHTML=`<button class="x" id="sx" aria-label="Quit lesson">${ico('x')}</button><div class="bar"><i id="sbar" style="width:0%"></i></div>${PRESS?'<span class="slamp" aria-hidden="true">'+LANTERN+'</span><span class="scount" id="scount"></span>':S.set.hearts&&!LS.practice?`<span class="ts heart" id="shearts">${ico('heart')}${hearts()}</span>`:''}`;
   $('#sx').onclick=()=>{if(confirmQuit())return};
   nextItem();
 }
 function confirmQuit(){const f=$('#stage .foot');f.className='foot';f.innerHTML=`<div class="in"><div class="msg"><b style="color:var(--ink)">Quit this lesson?</b><span class="muted small">Progress in this lesson will be lost.</span></div><div class="row"><button class="btn bad" id="qy">Quit</button><button class="btn" id="qn2">Keep going</button></div></div>`;$('#qy').onclick=()=>{closeStage();LS=null;go(cur)};$('#qn2').onclick=()=>{renderItem(LS.curItem)}}
-function updBar(){const tot=LS.done+LS.q.length;$('#sbar').style.width=pct(LS.done,tot)+'%';const h=$('#shearts');if(h)h.innerHTML=ico('heart')+hearts();const c=$('#scount');if(c)c.textContent=Math.min(tot,LS.done+1)+' of '+tot}
+function updBar(){const tot=LS.done+LS.q.length;$('#sbar').style.width=pct(LS.done,tot)+'%';const h=$('#shearts');if(h)h.innerHTML=ico('heart')+hearts();const c=$('#scount');if(c)c.textContent=Math.min(tot,LS.done+1)+' of '+tot;const sg=$('#stage');if(sg)sg.style.setProperty('--p',(tot?LS.done/tot:0).toFixed(3))}
 function nextItem(){updBar();if(!LS.q.length){finishLesson();return}LS.curItem=LS.q.shift();renderItem(LS.curItem)}
 async function renderItem(it){
   const body=$('#stage .inner'),foot=$('#stage .foot');foot.className='foot';keyOpts=null;
@@ -1183,7 +1189,7 @@ function finishLesson(){
   if(L.practice)gainHeart(1);
   if(L.node)S.done[L.node.id]=Object.assign(S.done[L.node.id]||{},{t:TD(),acc});
   if(L.onFinish)L.onFinish(L.scoredOk,L.scored||answered,L.mist);
-  save();beep('done');if(!PRESS)confetti();const newA=checkAch();if(window.tfpTrack)window.tfpTrack('sabaq_lesson_complete',{lessons:S.stats.lessons,accuracy:acc,kind:L.practice?'practice':'path'});
+  save();beep('done');if(!PRESS)confetti();const newA=checkAch();if(window.tfpTrack)window.tfpTrack('sabaq_lesson_complete',{lessons:S.stats.lessons,accuracy:acc,kind:L.practice?'practice':'path',desk:innerWidth>=900?1:0,kept:SYNC.key?1:0,days:streak()});
   $('#stage header').innerHTML='';
   if(PRESS)$('#stage .inner').innerHTML=pressKept(L,acc,secs,answered,newA);else
   $('#stage .inner').innerHTML=`<div class="result">${pressLantern()}<div class="eyebrow">${esc(L.title||'Lesson')}</div><div class="big">${L.mist===0&&answered?'Perfect lesson.':'Lesson complete.'}</div>
@@ -1193,19 +1199,228 @@ function finishLesson(){
     <div class="small muted">${todayXP()} / ${S.set.goal} XP today · streak ${streak()} day${streak()===1?'':'s'}</div>${pressOffer()}</div>`;
   const foot=$('#stage .foot');foot.className='foot';foot.innerHTML=`<div class="in"><span></span><button class="btn big pri" id="fbtn">Continue</button></div>`;
   $('#fbtn').onclick=()=>{closeStage();const back=L.back||cur;LS=null;go(back==='lesson'?'learn':back)};$('#fbtn').focus();
+  wireHeard($('#stage'));if($('#pk-keep'))$('#pk-keep').onclick=()=>keepSheet('lesson');if($('#pk-share'))$('#pk-share').onclick=()=>pressShare();
 }
 
 /* ========== The Foundations Press copy: welcome and the door back to the curriculum ========== */
 const LANTERN='<svg class="lantern" viewBox="0 0 28 36" aria-hidden="true" focusable="false"><path d="M9 5.5a5 5 0 0 1 10 0" fill="none" stroke="#d4ad62" stroke-width="1.6" stroke-linecap="round"/><rect x="8" y="6" width="12" height="3" rx="1.2" fill="#d4ad62"/><path d="M7.5 10h13l1.5 17h-16z" fill="rgba(243,220,166,.12)" stroke="#d4ad62" stroke-width="1.4" stroke-linejoin="round"/><g class="lflame"><path d="M14 13c2.6 3 3.6 5 3.6 6.8A3.6 3.6 0 0 1 14 23.4a3.6 3.6 0 0 1-3.6-3.6C10.4 18 11.4 16 14 13z" fill="#f3c978"/><path d="M14 17.2c1.2 1.5 1.6 2.3 1.6 3.1a1.6 1.6 0 0 1-3.2 0c0-.8.4-1.6 1.6-3.1z" fill="#fff6dc"/></g><rect x="5.5" y="27" width="17" height="3.2" rx="1.3" fill="#d4ad62"/><rect x="8.5" y="30.6" width="11" height="2.2" rx="1.1" fill="#a37b2c"/></svg>';
 const LEAFNO=['I','II','III','IV','V','VI','VII','VIII','IX','X','XI','XII','XIII','XIV','XV','XVI'];
+const LEAFWORD=['','One','Two','Three'];
+/* Days in a row. One missed day in any seven is forgiven: a rest day does not put the lantern out. */
+function pressDays(){const on=d=>{const o=S.days[ymd(d)];return !!(o&&(o.xp||o.new||o.rev))};
+  let n=0,d=new Date(),rested=false,sinceRest=7,usedToday=false;
+  if(!on(d))d.setDate(d.getDate()-1);                       // today not done yet does not break the run
+  for(let k=0;k<4000;k++){
+    if(on(d)){n++;sinceRest++}
+    else{const y=new Date(d);y.setDate(y.getDate()-1);if(sinceRest>=6&&n>0&&on(y)){if(k<=1)usedToday=true;sinceRest=0;rested=rested||k<=2}else break}
+    d.setDate(d.getDate()-1)}
+  return {n,rested}}
+/* The whole Qurʾān in thirty parts: each bar fills with the share of that juzʾ the learner has kept. */
+function pressMap(){const per={},tot={};let kept=0;D.ayahs.forEach((a,i)=>{tot[a[3]]=(tot[a[3]]||0)+1;if(memo(i)){per[a[3]]=(per[a[3]]||0)+1;kept++}});
+  return `<section class="tsec"><h3>The whole Qurʾān</h3><div class="qmap" role="group" aria-label="Thirty parts">${range(1,30).map(j=>`<button type="button" data-j="${j}" aria-label="Juzʾ ${j}: ${pct(per[j]||0,tot[j])}% kept"><i style="height:${Math.max(per[j]?8:0,pct(per[j]||0,tot[j]))}%"></i></button>`).join('')}</div>
+  <p class="qmap-n"><b>${kept.toLocaleString()}</b> of 6,236 āyāt kept${kept?'':'. Each one you memorise fills its part.'}</p></section>`}
+/* ───── Keeping progress: sign up, a private key, and sync. Nothing leaves the browser until the learner asks. ───── */
+let SYNC={};try{SYNC=JSON.parse(localStorage.getItem('sabaq_sync'))||{}}catch(e){SYNC={}}
+const syncSave=()=>{try{localStorage.setItem('sabaq_sync',JSON.stringify(SYNC))}catch(e){}};
+const syncURL=()=>'/api/sabaq-sync?k='+SYNC.key;
+const newKey=()=>{const a=new Uint8Array(26);crypto.getRandomValues(a);return Array.from(a,x=>'abcdefghijklmnopqrstuvwxyz234567'[x&31]).join('')};
+const keyLink=()=>location.origin+'/practice/quran/?key='+SYNC.key;
+let syncT=0,syncBusy=false;
+async function syncPush(){if(!PRESS||!SYNC.key||syncBusy)return;syncBusy=true;
+  try{const r=await fetch(syncURL(),{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({n:S.stats.lessons,s:S})});if(r.ok){SYNC.t=Date.now();syncSave()}}catch(e){}syncBusy=false}
+function syncSoon(){if(!PRESS||!SYNC.key)return;clearTimeout(syncT);syncT=setTimeout(syncPush,4000)}
+async function syncPull(key){try{const r=await fetch('/api/sabaq-sync?k='+key,{cache:'no-store'});if(!r.ok)return null;return await r.json()}catch(e){return null}}
+let MAILON=null;const mailOn=async()=>{if(MAILON!==null)return MAILON;try{const r=await fetch('/api/sabaq-mail',{cache:'no-store'});MAILON=r.ok&&!!(await r.json()).on}catch(e){MAILON=false}return MAILON};
+const remindPost=async on=>{try{const r=await fetch('/api/sabaq-remind',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({email:SYNC.email,k:SYNC.key,on})});return r.ok?await r.json():{error:r.status}}catch(e){return {error:'net'}}};
+const mailPost=async body=>{try{const r=await fetch('/api/sabaq-mail',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)});return r.ok?await r.json():{error:r.status}}catch(e){return {error:'net'}}};
+function pressKeepLine(){if(!PRESS)return '';return SYNC.key
+  ?`<p class="keepline">Your progress is kept. <button type="button" class="tlink" id="tkey">Open it on another device</button></p>${SYNC.cls?`<p class="keepline kcls">You are in ${esc(SYNC.cls.name)}.</p>`:''}`
+  :`<p class="keepline">Your progress is on this device only. <button type="button" class="tlink" id="tkeep">Keep it</button> <button type="button" class="tlink" id="tsign" hidden>Sign in</button></p>`}
+function pressShare(){const url=location.origin+'/practice/quran/',t='Sabaq: memorise the Qurʾān with its meaning';if(window.tfpTrack)window.tfpTrack('share',{what:'/practice/quran/',how:navigator.share?'sheet':'copy'});
+  if(navigator.share){navigator.share({title:t,url}).catch(()=>{});return}
+  (navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(url):Promise.reject()).then(()=>toast('Link copied'),()=>toast(url))}
+function keepSheet(from,mode){const old=$('#keep');if(old)old.remove();const sh=document.createElement('div');sh.className='sheet';sh.id='keep';
+  const done=()=>`<div class="spread"><div class="eyebrow">Your progress is kept</div><button class="btn sm" id="kx">Close</button></div>
+    <h2>Open Sabaq on any device.</h2>${SYNC.sent?`<p class="kp ksent">We have sent this link to ${esc(SYNC.email||'your email')}.</p>`:''}<p class="kp">This is your private link. Anyone who has it can open your progress, so keep it to yourself.</p>
+    <input class="klink" id="klink" readonly value="${esc(keyLink())}" aria-label="Your private link">
+    <div class="pk-acts"><button class="btn pri" id="kcopy">Copy the link</button><a class="tlink" id="kmail" href="mailto:?subject=${encodeURIComponent('My Sabaq link')}&body=${encodeURIComponent('Open Sabaq with this private link:\n'+keyLink())}">Email it to myself</a></div>
+    ${SYNC.email?`<label class="kcheck krem"><input type="checkbox" id="krem"${SYNC.remind?' checked':''}><span>Email me one word if I miss a day</span></label>`:''}
+    <p class="kp small"><button type="button" class="tlink" id="kdel">Delete my saved progress</button></p>`;
+  const form=()=>`<div class="spread"><div class="eyebrow">Keep my progress</div><button class="btn sm" id="kx">Close</button></div>
+    <h2>Keep what you have learned.</h2><p class="kp">Your lessons, words and days are saved under a private link, so you can carry on with any phone or computer.</p>
+    <form id="kform" class="kform" novalidate>
+      <label>Email<input type="email" id="kemail" name="email" autocomplete="email" inputmode="email" required placeholder="name@example.org"></label>
+      <label>I am a<select id="krole" name="role" required><option value="">Choose one</option><option>Student</option><option>Parent</option><option>Teacher</option><option>Imam or program lead</option><option>Other learner</option></select></label>
+      <label class="kcheck"><input type="checkbox" id="kage" required><span>I am 13 or older, or a parent or teacher is signing me up.</span></label>
+      <label class="kcheck"><input type="checkbox" id="kremind" checked><span>Email me one word if I miss a day. One tap stops it.</span></label>
+      <label class="kcheck"><input type="checkbox" id="knews" name="updates"><span>Send me the Press’s weekly letter as well.</span></label>
+      <p class="kp small">We keep your email, your role and your Sabaq progress. We do not sell them. Details are on the <a href="/privacy/#sabaq" target="_blank" rel="noopener">privacy page</a>.</p>
+      <p class="kerr" id="kerr" role="alert" hidden></p>
+      <button class="btn big pri" id="kgo" type="submit">Keep my progress</button>
+      <p class="kp small kalt" id="kalt" hidden>Already keeping your progress? <button type="button" class="tlink" id="ksign">Sign in by email</button></p>
+    </form>`;
+  const signin=()=>`<div class="spread"><div class="eyebrow">Sign in</div><button class="btn sm" id="kx">Close</button></div>
+    <h2>Carry on where you stopped.</h2><p class="kp">Enter the email you used. We will send your private link; open it on this device and your progress will be here.</p>
+    <form id="sform" class="kform" novalidate>
+      <label>Email<input type="email" id="semail" name="email" autocomplete="email" inputmode="email" required placeholder="name@example.org"></label>
+      <p class="kerr" id="serr" role="alert" hidden></p>
+      <button class="btn big pri" id="sgo" type="submit">Send my link</button>
+      <p class="kp small">New here? <button type="button" class="tlink" id="knew">Keep my progress</button></p>
+    </form>`;
+  const sentPage=em=>`<div class="spread"><div class="eyebrow">Check your email</div><button class="btn sm" id="kx">Close</button></div>
+    <h2>Your link is on its way.</h2><p class="kp">If ${esc(em)} keeps progress with Sabaq, its private link will arrive in a minute or two. Open it on this device to carry on.</p>
+    <p class="kp small">Nothing there? Look in the spam folder, or check the spelling and send it again.</p>`;
+  sh.innerHTML='<div>'+(SYNC.key?done():mode==='signin'?signin():form())+'</div>';document.body.appendChild(sh);
+  if(window.tfpTrack)window.tfpTrack(SYNC.key?'sabaq_key_open':mode==='signin'?'sabaq_signin_shown':'sabaq_signup_shown',{from});
+  const wire=()=>{$('#kx').onclick=()=>sh.remove();sh.onclick=e=>{if(e.target===sh)sh.remove()};
+    if($('#kalt'))mailOn().then(on=>{if(on&&$('#kalt'))$('#kalt').hidden=false});
+    if($('#ksign'))$('#ksign').onclick=()=>keepSheet(from,'signin');if($('#knew'))$('#knew').onclick=()=>keepSheet(from);
+    if($('#kmail')&&SYNC.email)mailOn().then(on=>{const a=$('#kmail');if(!on||!a)return;a.textContent=SYNC.sent?'Send it again':'Send it to my email';a.removeAttribute('href');a.setAttribute('role','button');a.tabIndex=0;
+      a.onclick=async e=>{e.preventDefault();a.textContent='Sending…';const r=await mailPost({email:SYNC.email});a.textContent=r.ok&&!r.limited?'Sent. Check your email.':r.limited?'Sent already today. Check your email.':'That did not send. Copy the link instead.';if(r.ok){SYNC.sent=1;syncSave()}};
+      a.onkeydown=e=>{if(e.key==='Enter'||e.key===' ')a.onclick(e)}});
+    if($('#sform'))$('#sform').onsubmit=async e=>{e.preventDefault();const em=$('#semail').value.trim(),err=$('#serr');
+      if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){err.textContent='Please enter an email address.';err.hidden=false;return}
+      err.hidden=true;$('#sgo').disabled=true;$('#sgo').textContent='Sending…';const r=await mailPost({email:em});
+      if(!r.ok){err.textContent=r.error===503?'Sign in by email is not switched on yet. Open the private link you were given instead.':'That did not send. Please check your connection and try again.';err.hidden=false;$('#sgo').disabled=false;$('#sgo').textContent='Send my link';return}
+      if(window.tfpTrack)window.tfpTrack('sabaq_signin_sent',{from});sh.firstElementChild.innerHTML=sentPage(em);wire()};
+    if($('#krem'))mailOn().then(on=>{const c=$('#krem');if(!c)return;if(!on){c.closest('label').hidden=true;return}
+      c.onchange=async()=>{const want=c.checked;c.disabled=true;const r=await remindPost(want);c.disabled=false;
+        if(r.ok){SYNC.remind=want?1:0;syncSave();toast(want?'We will email you if you miss a day.':'No more reminders.')}else{c.checked=!want;toast('That did not save. Please try again.')}}});
+    if($('#kcopy'))$('#kcopy').onclick=()=>{const i=$('#klink');i.select();(navigator.clipboard&&navigator.clipboard.writeText?navigator.clipboard.writeText(i.value):Promise.reject()).then(()=>toast('Link copied'),()=>{try{document.execCommand('copy');toast('Link copied')}catch(e){}})};
+    if($('#kdel'))$('#kdel').onclick=async()=>{if(!confirm2())return;try{await fetch(syncURL(),{method:'DELETE'})}catch(e){}SYNC={};syncSave();if(window.tfpTrack)window.tfpTrack('sabaq_key_deleted',{});sh.remove();toast('Saved progress deleted. Your progress is still on this device.');if(cur==='learn')go('learn')};
+    if($('#kform'))$('#kform').onsubmit=async e=>{e.preventDefault();const em=$('#kemail').value.trim(),role=$('#krole').value,err=$('#kerr');
+      const bad=!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)?'Please enter an email address.':!role?'Please choose what describes you.':!$('#kage').checked?'Please confirm the line about age.':'';
+      if(bad){err.textContent=bad;err.hidden=false;return}
+      err.hidden=true;$('#kgo').disabled=true;$('#kgo').textContent='Saving…';
+      SYNC={key:newKey(),email:em,role,t:0};
+      let ok=false;try{const r=await fetch(syncURL(),{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({n:S.stats.lessons,s:S})});ok=r.ok}catch(x){}
+      if(!ok){SYNC={};err.textContent='That did not save. Please check your connection and try again.';err.hidden=false;$('#kgo').disabled=false;$('#kgo').textContent='Keep my progress';return}
+      SYNC.t=Date.now();syncSave();
+      try{await fetch('/practice/quran/',{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({'form-name':'sabaq-signup',email:em,role,updates:$('#knews').checked?'yes':'no',lessons:String(S.stats.lessons),key:SYNC.key,device:innerWidth>=900?'desk':'phone',from}).toString()})}catch(x){}
+      if(window.tfpTrack)window.tfpTrack('sabaq_signup',{role,from,lessons:S.stats.lessons,updates:$('#knews').checked?1:0,desk:innerWidth>=900?1:0});
+      const mr=await mailPost({email:em,k:SYNC.key});
+      if(mr.ok&&mr.existing){/* this address already keeps progress elsewhere: do not make a second copy */
+        try{await fetch(syncURL(),{method:'DELETE'})}catch(x){}SYNC={};syncSave();
+        sh.firstElementChild.innerHTML=`<div class="spread"><div class="eyebrow">Check your email</div><button class="btn sm" id="kx">Close</button></div>
+          <h2>This address already keeps progress.</h2><p class="kp">We have sent its private link to ${esc(em)}. Open it on this computer and Sabaq will carry on from whichever has more lessons.</p>`;wire();return}
+      if(mr.ok&&mr.sent){SYNC.sent=1;syncSave()}
+      if(mr.ok&&$('#kremind')&&$('#kremind').checked){const rr=await remindPost(true);if(rr.ok){SYNC.remind=1;syncSave()}}
+      if(window.tfpTrack)window.tfpTrack('sabaq_remind',{on:SYNC.remind?1:0,from});
+      sh.firstElementChild.innerHTML=done();wire();if(cur==='learn'&&!$('#stage'))go('learn')}};
+  wire();const f=sh.querySelector('input,button');if(f)f.focus()}
+/* ========== classes: a teacher's room, and the Press's own figures (Press only) ==========
+   A teacher who keeps progress starts a class and shares one link. A learner who opens it types a first name and joins:
+   no email is asked of a learner in a class. The teacher sees first name, lessons kept, days practised and passages
+   recited to a person. Server side: netlify/functions/sabaq-class.mjs and sabaq-figures.mjs. */
+const ARRIVE=(()=>{try{const q=new URLSearchParams(location.search);return {cls:(q.get('class')||'').toLowerCase(),teach:q.has('teach'),fig:q.has('figures')}}catch(e){return {}}})();
+const clsLink=c=>location.origin+'/practice/quran/?class='+c;
+const clsApi=async(q,body)=>{try{const r=await fetch('/api/sabaq-class'+(q||''),body?{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(body)}:{cache:'no-store'});let j={};try{j=await r.json()}catch(e){}return r.ok?j:{error:j.error||r.status}}catch(e){return {error:'net'}}};
+const clsHead=k=>`<div class="spread"><div class="eyebrow">${k}</div><button class="btn sm" id="cx">Close</button></div>`;
+function clsSheet(inner){const old=$('#cls');if(old)old.remove();const sh=document.createElement('div');sh.className='sheet';sh.id='cls';sh.innerHTML='<div>'+inner+'</div>';document.body.appendChild(sh);
+  sh.onclick=e=>{if(e.target===sh)sh.remove()};const x=sh.querySelector('#cx');if(x)x.onclick=()=>sh.remove();return sh}
+const twice=(b,again)=>{if(b.dataset.sure)return true;b.dataset.sure=1;b.textContent=again;return false};
+async function classJoin(code){
+  const info=await clsApi('?code='+code);
+  if(info.error){clsSheet(clsHead('Class')+`<h2>That class link did not open.</h2><p class="kp">Ask your teacher to send it again.</p>`);return}
+  if(SYNC.cls&&SYNC.cls.code===code){clsSheet(clsHead('Your class')+`<h2>You are in ${esc(info.name)}.</h2><p class="kp">Your teacher sees your first name, the lessons you keep and the days you practise.</p>`);return}
+  const sh=clsSheet(clsHead('Join a class')+`<h2>Join ${esc(info.name)}.</h2>
+    <p class="kp">Your teacher will see your first name, the lessons you keep, the days you practise and the passages you recite to someone. Nothing else. No email is asked of you.</p>
+    <form id="cjf" class="kform" novalidate><label>Your first name<input type="text" id="cjn" maxlength="24" autocomplete="given-name" required></label>
+      <p class="kerr" id="cje" role="alert" hidden></p><button class="btn big pri" id="cjg" type="submit">Join the class</button></form>`);
+  $('#cjn').focus();
+  $('#cjf').onsubmit=async e=>{e.preventDefault();const name=$('#cjn').value.trim(),err=$('#cje'),btn=$('#cjg');
+    const fail=m=>{err.textContent=m;err.hidden=false;btn.disabled=false;btn.textContent='Join the class'};
+    if(!name){fail('Please type your first name.');return}
+    err.hidden=true;btn.disabled=true;btn.textContent='Joining…';
+    if(!SYNC.key){SYNC={key:newKey(),t:0};syncSave()}
+    let ok=false;try{const r=await fetch(syncURL(),{method:'PUT',headers:{'content-type':'application/json'},body:JSON.stringify({n:S.stats.lessons,s:S})});ok=r.ok}catch(x){}
+    if(!ok){fail('That did not save. Please check your connection and try again.');return}
+    const j=await clsApi('',{op:'join',code,k:SYNC.key,name});
+    if(j.error){fail(j.error==='class full'?'This class is full. Ask your teacher to start a second one.':'That did not work. Please try again.');return}
+    SYNC.cls={code,name:info.name,as:name};SYNC.t=Date.now();syncSave();if(window.tfpTrack)window.tfpTrack('sabaq_class_join',{});
+    sh.firstElementChild.innerHTML=clsHead('Your class')+`<h2>You are in ${esc(info.name)}.</h2><p class="kp">Keep one lesson today. When you finish a passage, recite it to your teacher.</p><div class="pk-acts"><button class="btn pri" id="cjd">Begin</button></div>`;
+    $('#cx').onclick=$('#cjd').onclick=()=>{sh.remove();if(cur==='learn')go('learn')};$('#cjd').focus()}}
+async function classTeach(){
+  if(!SYNC.key){const sh=clsSheet(clsHead('For teachers')+`<h2>Start a class.</h2>
+    <p class="kp">Your learners join with one link and no email. You see who has kept which lessons, on which days, and what each has recited to a person.</p>
+    <p class="kp">First keep your own progress with your email, so that the class has an owner. Then come back to “Start a class” in your Record.</p>
+    <div class="pk-acts"><button class="btn pri" id="ck">Keep my progress</button></div>`);$('#ck').onclick=()=>{sh.remove();keepSheet('class')};return}
+  clsSheet(clsHead('For teachers')+`<h2>Your classes.</h2><div id="cl"><p class="kp">One moment.</p></div>
+    <form id="cnf" class="kform" novalidate><label>Start a class<input type="text" id="cnn" maxlength="60" placeholder="Sunday ḥalaqa" required></label>
+      <p class="kerr" id="cne" role="alert" hidden></p><button class="btn big pri" id="cng" type="submit">Start the class</button></form>`);
+  clsApi('?t='+SYNC.key).then(j=>{const box=$('#cl');if(!box)return;
+    box.innerHTML=j.error?'<p class="kp">Your classes did not load. Please try again.</p>':j.classes.length?j.classes.map(c=>`<button type="button" class="crow" data-c="${c.code}"><b>${esc(c.name)}</b><span>${c.n} ${c.n===1?'learner':'learners'} ›</span></button>`).join(''):'<p class="kp">You have no class yet.</p>';
+    box.querySelectorAll('[data-c]').forEach(b=>b.onclick=()=>classView(b.dataset.c))});
+  $('#cnf').onsubmit=async e=>{e.preventDefault();const name=$('#cnn').value.trim(),err=$('#cne'),btn=$('#cng');
+    if(name.length<2){err.textContent='Please give the class a name.';err.hidden=false;return}
+    err.hidden=true;btn.disabled=true;const j=await clsApi('',{op:'create',t:SYNC.key,name});btn.disabled=false;
+    if(j.error){err.textContent=j.error==='keep first'?'Sign up with your email first: use “Keep my progress”, then start the class.':j.error==='too many classes'?'You have eight classes already. Close one before starting another.':'That did not work. Please try again.';err.hidden=false;return}
+    if(window.tfpTrack)window.tfpTrack('sabaq_class_create',{});classView(j.code)}}
+function classView(code){
+  clsSheet(clsHead('Your class')+'<div id="cv"><p class="kp">One moment.</p></div>');
+  const ago=d=>{if(!d)return 'Not yet';const n=Math.round((Date.parse(ymd(new Date()))-Date.parse(d))/864e5);return n<=0?'Today':n===1?'Yesterday':n+' days ago'};
+  const draw=async()=>{const j=await clsApi('?code='+code+'&t='+SYNC.key);const box=$('#cv');if(!box)return;
+    if(j.error){box.innerHTML='<p class="kp">The class did not load. Please try again.</p>';return}
+    const m=j.members,act=m.filter(x=>x.week.some(Boolean)).length,url=clsLink(code);
+    box.innerHTML=`<h2>${esc(j.name)}</h2><p class="kp">${m.length} ${m.length===1?'learner':'learners'}, ${act} active this week.</p>
+      <input class="klink" id="cvl" readonly value="${esc(url)}" aria-label="The class link">
+      <div class="pk-acts"><button class="btn pri" id="cvc">Copy the class link</button><button type="button" class="tlink" id="cvs">Send it</button><button type="button" class="tlink" id="cvr">Refresh</button></div>
+      ${m.length?`<div class="ctab" role="table" aria-label="Learners"><div class="ch" role="row"><span role="columnheader">Learner</span><span role="columnheader">Lessons</span><span role="columnheader">This week</span><span role="columnheader">Last</span><span role="columnheader">Heard</span><span></span></div>
+        ${m.map(x=>`<div class="cr" role="row"><span role="cell"><b>${esc(x.name)}</b></span><span role="cell">${x.lessons}</span><span role="cell" class="cw" aria-label="${x.week.filter(Boolean).length} of 7 days">${x.week.map(d=>`<i class="${d?'on':''}"></i>`).join('')}</span><span role="cell">${ago(x.last)}</span><span role="cell">${x.heard}</span><button type="button" class="tlink crm" data-id="${x.id}" aria-label="Take ${esc(x.name)} off the list">Remove</button></div>`).join('')}</div>`
+        :'<p class="kp">No one has joined yet. Send the class link to your learners, or write it on the board.</p>'}
+      <p class="kp small">“Heard” counts the passages a learner has recited to a person. <button type="button" class="tlink" id="cvd">Close this class</button></p>`;
+    $('#cvc').onclick=()=>{const done=()=>{$('#cvc').textContent='Copied'};try{navigator.clipboard.writeText(url).then(done,()=>{$('#cvl').select()})}catch(x){$('#cvl').select()}};
+    $('#cvs').onclick=()=>{const t='Join '+j.name+' in Sabaq';if(navigator.share){navigator.share({title:t,text:t+'.',url}).catch(()=>{})}else location.href='mailto:?subject='+encodeURIComponent(t)+'&body='+encodeURIComponent('Open this link and type your first name:\n'+url)};
+    $('#cvr').onclick=draw;
+    box.querySelectorAll('.crm').forEach(b=>b.onclick=async()=>{if(!twice(b,'Tap again to remove'))return;await clsApi('',{op:'remove',code,t:SYNC.key,id:b.dataset.id});draw()});
+    $('#cvd').onclick=async()=>{if(!twice($('#cvd'),'Tap again to close it for everyone'))return;await clsApi('',{op:'delete',code,t:SYNC.key});classTeach()}};
+  draw();if(window.tfpTrack)window.tfpTrack('sabaq_class_view',{})}
+async function figuresSheet(){if(!SYNC.key)return;let j;try{const r=await fetch('/api/sabaq-figures?k='+SYNC.key,{cache:'no-store'});if(!r.ok)return;j=await r.json()}catch(e){return}
+  const pc=(a,b)=>b?Math.round(100*a/b)+'%':'Too early';
+  clsSheet(clsHead('Sabaq figures')+`<h2>${j.weeklyActive} active this week.</h2><p class="kp">Learners who keep their progress and practised in the last seven days. As of ${esc(j.asOf)}.</p>
+    <dl class="pfacts cfig"><div><dt>New this week</dt><dd>${j.newThisWeek}</dd></div><div><dt>Active in 28 days</dt><dd>${j.monthlyActive}</dd></div><div><dt>Keeping progress</dt><dd>${j.kept}</dd></div>
+      <div><dt>Classes</dt><dd>${j.classes}</dd></div><div><dt>Learners in classes</dt><dd>${j.learnersInClasses}</dd></div><div><dt>Active, in a class</dt><dd>${j.weeklyActiveInClasses}</dd></div>
+      <div><dt>Lessons kept</dt><dd>${j.lessons}</dd></div><div><dt>Lessons per active learner</dt><dd>${j.lessonsPerWeeklyLearner}</dd></div><div><dt>Passages heard</dt><dd>${j.heard}</dd></div></dl>
+    <div class="ctab cco" role="table" aria-label="Each week’s starters"><div class="ch" role="row"><span role="columnheader">Week of</span><span role="columnheader">Started</span><span role="columnheader">Back in week 2</span><span role="columnheader">Back in week 5</span></div>
+      ${j.cohorts.map(c=>`<div class="cr" role="row"><span role="cell">${esc(c.week)}</span><span role="cell">${c.started}</span><span role="cell">${pc(c.week2,c.week2due)}</span><span role="cell">${pc(c.week5,c.week5due)}</span></div>`).join('')}</div>
+    ${(j.sources||[]).length?`<div class="ctab csrc" role="table" aria-label="Where learners came from"><div class="ch" role="row"><span role="columnheader">Came from</span><span role="columnheader">Started</span><span role="columnheader">Active this week</span></div>
+      ${j.sources.map(c=>`<div class="cr" role="row"><span role="cell">${esc(SRCNAME[c.source]||c.source)}</span><span role="cell">${c.started}</span><span role="cell">${c.weeklyActive}</span></div>`).join('')}</div>`:''}
+    <p class="kp small">Counts only. No names, emails or keys leave the server.</p>`)}
+const SRCNAME={direct:'Not known',youtube:'YouTube',linkedin:'LinkedIn',instagram:'Instagram',tiktok:'TikTok',whatsapp:'WhatsApp',email:'Press emails',words:'Printed cards',reminder:'Reminder emails',class:'A class link',instantly:'Masjid and school emails'};
+if(PRESS&&(ARRIVE.cls||ARRIVE.teach||ARRIVE.fig)){const iv=setInterval(()=>{if($('#welcome')||!document.querySelector('.keepline'))return;clearInterval(iv);
+  try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}
+  if(/^[a-hjkmnp-z2-9]{6}$/.test(ARRIVE.cls))classJoin(ARRIVE.cls);else if(ARRIVE.teach)classTeach();else if(ARRIVE.fig)figuresSheet()},300)}
+function confirm2(){const b=$('#kdel');if(b.dataset.sure){return true}b.dataset.sure=1;b.textContent='Tap again to delete it from the Press’s server';return false}
+/* arriving with a private link: fetch that progress and carry on from it */
+async function syncArrive(){if(!PRESS)return;const m=location.search.match(/[?&]key=([a-z2-7]{26})/);
+  if(m){try{history.replaceState(null,'',location.pathname+location.hash)}catch(e){}
+    const rec=await syncPull(m[1]);
+    if(rec&&rec.s){const mine=(S.stats&&S.stats.lessons)||0,theirs=rec.n||0;
+      if(!mine||theirs>=mine||SYNC.key===m[1]){Object.keys(S).forEach(k=>delete S[k]);Object.assign(S,rec.s);S.welcomed=1;save();SYNC={key:m[1],t:Date.now()};syncSave();if(window.tfpTrack)window.tfpTrack('sabaq_restore',{lessons:theirs});return 'restored'}
+      SYNC={key:m[1],t:0};syncSave();syncPush();return 'kept-local'}
+    return 'missing'}
+  if(SYNC.key){const rec=await syncPull(SYNC.key);const mine=(S.stats&&S.stats.lessons)||0;
+    if(rec&&rec.s&&(rec.n||0)>mine){Object.keys(S).forEach(k=>delete S[k]);Object.assign(S,rec.s);S.welcomed=1;save();return 'restored'}}
+  return ''}
 function portion(){return Math.min(100,Math.round(100*todayXP()/Math.max(1,S.set.goal)))}
 /* The lesson's last page: a colophon, not a scoreboard. */
-function pressKept(L,acc,secs,answered,newA){const n=streak(),p=portion();
+/* Heard: a passage that is sealed should then be recited to a person. Sabaq can test; only a person can hear. */
+const heardKey=u=>u.s+':'+A(u.list[0])[1];
+const unitRange=u=>sName(u.s)+' '+A(u.list[0])[1]+(u.list.length>1?RNG+A(u.list[u.list.length-1])[1]:'');
+const isHeard=u=>!!(S.heard&&S.heard[heardKey(u)]);
+function markHeard(u,from){S.heard=S.heard||{};S.heard[heardKey(u)]=ymd(new Date());save();if(window.tfpTrack)window.tfpTrack('sabaq_heard',{passage:heardKey(u),from,heard:Object.keys(S.heard).length})}
+function heardAsk(u,from){return `<div class="pk-heard" data-heard-box><p><b>Now recite it to someone.</b> A teacher, a parent or a friend who can follow in the mushaf. Sabaq can test you. Only a person can hear you.</p><button type="button" class="btn" data-heard="${u.ix}" data-from="${from}">Someone heard it</button></div>`}
+function wireHeard(root,after){(root||document).querySelectorAll('[data-heard]').forEach(b=>b.onclick=()=>{const u=UNITS[+b.dataset.heard];markHeard(u,b.dataset.from);const box=b.closest('[data-heard-box]');if(box)box.innerHTML=`<p class="pk-heard-done">Heard. ${esc(unitRange(u))} is in your record.</p>`;if(after)after()})}
+function pressKept(L,acc,secs,answered,newA){const n=streak(),p=portion();const su=L.node&&!L.practice?L.node.u:null,sealed=!!(su&&su.nodes.every(nodeDone));
   return `<div class="result pkept"><div class="pk-lantern">${LANTERN}</div><div class="eyebrow">${esc(L.title||'Lesson')}</div>
-    <div class="big">${L.mist===0&&answered?'Kept without a slip.':'Lesson kept.'}</div>
+    <div class="big">${sealed?'Passage sealed.':L.mist===0&&answered?'Kept without a slip.':'Lesson kept.'}</div>
     <p class="pk-day">${n>1?'Day '+n+'. The lantern is lit.':'The lantern is lit.'}</p>
     <dl class="pfacts"><div><dt>Accuracy</dt><dd>${acc}%</dd></div><div><dt>Time</dt><dd>${Math.floor(secs/60)}:${String(secs%60).padStart(2,'0')}</dd></div><div><dt>Today’s portion</dt><dd>${p>=100?'Complete':p+'%'}</dd></div></dl>
-    ${newA.length?`<div class="pmark"><span>A mark in your record</span>${newA.map(a=>`<b>${esc(pressMark(a.id,a.t,'')[0])}</b>`).join('')}</div>`:''}${pressOffer()}</div>`}
+    ${newA.length?`<div class="pmark"><span>A mark in your record</span>${newA.map(a=>`<b>${esc(pressMark(a.id,a.t,'')[0])}</b>`).join('')}</div>`:''}
+    ${(()=>{const nx=currentNode();const rest=pressDays().rested;return `<p class="pk-next">${p>=100?'Today’s portion is complete. ':''}${nx?(p>=100?'Tomorrow: ':'Next: ')+esc(nodeTitle(nx))+', '+esc(sName(nx.u.s))+'.':''}${rest?' The lantern kept its flame through your rest day.':''}</p>`})()}
+    ${sealed&&!isHeard(su)?heardAsk(su,'lesson'):''}
+    <div class="pk-acts">${SYNC.key?'':`<button type="button" class="${sealed?'tlink':'btn'}" id="pk-keep">Keep my progress</button>`}<button type="button" class="tlink" id="pk-share">Send to a parent or a teacher</button></div>
+    ${pressOffer()}</div>`}
 /* Today: the next lesson, the passage's contents page, and what lies further on. Replaces the game path. */
 function pressToday(){
   const cn=currentNode();const cu=cn?cn.u.ix:UNITS.length-1;const u=UNITS[cu];const s=D.surahs[u.s-1];
@@ -1216,18 +1431,24 @@ function pressToday(){
   html+=cn?`<section class="tcard" aria-labelledby="tc-h"><div class="tc-ar" lang="ar" aria-hidden="true">${esc(s[3])}</div>
       <div class="tc-k">${S.stats.lessons?'Next lesson':'Your first lesson'} · ${LEAFNO[at]||at+1} of ${LEAFNO[u.nodes.length-1]||u.nodes.length}</div><h2 id="tc-h">${esc(nodeTitle(cn))}</h2>
       <div class="tc-sub">${esc(s[1])} ${rng(u)} · ${esc(s[4])}</div>
+      <div class="tc-goal">${(()=>{const left=u.nodes.length-at;return left<=3?(left===1?'This lesson seals the passage.':LEAFWORD[left]+' lessons until this passage is sealed.'):at+' of '+u.nodes.length+' lessons kept in this passage.'})()}</div>
       <button class="btn big pri" id="tgo">${S.stats.lessons?'Continue':'Begin'}</button>
       <div class="tc-bar"><i style="width:${p}%"></i></div><div class="tc-note">${p>=100?'Today’s portion is complete. Anything more is extra.':'Today’s portion'}</div></section>`
     :`<section class="tcard"><div class="tc-k">The whole mushaf</div><h2>Every passage is kept.</h2><div class="tc-sub">Review keeps it. Recite what is due.</div><button class="btn big pri" id="trev">Go to Review</button></section>`;
   html+=`<section class="tsec"><h3>This passage</h3><ol class="toc">${u.nodes.map((n,j)=>{const done=nodeDone(n),isCur=cn&&n.id===cn.id;
     return `<li class="${done?'done':isCur?'cur':'later'}"><button data-n="${n.id}" ${done||isCur?'':'disabled'}><span class="rn">${LEAFNO[j]||j+1}</span><span class="tt">${esc(nodeTitle(n))}</span><span class="st">${done?'Kept':isCur?'Next':''}</span></button></li>`}).join('')}</ol></section>`;
+  const pu=cu>0?UNITS[cu-1]:null;
+  if(pu&&pu.nodes.every(n=>!!S.done[n.id])&&!isHeard(pu))html+=`<section class="tsec theard" data-heard-box><p><b>${esc(unitRange(pu))} is sealed.</b> Recite it to a teacher, a parent or a friend, then mark it here.</p><button type="button" class="tlink" data-heard="${pu.ix}" data-from="today">Someone heard it</button></section>`;
+  html+=pressMap()+pressKeepLine();
   const to=Math.min(UNITS.length-1,cu+PATHVIEW.ahead);
   const row=(x,k,past)=>{const t=D.surahs[x.s-1];const known=unitKnown(x)||x.nodes.every(nodeDone);
-    return `<li><div class="pa-t"><b>${esc(t[1])} ${rng(x)}</b><small>${esc(t[4])} · ${x.list.length} āyāt · page ${A(x.list[0])[2]}</small></div><span class="pa-ar" lang="ar" aria-hidden="true">${esc(t[3])}</span>${known?'<span class="pa-kept">Kept</span>':past?'':`<button class="tlink" data-jump="${k}">I know this</button>`}</li>`};
+    return `<li><div class="pa-t"><b>${esc(t[1])} ${rng(x)}</b><small>${esc(t[4])} · ${x.list.length} āyāt · page ${A(x.list[0])[2]}</small></div><span class="pa-ar" lang="ar" aria-hidden="true">${esc(t[3])}</span>${known?`<span class="pa-kept">${isHeard(x)?'Kept and heard':'Kept'}</span>`:past?'':`<button class="tlink" data-jump="${k}">I know this</button>`}</li>`};
   if(to>cu)html+=`<section class="tsec"><h3>Further on</h3><ul class="passages">${range(cu+1,to).map(k=>row(UNITS[k],k,false)).join('')}</ul>${to<UNITS.length-1?'<button class="tlink more" id="pahead">Show more passages</button>':''}</section>`;
   if(cu>0)html+=`<section class="tsec"><h3>Behind you</h3>${PATHVIEW.back?`<ul class="passages">${range(Math.max(0,cu-PATHVIEW.back),cu-1).map(k=>row(UNITS[k],k,true)).join('')}</ul>`:''}${cu-PATHVIEW.back>0?`<button class="tlink more" id="pback">${PATHVIEW.back?'Show earlier passages':cu+' passage'+(cu===1?'':'s')+' behind you. Show them'}</button>`:''}</section>`;
   V().innerHTML=html;
-  if($('#tgo'))$('#tgo').onclick=()=>openNode(cn);if($('#trev'))$('#trev').onclick=()=>go('practice');
+  wireHeard(V());if($('#tgo'))$('#tgo').onclick=()=>openNode(cn);if($('#trev'))$('#trev').onclick=()=>go('practice');
+  if($('#tkeep'))$('#tkeep').onclick=()=>keepSheet('today');if($('#tsign')){$('#tsign').onclick=()=>keepSheet('today','signin');mailOn().then(on=>{const b=$('#tsign');if(on&&b)b.hidden=false})}if($('#tkey'))$('#tkey').onclick=()=>keepSheet('today');
+  V().querySelectorAll('.qmap [data-j]').forEach(b=>b.onclick=()=>go('mushaf',{page:A(D.ayahs.findIndex(a=>a[3]==b.dataset.j))[2]}));
   if($('#pback'))$('#pback').onclick=()=>{PATHVIEW.back+=6;pressToday()};
   if($('#pahead'))$('#pahead').onclick=()=>{PATHVIEW.ahead+=6;pressToday()};
   V().querySelectorAll('.toc [data-n]').forEach(b=>b.onclick=()=>openNode(NODE[b.dataset.n]));
@@ -1245,13 +1466,14 @@ function pressLantern(){if(!window.SABAQ_PRESS)return '';const n=streak();return
       <button class="wpath" data-o="mushaf" role="radio" aria-checked="false"><b>Start from the beginning</b><span>al-Fātiḥah, then al-Baqarah onward</span></button>
     </div>
     <button class="btn big pri" id="wgo">Begin</button>
-    <div class="wnote">Free. No account. Your progress stays on this device.</div></div>`;/* WELCOME-END */
+    <div class="wnote">Free. No account needed. A few quiet minutes a day, with the mushaf open.</div>
+    <button type="button" class="wsign" id="wsign" hidden>Already keeping your progress? Sign in</button></div>`;/* WELCOME-END */
 /* On the Press site the welcome is already in the page's HTML (the builder writes it there), so it is on screen with the first paint. */
 function pressWelcome(){return new Promise(res=>{
   let st=$('#welcome');if(!st){st=document.createElement('div');st.className='stage welcome';st.id='welcome';st.innerHTML=WELCOME;document.body.appendChild(st)}
   let o='back';
   st.querySelectorAll('.wpath').forEach(b=>b.onclick=()=>{o=b.dataset.o;st.querySelectorAll('.wpath').forEach(x=>{const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-checked',on)})});
-  $('#wgo').onclick=()=>{S.set.order=o;S.welcomed=1;save();if(window.tfpTrack)window.tfpTrack('sabaq_start',{path:o});st.remove();res()};$('#wgo').focus();
+  $('#wgo').onclick=()=>{S.set.order=o;S.welcomed=1;save();if(window.tfpTrack)window.tfpTrack('sabaq_start',{path:o});st.remove();res()};$('#wgo').focus();if(PRESS&&$('#wsign'))mailOn().then(on=>{const b=$('#wsign');if(on&&b){b.hidden=false;b.onclick=()=>keepSheet('welcome','signin')}});
 })}
 function pressOffer(){if(!window.SABAQ_PRESS)return '';const n=S.stats.lessons;if(!(n===1||n%5===0))return '';
   if(window.tfpTrack)window.tfpTrack('sabaq_offer_shown',{lessons:n});
@@ -1277,7 +1499,7 @@ R.practice=()=>{const due=dueAyat(),mem=memList();const t=TD();const dueW=Object
   bind('pr-rev',()=>{let list=dueAyat().slice(0,S.set.rev);if(!list.length){const m=memList();const s=pick(m);const k=m.indexOf(s);list=m.slice(k,k+8)}startLesson({title:'Review',practice:true,back:'practice',items:list.map(i=>chRecite(i,true,i>0&&A(i-1)[0]===A(i)[0]?i-1:null))})});
   bind('pr-words',()=>{const t2=TD();let ks=Object.keys(S.lex).map(Number).filter(k=>S.lex[k].n>0&&S.lex[k].due<=t2);if(ks.length<5)ks=shuffle(Object.keys(S.lex).map(Number)).slice(0,10);ks=shuffle(ks).slice(0,15);
     const items=ks.map(li=>Math.random()<.6?chLemma(li,'Word review'):chMCQ({kind:'Word review',prompt:`<h2>Which word means “${esc(D.lemmas[li][4])}”?</h2>`,opts:shuffle([li,...lemmaDistractors(li)]).map(k=>D.lemmas[k][0]),ans:D.lemmas[li][0],ar:true,big:true,lex:li}));
-    if(ks.length>=4)items.push({type:'pairs',kind:'Word review',pairs:ks.slice(0,5).map(li=>[D.lemmas[li][0],D.lemmas[li][4]])});startLesson({title:'Word review',practice:true,back:'practice',items})});
+    if(ks.length>=4)items.push({type:'pairs',kind:'Word review',pairs:uniqGloss(ks).slice(0,5).map(li=>[D.lemmas[li][0],D.lemmas[li][4]])});startLesson({title:'Word review',practice:true,back:'practice',items})});
   bind('pr-hifz',async()=>{stageLoading();const p=P();await ensureTJ(p.slice(0,60));const items=[];for(let k=0;k<10;k++){const i=pick(p);const r=Math.random();let c=null;
       if(r<.3&&i<6235&&A(i+1)[0]===A(i)[0])c=chNext(i,p);else if(r<.55)c=chGap(i);else if(r<.75)c=await chBuildArabic(i);else if(r<.9)c=chMutash(i);else{const s=p.filter(j=>j>=i&&j<i+4&&A(j)[0]===A(i)[0]);if(s.length>=3&&s.every((x,ix)=>x===i+ix))c=chOrder(s)}
       if(!c)c=chGap(i)||chMeaning(i);items.push(c)}startLesson({title:'Ḥifẓ drill',practice:true,back:'practice',items})});
@@ -1305,7 +1527,7 @@ R.library=(arg)=>{if(arg&&arg.lesson){libLesson(LESSONS.find(l=>l.id===arg.lesso
   const ls=LESSONS.filter(l=>l.track===LIBTAB);const units=[...new Set(ls.map(l=>l.unit))];const done=ls.filter(l=>S.gram[l.id]&&S.gram[l.id].done).length;
   if(PRESS){B.innerHTML=`<div class="lprog"><div class="lp-n"><b>${done}</b> of ${ls.length} lessons passed</div><div class="bar gold"><i style="width:${pct(done,ls.length)}%"></i></div></div>`+
    units.map(u=>`<section class="tsec"><h3>${esc(u)}</h3><ul class="toc lib">${ls.filter(l=>l.unit===u).map(l=>{const g=S.gram[l.id];return `<li class="${g&&g.done?'done':''}"><button data-l="${l.id}"><span class="tt">${esc(l.title)}</span><span class="la" lang="ar">${esc(l.ar)}</span><span class="st">${g?(g.done?'Passed':'Best '+g.best+' of 10'):''}</span></button></li>`}).join('')}</ul></section>`).join('')+
-   `<p class="lp-src">${LIBTAB==='tajwid'?'The order follows Safina Society’s Science of Tajwid.':'The order follows Safina Society’s Arabic Grammar in 40 Lessons, with the ṣarf of From the Treasures of Arabic Morphology.'} The lesson texts are written for Sabaq.</p>`}
+   `<p class="lp-src">Lessons by The Foundations Press. A study tool; its texts are in review.</p>`}
   else
   B.innerHTML=`<div class="card"><div class="spread"><b>${done} of ${ls.length} passed</b><span class="small muted">${LIBTAB==='tajwid'?'Follows Safina Society’s Science of Tajwid.':'Follows Safina Society’s Arabic Grammar in 40 Lessons, with the sarf of From the Treasures of Arabic Morphology.'}</span></div><div class="bar gold"><i style="width:${pct(done,ls.length)}%"></i></div></div>`+
    units.map(u=>`<div class="card"><h2>${esc(u)}</h2><div class="list">${ls.filter(l=>l.unit===u).map(l=>{const g=S.gram[l.id];return `<div data-l="${l.id}" style="cursor:pointer"><span class="row"><b>${esc(l.title)}</b><span class="ar">${esc(l.ar)}</span></span><span class="chip ${g&&g.done?'g':''}">${g?(g.done?'passed · ':'')+g.best+'/10':'not yet'}</span></div>`}).join('')}</div></div>`).join('');
@@ -1381,17 +1603,21 @@ R.profile=()=>{checkAch();const mem=memList();const per={},tot={};D.ayahs.forEac
     <label class="field" ${PRESS?'hidden':''}>Hearts<select id="shrt"><option value="1" ${S.set.hearts?'selected':''}>On</option><option value="0" ${S.set.hearts?'':'selected'}>Off</option></select></label>
     <label class="field">Sounds<select id="ssnd"><option value="1" ${S.set.sound?'selected':''}>On</option><option value="0" ${S.set.sound?'':'selected'}>Off</option></select></label>
     <label class="field">Transliteration<select id="stl"><option value="easy" ${S.set.tl==='easy'?'selected':''}>Easy English (Bismillaahir-Rahmaan)</option><option value="academic" ${S.set.tl==='academic'?'selected':''}>Academic (bismillāhir-raḥmān)</option><option value="off" ${S.set.tl==='off'?'selected':''}>Off</option></select></label>
-    <label class="field">Transliteration in exercises<select id="stlx"><option value="1" ${S.set.tlx!==false?'selected':''}>Show</option><option value="0" ${S.set.tlx===false?'selected':''}>Hide (harder)</option></select></label>
+    <label class="field" data-adv>Transliteration in exercises<select id="stlx"><option value="1" ${S.set.tlx!==false?'selected':''}>Show</option><option value="0" ${S.set.tlx===false?'selected':''}>Hide (harder)</option></select></label>
     <label class="field">Language<select id="slang">${LANGS.map(l=>`<option value="${l.code}" ${l.code===S.set.lang?'selected':''}>${esc(l.name)}</option>`).join('')}</select></label>
-    <label class="field">Tajwīd colours<select id="stjc"><option value="1" ${S.set.tjc?'selected':''}>On</option><option value="0" ${S.set.tjc?'':'selected'}>Off</option></select></label>
-    <label class="field">Path<select id="so"><option value="back" ${S.set.order==='back'?'selected':''}>al-Fātiḥah, then an-Nās → al-Baqarah</option><option value="fwd" ${S.set.order==='fwd'?'selected':''}>Mushaf order</option></select></label>
+    <label class="field" data-adv>Tajwīd colours<select id="stjc"><option value="1" ${S.set.tjc?'selected':''}>On</option><option value="0" ${S.set.tjc?'':'selected'}>Off</option></select></label>
+    <label class="field" data-adv>Path<select id="so"><option value="back" ${S.set.order==='back'?'selected':''}>al-Fātiḥah, then an-Nās → al-Baqarah</option><option value="fwd" ${S.set.order==='fwd'?'selected':''}>Mushaf order</option></select></label>
     <label class="field">Translation<select id="st">${TRO().map(k=>`<option value="${k}" ${k===trSel()?'selected':''}>${TRN[k]}</option>`).join('')}</select></label>
-    <label class="field">Review cap<select id="sr">${[20,50,100,300].map(n=>`<option ${n===S.set.rev?'selected':''}>${n}</option>`).join('')}</select></label></div>
-   <div class="small muted">Progress is saved in this browser. Copy a backup now and then; paste it back to restore or move devices.</div>
-   <div class="row"><button class="btn sm" id="bk">Copy backup</button><button class="btn sm" id="rs2">Restore</button><button class="btn sm ghost" id="rz">Reset everything…</button></div><div id="bkbox"></div></div>
+    <label class="field" data-adv>Review cap<select id="sr">${[20,50,100,300].map(n=>`<option ${n===S.set.rev?'selected':''}>${n}</option>`).join('')}</select></label></div>
+   <div class="small muted" data-bk>${PRESS?'A backup is a copy of your progress as text. Paste it back to restore it.':'Progress is saved in this browser. Copy a backup now and then; paste it back to restore or move devices.'}</div>
+   <div class="row" data-bk><button class="btn sm" id="bk">Copy backup</button><button class="btn sm" id="rs2">Restore</button><button class="btn sm ghost" id="rz">Reset everything…</button></div><div id="bkbox"></div></div>
   <div class="card"><div class="spread"><h2>Sūrahs you already know</h2><span class="small muted">${PRESS?'Mark a sūrah you already know and it goes straight to review.':'Mark them: they skip the path and go straight to review.'}</span></div>
    ${PRESS?`<ul class="passages known">${D.surahs.map(s=>{const m=bySurah[s[0]]||0;return `<li><div class="pa-t"><b>${s[0]}. ${esc(s[1])}</b><small>${s[7]} āyāt${m?' · '+m+' memorised':''}</small></div><span class="pa-ar" lang="ar" aria-hidden="true">${esc(s[3])}</span>${m<s[7]?`<button class="tlink" data-know="${s[0]}">I know it</button>`:'<span class="pa-kept">Complete</span>'}</li>`}).join('')}</ul></div>`:`<div class="tbl"><table><thead><tr><th>#</th><th>Sūrah</th><th class="n">Āyāt</th><th style="width:30%">Memorised</th><th></th></tr></thead><tbody>${D.surahs.map(s=>{const m=bySurah[s[0]]||0;return `<tr><td class="n">${s[0]}</td><td><b>${esc(s[1])}</b> <span class="ar">${esc(s[3])}</span></td><td class="n">${s[7]}</td><td><div class="bar"><i style="width:${pct(m,s[7])}%"></i></div></td><td>${m<s[7]?`<button class="btn sm" data-know="${s[0]}">I know it</button>`:'<span class="chip g">complete</span>'}</td></tr>`}).join('')}</tbody></table></div></div>`}
   <div class="card small muted"><h3>Sources</h3>${sourcesHTML()}</div>`;
+  if(PRESS){/* the editing function: five settings on show, the rest one tap away */
+    const adv=[...V().querySelectorAll('[data-adv]')],bk=[...V().querySelectorAll('[data-bk]')],box=$('#bkbox');
+    if(adv.length){const d=document.createElement('details');d.className='more-set';d.innerHTML='<summary>More settings</summary><div class="row"></div>';const row=adv[0].parentElement;row.after(d);adv.forEach(x=>d.querySelector('.row').appendChild(x));bk.forEach(x=>d.appendChild(x));if(box)d.appendChild(box);
+      const k=document.createElement('div');k.innerHTML=pressKeepLine()+'<p class="keepline kteach">Teaching a class? <button type="button" class="tlink" id="tteach">Start a class</button></p>';while(k.firstChild)d.before(k.firstChild);if($('#tteach'))$('#tteach').onclick=()=>classTeach();if($('#tkeep'))$('#tkeep').onclick=()=>keepSheet('record');if($('#tsign')){$('#tsign').onclick=()=>keepSheet('record','signin');mailOn().then(on=>{const b=$('#tsign');if(on&&b)b.hidden=false})}if($('#tkey'))$('#tkey').onclick=()=>keepSheet('record')}}
   $('#jm').onclick=e=>{const d=e.target.closest('[data-j]');if(d)go('mushaf',{page:A(D.ayahs.findIndex(a=>a[3]==d.dataset.j))[2]})};
   V().querySelectorAll('[data-know]').forEach(b=>b.onclick=()=>{const s=+b.dataset.know;markKnown(range(SI[s],SI[s]+D.surahs[s-1][7]-1));R.profile();toast(`${sName(s)} added to review`)});
   const on=(id,f)=>$('#'+id).onchange=e=>{f(e.target.value);save();nav()};
@@ -1400,11 +1626,11 @@ R.profile=()=>{checkAch();const mem=memList();const per={},tot={};D.ayahs.forEac
   $('#rs2').onclick=()=>{$('#bkbox').innerHTML=`<textarea id="rst" rows="4" style="width:100%;margin-top:8px" placeholder="Paste a backup here"></textarea><button class="btn sm pri" id="rsg">Restore</button>`;$('#rsg').onclick=()=>{try{const o=JSON.parse($('#rst').value);if(!o.ay||!o.set)throw 0;S=o;save();location.reload()}catch(e){toast('That text is not a Sabaq backup')}}};
   $('#rz').onclick=()=>{$('#bkbox').innerHTML=`<div class="note">${PRESS?'This erases every memorised āyah, every word and every day kept in this browser.':'This erases every memorised āyah, word, XP and streak in this browser.'} <button class="btn sm bad" id="rzy">Erase everything</button> <button class="btn sm ghost" id="rzn">Keep it</button></div>`;$('#rzy').onclick=()=>{try{localStorage.removeItem(SK)}catch(e){}location.reload()};$('#rzn').onclick=()=>$('#bkbox').innerHTML=''};
 };
-function pressColophon(){return window.SABAQ_PRESS?`<div class="colophon"><b>Sabaq, The Foundations Press edition</b><span>Edition of ${window.SABAQ_EDITION||''}. A study tool. Its texts have not yet been through the Press’s scholarly review, and it issues no rulings. Report an error to the Press and it is recorded on the <a href="/errata/">errata page</a>.</span><span>Left out of this edition because their publishers hold the rights: the Abdel Haleem, Usmani and Bridges translations, the abridged Ibn Kathīr, and the Tafhīm introductions.</span></div>`:''}
+function pressColophon(){return window.SABAQ_PRESS?`<div class="colophon"><b>Sabaq, The Foundations Press edition</b><span>Edition of ${window.SABAQ_EDITION||''}. A study tool. Its texts have not yet been through the Press’s scholarly review, and it issues no rulings. Report an error to the Press and it is recorded on the <a href="/errata/">errata page</a>.</span><span>The lessons in Arabic and tajwīd are written by The Foundations Press. The texts it did not write are credited below, as their terms require.</span></div>`:''}
 function sourcesHTML(){return pressColophon()+`<div>Quran text: Uthmani Ḥafṣ (King Fahd Complex script) via the Quran.com API, checked against <a href="https://tanzil.net" target="_blank" rel="noopener">Tanzil</a> Uthmani 1.1 (CC BY 3.0). Page and line layout: the 604-page Madani mushaf. Tajwīd colouring: Quran.com.</div>
  <div>${PUB?'Translations: Saheeh International (non-commercial use with credit), Pickthall, Yusuf Ali, Hilali &amp; Khan. Tafsīr: al-Muyassar and as-Saʿdī. Copyrighted translations and commentary are left out of this public copy.':'Translations: Saheeh International, Abdel Haleem, Taqi Usmani, Pickthall, Yusuf Ali, Bridges, Hilali &amp; Khan. Tafsīr: al-Muyassar, as-Saʿdī, Ibn Kathīr (abridged). Sūrah introductions: Quran.com.'} Word-by-word glosses, transliteration and word audio: Quran.com.</div>
  <div>Grammar, roots, lemmas and verb forms: the <a href="https://corpus.quran.com" target="_blank" rel="noopener">Quranic Arabic Corpus</a> 0.4 (GPL), corrected edition by mustafa0x. Recitation: ʿAbd al-Bāsiṭ ʿAbd aṣ-Ṣamad (murattal), everyayah.com.</div>
- <div>Course order: Safina Society’s <i>Arabic Grammar in 40 Lessons</i> and <i>The Science of Tajwid</i> (Shadee Elmasry), and the sarf topics of <i>From the Treasures of Arabic Morphology</i>. The lesson texts here are written fresh for Sabaq. Nuh Ha Mim Keller’s <i>The Quran Beheld</i> is not included: it has no licensed digital text.</div>`}
+${window.SABAQ_PRESS?'':` <div>Course order: Safina Society’s <i>Arabic Grammar in 40 Lessons</i> and <i>The Science of Tajwid</i> (Shadee Elmasry), and the sarf topics of <i>From the Treasures of Arabic Morphology</i>. The lesson texts here are written fresh for Sabaq. Nuh Ha Mim Keller’s <i>The Quran Beheld</i> is not included: it has no licensed digital text.</div>`}`}
 
 /* ========== navigation & boot ========== */
 const VIEWS=window.SABAQ_PRESS?[['learn','Today','learn'],['practice','Review','practice'],['mushaf','Mushaf','mushaf'],['library','Library','library'],['profile','Record','profile']]:[['learn','Learn','learn'],['practice','Practice','practice'],['mushaf','Mushaf','mushaf'],['library','Library','library'],['profile','Profile','profile']];
@@ -1419,6 +1645,12 @@ document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textar
   if(e.key==='Enter'){const b=$('#fbtn');if(b&&!b.disabled){e.preventDefault();b.click()}}});
 (async()=>{
   try{
+    /* a learner arriving with a private link, or one whose progress is kept, starts from the saved copy */
+    const withKey=PRESS&&/[?&]key=[a-z2-7]{26}/.test(location.search);
+    if(withKey){const w0=$('#welcome');if(w0)w0.style.display='none'}
+    const arrived=PRESS&&(withKey||SYNC.key)?await syncArrive():'';
+    if(withKey&&arrived==='missing'){const w0=$('#welcome');if(w0)w0.style.display=''}
+    window.sabaqSyncSoon=syncSoon;addEventListener('pagehide',()=>{if(SYNC.key)try{fetch(syncURL(),{method:'PUT',keepalive:true,headers:{'content-type':'application/json'},body:JSON.stringify({n:S.stats.lessons,s:S})})}catch(e){}});
     const firstRun=window.SABAQ_PRESS&&!S.welcomed&&!(S.stats&&S.stats.lessons);
     /* The welcome needs no data. It is put on screen and given one frame to paint before the mushaf is read:
        parsing three megabytes first could hold the headline back by seconds on a slow phone. */
@@ -1431,6 +1663,7 @@ document.addEventListener('keydown',e=>{if(e.target.closest('input,select,textar
     if(window.SABAQ_NAMES)D.surahs.forEach((s,i)=>{if(window.SABAQ_NAMES[i])s[1]=window.SABAQ_NAMES[i]});
     buildOrder();buildUnits();hearts();await loadLang(S.set.lang);i18nWatch();nav();
     const h=(location.hash||'').slice(1);go(VIEWS.some(v=>v[0]===h)?h:'learn');
+    if(arrived==='restored')toast('Welcome back. Your kept progress is open.');else if(arrived==='missing')toast('That link did not open any saved progress.');
   }catch(e){console.error(e);V().innerHTML=`<div class="card"><h2>The mushaf data did not load</h2><div class="muted">${esc(e.message)}. Reload the page; if it persists, the data files are missing from this copy.</div></div>`}
 })();
 
