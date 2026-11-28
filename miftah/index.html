@@ -188,10 +188,10 @@ const app=$("#app"), tabs=$("#tabs"), panel=$("#panel");
 let TAB="today";
 
 /* ---------- state ---------- */
-const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}, rv:{}, mubw:{}, size:1, notes:{}, hard:{}, whyHist:[], reports:[], seenEx:{}, plan:null, paused:null});
+const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}, rv:{}, mubw:{}, size:1, notes:{}, hard:{}, whyHist:[], reports:[], seenEx:{}, plan:null, paused:null, U:{}, path:null});
 function migrate(o){
   if(!o) return fresh();
-  if(o.v===2){ const n=Object.assign(fresh(), o); for(const k of ["rv","mubw","notes","hard","seenEx","exams","calls","L","log"]) n[k]=n[k]||{}; for(const k of ["whyHist","reports","questions"]) n[k]=n[k]||[]; if(n.size==null) n.size=1; return n; }
+  if(o.v===2){ const n=Object.assign(fresh(), o); for(const k of ["rv","mubw","notes","hard","seenEx","exams","calls","L","log","U"]) n[k]=n[k]||{}; for(const k of ["whyHist","reports","questions"]) n[k]=n[k]||[]; if(n.size==null) n.size=1; return n; }
   const n = fresh();                      // carry Day One over from the first Miftāḥ
   for(const k of ["owner","label","start","why","moment","updatedAt"]) if(o[k]!=null) n[k]=o[k];
   n.questions = (o.questions||[]).map(q=>({...q}));
@@ -248,6 +248,21 @@ async function loadBook(id){
     try{ localStorage.setItem(BOOK_CACHE(id), JSON.stringify(BOOK)); }catch(e){}
   }catch(e){ if(!BOOK) BOOK_STATE="offline"; }
 }
+let L1=null, L1_STATE="loading";
+async function loadL1(){
+  if(window.MIFTAH_BOOKS && window.MIFTAH_BOOKS.level1){ L1=window.MIFTAH_BOOKS.level1; L1_STATE="ok"; return; }
+  try{ const t=localStorage.getItem(BOOK_CACHE("level1")); if(t){ L1=JSON.parse(t); L1_STATE="ok"; } }catch(e){}
+  if(!BOOK_API || !LINK_KEY){ if(!L1) L1_STATE = LINK_KEY ? "offline" : "nokey"; return; }
+  try{
+    const r = await fetch(BOOK_API+"?id=level1&k="+encodeURIComponent(LINK_KEY)+"&have="+encodeURIComponent(L1?L1.rev:""),{cache:"no-store"});
+    if(r.status===304) return;
+    if(r.status===403){ if(!L1) L1_STATE="nokey"; return; }
+    if(!r.ok) throw 0;
+    L1 = await r.json(); L1_STATE="ok";
+    try{ localStorage.setItem(BOOK_CACHE("level1"), JSON.stringify(L1)); }catch(e){}
+  }catch(e){ if(!L1) L1_STATE="offline"; }
+}
+const pathNow = () => S.path || (Object.keys(S.L||{}).length && !Object.keys(S.U||{}).length ? "bab" : "level1");
 const lessonsOf = () => BOOK ? BOOK.lessons : [];
 const LK = n => BOOK.id+":"+n;
 const qid = (n,q,j) => LK(n)+":"+(q.id||("q"+(j+1)));
@@ -270,8 +285,10 @@ const unlockedLesson = n => n===1 || (passed(n-1) && (()=>{ const prev=chapterOf
 /* ---------- murājaʿa: spaced review of passed lessons ---------- */
 const RV=[1,3,7,16,35,90];
 function dueReview(){
-  if(!BOOK) return [];
   const t=today(), out=[];
+  for(const u of unitsReady()){ const r=S.U[u.id]; if(!r||!r.passed) continue;
+    recallItems(u).forEach(it=>{ const s=S.rv[it.id]||{box:0,due:addDays(r.passedOn||t,1)}; if(s.due<=t) out.push({...it, box:s.box}); }); }
+  if(!BOOK) return out.sort((a,b)=>a.box-b.box);
   for(const l of lessonsOf()){ const r=S.L[LK(l.n)]; if(!r||!r.passed) continue;
     const start=addDays(r.passedOn||t,1);
     (l.check||[]).forEach((q,j)=>{ const id=qid(l.n,q,j); const s=S.rv[id]||{box:0,due:start}; if(s.due<=t) out.push({kind:"q",id,n:l.n,q,box:s.box}); });
@@ -299,7 +316,7 @@ function openReview(then){
       }); return;
     }
     const ord=shuffleSeed(it.q.options.length, k*17+Date.now()%97);
-    openPanel(`${head}<p class="read"><b>${rich(it.q.q)}</b></p><p class="small muted" id="rh">Answer it in your head first.</p><button class="btn" id="show">I have my answer</button><div id="opts" hidden>${ord.map(o=>`<button class="opt" data-o="${o}">${rich(it.q.options[o])}</button>`).join("")}</div><p class="small" id="why" hidden aria-live="polite"></p><button class="btn primary" id="nx" hidden>Next</button>`, ()=>{
+    openPanel(`${head.replace("from lesson "+it.n, it.unitTitle? esc(it.unitTitle) : "from lesson "+it.n)}<p class="read"><b>${rich(it.q.q)}</b></p><p class="small muted" id="rh">Answer it in your head first.</p><button class="btn" id="show">I have my answer</button><div id="opts" hidden>${ord.map(o=>`<button class="opt" data-o="${o}">${rich(it.q.options[o])}</button>`).join("")}</div><p class="small" id="why" hidden aria-live="polite"></p><button class="btn primary" id="nx" hidden>Next</button>`, ()=>{
       $("#show").onclick=()=>{ $("#opts").hidden=false; $("#show").remove(); $("#rh").textContent="Now choose the answer you had."; };
       let locked=false;
       panel.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(locked) return; locked=true; const o=+b.dataset.o, ok=o===it.q.answer;
@@ -319,6 +336,10 @@ function summary(){
   const last7=[...Array(7)].map((_,i)=>{ const d=iso(new Date(Date.now()-(6-i)*DAY)); return !!S.log[d]; });
   const nt = nextThing();
   const passedN = BOOK ? lessonsOf().filter(l=>passed(l.n)).length : Object.values(S.L).filter(x=>x.passed).length;
+  const uPassed=Object.values(S.U||{}).filter(x=>x.passed).length, nu=(typeof nextUnit==="function"&&L1)?nextUnit():null;
+  if(pathNow()==="level1") return {v:2, label:S.label||"", start:S.start||null, last7, days:Object.keys(S.log).length, book:"Level One", total:48, passed:uPassed,
+    taqrir:Object.values(S.U||{}).filter(x=>x.assess&&x.assess.submitted).length, exams:uPassed, now: nu ? nu.meta.discipline+" "+nu.meta.unit+": "+nu.meta.title : "",
+    paused: isPaused() ? S.paused : null, hard: S.hard[weekStart()] || "", openQ:S.questions.filter(q=>!q.ans).length, reports:(S.reports||[]).length, active:Object.keys(S.log).sort().pop()||null, units:true};
   return {v:2, label:S.label||"", start:S.start||null, last7, days:Object.keys(S.log).length,
     book: BOOK ? BOOK.title : "The Eleventh Chapter", total: BOOK ? lessonsOf().length : 26, passed: passedN,
     taqrir: Object.values(S.L).filter(x=>x.taqrir).length,
@@ -369,7 +390,7 @@ function personRow(id){
   const quiet = !s.paused && s.active && s.active < iso(new Date(Date.now()-3*DAY));
   const pill = s.paused ? `<span class="pill gold">Paused until ${fmt(s.paused)}</span>` : quiet ? `<span class="pill gold">Quiet since ${fmt(s.active)}</span>` : s.start ? `<span class="pill">${s.passed} of ${s.total}</span>` : `<span class="pill gold">Not started</span>`;
   return `<div class="person"><div class="row" style="justify-content:space-between"><b>${nm}</b>${pill}</div>
-    ${dots}<p class="small muted">${esc(s.book)} · ${s.passed} lessons passed · ${s.taqrir} taqrīrs · ${s.exams} exams · ${s.openQ} open question${s.openQ===1?"":"s"}</p>${s.now?`<p class="small">Now: ${esc(s.now)}</p>`:""}${s.hard?`<p class="small"><span class="muted">Hard this week:</span> ${esc(s.hard)}</p>`:""}</div>`;
+    ${dots}<p class="small muted">${esc(s.book)} · ${s.units? s.passed+" units passed" : s.passed+" lessons passed · "+s.taqrir+" taqrīrs · "+s.exams+" exams"} · ${s.openQ} open question${s.openQ===1?"":"s"}</p>${s.now?`<p class="small">Now: ${esc(s.now)}</p>`:""}${s.hard?`<p class="small"><span class="muted">Hard this week:</span> ${esc(s.hard)}</p>`:""}</div>`;
 }
 function paintTogether(){ document.querySelectorAll("[data-together]").forEach(el => el.innerHTML = togetherHTML()); }
 
@@ -427,7 +448,7 @@ function adoptKey(k, label){
   STORE="miftah.v2."+k; OLD_STORE="miftah.v1."+k;
   try{ history.replaceState(null,"",location.pathname+"?k="+encodeURIComponent(k)); }catch(e){}
   S=fresh(); S.label=label||""; save();
-  BOOK_STATE="loading"; render(); loadBook("bab").then(()=>{ if(panel.hidden) render(); }); connectRest();
+  BOOK_STATE="loading"; L1_STATE="loading"; render(); loadL1().then(()=>{ if(panel.hidden) render(); }); loadBook("bab").then(()=>{ if(panel.hidden) render(); }); connectRest();
 }
 async function openInvite(){
   if(!API||!LINK_KEY) return;
@@ -466,16 +487,17 @@ function dayOne(step){
     <div class="note"><b>This is a plan, not a vow.</b> Nothing here is a nadhr, an ʿahd or an oath, and nothing is owed if a day is missed. Imam al‑Ṣādiq (ʿa) warned against taking on a duty and then leaving it; keep the plan small enough to keep. Missing one day does no harm. Never miss two. <span class="src">al‑Kāfī, vol. 2, the same chapter, ḥadīth 6; al‑Majlisī: muwaththaq.</span></div></div>`,
     ()=>{ const ds=[...app.querySelectorAll("[data-d][aria-pressed=true]")].map(b=>+b.dataset.d); S.plan={days:ds.length?ds:days}; S.moment=$("#mo").value.trim(); save(); dayOne(3); });
     app.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true")); return; }
-  return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>Your first book.</h1>
-    <div class="book"><div class="spine" lang="ar">١</div><div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with the commentary of al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)</p></div></div>
-    <p class="read">Al‑Ḥillī wrote it about seven hundred years ago, and the seminaries still teach it, usually with this commentary. He wrote it for everyone: “what all who are charged with duty must know of the foundations of religion”, held “by proof, not by imitation”.</p>
-    <p class="read">You will read it the way the ḥawza reads it. Each lesson: questions before you read, the text, the lesson on it, the classic objection, your own written summary, four questions, and the mubāḥatha. Three lessons a week. About ten weeks.</p>
+  return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>Where you begin.</h1>
+    <p class="read">Miftāḥ begins where the tradition begins: with the man. Before the proofs of belief, before the rules of prayer, you meet the Prophet ﷺ in his life and his household in his story. Then the five roots of belief, held by proof; then the worship you do every day, done knowingly; then the Qurʾān, the ḥadīth, and the logic that runs beneath them all.</p>
+    <div class="card stack"><div class="eyebrow">Level One · Six disciplines · 48 units</div><p class="read">Sīrah → ʿAqīdah → Aḥkām → ʿUlūm al‑Qurʾān → Ḥadīth → Manṭiq</p><p class="small muted">About one unit a week, three sessions of about 45 minutes. Each unit: three lessons, the Qurʾān on the subject, a scholar of the tradition, the words that carry it, an assessment you mark yourself, and a journal.</p></div>
+    <p class="read">Your first unit: <b>Sīrah, Unit 1. Before the Mission.</b></p>
     ${JOIN_API&&LINK_KEY?`<div class="note"><b>This page is now your private link.</b> Add it to your home screen (Share, then Add to Home Screen). To open Miftāḥ on another device, copy your link from Record.</div>`:""}</div>`,
-    ()=>{ S.dayOne=true; if(!S.start) S.start=today(); logToday("dayone"); save(); TAB="today"; render(); }, "Begin");
+    ()=>{ S.dayOne=true; if(!S.start) S.start=today(); if(!S.path) S.path="level1"; logToday("dayone"); save(); TAB="today"; render(); }, "Begin");
 }
 
 /* ---------- Today ---------- */
 function renderToday(){
+  if(pathNow()==="level1") return renderTodayUnits();
   if(!BOOK){ app.innerHTML=`<div class="wrap stack">${header("Miftāḥ","Today")}${bookMissing()}</div>`; return; }
   const nt=nextThing(), ws=weekStart(), dow=new Date().getDay();
   const weekLessons=Object.values(S.L).filter(v=>v.passedOn && v.passedOn>=ws).length;
@@ -667,24 +689,171 @@ function renewIntention(c){
     <button class="btn primary" id="ok">Keep this intention</button>`, ()=>$("#ok").onclick=()=>{ const t=$("#nw").value.trim(); if(t && t!==S.why){ S.why=t; S.whyHist.push({t,on:today()}); } else S.whyHist.push({t:S.why||"",on:today(),kept:true}); save(); closePanel(); });
 }
 
+/* ---------- Level One: eight‑part units ---------- */
+const USTEPS=[{k:"cover",name:"The unit"},{k:"l0",name:"Lesson 1"},{k:"l1",name:"Lesson 2"},{k:"l2",name:"Lesson 3"},{k:"actA",name:"Activity"},{k:"quran",name:"The Qurʾān speaks"},{k:"scholar",name:"Scholar spotlight"},{k:"words",name:"What the word carries"},{k:"assess",name:"Assessment"},{k:"journal",name:"Journal"},{k:"source",name:"The source behind this unit"}];
+const unitsReady = () => L1 ? (L1.units||[]) : [];
+const unitPassed = id => !!(S.U[id]||{}).passed;
+function nextUnit(){ for(const u of unitsReady()) if(!unitPassed(u.id)) return u; return null; }
+function recallItems(u){
+  const out=[], sec=((u.partF||{}).sections||[])[0]||{};
+  (sec.questions||[]).forEach((q,j)=>{
+    if(Array.isArray(q.options) && q.options.length && Number.isInteger(q.answer)) out.push({kind:"q", id:"u:"+u.id+":"+(q.n||j), n:u.meta.unit, unitTitle:u.meta.discipline+" "+u.meta.unit, q:{q:q.text, options:q.options.map(o=>o.replace(/^[a-d]\)\s*/,"")), answer:q.answer, why:q.why||""}});
+    else if(/true/i.test(q.type||"") && typeof q.answer==="boolean") out.push({kind:"q", id:"u:"+u.id+":"+(q.n||j), n:u.meta.unit, unitTitle:u.meta.discipline+" "+u.meta.unit, q:{q:q.text.replace(/\s*True\s*\/\s*False\s*$/,""), options:["True","False"], answer:q.answer?0:1, why:q.correction||q.why||""}});
+  });
+  return out;
+}
+function blocksHTML(blocks){ return (blocks||[]).map(b=> b.type==="h" ? `<h3 style="margin-top:8px">${rich(b.text)}</h3>` : b.type==="note" ? `<div class="note">${rich(b.text)}</div>` : `<p>${rich(b.text)}</p>`).join(""); }
+function qList(qs, key, rec){ return `<ol class="read" style="padding-left:20px;margin:0">${(qs||[]).map((q,i)=>`<li style="margin-bottom:10px">${rich(q)}<textarea data-gq="${key}:${i}" placeholder="My answer (optional)" style="margin-top:6px;min-height:64px">${esc(((rec.gq||{})[key+":"+i])||"")}</textarea></li>`).join("")}</ol>`; }
+function renderTodayUnits(){
+  if(!L1){ app.innerHTML=`<div class="wrap stack">${header("Miftāḥ","Today")}${L1_STATE==="loading"?`<p class="muted">Opening…</p>`:bookMissing()}</div>`; return; }
+  const u=nextUnit(), ws=weekStart(), dow=new Date().getDay(), due=dueReview().length, last=Object.keys(S.log).sort().pop(), gap=last?daysSince(last):0;
+  let main="";
+  if(isPaused()) main=`<div class="card main stack"><div class="eyebrow">Paused</div><h2>New units wait until ${fmtH(S.paused)}.</h2><p class="read">Only murājaʿa until then, a few minutes when you can. Al‑Shahīd al‑Thānī allows “one lesson, or less”: what is possible.</p><button class="btn" id="resume">Resume now</button></div>`;
+  else if(u){ const st=(S.U[u.id]||{}).step||0;
+    main=`<div class="card main stack"><div class="eyebrow">${esc(u.meta.discipline)} · Level One · Unit ${u.meta.unit} of ${u.meta.of}</div><h2>${esc(u.meta.title)}</h2><p class="small muted">${esc(u.meta.subtitle||"")}</p>
+      <div class="progress-dots" role="img" aria-label="${st} of ${USTEPS.length} parts done">${USTEPS.map((s,i)=>`<i class="${i<st?"on":""}"></i>`).join("")}</div>
+      <p class="small muted">${st?"You stopped at "+USTEPS[st].name.toLowerCase()+".":esc(u.meta.sessions||"")}${due&&!st?" Murājaʿa first, then the unit.":""}</p>
+      <button class="btn primary" id="go">${st?"Continue":"Begin the unit"}</button></div>`; }
+  else main=`<div class="card main stack"><div class="eyebrow">Level One</div><h2>You have finished every unit written so far.</h2><p class="read">More units are being written. Until then, keep the murājaʿa, and, if you are ready for a whole classical text, open The Eleventh Chapter from the Shelf.</p></div>`;
+  const back = !isPaused() && gap>=3 ? `<div class="note"><b>Welcome back.</b> It has been ${gap} days. Start small: the murājaʿa, then one session. Never miss two from here.</div>` : "";
+  const rvCard = due ? `<button class="card wk" id="rvw"><span class="tick"></span><span><b>Murājaʿa</b><br><span class="when">${Math.min(due,6)} items from earlier units</span></span><span class="small muted">3 min</span></button>` : "";
+  const doneU = unitsReady().filter(x=>(S.U[x.id]||{}).passedOn>=ws);
+  const called=S.calls[ws];
+  const week=`<div class="card stack"><div class="row" style="justify-content:space-between"><h3>${dow===5?"Friday":"This week"}</h3><span class="pill ${doneU.length?"":"gold"}">${doneU.length? doneU.length+" unit"+(doneU.length===1?"":"s")+" ✓":"one unit a week"}</span></div>
+    <button class="wk ${called?"done":""}" id="call"><span class="tick"></span><span><b>Mubāḥatha</b><br><span class="when">${doneU.length?"The unit’s discussion questions, with your partner or alone":"After you finish a unit"}</span></span><span class="small muted">30 min</span></button>
+    <label class="small muted" for="hard">What was hard this week? <span class="muted">(your partner sees this line)</span></label><input type="text" id="hard" value="${esc(S.hard[ws]||"")}" placeholder="One line"></div>`;
+  app.innerHTML=`<div class="wrap stack">${header("Level One","Today")}${back}${main}${rvCard}${week}
+    <div class="card"><h3 style="margin-bottom:4px">Studying together</h3><div data-together>${togetherHTML()}</div>${DB&&Object.keys(PEOPLE).length<2?`<button class="btn" id="inv" style="margin-top:8px">Invite a study partner</button>`:""}</div>
+    ${!isPaused()&&u?`<button class="linkish" id="pause" style="align-self:center">Exams or a hard month? Pause new units</button>`:""}${FOOT}</div>`;
+  const go=$("#go"); if(go) go.onclick=()=>{ const st=(S.U[u.id]||{}).step||0; if(due && !st) openReview(()=>openUnit(u)); else openUnit(u); };
+  const rv=$("#rvw"); if(rv) rv.onclick=()=>openReview();
+  $("#call").onclick=()=>openUnitCall(ws, doneU);
+  $("#hard").onchange=e=>{ S.hard[ws]=e.target.value.trim(); save(); };
+  const ps=$("#pause"); if(ps) ps.onclick=openPause;
+  const rs=$("#resume"); if(rs) rs.onclick=()=>{ S.paused=null; save(); render(); };
+  const iv=$("#inv"); if(iv) iv.onclick=openInvite;
+}
+function openUnitCall(ws, units){
+  openPanel(`<div class="eyebrow">Mubāḥatha · this week</div><h1>Argue it out</h1>
+    <p class="read"><b>With a partner:</b> one of you retells the unit’s three lessons without notes; the other listens for gaps and presses. Then take the discussion questions together. <b>Alone:</b> say the unit aloud as if to a friend, then answer in writing.</p>
+    ${units.length? units.map(u=>{ const qs=((u.partC||{}).discussionQuestions||[]).concat((u.partH||{}).discussionQuestions||[]); return `<div class="card stack"><b>${esc(u.meta.discipline)} ${u.meta.unit}. ${esc(u.meta.title)}</b>${qs.map((p,j)=>`<p class="read" style="margin-top:6px">${j+1}. ${rich(p)}</p><textarea data-mw="${ws}:${u.id}:${j}" placeholder="My answer">${esc(S.mubw[ws+":"+u.id+":"+j]||"")}</textarea>`).join("")}</div>`; }).join("") : `<p class="muted read">Finish a unit this week and its questions appear here.</p>`}
+    <button class="btn primary" id="dn">${S.calls[ws]?"Done this week ✓":"Done for this week"}</button>`,
+    ()=>{ panel.querySelectorAll("[data-mw]").forEach(ta=>ta.oninput=()=>{ S.mubw[ta.dataset.mw]=ta.value; save(); }); $("#dn").onclick=()=>{ S.calls[ws]=today(); logToday("call"); save(); closePanel(); }; });
+}
+function openStudyGuide(u){
+  const d=u.partD||{};
+  openPanel(`<div class="eyebrow">${esc(u.meta.discipline)} · Unit ${u.meta.unit}</div><h1>Study guide</h1>
+    ${d.toYou?`<div class="card"><div class="eyebrow">What this unit asks of you</div><p class="read" style="margin-top:6px">${rich(d.toYou)}</p></div>`:""}
+    ${(d.pacing||[]).length?`<div class="card"><h3>Three sessions</h3><table><tbody>${d.pacing.map(x=>`<tr><td><b>${esc(x.session)}</b></td><td>${rich(x.focus)}<br><span class="small muted">${rich(x.content||"")}</span>${x.closing?`<br><span class="small">${rich(x.closing)}</span>`:""}</td></tr>`).join("")}</tbody></table></div>`:""}
+    ${(d.deeper||[]).length?`<details class="card"><summary style="cursor:pointer"><b>Going deeper</b></summary><div class="dars" style="margin-top:8px">${d.deeper.map(x=>`<p>${rich(typeof x==="string"?x:(x.title?"**"+x.title+".** ":"")+(x.text||""))}</p>`).join("")}</div></details>`:""}
+    ${(d.connections||[]).length?`<details class="card"><summary style="cursor:pointer"><b>Connections</b></summary><div class="dars" style="margin-top:8px">${d.connections.map(x=>`<p>${rich(typeof x==="string"?x:(x.title?"**"+x.title+".** ":"")+(x.text||""))}</p>`).join("")}</div></details>`:""}
+    ${d.sourceEngagement?`<details class="card"><summary style="cursor:pointer"><b>Reading the source</b></summary><div class="dars" style="margin-top:8px"><p><b>${rich(d.sourceEngagement.source||"")}</b></p><p>${rich(d.sourceEngagement.reading||"")}</p><p><i>What to notice.</i> ${rich(d.sourceEngagement.whatToNotice||"")}</p>${d.sourceEngagement.howToCite?`<p><i>How to cite it.</i> ${rich(d.sourceEngagement.howToCite)}</p>`:""}</div></details>`:""}
+    ${(d.sourceTransparency||[]).length?`<details class="card" open><summary style="cursor:pointer"><b>How we know this</b> <span class="small muted">every claim, its source and its standing</span></summary><div class="stack" style="margin-top:8px">${d.sourceTransparency.map(x=>`<div class="qitem"><b class="small">${rich(x.claim)}</b><span class="small">${rich(x.source)}</span><span class="small muted">${esc(x.tier||"")} · ${esc(x.status||"")}${x.note?" · "+rich(x.note):""}</span></div>`).join("")}</div></details>`:""}
+    ${(d.boundaryNotes||[]).length?`<details class="card"><summary style="cursor:pointer"><b>Where Muslims differ</b></summary><div class="dars" style="margin-top:8px">${d.boundaryNotes.map(x=>`<p>${rich(typeof x==="string"?x:(x.title?"**"+x.title+".** ":"")+(x.text||""))}</p>`).join("")}</div></details>`:""}`);
+}
+function openUnit(u, at){
+  const rec=S.U[u.id]=S.U[u.id]||{step:0, gq:{}};
+  let i = at!=null ? at : Math.min(rec.step||0, USTEPS.length-1);
+  const draw=()=>{
+    const st=USTEPS[i], A=u.partA||{}, B=u.partB||{}, C=u.partC||{}, E=u.partE||{}, G=u.partG||{}, Hh=u.partH||{};
+    let body="", nextLabel="Next", canNext=()=>true;
+    if(st.k==="cover") body=`<div class="card stack"><div class="eyebrow">${esc(u.meta.discipline)} · Level One · Unit ${u.meta.unit} of ${u.meta.of}</div><p class="small muted">${esc(u.meta.sessions||"")}</p>${u.meta.anchor?`<p class="read">${rich(u.meta.anchor)}</p>`:""}</div>${(u.front||[]).map(f=>`<div class="card stack">${f.title?`<b>${esc(f.title)}</b>`:""}${(Array.isArray(f.text)?f.text:[f.text]).map(x=>`<p class="read">${rich(x)}</p>`).join("")}</div>`).join("")}`, nextLabel="Lesson 1";
+    if(/^l\d$/.test(st.k)){ const k=+st.k[1], L=(A.lessons||[])[k]||{};
+      body=`<h2>${esc(L.title||"")}</h2><div class="dars">${blocksHTML(L.blocks)}</div><div class="card stack"><b>Guided questions</b><p class="small muted">Answer in your own words, here or in a notebook. Nobody grades them.</p>${qList(L.guidedQuestions,"l"+k,rec)}</div>`; nextLabel = k<2 ? "Lesson "+(k+2) : "Activity"; }
+    if(st.k==="actA"){ const a=A.activityA||{}; body=`<div class="card stack"><div class="eyebrow">${esc(a.label||"Activity A")} · ${esc(a.timing||"")}</div><h2>${esc(a.title||"")}</h2>${(a.text||[]).map(x=>`<p class="read">${rich(x)}</p>`).join("")}${a.deliverable?`<p class="small"><b>What to produce:</b> ${rich(a.deliverable)}</p>`:""}<textarea id="act" style="min-height:160px" placeholder="My work">${esc(rec.act||"")}</textarea></div>`; nextLabel="The Qurʾān speaks"; }
+    if(st.k==="quran") body=`<h2>${esc(B.title||"The Qurʾān speaks")}</h2>${B.intro?`<p class="read">${rich(B.intro)}</p>`:""}${(B.ayat||[]).map(a=>`<div class="card stack"><div class="eyebrow">${esc(a.heading)}</div><p class="ar" lang="ar" dir="rtl">${esc(a.arabic)}</p>${a.translit?`<p class="read"><i>${esc(a.translit)}</i></p>`:""}<p class="read">${rich(a.translation)}</p>${a.analysisSources?`<p class="src">Disciplinary analysis: ${rich(a.analysisSources)}</p>`:""}<div class="dars">${(a.analysis||[]).map(x=>`<p>${rich(x)}</p>`).join("")}</div></div>`).join("")}${B.closing?`<p class="read">${rich(B.closing)}</p>`:""}<div class="card stack"><b>Guided questions</b>${qList(B.guidedQuestions,"b",rec)}</div>`, nextLabel="Scholar spotlight";
+    if(st.k==="scholar") body=`<div class="eyebrow">Scholar spotlight</div><h2>${rich(C.heading||"")}</h2><p class="small muted">${esc(C.datesPlaces||"")}</p><div class="dars">${(C.portrait||[]).map(x=>`<p>${rich(x)}</p>`).join("")}</div>${C.relevance?`<div class="card"><div class="eyebrow">Why he matters to this unit</div><p class="read" style="margin-top:6px">${rich(C.relevance)}</p></div>`:""}${C.toReader?`<p class="read"><i>${rich(C.toReader)}</i></p>`:""}<div class="card stack"><b>Discussion questions</b><p class="small muted">With your partner, or in writing alone.</p>${qList(C.discussionQuestions,"c",rec)}</div>${C.reflect?`<div class="card stack"><b>Reflect</b><p class="read">${rich(C.reflect)}</p><textarea data-gq="c:reflect" placeholder="My reflection">${esc((rec.gq||{})["c:reflect"]||"")}</textarea></div>`:""}`, nextLabel="What the word carries";
+    if(st.k==="words"){ const ab=E.activityB||{}; body=`<h2>What the word carries</h2><p class="small muted">Each term keeps its Arabic, because the English loses what the root carries.</p><div class="stack">${(E.terms||[]).map(x=>`<div class="qitem"><div class="row" style="justify-content:space-between"><b>${esc(x.term)}</b><span class="ar-s" lang="ar" dir="rtl" style="font-family:var(--f-ar);font-size:1.3rem;color:var(--green)">${esc(x.arabic||"")}</span></div><span class="small muted">${esc(x.pronunciation||"")}</span><span class="read">${rich(x.meaning||"")}</span><span class="small read" style="color:var(--muted)">${rich(x.carries||"")}</span></div>`).join("")}</div>${ab.title?`<div class="card stack"><div class="eyebrow">${esc(ab.label||"Activity B")} · ${esc(ab.timing||"")}</div><b>${esc(ab.title)}</b>${(ab.text||[]).map(x=>`<p class="read">${rich(x)}</p>`).join("")}<textarea id="actb" style="min-height:120px" placeholder="My work">${esc(rec.actb||"")}</textarea></div>`:""}`; nextLabel="Assessment"; }
+    if(st.k==="assess"){ body=assessHTML(u, rec); nextLabel = rec.passed ? "Journal" : ""; }
+    if(st.k==="journal") body=`<h2>Reflection journal</h2><p class="small muted">For you alone. Your partner never sees it.</p>${(G.reflections||[]).map((x,j)=>`<div class="card stack"><b>${esc(x.title||"")}</b><p class="read">${rich(x.text||"")}</p><textarea data-gq="g:${j}" style="min-height:110px">${esc((rec.gq||{})["g:"+j]||"")}</textarea></div>`).join("")}${G.lookingAhead?`<div class="card"><div class="eyebrow">Looking ahead</div><p class="read" style="margin-top:6px">${rich(G.lookingAhead)}</p></div>`:""}`, nextLabel="The source behind this unit";
+    if(st.k==="source") body=`<div class="eyebrow">The source behind this unit</div><h2>${esc(Hh.sourceTitle||"")}</h2><p class="ar" lang="ar" dir="rtl" style="font-size:1.4rem">${esc(Hh.sourceArabic||"")}</p><p class="small muted">${esc(Hh.scholar||"")} · ${esc(Hh.dates||"")}</p><div class="dars"><p>${rich(Hh.about||"")}</p><p>${rich(Hh.why||"")}</p>${Hh.toReader?`<p><i>${rich(Hh.toReader)}</i></p>`:""}</div><div class="card stack"><b>Discussion questions</b>${qList(Hh.discussionQuestions,"h",rec)}</div><div class="row"><button class="btn ghost" id="rep">Report a problem in this unit</button></div>`, nextLabel="Finish the unit";
+    panel.innerHTML=`<div class="wrap stack"><div class="row" style="justify-content:space-between"><button class="back" id="bk">‹ Close</button><button class="linkish" id="sg">Study guide</button></div><div class="eyebrow">${esc(u.meta.discipline)} · Unit ${u.meta.unit} · ${esc(st.name)}</div><h1>${esc(u.meta.title)}</h1>
+      <div class="progress-dots" role="img" aria-label="Part ${i+1} of ${USTEPS.length}">${USTEPS.map((s,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>${body}
+      <div class="row" style="justify-content:space-between">${i>0?`<button class="btn ghost" id="pv">‹ ${esc(USTEPS[i-1].name)}</button>`:"<span></span>"}${nextLabel?`<button class="btn primary" id="nx">${nextLabel}</button>`:""}</div></div>`;
+    panel.hidden=false; panel.scrollTop=0; try{ $("#bk").focus({preventScroll:true}); }catch(e){}
+    $("#bk").onclick=()=>{ save(); closePanel(); };
+    $("#sg").onclick=()=>{ const back=i; openStudyGuide(u); $("#bk").onclick=()=>{ openUnit(u, back); }; };
+    const pv=$("#pv"); if(pv) pv.onclick=()=>{ i--; draw(); };
+    panel.querySelectorAll("[data-gq]").forEach(ta=>ta.oninput=()=>{ rec.gq=rec.gq||{}; rec.gq[ta.dataset.gq]=ta.value; save(); });
+    const act=$("#act"); if(act) act.oninput=()=>{ rec.act=act.value; save(); };
+    const actb=$("#actb"); if(actb) actb.oninput=()=>{ rec.actb=actb.value; save(); };
+    const rp=$("#rep"); if(rp) rp.onclick=()=>openReportUnit(u);
+    if(st.k==="assess") wireAssess(u, rec, draw);
+    const nx=$("#nx"); if(nx) nx.onclick=()=>{ if(!canNext()) return;
+      if(i===USTEPS.length-1){ rec.finished=true; save(); closePanel(); return; }
+      i++; rec.step=Math.max(rec.step||0,i); logToday("study"); save(); draw(); };
+  };
+  draw();
+}
+function openReportUnit(u){
+  openPanel(`<div class="eyebrow">Report a problem</div><h2>${esc(u.meta.discipline)} ${u.meta.unit}. ${esc(u.meta.title)}</h2><p class="read">A wrong reference, a misprint, a question with two right answers, a view stated unfairly. It is kept with your progress, and Basma Press reads it.</p><textarea id="rt"></textarea><button class="btn primary" id="ok">Send with my progress</button><p class="small muted" id="msg" aria-live="polite"></p>`,
+    ()=>$("#ok").onclick=()=>{ const t=$("#rt").value.trim(); if(!t) return; S.reports.push({unit:u.id, t, on:today(), rev:L1.rev}); save(); $("#msg").textContent="Thank you. It goes with your next save."; $("#rt").value=""; });
+}
+function assessHTML(u, rec){
+  const F=u.partF||{}, a=rec.assess||{}, done=!!a.submitted;
+  let qn=0;
+  const secs=(F.sections||[]).map((s,si)=>`<div class="card stack"><div class="row" style="justify-content:space-between"><b>${esc(s.title)}</b><span class="pill">${s.points} points</span></div>${(s.questions||[]).map(q=>{ qn++; const key=String(q.n||qn), v=(a.ans||{})[key];
+      let inp="";
+      const isTF=/true/i.test(q.type||""), isMC=!isTF && Array.isArray(q.options) && q.options.length>0;
+      if(isMC) inp=q.options.map((o,oi)=>`<button class="opt ${done&&oi===q.answer?"right":""} ${done&&v===oi&&oi!==q.answer?"wrong":""}" data-a="${key}" data-v="${oi}" aria-pressed="${v===oi}" ${done?"disabled":""}>${done&&oi===q.answer?"✓ ":""}${done&&v===oi&&oi!==q.answer?"✗ ":""}${rich(o)}</button>`).join("");
+      else if(isTF) inp=`<div class="row">${["True","False"].map((o,oi)=>`<button class="chip" data-a="${key}" data-v="${oi===0}" aria-pressed="${v===(oi===0)}" ${done?"disabled":""}>${o}</button>`).join("")}</div><input type="text" data-t="${key}c" placeholder="If false, the correction" value="${esc((a.ans||{})[key+"c"]||"")}" ${done?"readonly":""}>`;
+      else if(/fill/i.test(q.type||"")) inp=`<input type="text" data-t="${key}" value="${esc(v||"")}" ${done?"readonly":""}>`;
+      else inp=`<textarea data-t="${key}" style="min-height:${/paragraph/i.test(q.type||"")?200:120}px" ${done?"readonly":""}>${esc(v||"")}</textarea>`;
+      const auto = isMC;
+      const mark = done && !auto ? `<label class="small">My mark for this answer <input type="number" min="0" max="${q.points}" step="1" data-m="${key}" value="${(a.self||{})[key]??""}" style="width:80px;display:inline-block"> of ${q.points}</label>` : "";
+      const key2 = done ? `${isTF?`<p class="small"><b>Answer:</b> ${rich(q.correction || (q.answer?"True":"False"))}</p>`:""}${/fill/i.test(q.type||"")&&typeof q.answer==="string"?`<p class="small"><b>Answer:</b> ${rich(q.answer)}</p>`:""}${q.why?`<p class="small">${rich(q.why)}</p>`:""}${(F.models||{})[key]?`<details open><summary class="small" style="cursor:pointer"><b>A model answer</b></summary><p class="read">${rich(F.models[key])}</p></details>`:""}${(F.rubric||{})[key]?`<p class="small muted"><b>Marking:</b> ${rich(F.rubric[key])}</p>`:""}${(!auto && !isTF && !/fill/i.test(q.type||"") && !(F.models||{})[key] && (F.answerKey||[]).find(x=>x.startsWith("Q"+key+":")))?`<p class="small"><b>Answer:</b> ${rich((F.answerKey||[]).find(x=>x.startsWith("Q"+key+":")).replace(/^Q\d+:\s*/,""))}</p>`:""}` : "";
+      return `<div class="stack" style="gap:8px"><p class="read"><b>${key}.</b> ${rich(q.text)} <span class="small muted">(${q.points} points · ${esc(q.type||"")})</span></p>${inp}${key2}${mark}</div>`; }).join("")}</div>`).join("");
+  const score = done ? assessScore(u, rec) : null;
+  return `<h2>Assessment</h2><p class="read">${done?"Mark your written answers against the model and the marking notes, honestly. The multiple choice is marked for you. Seventy points passes.":"Answer everything without looking back. When you submit, you will see the answers, model answers and marking notes, and mark your written answers yourself."}</p>${secs}
+    ${done?`<div class="card stack" aria-live="polite"><b id="tot">${score.total} of 100${score.complete?"":" so far (mark every written answer)"}</b>${rec.passed?`<p class="read">Passed. ${score.total>=85?"":"Read again the parts where you lost the most points before you move on."}</p>`:score.complete?`<p class="read">Not yet. Read the lessons again and sit it once more.</p><button class="btn" id="retry">Sit it again</button>`:""}</div>`:`<button class="btn primary" id="sub">Submit</button><p class="small muted" id="amsg" aria-live="polite"></p>`}`;
+}
+function assessScore(u, rec){
+  const F=u.partF||{}, a=rec.assess||{}; let total=0, complete=true, qn=0;
+  (F.sections||[]).forEach(s=>(s.questions||[]).forEach(q=>{ qn++; const key=String(q.n||qn);
+    if(!/true/i.test(q.type||"") && Array.isArray(q.options)&&q.options.length){ if((a.ans||{})[key]===q.answer) total+=q.points; }
+    else { const m=(a.self||{})[key]; if(m===undefined||m===""||m===null) complete=false; else total+=Math.max(0,Math.min(q.points,+m)); } }));
+  return {total, complete};
+}
+function wireAssess(u, rec, redraw){
+  const a=rec.assess=rec.assess||{ans:{}, self:{}};
+  panel.querySelectorAll("[data-a]").forEach(b=>b.onclick=()=>{ if(a.submitted) return; const k=b.dataset.a, v=b.dataset.v; a.ans[k]= v==="true"?true: v==="false"?false: +v; panel.querySelectorAll(`[data-a="${k}"]`).forEach(x=>x.setAttribute("aria-pressed", String(x===b))); save(); });
+  panel.querySelectorAll("[data-t]").forEach(x=>x.oninput=()=>{ a.ans[x.dataset.t]=x.value; save(); });
+  panel.querySelectorAll("[data-m]").forEach(x=>x.oninput=()=>{ a.self[x.dataset.m]=x.value; const sc=assessScore(u,rec); $("#tot").textContent=sc.total+" of 100"+(sc.complete?"":" so far (mark every written answer)"); if(sc.complete){ rec.score=sc.total; if(sc.total>=70 && !rec.passed){ rec.passed=true; rec.passedOn=today(); rec.rev=L1.rev; logToday("passed"); save(); redraw(); return; } } save(); });
+  const sub=$("#sub"); if(sub) sub.onclick=()=>{ const F=u.partF||{}; let missing=0, qn=0; (F.sections||[]).forEach(s=>(s.questions||[]).forEach(q=>{ qn++; const k=String(q.n||qn); if(a.ans[k]===undefined||a.ans[k]==="") missing++; }));
+    if(missing && !confirm(missing+" question"+(missing===1?" is":"s are")+" unanswered. Submit anyway?")) return;
+    a.submitted=true; a.on=today(); a.tries=(a.tries||0)+1; save(); redraw(); };
+  const rt=$("#retry"); if(rt) rt.onclick=()=>{ rec.assess={ans:{}, self:{}, tries:a.tries}; save(); redraw(); };
+}
+
 /* ---------- Shelf ---------- */
 function renderShelf(){
-  const open = SHELF.filter(b=>b.status==="open"), later = SHELF.filter(b=>b.status!=="open");
+  const later = SHELF.filter(b=>b.status!=="open"), cur=pathNow();
   let list="";
   if(BOOK){ list = chapters().map(c=>{ const ex=S.exams[examKey(c)]||{};
     return `<div class="chapter"><div class="row" style="justify-content:space-between"><h3>${esc(c.title)}</h3>${ex.passed?`<span class="pill">Exam ${ex.score}%</span>`:""}</div>${c.lessons.map(n=>{ const l=lessonsOf()[n-1], r=S.L[LK(n)]||{}, un=unlockedLesson(n);
       return `<button class="lesson-row ${r.passed?"done":""}" data-l="${n}" ${un?"":"disabled"} aria-label="Lesson ${n}, ${esc(l.title)}${r.passed?", passed":un?"":", locked"}"><span class="n">${r.passed?"✓":n}</span><span>${esc(l.title)}</span><span class="small muted">${r.passed?r.score:un?"open":""}</span></button>`; }).join("")}</div>`; }).join(""); }
+  const plan = (L1&&L1.plan)||[], ready=new Set(unitsReady().map(u=>u.id));
+  const discs=[...new Set(plan.map(x=>x.discipline))];
+  const lvl1 = L1 ? discs.map((d,di)=>`<details class="card" ${di===0?"open":""}><summary style="cursor:pointer"><b>${di+1}. ${esc(d)}</b> <span class="small muted">${plan.filter(x=>x.discipline===d&&ready.has(x.id)).length} of 8 ready</span></summary><div style="margin-top:6px">${plan.filter(x=>x.discipline===d).map(x=>{ const r=S.U[x.id]||{}, ok=ready.has(x.id);
+      return `<button class="lesson-row ${r.passed?"done":""}" data-u="${x.id}" ${ok?"":"disabled"}><span class="n">${r.passed?"✓":x.n}</span><span>${esc(x.title)}</span><span class="small muted">${r.passed?(r.score||"")+(r.score?" pts":""):ok?"open":"being written"}</span></button>`; }).join("")}</div></details>`).join("") : bookMissing();
   app.innerHTML=`<div class="wrap stack">${header("Basma Press","The shelf")}
-    <p class="read muted">The books the ḥawza teaches, in the order it teaches them. One book open at a time.</p>
+    <div class="row" style="justify-content:space-between"><h2>Level One · Foundations</h2>${cur==="level1"?`<span class="pill">Studying now</span>`:`<button class="btn" id="toL1">Study this now</button>`}</div>
+    <p class="read muted">Six disciplines in the order the tradition builds a person: the man, then the message, then the practice, then the method. Eight units each.</p>
+    ${lvl1}
+    <div class="row" style="justify-content:space-between;margin-top:10px"><h2>Level Two · The texts</h2>${cur==="bab"?`<span class="pill">Studying now</span>`:""}</div>
+    <p class="read muted">The classical set texts themselves, read line by line through their commentaries, as the ḥawza reads them. Best begun after Level One ʿAqīdah.</p>
     ${BOOK?`<div class="row"><button class="btn" id="srch">Search the book</button><button class="btn" id="terms">Terms (${glossary().length})</button></div>`:""}
-    ${open.map(b=>`<div class="card stack"><div class="book"><div class="spine" lang="ar">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)}</div><h2>${esc(b.title)}</h2><p class="small muted">${esc(b.author)}</p></div></div>${BOOK?list:bookMissing()}</div>`).join("")}
-    <h2>Planned</h2>
+    <div class="card stack"><div class="book"><div class="spine" lang="ar">١١</div><div><div class="eyebrow">ʿAqīdah · Level Two</div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE). 26 lessons.</p></div></div>${cur==="bab"?"":`<button class="btn" id="toBab">Study this now</button>`}${BOOK?list:""}</div>
+    <h2>Level Three, planned</h2>
     <p class="small muted">“Finish the book in one art before you move on. Beware moving from book to book and from art to art without cause: it is a sign of boredom and of failure.” <span class="src">Munyat al‑Murīd, ed. al‑Mukhtārī, pp. 231 to 232. English ours.</span></p>
-    ${later.map(b=>`<div class="book" style="padding:6px 0"><div class="spine soon" lang="ar">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)} · Year ${b.year}</div><h3>${esc(b.title)}</h3><p class="small muted">${esc(b.author)}</p></div></div>`).join("")}
-    <p class="honest">Every book is a classical text, translated by Basma Press from the Arabic.</p></div>`;
+    ${later.filter(b=>b.year>=2).map(b=>`<div class="book" style="padding:6px 0"><div class="spine soon" lang="ar">${b.spine}</div><div><div class="eyebrow">${esc(b.discipline)}</div><h3>${esc(b.title)}</h3><p class="small muted">${esc(b.author)}</p></div></div>`).join("")}
+    ${FOOT}</div>`;
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>openLesson(+b.dataset.l));
+  app.querySelectorAll("[data-u]").forEach(b=>b.onclick=()=>{ const u=unitsReady().find(x=>x.id===b.dataset.u); if(u) openUnit(u, (S.U[u.id]||{}).passed?0:undefined); });
   const tm=$("#terms"); if(tm) tm.onclick=openGlossary;
   const sr=$("#srch"); if(sr) sr.onclick=openSearch;
+  const t1=$("#toL1"); if(t1) t1.onclick=()=>{ S.path="level1"; save(); TAB="today"; render(); };
+  const tb=$("#toBab"); if(tb) tb.onclick=()=>{ if(!confirm("Make The Eleventh Chapter your current study? One book at a time: Level One waits, and your progress in it is kept.")) return; S.path="bab"; save(); TAB="today"; render(); };
 }
 function glossary(){
   const met=new Set(lessonsOf().filter(l=>unlockedLesson(l.n)).map(l=>l.n));
@@ -739,12 +908,15 @@ function renderAsk(){
 
 /* ---------- Record ---------- */
 function transcriptHTML(){
+  const up = unitsReady().filter(u=>unitPassed(u.id));
+  const unitsPart = up.length ? `<h2>Level One units</h2><ul>${up.map(u=>{ const x=S.U[u.id]; return `<li>${esc(u.meta.discipline)}, Unit ${u.meta.unit}: ${esc(u.meta.title)}. ${x.score??""} points, ${x.passedOn?fmtH(x.passedOn):""}</li>`; }).join("")}</ul>` : "";
+  if(!BOOK) return `<h1>Miftāḥ · Record of study</h1><p>${esc(S.label||"")}</p><p>Begun ${S.start?fmtH(S.start):""}. Printed ${fmtH(today())}.</p>${S.why?`<p><b>Intention:</b> ${esc(S.why)}</p>`:""}${unitsPart}<p><i>A record of private study kept by the learner. Not an ijāza, a certificate or a qualification.</i></p>`;
   const lp = lessonsOf().filter(l=>passed(l.n));
   const ex = chapters().map(c=>({t:c.title, e:S.exams[examKey(c)]})).concat([{t:"Book exam", e:S.exams[BOOK.id+":book"]}]).filter(x=>x.e&&x.e.passed);
   return `<h1>Miftāḥ · Record of study</h1><p>${esc(S.label||"")} · ${esc(BOOK.title)}, ${esc(BOOK.author)}</p>
     <p>Begun ${S.start?fmtH(S.start):""}. Printed ${fmtH(today())}. Edition ${esc(BOOK.rev)}.</p>
-    ${S.why?`<p><b>Intention:</b> ${esc(S.why)}</p>`:""}
-    <h2>Exams</h2>${ex.length?`<ul>${ex.map(x=>`<li>${esc(x.t)}: ${x.e.score} percent, ${fmtH(x.e.on)}</li>`).join("")}</ul>`:"<p>None yet.</p>"}
+    ${S.why?`<p><b>Intention:</b> ${esc(S.why)}</p>`:""}${unitsPart}
+    <h2>The Eleventh Chapter: exams</h2>${ex.length?`<ul>${ex.map(x=>`<li>${esc(x.t)}: ${x.e.score} percent, ${fmtH(x.e.on)}</li>`).join("")}</ul>`:"<p>None yet.</p>"}
     <h2>Lessons and taqrīrs</h2>${lp.map(l=>{ const r=S.L[LK(l.n)]; return `<h3>Lesson ${l.n}. ${esc(l.title)} <small>(${esc(r.score||"")}, ${r.passedOn?fmtH(r.passedOn):""})</small></h3><p style="white-space:pre-wrap">${esc(r.taqrir||"")}</p>`; }).join("")||"<p>None yet.</p>"}
     <p><i>A record of private study kept by the learner. Not an ijāza, a certificate or a qualification.</i></p>`;
 }
@@ -754,12 +926,12 @@ function renderRecord(){
   const exams = BOOK ? chapters().map(c=>({t:c.title, e:S.exams[examKey(c)]})).concat([{t:"Book exam", e:S.exams[BOOK.id+":book"]}]).filter(x=>x.e) : [];
   const ch = (BOOK&&BOOK.changes)||[], emend=(BOOK&&BOOK.emendations)||[];
   app.innerHTML=`<div class="wrap stack">${header("Your record","Record")}
-    <div class="grid2"><div class="card"><div class="big-num">${lp.length}</div><div class="small muted">lessons passed${BOOK?" of "+lessonsOf().length:""}</div></div><div class="card"><div class="big-num">${tq.length}</div><div class="small muted">taqrīrs written</div></div></div>
+    ${(()=>{ const up=unitsReady().filter(u=>unitPassed(u.id)); return `<div class="grid2"><div class="card"><div class="big-num">${up.length}</div><div class="small muted">Level One units passed of 48</div></div><div class="card"><div class="big-num">${lp.length}</div><div class="small muted">lessons of The Eleventh Chapter</div></div></div>${up.length?`<div class="card"><h3>Level One</h3><table><tbody>${up.map(u=>{ const x=S.U[u.id]; return `<tr><td>${esc(u.meta.discipline)} ${u.meta.unit}. ${esc(u.meta.title)}</td><td>${x.score??""} points</td><td class="small muted">${x.passedOn?fmtH(x.passedOn):""}</td></tr>`; }).join("")}</tbody></table></div>`:""}`; })()}
     ${S.why?`<div class="card"><div class="eyebrow">Why I am doing this</div><p class="read" style="margin-top:6px">${esc(S.why)}</p>${(S.whyHist||[]).length>1?`<details><summary class="small muted" style="cursor:pointer">Renewed ${S.whyHist.length-1} time${S.whyHist.length===2?"":"s"}</summary><ul class="small read">${S.whyHist.map(h=>`<li>${fmt(h.on)}: ${h.kept?"kept":esc(h.t)}</li>`).join("")}</ul></details>`:""}</div>`:""}
     <div class="card"><h3 style="margin-bottom:4px">Together</h3><div data-together>${togetherHTML()}</div></div>
     ${exams.length?`<div class="card"><h3>Exams</h3><table><tbody>${exams.map(x=>`<tr><td>${esc(x.t)}</td><td>${x.e.passed?"passed, "+x.e.score+"%":"best "+x.e.best+"%"}</td><td class="small muted">${x.e.on?fmtH(x.e.on):""}</td></tr>`).join("")}</tbody></table></div>`:""}
     ${tq.length?`<details class="card"><summary style="cursor:pointer"><b>My taqrīrs (${tq.length})</b></summary><div class="stack" style="margin-top:10px">${tq.map(l=>{ const r=S.L[LK(l.n)]; return `<div><b>Lesson ${l.n}. ${esc(l.title)}</b><p class="read" style="white-space:pre-wrap;margin-top:4px">${esc(r.taqrir)}</p><p class="small muted">${r.taqrirOn?fmtH(r.taqrirOn):""}${r.score?" · "+r.score:""}</p></div>`; }).join("")}</div></details>`:""}
-    ${BOOK&&lp.length?`<button class="btn" id="print">Print my record</button>`:""}
+    ${(BOOK&&lp.length)||Object.values(S.U||{}).some(x=>x.passed)?`<button class="btn" id="print">Print my record</button>`:""}
     ${LINK_KEY&&API?`<details class="card"><summary style="cursor:pointer"><b>My private link</b></summary><div class="stack" style="margin-top:10px"><p class="small muted">This link opens your Miftāḥ on any phone or computer. Keep it to yourself: whoever has it can see and change your progress.</p><input type="text" readonly value="${esc(myLink())}"><div class="row"><button class="btn" id="cpl">Copy my link</button><button class="btn" id="inv2">Invite a study partner</button></div><p class="small muted" id="lmsg" aria-live="polite"></p></div></details>`:""}
     <details class="card"><summary style="cursor:pointer"><b>Settings and backup</b></summary><div class="stack" style="margin-top:10px">
       <label class="small muted" for="lb">My name, as my study partner sees it</label><input type="text" id="lb" value="${esc(S.label)}">
@@ -813,6 +985,7 @@ function copy(txt, msgEl){
 function applySize(){ document.documentElement.style.fontSize = ["93.75%","100%","112.5%"][S.size??1]; }
 applySize();
 render();
+loadL1().then(()=>{ if(panel.hidden) render(); paintTogether(); });
 loadBook("bab").then(()=>{ if(panel.hidden) render(); paintTogether(); });
 connectRest();
 if(API && "serviceWorker" in navigator && location.protocol==="https:"){ navigator.serviceWorker.register("sw.js").catch(()=>{}); }
