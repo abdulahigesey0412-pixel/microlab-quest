@@ -1,4 +1,4 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1E5A4A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Miftāḥ"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><script>window.MIFTAH_API="https://miftah-study.netlify.app/api/progress";window.MIFTAH_BOOK_API="https://miftah-study.netlify.app/api/book";</script><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style><title>Miftāḥ</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1E5A4A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Miftāḥ"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><script>window.MIFTAH_API="https://miftah-study.netlify.app/api/progress";window.MIFTAH_BOOK_API="https://miftah-study.netlify.app/api/book";window.MIFTAH_HOME="https://miftah-study.netlify.app/";</script><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style><title>Miftāḥ</title>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://miftah-study.netlify.app; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <link rel="stylesheet" href="fonts/fonts.css">
@@ -171,11 +171,15 @@ input[type=search]{width:100%;color:var(--ink);background:var(--paper);border:1p
 /* Miftāḥ, the ḥawza in English. Self taught. One book open at a time; each lesson runs the ḥawza's cycle:
    muṭālaʿa, dars, ishkāl, taqrīr, imtiḥān, mubāḥatha; murājaʿa keeps what was learned. */
 const SHELF = [{"no": 1, "id": "bab", "title": "The Eleventh Chapter", "author": "al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)", "discipline": "Creed by proof", "year": 1, "status": "open", "spine": "١"}, {"no": 2, "title": "The Student’s Way", "author": "al‑Shahīd al‑Thānī (d. 965 AH / 1558 CE), Munyat al‑Murīd", "discipline": "Adab", "year": 1, "status": "soon", "spine": "٢"}, {"no": 3, "title": "The Rule of Thought", "author": "al‑Taftāzānī (d. 792 AH / 1390 CE), Tahdhīb al‑Manṭiq, with the Ḥāshiya of Mullā ʿAbd Allāh al‑Yazdī", "discipline": "Logic", "year": 1, "status": "soon", "spine": "٣"}, {"no": 4, "title": "The Damascene Gleam: Worship", "author": "al‑Shahīd al‑Awwal (d. 786 AH / 1384 CE), al‑Lumʿa al‑Dimashqiyya", "discipline": "Fiqh", "year": 1, "status": "soon", "spine": "٤"}, {"no": 5, "title": "The Radiant Garden", "author": "al‑Shahīd al‑Thānī, al‑Rawḍa al‑Bahiyya (Sharḥ al‑Lumʿa)", "discipline": "Fiqh with its proofs", "year": 2, "status": "soon", "spine": "٥"}, {"no": 6, "title": "The Landmarks", "author": "Ḥasan ibn Zayn al‑Dīn (d. 1011 AH / 1602 CE), Maʿālim al‑Uṣūl", "discipline": "Legal theory", "year": 2, "status": "soon", "spine": "٦"}, {"no": 7, "title": "The Care of Reports", "author": "al‑Shahīd al‑Thānī, al‑Riʿāya fī ʿIlm al‑Dirāya", "discipline": "Ḥadīth sciences", "year": 2, "status": "soon", "spine": "٧"}, {"no": 8, "title": "Unveiling the Intent", "author": "al‑ʿAllāma al‑Ḥillī, Kashf al‑Murād, on al‑Ṭūsī’s Tajrīd", "discipline": "Advanced theology", "year": 3, "status": "soon", "spine": "٨"}];
-const LINK_KEY = (() => { try{ const k=new URL(location.href).searchParams.get("k"); if(k){ localStorage.setItem("miftah.key",k); return k; } return localStorage.getItem("miftah.key"); }catch(e){ return null; } })();
+let LINK_KEY = (() => { try{ const k=new URL(location.href).searchParams.get("k"); if(k){ localStorage.setItem("miftah.key",k); return k; } return localStorage.getItem("miftah.key"); }catch(e){ return null; } })();
 const API = window.MIFTAH_API || null;                 // progress service
 const BOOK_API = window.MIFTAH_BOOK_API || null;       // book text, personal links only
-const STORE = API && LINK_KEY ? "miftah.v2." + LINK_KEY : "miftah.v2";
-const OLD_STORE = API && LINK_KEY ? "miftah.v1." + LINK_KEY : "miftah.v1";
+const JOIN_API = window.MIFTAH_JOIN_API || null;       // makes a private link for a new reader
+const INVITE = (() => { try{ const c=new URL(location.href).searchParams.get("invite"); if(c){ localStorage.setItem("miftah.invite",c); return c; } return localStorage.getItem("miftah.invite"); }catch(e){ return null; } })();
+if(!LINK_KEY && !JOIN_API && window.MIFTAH_HOME){ location.replace(window.MIFTAH_HOME); }
+let STORE = API && LINK_KEY ? "miftah.v2." + LINK_KEY : "miftah.v2";
+let OLD_STORE = API && LINK_KEY ? "miftah.v1." + LINK_KEY : "miftah.v1";
+const myLink = () => location.origin + location.pathname + "?k=" + encodeURIComponent(LINK_KEY||"");
 const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g,"$1<i>$2</i>");
@@ -371,6 +375,7 @@ function paintTogether(){ document.querySelectorAll("[data-together]").forEach(e
 
 /* ---------- shell ---------- */
 function render(){
+  if(!LINK_KEY && JOIN_API){ tabs.hidden=true; return welcome(); }
   if(!S.dayOne){ tabs.hidden=true; return dayOne(0); }
   tabs.hidden=false;
   tabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.tab===TAB ? "page" : "false"));
@@ -395,6 +400,47 @@ const FOOT = `<p class="honest">Basma Press. Translated from the Arabic. Self ta
 const bookMissing = () => BOOK_STATE==="loading" ? `<p class="muted">Opening the book…</p>` :
   BOOK_STATE==="nokey" ? `<div class="note">The books open from your personal link. Use the link you were sent, once, on this phone.</div>` :
   `<div class="note">The book could not be fetched. Connect to the internet once and it will stay on this phone.</div>`;
+
+/* ---------- Welcome: a new reader gets a private link ---------- */
+function welcome(){
+  app.innerHTML=`<div class="wrap stack" style="padding-top:32px">
+    <div class="eyebrow">Basma Press</div><h1>Miftāḥ: the ḥawza in English.</h1>
+    <p class="read">The books the Shia seminaries have taught for centuries, read the way the ḥawza reads them: a classical text explained line by line through its classical commentary, the objection and its answer, your own written summary, and exams. Self taught, free, at your own pace. No Arabic needed.</p>
+    <div class="book"><div class="spine" lang="ar">١</div><div><div class="eyebrow">Book One · Creed by proof</div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with the commentary of al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE). 26 lessons, about ten weeks at three lessons a week.</p></div></div>
+    ${INVITE?`<div class="note">You have been invited to study with someone. Once you begin, you will see each other’s week.</div>`:""}
+    <label class="small muted" for="nm">Your first name or initials (only your study partners see it)</label><input type="text" id="nm" maxlength="30" autocomplete="off">
+    <button class="btn primary" id="go">Begin</button><p class="small" id="msg" aria-live="polite"></p>
+    <p class="small muted">No account and no email. Miftāḥ makes a private link for you, and your progress is kept under it. Keep the link: it is how you open Miftāḥ on another phone.</p>
+    <details class="card"><summary style="cursor:pointer" class="small"><b>I already have a link</b></summary><div class="stack" style="margin-top:10px"><label class="small muted" for="lk">Paste your private link</label><input type="text" id="lk" autocomplete="off"><button class="btn" id="open">Open it</button></div></details>
+    ${FOOT}</div>`;
+  $("#go").onclick=async()=>{ const b=$("#go"); b.disabled=true; $("#msg").textContent="Making your private link…";
+    try{ const r=await fetch(JOIN_API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({label:$("#nm").value.trim(), invite:INVITE||undefined})});
+      if(r.status===429){ $("#msg").textContent="Too many new links from this connection in the last hour. Please try again later."; b.disabled=false; return; }
+      if(!r.ok) throw 0; const j=await r.json(); adoptKey(j.k, j.label);
+      if(j.full) S.circleFull=true;
+      try{ localStorage.removeItem("miftah.invite"); }catch(e){}
+    }catch(e){ $("#msg").textContent="Miftāḥ could not be reached. Check the connection and try again."; b.disabled=false; } };
+  $("#open").onclick=()=>{ const v=$("#lk").value.trim(); let k=null; try{ k=new URL(v).searchParams.get("k"); }catch(e){ k=v; } if(k){ location.href=location.pathname+"?k="+encodeURIComponent(k); } };
+}
+function adoptKey(k, label){
+  LINK_KEY=k; try{ localStorage.setItem("miftah.key",k); }catch(e){}
+  STORE="miftah.v2."+k; OLD_STORE="miftah.v1."+k;
+  try{ history.replaceState(null,"",location.pathname+"?k="+encodeURIComponent(k)); }catch(e){}
+  S=fresh(); S.label=label||""; save();
+  BOOK_STATE="loading"; render(); loadBook("bab").then(()=>{ if(panel.hidden) render(); }); connectRest();
+}
+async function openInvite(){
+  if(!API||!LINK_KEY) return;
+  openPanel(`<div class="eyebrow">Study together</div><h1>Invite a study partner</h1><p class="read" id="iv">Making your invitation…</p>`, async()=>{
+    try{ const r=await fetch(API.replace(/progress$/,"invite")+"?k="+encodeURIComponent(LINK_KEY),{cache:"no-store"}); const j=await r.json();
+      if(!j.invite){ $("#iv").textContent = j.note==="founding circle" ? "You are already studying with your partner." : "Invitations are not available for this link."; return; }
+      const link=location.origin+location.pathname+"?invite="+encodeURIComponent(j.invite);
+      $("#iv").outerHTML=`<p class="read">Send this link to one person you will study with (up to ${j.max} in a circle; ${j.members} so far). They get their own private link, and you each see the other’s week: lessons, exams and one line on what was hard. Never your taqrīrs, notes or questions.</p>
+        <input type="text" readonly value="${esc(link)}" id="il"><div class="row"><button class="btn primary" id="sh">Share</button><button class="btn" id="cp">Copy</button></div><p class="small muted" id="msg" aria-live="polite"></p>`;
+      $("#cp").onclick=()=>copy(link,$("#msg"));
+      $("#sh").onclick=()=>{ const text="Study the ḥawza’s books with me, in English: "+link; if(navigator.share) navigator.share({text}).catch(()=>{}); else copy(text,$("#msg")); };
+    }catch(e){ $("#iv").textContent="Miftāḥ could not be reached. Try again when you are online."; } });
+}
 
 /* ---------- Day One ---------- */
 function dayOne(step){
@@ -423,7 +469,8 @@ function dayOne(step){
   return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>Your first book.</h1>
     <div class="book"><div class="spine" lang="ar">١</div><div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with the commentary of al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)</p></div></div>
     <p class="read">Al‑Ḥillī wrote it about seven hundred years ago, and the seminaries still teach it, usually with this commentary. He wrote it for everyone: “what all who are charged with duty must know of the foundations of religion”, held “by proof, not by imitation”.</p>
-    <p class="read">You will read it the way the ḥawza reads it. Each lesson: questions before you read, the text, the lesson on it, the classic objection, your own written summary, four questions, and the mubāḥatha. Three lessons a week. About ten weeks.</p></div>`,
+    <p class="read">You will read it the way the ḥawza reads it. Each lesson: questions before you read, the text, the lesson on it, the classic objection, your own written summary, four questions, and the mubāḥatha. Three lessons a week. About ten weeks.</p>
+    ${JOIN_API&&LINK_KEY?`<div class="note"><b>This page is now your private link.</b> Add it to your home screen (Share, then Add to Home Screen). To open Miftāḥ on another device, copy your link from Record.</div>`:""}</div>`,
     ()=>{ S.dayOne=true; if(!S.start) S.start=today(); logToday("dayone"); save(); TAB="today"; render(); }, "Begin");
 }
 
@@ -455,7 +502,7 @@ function renderToday(){
       ${mubCard}
       <label class="small muted" for="hard">What was hard this week? <span class="muted">(your partner sees this line)</span></label><input type="text" id="hard" value="${esc(S.hard[ws]||"")}" placeholder="One line"></div>`;
   app.innerHTML=`<div class="wrap stack">${header(esc(BOOK.title),"Today")}${back}${friday?week+main+rvCard:main+rvCard+week}
-    <div class="card"><h3 style="margin-bottom:4px">Studying together</h3><div data-together>${togetherHTML()}</div></div>
+    <div class="card"><h3 style="margin-bottom:4px">Studying together</h3><div data-together>${togetherHTML()}</div>${DB&&Object.keys(PEOPLE).length<2?`<button class="btn" id="inv" style="margin-top:8px">Invite a study partner</button>`:""}</div>
     ${!isPaused()&&nt.kind!=="done"?`<button class="linkish" id="pause" style="align-self:center">Exams or a hard month? Pause new lessons</button>`:""}
     ${FOOT}</div>`;
   const go=$("#go"); if(go) go.onclick=()=>{ if(nt.kind==="lesson"){ const st=(S.L[LK(nt.n)]||{}).step||0; if(due && !st) openReview(()=>openLesson(nt.n)); else openLesson(nt.n); } else if(nt.kind==="exam") openExam(nt.c); else openBookExam(); };
@@ -463,6 +510,7 @@ function renderToday(){
   const rv=$("#rvw"); if(rv) rv.onclick=()=>openReview();
   $("#hard").onchange=e=>{ S.hard[ws]=e.target.value.trim(); save(); };
   const ps=$("#pause"); if(ps) ps.onclick=openPause;
+  const iv=$("#inv"); if(iv) iv.onclick=openInvite;
   const rs=$("#resume"); if(rs) rs.onclick=()=>{ S.paused=null; save(); render(); };
 }
 function openPause(){
@@ -712,18 +760,19 @@ function renderRecord(){
     ${exams.length?`<div class="card"><h3>Exams</h3><table><tbody>${exams.map(x=>`<tr><td>${esc(x.t)}</td><td>${x.e.passed?"passed, "+x.e.score+"%":"best "+x.e.best+"%"}</td><td class="small muted">${x.e.on?fmtH(x.e.on):""}</td></tr>`).join("")}</tbody></table></div>`:""}
     ${tq.length?`<details class="card"><summary style="cursor:pointer"><b>My taqrīrs (${tq.length})</b></summary><div class="stack" style="margin-top:10px">${tq.map(l=>{ const r=S.L[LK(l.n)]; return `<div><b>Lesson ${l.n}. ${esc(l.title)}</b><p class="read" style="white-space:pre-wrap;margin-top:4px">${esc(r.taqrir)}</p><p class="small muted">${r.taqrirOn?fmtH(r.taqrirOn):""}${r.score?" · "+r.score:""}</p></div>`; }).join("")}</div></details>`:""}
     ${BOOK&&lp.length?`<button class="btn" id="print">Print my record</button>`:""}
+    ${LINK_KEY&&API?`<details class="card"><summary style="cursor:pointer"><b>My private link</b></summary><div class="stack" style="margin-top:10px"><p class="small muted">This link opens your Miftāḥ on any phone or computer. Keep it to yourself: whoever has it can see and change your progress.</p><input type="text" readonly value="${esc(myLink())}"><div class="row"><button class="btn" id="cpl">Copy my link</button><button class="btn" id="inv2">Invite a study partner</button></div><p class="small muted" id="lmsg" aria-live="polite"></p></div></details>`:""}
     <details class="card"><summary style="cursor:pointer"><b>Settings and backup</b></summary><div class="stack" style="margin-top:10px">
       <label class="small muted" for="lb">My name, as my study partner sees it</label><input type="text" id="lb" value="${esc(S.label)}">
       <label class="small muted" for="mo">My moment</label><input type="text" id="mo" value="${esc(S.moment||"")}">
       <div class="switch"><span class="small muted">Reading size</span><div class="chips" role="group" aria-label="Reading size">${["Smaller","Normal","Larger"].map((nm,i)=>`<button class="chip" data-sz="${i}" aria-pressed="${(S.size??1)===i}">${nm}</button>`).join("")}</div></div>
       <button class="btn primary" id="sv">Save</button>
-      <p class="small muted">${DB?"Your progress is kept on this phone and saved to Miftāḥ, where only the personal links can see it"+(S._synced?"; last saved "+new Date(S._synced).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"")+".":"Your progress is kept on this phone only. Download a backup now and then."}</p>
+      <p class="small muted">${DB?"Your progress is kept on this phone and saved to Miftāḥ under your private link"+(S._synced?"; last saved "+new Date(S._synced).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"")+".":"Your progress is kept on this phone only. Download a backup now and then."}</p>
       <div class="row"><button class="btn" id="bkf">Download a backup</button><button class="btn" id="bk1">Copy my progress code</button><button class="btn" id="bk2">Restore from a backup</button></div>
       <textarea id="bkt" hidden placeholder="Paste a backup here, then press Restore again"></textarea><p class="small muted" id="msg" aria-live="polite"></p></div></details>
     <details class="card"><summary style="cursor:pointer"><b>What is kept, and who sees it</b></summary><div class="stack small read" style="margin-top:10px">
-      <p>On this phone: your progress, your taqrīrs, notes and questions, and a copy of the book so that it opens offline.</p>
-      <p>On the Miftāḥ service, under your personal link only: the same progress, so that it is safe and your study partner can see your week. Your partner sees a summary (lessons, exams, open question count, last seven days and your one line on the week), never your taqrīrs, notes or questions.</p>
-      <p>Nothing else: no account, no email, no advertising, no tracking. The page loads its fonts from itself, not from any outside service.</p>
+      <p>You can delete everything, here and on the service, with the button below.</p><p>On this phone: your progress, your taqrīrs, notes and questions, and a copy of the book so that it opens offline.</p>
+      <p>On the Miftāḥ service, under your private link only: the same progress, so that it is safe and your study partners can see your week. They see a summary (lessons, exams, open question count, last seven days and your one line on the week), never your taqrīrs, notes or questions.</p>
+      <p>Nothing else: no account, no email, no advertising, no tracking. To stop abuse, the service counts how many new links are made from each connection in an hour, under a one way scrambled code from which the address cannot be read back. The page loads its fonts from itself, not from any outside service.</p>
       <button class="btn ghost" id="wipe">Remove Miftāḥ from this phone</button></div></details>
     ${BOOK?`<details class="card"><summary style="cursor:pointer"><b>About this edition</b></summary><div class="stack small read" style="margin-top:10px">
       <p>${esc(BOOK.edition||"")}</p>
@@ -733,6 +782,8 @@ function renderRecord(){
       ${ch.length?`<p><b>Changes</b></p><ul>${ch.map(x=>`<li>${rich(x)}</li>`).join("")}</ul>`:""}</div></details>`:""}
     ${FOOT}</div>`;
   $("#sv").onclick=()=>{ S.label=$("#lb").value.trim(); S.moment=$("#mo").value.trim(); save(); $("#msg").textContent="Saved."; };
+  const cpl=$("#cpl"); if(cpl) cpl.onclick=()=>copy(myLink(), $("#lmsg"));
+  const iv2=$("#inv2"); if(iv2) iv2.onclick=openInvite;
   app.querySelectorAll("[data-sz]").forEach(b=>b.onclick=()=>{ S.size=+b.dataset.sz; applySize(); save(); renderRecord(); });
   $("#bk1").onclick=()=>copy(JSON.stringify(S), $("#msg"));
   $("#bkf").onclick=()=>downloadBackup($("#msg"));
@@ -743,6 +794,8 @@ function renderRecord(){
   const pr=$("#print"); if(pr) pr.onclick=()=>{ const p=$("#printout"); p.innerHTML=transcriptHTML(); p.hidden=false; window.print(); setTimeout(()=>{ p.hidden=true; p.innerHTML=""; }, 500); };
   $("#wipe").onclick=()=>{ if(!confirm("Download a backup first? Press OK to download it, or Cancel to go on without one.")){ } else downloadBackup($("#msg"));
     setTimeout(()=>{ if(!confirm("Remove Miftāḥ’s progress, notes, taqrīrs and the book from this phone? Your progress on the Miftāḥ service stays under your link.")) return;
+      const alsoServer = DB && confirm("Also delete your progress from the Miftāḥ service? Your private link will stop working, and this cannot be undone. Press Cancel to keep it there.");
+      if(alsoServer){ fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:LINK_KEY,erase:true})}).catch(()=>{}); }
       try{ Object.keys(localStorage).filter(k=>k.startsWith("miftah.")).forEach(k=>localStorage.removeItem(k)); }catch(e){}
       try{ caches.keys().then(ks=>ks.forEach(k=>caches.delete(k))); }catch(e){}
       app.innerHTML=`<div class="wrap stack" style="padding-top:40px"><h1>Removed.</h1><p class="read">Miftāḥ’s data is gone from this phone. Close this page. To study again, open your personal link.</p></div>`; tabs.hidden=true; }, 400); };
