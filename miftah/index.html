@@ -158,7 +158,7 @@ input[type=search]{width:100%;color:var(--ink);background:var(--paper);border:1p
 }
 
 /* game */
-.toast{position:fixed;left:50%;bottom:calc(84px + env(safe-area-inset-bottom,0px));transform:translate(-50%,20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:99px;font:600 .9rem var(--f-ui);opacity:0;transition:opacity .2s,transform .2s;z-index:40;pointer-events:none}
+.toast{position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top,0px));transform:translate(-50%,-20px);background:var(--ink);color:var(--paper);padding:10px 16px;border-radius:99px;font:600 .9rem var(--f-ui);opacity:0;transition:opacity .2s,transform .2s;z-index:40;pointer-events:none}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .hud{background:linear-gradient(135deg,var(--green-soft),var(--surface))}
 .stars i{font-style:normal;color:var(--line);font-size:1.05rem;letter-spacing:1px}
@@ -183,6 +183,41 @@ input[type=search]{width:100%;color:var(--ink);background:var(--paper);border:1p
 .match .opt{margin-top:0;margin-bottom:8px;min-height:52px}
 .okcard{border-color:var(--green);background:var(--green-soft)}
 .nocard{border-color:var(--warn)}
+
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.grid3 .card{padding:12px;text-align:center}
+.moment{border-color:color-mix(in srgb,var(--gold) 55%,var(--line));background:var(--gold-soft)}
+.keymoment{text-align:center}
+.keywrap{color:var(--gold);display:flex;justify-content:center;margin:4px 0 6px}
+.bigkey{animation:keyglow 2.4s ease-in-out infinite}
+@keyframes keyglow{0%,100%{filter:drop-shadow(0 0 0 transparent)}50%{filter:drop-shadow(0 0 10px color-mix(in srgb,var(--gold) 70%,transparent))}}
+.qfoot{position:sticky;bottom:0;margin:12px -16px 0;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));background:var(--surface);border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;z-index:3}
+.qfoot.ok{background:var(--green-soft);border-top-color:var(--green)}
+.qfoot.no{background:color-mix(in srgb,var(--warn) 10%,var(--surface));border-top-color:var(--warn)}
+.qfoot #fb p{margin:0}
+.kbd{display:inline-grid;place-items:center;min-width:20px;height:20px;border:1px solid var(--line);border-radius:5px;font:600 .7rem var(--f-ui);color:var(--muted);margin-right:10px;vertical-align:1px}
+.opt.right{animation:pulse .35s ease-out}
+@keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.012)}100%{transform:scale(1)}}
+.hearts span{color:var(--line);display:inline-block;vertical-align:-3px}
+.hearts span.on{color:var(--warn)}
+.keygrid{display:flex;flex-direction:column;gap:6px}
+.krow{display:grid;grid-template-columns:120px 1fr;align-items:center;gap:8px}
+.kdots{display:flex;gap:5px}
+.kdots i{width:16px;height:16px;border-radius:4px;background:var(--line)}
+.kdots i.on{background:var(--gold)}
+.kdots i.now{background:var(--green)}
+.door.next{border-color:var(--green);box-shadow:0 0 0 2px color-mix(in srgb,var(--green) 25%,transparent)}
+.stage.next{border-color:var(--green)}
+.ic{display:inline-flex;vertical-align:-3px}
+.door .door-n svg{color:var(--gold)}
+.mark{display:grid;grid-template-columns:24px 1fr;gap:10px;align-items:start;opacity:.55}
+.mark.on{opacity:1}
+.mark .ic{color:var(--gold)}
+.stars i{display:inline-flex;color:var(--line)}
+.stars i.on{color:var(--gold)}
+nav.tabs button{position:relative}
+.badge{position:absolute;top:6px;right:calc(50% - 26px);min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:var(--gold);color:var(--paper);font:700 .68rem/18px var(--f-ui)}
+@media (prefers-reduced-motion:reduce){.bigkey,.opt.right{animation:none}}
 </style>
 </head><body><div id="app"></div>
 <nav class="tabs" id="tabs" hidden aria-label="Rooms"><div class="in">
@@ -215,10 +250,10 @@ const app=$("#app"), tabs=$("#tabs"), panel=$("#panel");
 let TAB="today";
 
 /* ---------- state ---------- */
-const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}, rv:{}, mubw:{}, size:1, notes:{}, hard:{}, whyHist:[], reports:[], seenEx:{}, plan:null, paused:null, U:{}, path:null, xp:0, xpLog:{}, keys:[], stars:{}, goal:50});
+const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}, rv:{}, mubw:{}, size:1, notes:{}, hard:{}, whyHist:[], reports:[], seenEx:{}, plan:null, paused:null, U:{}, path:null, xp:0, xpLog:{}, keys:[], stars:{}, goal:50, marks:{}, seenQ:{}, reviews:0, sound:true});
 function migrate(o){
   if(!o) return fresh();
-  if(o.v===2){ const n=Object.assign(fresh(), o); for(const k of ["rv","mubw","notes","hard","seenEx","exams","calls","L","log","U","xpLog","stars"]) n[k]=n[k]||{}; n.keys=n.keys||[]; n.xp=n.xp||0; n.goal=n.goal||50; for(const k of ["whyHist","reports","questions"]) n[k]=n[k]||[]; if(n.size==null) n.size=1; return n; }
+  if(o.v===2){ const n=Object.assign(fresh(), o); for(const k of ["rv","mubw","notes","hard","seenEx","exams","calls","L","log","U","xpLog","stars"]) n[k]=n[k]||{}; n.keys=n.keys||[]; n.xp=n.xp||0; n.goal=n.goal||50; n.marks=n.marks||{}; n.seenQ=n.seenQ||{}; n.reviews=n.reviews||0; for(const k of ["whyHist","reports","questions"]) n[k]=n[k]||[]; if(n.size==null) n.size=1; return n; }
   const n = fresh();                      // carry Day One over from the first Miftāḥ
   for(const k of ["owner","label","start","why","moment","updatedAt"]) if(o[k]!=null) n[k]=o[k];
   n.questions = (o.questions||[]).map(q=>({...q}));
@@ -324,7 +359,7 @@ function dueReview(){
   }
   return out.sort((a,b)=>a.box-b.box||a.n-b.n);
 }
-function gradeReview(id, ok){ if(ok) addXP(5,"review"); const s=S.rv[id]||{box:0}; s.box = ok ? Math.min(RV.length-1, s.box+1) : 0; s.due = addDays(today(), RV[s.box]); S.rv[id]=s; }
+function gradeReview(id, ok){ S.reviews=(S.reviews||0)+1; if(ok) addXP(5,"review"); const s=S.rv[id]||{box:0}; s.box = ok ? Math.min(RV.length-1, s.box+1) : 0; s.due = addDays(today(), RV[s.box]); S.rv[id]=s; }
 function pickReview(){ const all=dueReview(); const qs=all.filter(x=>x.kind==="q").slice(0,5), ord=all.filter(x=>x.kind==="order").slice(0,1); return qs.concat(ord); }
 function openReview(then){
   const items=pickReview(); if(!items.length){ if(then) then(); return; }
@@ -427,6 +462,7 @@ function render(){
   if(!S.dayOne){ tabs.hidden=true; return dayOne(0); }
   tabs.hidden=false;
   tabs.querySelectorAll("button").forEach(b => b.setAttribute("aria-current", b.dataset.tab===TAB ? "page" : "false"));
+  try{ const d=dueReview().length, jb=tabs.querySelector('[data-tab="today"]'); let bd=jb.querySelector(".badge"); if(d){ if(!bd){ bd=document.createElement("span"); bd.className="badge"; jb.appendChild(bd); } bd.textContent=d>9?"9+":d; bd.setAttribute("aria-label", d+" review questions due"); } else if(bd) bd.remove(); }catch(e){}
   ({today:renderToday, shelf:renderShelf, ask:renderAsk, record:renderRecord})[TAB]();
   window.scrollTo(0,0);
 }
@@ -716,45 +752,124 @@ function renewIntention(c){
     <button class="btn primary" id="ok">Keep this intention</button>`, ()=>$("#ok").onclick=()=>{ const t=$("#nw").value.trim(); if(t && t!==S.why){ S.why=t; S.whyHist.push({t,on:today()}); } else S.whyHist.push({t:S.why||"",on:today(),kept:true}); save(); closePanel(); });
 }
 
-/* ---------- the game: XP, levels, streaks, keys, stars ---------- */
+/* ---------- the game: XP, levels, streaks, keys, stars, marks ---------- */
 const LEVELS=[[0,"Newcomer"],[100,"Seeker"],[250,"Reader"],[500,"Questioner"],[900,"Student"],[1400,"Diligent Student"],[2000,"Keeper of the Story"],[2800,"Keeper of the Proof"],[3800,"Explainer"],[5000,"Companion of the Books"],[6500,"Lamp"]];
+const LEVEL_LINE={2:"You have begun to ask, which is where knowledge starts.",3:"You read the sources, not only what is said about them.",4:"You are learning to ask the question behind the answer.",5:"You study with a plan, and you keep it.",6:"You come back to what you learned, and it stays.",7:"You can tell the story and say where it comes from.",8:"You can give the proof, not only the conclusion.",9:"You can explain it to someone who does not know.",10:"The books have become companions.",11:"What you learned has begun to give light to others."};
 function levelOf(x){ let i=0; while(i+1<LEVELS.length && x>=LEVELS[i+1][0]) i++; const next=LEVELS[i+1]; return {n:i+1, name:LEVELS[i][1], from:LEVELS[i][0], to:next?next[0]:null}; }
 function xpSince(d){ return Object.entries(S.xpLog||{}).filter(([k])=>k>=d).reduce((a,[,v])=>a+v,0); }
-function streakNow(){ const days=Object.keys(S.xpLog||{}).filter(k=>(S.xpLog[k]||0)>0).sort(); if(!days.length) return 0;
-  if(daysSince(days[days.length-1])>2) return 0; let n=1; for(let i=days.length-1;i>0;i--){ const gap=Math.round((parse(days[i])-parse(days[i-1]))/DAY); if(gap<=2) n++; else break; } return n; }
+/* one rest day in any seven: a single missed day is forgiven once a week; today not yet studied does not break the run */
+function streakInfo(){
+  const studied=new Set(Object.keys(S.xpLog||{}).filter(k=>(S.xpLog[k]||0)>0)); if(!studied.size) return {n:0, rested:false, atRisk:false};
+  let d=today(), n=0, restUsedAt=null, rested=false;
+  if(!studied.has(d)) d=addDays(d,-1);
+  for(let guard=0; guard<4000; guard++){
+    if(studied.has(d)){ n++; d=addDays(d,-1); continue; }
+    const prev=addDays(d,-1);
+    if(studied.has(prev) && (!restUsedAt || daysBetweenISO(d,restUsedAt)>=7)){ if(d===addDays(today(),-1)||d===addDays(today(),-2)) rested=true; restUsedAt=d; d=prev; continue; }
+    break;
+  }
+  return {n, rested, atRisk: n>0 && !studied.has(today())};
+}
+const daysBetweenISO=(a,b)=>Math.abs(Math.round((parse(a)-parse(b))/DAY));
+function streakNow(){ return streakInfo().n; }
 let toastTimer=null;
-function toast(msg){ let el=$("#toast"); if(!el){ el=document.createElement("div"); el.id="toast"; el.className="toast"; el.setAttribute("aria-live","polite"); document.body.appendChild(el); } el.textContent=msg; el.classList.add("on"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("on"),1800); }
-function addXP(n, why){ const before=levelOf(S.xp||0).n; S.xp=(S.xp||0)+n; const d=today(); S.xpLog[d]=(S.xpLog[d]||0)+n; logToday("xp"); const after=levelOf(S.xp).n; if(after>before) setTimeout(()=>toast("Level "+after+": "+levelOf(S.xp).name),300); }
-function xpBar(){ const L=levelOf(S.xp||0), pct=L.to?Math.round(100*((S.xp||0)-L.from)/(L.to-L.from)):100, dayXP=S.xpLog[today()]||0, g=S.goal||50, st=streakNow();
-  return `<div class="card hud"><div class="row" style="justify-content:space-between"><div><div class="eyebrow">Level ${L.n} · ${esc(L.name)}</div><div class="big-num" style="font-size:1.6rem">${S.xp||0} XP</div></div><div style="text-align:right"><div class="pill ${st?"":"gold"}">${st?"Streak "+st+" day"+(st===1?"":"s"):"Start a streak today"}</div><div class="small muted" style="margin-top:6px">Today ${Math.min(dayXP,g)} of ${g} XP${dayXP>=g?" ✓":""}</div></div></div>
-    <div class="meter" style="margin-top:10px" role="img" aria-label="Progress to the next level"><i style="width:${pct}%"></i></div>${L.to?`<p class="small muted" style="margin-top:6px">${L.to-(S.xp||0)} XP to level ${L.n+1}</p>`:""}
-    <p class="small muted">Miss one day and nothing is lost. Miss two and the streak starts again.</p></div>`; }
-function starsHTML(n){ return `<span class="stars" aria-label="${n||0} of 3 stars">${[0,1,2].map(i=>`<i class="${i<(n||0)?"on":""}">★</i>`).join("")}</span>`; }
+function toast(msg){ let el=$("#toast"); if(!el){ el=document.createElement("div"); el.id="toast"; el.className="toast"; el.setAttribute("aria-live","polite"); document.body.appendChild(el); } el.textContent=msg; el.classList.add("on"); clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.classList.remove("on"),1600); }
+let PENDING={levels:[], marks:[]};
+function addXP(n, why){ const before=levelOf(S.xp||0).n; S.xp=(S.xp||0)+n; const d=today(); S.xpLog[d]=(S.xpLog[d]||0)+n; logToday("xp"); const after=levelOf(S.xp).n; for(let l=before+1;l<=after;l++) PENDING.levels.push(l); }
+
+/* quiet sound, with a switch; motion follows the reader's own setting */
+let AC=null;
+function beep(kind){ if(S.sound===false) return; try{ AC=AC||new (window.AudioContext||window.webkitAudioContext)(); const notes={right:[660,880],wrong:[220],key:[523,659,784,1047],level:[587,880]}[kind]||[660];
+  notes.forEach((f,i)=>{ const o=AC.createOscillator(), g=AC.createGain(); o.type="sine"; o.frequency.value=f; const t=AC.currentTime+i*0.11; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(0.1,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+0.22); o.connect(g); g.connect(AC.destination); o.start(t); o.stop(t+0.25); }); }catch(e){} }
+function buzz(){ try{ if(S.sound!==false && navigator.vibrate) navigator.vibrate(12); }catch(e){} }
+
+/* inline icons, so they look the same on every phone */
+const ICON={
+  key:`<svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="8" cy="12" r="4.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 12h9M18 12v3M21 12v2.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
+  keyBig:`<svg viewBox="0 0 120 60" width="150" height="75" aria-hidden="true" class="bigkey"><circle cx="30" cy="30" r="17" fill="none" stroke="currentColor" stroke-width="6"/><circle cx="30" cy="30" r="6" fill="currentColor" opacity=".35"/><path d="M47 30h62M95 30v12M107 30v9" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round"/></svg>`,
+  heart:`<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 20s-7-4.4-9.2-8.6C1.2 8.2 3.2 4.8 6.6 4.8c2 0 3.4 1.1 4.2 2.4h2.4c.8-1.3 2.2-2.4 4.2-2.4 3.4 0 5.4 3.4 3.8 6.6C19 15.6 12 20 12 20z" fill="currentColor"/></svg>`,
+  lamp:`<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3c1.6 2 2.6 3.6 2.6 5.2A2.6 2.6 0 0 1 12 10.8a2.6 2.6 0 0 1-2.6-2.6C9.4 6.6 10.4 5 12 3z" fill="currentColor"/><path d="M4 14h16c-.6 3.6-3.8 6-8 6s-7.4-2.4-8-6z" fill="none" stroke="currentColor" stroke-width="1.8"/></svg>`,
+  star:`<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path d="M12 3.2l2.6 5.4 5.9.8-4.3 4.1 1 5.9L12 16.6l-5.2 2.8 1-5.9-4.3-4.1 5.9-.8z" fill="currentColor"/></svg>`
+};
+function starsHTML(n){ return `<span class="stars" role="img" aria-label="${n||0} of 3 stars">${[0,1,2].map(i=>`<i class="${i<(n||0)?"on":""}">${ICON.star}</i>`).join("")}</span>`; }
 function setStars(u){ const rec=S.U[u.id]||{}; let n=0; if((rec.trials||{}).best>=0.7) n++; if((rec.guard||{}).best>=0.9) n++; if(rec.passed) n++; S.stars[u.id]=Math.max(S.stars[u.id]||0,n); }
+
+/* the daily goal, chosen by the reader */
+const GOALS=[[20,"Light","about one stage of a door"],[50,"Steady","a reading and a trial round"],[80,"Serious","most of a door"],[120,"Full","a whole door in a sitting"]];
+function goalRing(){ const g=S.goal||50, d=S.xpLog[today()]||0, p=Math.min(1,d/g), r=16, c=2*Math.PI*r;
+  return `<svg viewBox="0 0 40 40" width="44" height="44" role="img" aria-label="Today ${Math.min(d,g)} of ${g} XP"><circle cx="20" cy="20" r="${r}" fill="none" stroke="var(--line)" stroke-width="4"/><circle cx="20" cy="20" r="${r}" fill="none" stroke="${p>=1?"var(--gold)":"var(--green)"}" stroke-width="4" stroke-linecap="round" stroke-dasharray="${(c*p).toFixed(1)} ${c.toFixed(1)}" transform="rotate(-90 20 20)"/></svg>`; }
+function xpBar(){ const L=levelOf(S.xp||0), pct=L.to?Math.round(100*((S.xp||0)-L.from)/(L.to-L.from)):100, dayXP=S.xpLog[today()]||0, g=S.goal||50, si=streakInfo();
+  const streakLine = si.rested ? "Yesterday was your rest day. The streak holds." : si.atRisk ? `Study today to keep ${si.n} day${si.n===1?"":"s"}.` : si.n ? "One rest day in any seven is forgiven." : "Study today to begin a streak.";
+  return `<div class="card hud"><div class="row" style="justify-content:space-between;align-items:center"><div><div class="eyebrow">Level ${L.n} · ${esc(L.name)}</div><div class="big-num" style="font-size:1.6rem">${S.xp||0} XP</div></div>
+    <div class="row" style="gap:12px;align-items:center"><div style="text-align:right"><div class="pill ${si.n?"":"gold"}"><span class="ic">${ICON.lamp}</span> ${si.n} day${si.n===1?"":"s"}</div><div class="small muted" style="margin-top:6px">${Math.min(dayXP,g)} of ${g} XP today</div></div>${goalRing()}</div></div>
+    <div class="meter" style="margin-top:10px" role="img" aria-label="Progress to the next level"><i style="width:${pct}%"></i></div>${L.to?`<p class="small muted" style="margin-top:6px">${L.to-(S.xp||0)} XP to level ${L.n+1}</p>`:""}
+    <p class="small muted">${streakLine}</p></div>`; }
+
+/* marks: earned once, dated, kept in the Record */
+const MARKS=[
+  {id:"firstkey", name:"The first key", line:"You opened your first door.", test:()=> (S.keys||[]).length>=1},
+  {id:"land", name:"A land complete", line:"Eight doors of one discipline, all opened.", test:()=> landsDone()>=1},
+  {id:"sirah", name:"The life, from Ḥirāʾ to Ghadīr", line:"Every door of Sīrah.", test:()=> landKeys("Sīrah")>=8},
+  {id:"all", name:"Level One, complete", line:"All forty‑eight keys.", test:()=> (S.keys||[]).length>=48},
+  {id:"week", name:"Seven days", line:"A streak of seven days.", test:()=> streakNow()>=7},
+  {id:"month", name:"Thirty days", line:"A streak of thirty days.", test:()=> streakNow()>=30},
+  {id:"scroll", name:"The first Scroll", line:"A written assessment, marked honestly.", test:()=> Object.values(S.U||{}).some(x=>x.passed)},
+  {id:"three", name:"Three stars", line:"A door with all three stars.", test:()=> Object.values(S.stars||{}).some(n=>n>=3)},
+  {id:"told", name:"Explained to someone", line:"You taught what you learned.", test:()=> Object.values(S.U||{}).some(x=>x.told)},
+  {id:"mub", name:"The first mubāḥatha", line:"You argued it out, with a partner or on paper.", test:()=> Object.keys(S.calls||{}).length>=1},
+  {id:"review", name:"A hundred returns", line:"One hundred review answers.", test:()=> (S.reviews||0)>=100},
+  {id:"clean", name:"A Guardian without a slip", line:"Every Guardian question right.", test:()=> Object.values(S.U||{}).some(x=>(x.guard||{}).best>=1)},
+  {id:"question", name:"The key is the question", line:"Ten questions written in your list.", test:()=> (S.questions||[]).length>=10}
+];
+function landKeys(d){ return ((L1&&L1.plan)||[]).filter(x=>x.discipline===d && unitPassed(x.id)).length; }
+function landsDone(){ return [...new Set(((L1&&L1.plan)||[]).map(x=>x.discipline))].filter(d=>landKeys(d)>=8).length; }
+function checkMarks(){ S.marks=S.marks||{}; for(const m of MARKS){ if(!S.marks[m.id] && m.test()){ S.marks[m.id]=today(); PENDING.marks.push(m); addXP(25,"mark"); } } }
+
+/* the results page that closes every round */
+function resultPanel({title, right, total, xp0, secs, best, nextLabel, onNext, onDoor, extra}){
+  checkMarks(); save();
+  const gained=(S.xp||0)-xp0, g=S.goal||50, today_=S.xpLog[today()]||0, goalNew = today_>=g && today_-gained<g, si=streakInfo();
+  const lv=PENDING.levels.splice(0), mk=PENDING.marks.splice(0);
+  if(lv.length) beep("level");
+  openPanel(`<div class="eyebrow">${esc(title)}</div>
+    ${total?`<h1>${right} of ${total}</h1>`:""}
+    <div class="grid3"><div class="card"><div class="big-num">+${gained}</div><div class="small muted">XP</div></div><div class="card"><div class="big-num">${total?Math.round(100*right/total)+"%":"✓"}</div><div class="small muted">${total?"right":"done"}</div></div><div class="card"><div class="big-num">${secs?Math.max(1,Math.round(secs/60)):"·"}</div><div class="small muted">min</div></div></div>
+    ${best>=3?`<p class="small muted">Best combo ×${best}.</p>`:""}
+    ${extra||""}
+    ${lv.map(l=>`<div class="card moment"><div class="eyebrow">Level ${l}</div><h2>${esc(LEVELS[l-1][1])}</h2><p class="read">${esc(LEVEL_LINE[l]||"")}</p></div>`).join("")}
+    ${mk.map(m=>`<div class="card moment"><div class="eyebrow">A mark in your record</div><h3>${esc(m.name)}</h3><p class="small">${esc(m.line)}</p></div>`).join("")}
+    <div class="card stack"><div class="row" style="justify-content:space-between;align-items:center"><div><b>${today_>=g?"Today’s goal is met.":Math.min(today_,g)+" of "+g+" XP today"}</b><p class="small muted">${goalNew?"Anything more today is extra.":si.rested?"Yesterday was your rest day. The streak holds.":si.n?"Streak: "+si.n+" day"+(si.n===1?"":"s")+".":""}</p></div>${goalRing()}</div></div>
+    <div class="row" style="justify-content:space-between"><button class="btn ghost" id="door">Back to the door</button><button class="btn primary" id="nx">${esc(nextLabel||"Continue")}</button></div>`, ()=>{
+      $("#nx").onclick=onNext||onDoor; $("#door").onclick=onDoor; $("#bk").onclick=onDoor; try{ $("#nx").focus(); }catch(e){} }, "‹ Door");
+}
 
 /* the map */
 function renderMap(){
   if(!L1){ app.innerHTML=`<div class="wrap stack">${header("Miftāḥ","Journey")}${L1_STATE==="loading"?`<p class="muted">Opening…</p>`:bookMissing()}</div>`; return; }
+  checkMarks();
   const plan=L1.plan||[], ready=new Set(unitsReady().map(u=>u.id)), u=nextUnit(), due=dueReview().length, last=Object.keys(S.log).sort().pop(), gap=last?daysSince(last):0, ws=weekStart();
   const discs=[...new Set(plan.map(x=>x.discipline))];
   const curDisc = u ? u.meta.discipline : discs[0];
   const back = !isPaused() && gap>=3 ? `<div class="note"><b>Welcome back.</b> It has been ${gap} days. Start small: the review, then one stage of a door.</div>` : "";
+  const left = u ? STAGES.slice(0,6).filter(s=>!stageDone(u,s.k)).length : 0;
   const cont = isPaused() ? `<div class="card main stack"><div class="eyebrow">Paused</div><h2>New doors wait until ${fmtH(S.paused)}.</h2><p class="read">Only the daily review until then.</p><button class="btn" id="resume">Resume now</button></div>`
-    : u ? `<div class="card main stack"><div class="eyebrow">${esc(u.meta.discipline)} · Door ${u.meta.unit} of 8</div><h2>${esc(u.meta.title)}</h2><p class="small muted">${esc(u.meta.subtitle||"")}</p>${doorProgress(u)}<button class="btn primary" id="go">${(S.U[u.id]||{}).stage?"Continue":"Open the door"}</button></div>`
+    : u ? `<div class="card main stack"><div class="eyebrow">${esc(u.meta.discipline)} · Door ${u.meta.unit} of 8</div><h2>${esc(u.meta.title)}</h2><p class="small muted">${esc(u.meta.subtitle||"")}</p>${doorProgress(u)}<p class="small">${left===6?"Six stages to the key.":left===1?"One stage until the key.":left+" stages until the key."}</p><button class="btn primary" id="go">${(S.U[u.id]||{}).stage?"Continue":"Open the door"}</button></div>`
     : `<div class="card main stack"><div class="eyebrow">Level One</div><h2>Every door written so far is open.</h2><p class="read">More doors are being written. Keep the daily review; or open The Eleventh Chapter from the Shelf.</p></div>`;
   const rvCard = due ? `<button class="card wk" id="rvw"><span class="tick"></span><span><b>Daily review</b><br><span class="when">${Math.min(due,6)} questions from doors you have opened · 5 XP each</span></span><span class="small muted">3 min</span></button>` : "";
+  const grid = `<div class="keygrid" role="img" aria-label="${(S.keys||[]).length} of 48 keys">${discs.map(d=>`<div class="krow"><span class="small muted">${esc(d)}</span><span class="kdots">${plan.filter(x=>x.discipline===d).map(x=>`<i class="${unitPassed(x.id)?"on":u&&u.id===x.id?"now":""}"></i>`).join("")}</span></div>`).join("")}</div>`;
   const path = discs.map((d,di)=>{ const rows=plan.filter(x=>x.discipline===d); const keys=rows.filter(x=>unitPassed(x.id)).length;
-    return `<details class="card land" ${d===curDisc?"open":""}><summary style="cursor:pointer"><span class="land-n">${di+1}</span> <b>${esc(d)}</b> <span class="small muted">${keys} of 8 keys</span></summary><div class="doors">${rows.map(x=>{ const ok=ready.has(x.id), un=ok&&doorOpen(x.id), k=unitPassed(x.id);
-      return `<button class="door ${k?"done":""} ${un?"":"locked"}" data-door="${x.id}" ${un?"":"disabled"} aria-label="Door ${x.n}: ${esc(x.title)}${k?", key earned":un?"":ok?", locked":", being written"}"><span class="door-n">${k?"🔑":x.n}</span><span class="door-t">${esc(x.title)}</span>${k?starsHTML(S.stars[x.id]):`<span class="small muted">${ok?(un?"open":"locked"):"soon"}</span>`}</button>`; }).join("")}</div></details>`; }).join("");
+    return `<details class="card land" ${d===curDisc?"open":""}><summary><span class="land-n">${di+1}</span> <b>${esc(d)}</b> <span class="small muted">${keys} of 8 keys</span></summary><div class="doors">${rows.map(x=>{ const ok=ready.has(x.id), un=ok&&doorOpen(x.id), k=unitPassed(x.id), isNext=u&&u.id===x.id;
+      return `<button class="door ${k?"done":""} ${un?"":"locked"} ${isNext?"next":""}" data-door="${x.id}" ${un?"":"disabled"} aria-label="Door ${x.n}: ${esc(x.title)}${k?", key earned":isNext?", next":un?"":ok?", locked":", being written"}"><span class="door-n">${k?ICON.key:x.n}</span><span class="door-t">${esc(x.title)}${isNext?` <span class="pill">Next</span>`:""}</span>${k?starsHTML(S.stars[x.id]):`<span class="small muted">${ok?(un?"open":"locked"):"soon"}</span>`}</button>`; }).join("")}</div></details>`; }).join("");
   app.innerHTML=`<div class="wrap stack">${header("Level One","Journey")}${xpBar()}${back}${cont}${rvCard}
-    <h2>The map</h2><p class="small muted">Six lands, eight doors each. Each door: read, play the trials, face the Guardian, and earn its key.</p>${path}
+    <h2>The map</h2>${grid}<p class="small muted">Six lands, eight doors each. Each door: read, play the trials, face the Guardian, and earn its key.</p>${path}
     <div class="card"><h3 style="margin-bottom:4px">Your circle</h3><div data-together>${togetherHTML()}</div>${DB&&Object.keys(PEOPLE).length<2?`<button class="btn" id="inv" style="margin-top:8px">Invite a study partner</button>`:""}</div>
-    <div class="card stack"><div class="row" style="justify-content:space-between"><h3>This week</h3></div><button class="wk ${S.calls[ws]?"done":""}" id="call"><span class="tick"></span><span><b>Mubāḥatha</b><br><span class="when">The week’s discussion questions, with your partner or alone · 30 XP</span></span><span class="small muted">30 min</span></button>
+    <div class="card stack"><h3>This week</h3><button class="wk ${S.calls[ws]?"done":""}" id="call"><span class="tick"></span><span><b>Mubāḥatha</b><br><span class="when">The week’s discussion questions, with your partner or alone · 30 XP</span></span><span class="small muted">30 min</span></button>
     <label class="small muted" for="hard">What was hard this week? <span class="muted">(your circle sees this line)</span></label><input type="text" id="hard" value="${esc(S.hard[ws]||"")}" placeholder="One line"></div>
     ${!isPaused()&&u?`<button class="linkish" id="pause" style="align-self:center">Exams or a hard month? Pause new doors</button>`:""}${FOOT}</div>`;
-  const go=$("#go"); if(go) go.onclick=()=>{ if(due && !(S.U[u.id]||{}).stage) openReview(()=>openDoor(u)); else openDoor(u); };
+  const go=$("#go"); if(go) go.onclick=()=>openDoor(u);
   app.querySelectorAll("[data-door]").forEach(b=>b.onclick=()=>{ const x=unitsReady().find(z=>z.id===b.dataset.door); if(x) openDoor(x); });
-  const rv=$("#rvw"); if(rv) rv.onclick=()=>openReview();
+  const nxt=app.querySelector(".door.next"); if(nxt && !app.dataset.scrolled){ app.dataset.scrolled="1"; }
+  const rv=$("#rvw"); if(rv) rv.onclick=()=>openReview(()=>renderMap());
   $("#call").onclick=()=>{ const doneU=unitsReady().filter(x=>((S.U[x.id]||{}).keyOn||"")>=ws); openUnitCall(ws, doneU); };
   $("#hard").onchange=e=>{ S.hard[ws]=e.target.value.trim(); save(); };
   const ps=$("#pause"); if(ps) ps.onclick=openPause;
@@ -764,27 +879,35 @@ function renderMap(){
 function doorOpen(id){ const plan=(L1&&L1.plan)||[], i=plan.findIndex(x=>x.id===id); if(i<=0) return true; const prev=plan[i-1]; return unitPassed(prev.id) || !unitsReady().some(x=>x.id===prev.id) && prev.discipline!==plan[i].discipline; }
 
 /* a door: the stages of one unit */
-const STAGES=[{k:"read",name:"Read",sub:"Three lessons, with a check after each passage",xp:"5 XP a check"},{k:"quran",name:"The Qurʾān speaks",sub:"The āyāt behind this door",xp:"20 XP",step:5},{k:"scholar",name:"Scholar spotlight",sub:"The scholar whose work anchors it",xp:"20 XP",step:6},{k:"words",name:"What the word carries",sub:"The words, and a matching round",xp:"20 XP",step:7},{k:"trials",name:"Trials",sub:"Three rounds; three hearts each",xp:"10 XP a right answer"},{k:"guardian",name:"The Guardian",sub:"The hardest questions; eighty percent wins the key",xp:"100 XP and the key"},{k:"scroll",name:"The Scroll",sub:"The written assessment you mark yourself: the third star",xp:"50 XP",step:8},{k:"journal",name:"Journal",sub:"Three reflections, for you alone",xp:"20 XP",step:9},{k:"source",name:"The source behind this door",sub:"The book, and who wrote it",xp:"10 XP",step:10}];
+const STAGES=[{k:"read",name:"Read",sub:"Three lessons, with a check after each passage",xp:"5 XP a check"},{k:"quran",name:"The Qurʾān speaks",sub:"The āyāt behind this door",xp:"20 XP",step:5},{k:"scholar",name:"Scholar spotlight",sub:"The scholar whose work anchors it",xp:"20 XP",step:6},{k:"words",name:"What the word carries",sub:"The words, and a matching round",xp:"20 XP",step:7},{k:"trials",name:"Trials",sub:"Rounds of eight; three hearts each",xp:"10 XP a new right answer"},{k:"guardian",name:"The Guardian",sub:"The hardest questions; eighty percent wins the key",xp:"100 XP and the key"},{k:"scroll",name:"The Scroll",sub:"The written assessment you mark yourself: the third star",xp:"50 XP",step:8},{k:"journal",name:"Journal",sub:"Three reflections, for you alone",xp:"20 XP",step:9},{k:"source",name:"The source behind this door",sub:"The book, and who wrote it",xp:"10 XP",step:10}];
 function stageDone(u,k){ const rec=S.U[u.id]||{}; if(k==="guardian") return !!rec.key; if(k==="scroll") return !!rec.passed; return !!(rec.done||{})[k]; }
 function stageOpen(u,i){ if(i===0) return true; const k=STAGES[i].k; if(["scroll","journal","source"].includes(k)) return stageDone(u,"guardian"); return stageDone(u,STAGES[i-1].k); }
+function nextStage(u){ for(let i=0;i<STAGES.length;i++) if(!stageDone(u,STAGES[i].k) && stageOpen(u,i)) return i; return -1; }
 function doorProgress(u){ return `<div class="progress-dots" role="img" aria-label="Stages done">${STAGES.slice(0,6).map(s=>`<i class="${stageDone(u,s.k)?"on":""}"></i>`).join("")}</div>`; }
-function markStage(u,k,xp){ const rec=S.U[u.id]=S.U[u.id]||{step:0,gq:{}}; rec.done=rec.done||{}; if(!rec.done[k]){ rec.done[k]=today(); if(xp) addXP(xp,k); } rec.stage=k; save(); }
+function markStage(u,k,xp){ const rec=S.U[u.id]=S.U[u.id]||{step:0,gq:{}}; rec.done=rec.done||{}; let first=false; if(!rec.done[k]){ rec.done[k]=today(); first=true; if(xp) addXP(xp,k); } rec.stage=k; save(); return first; }
+function runStage(u,i){ const s=STAGES[i], rec=S.U[u.id];
+  if(s.k==="read") return openReading(u);
+  if(s.k==="trials") return openTrials(u);
+  if(s.k==="guardian") return openGuardian(u);
+  if(s.k==="words") return openUnit(u, s.step, ()=>openWordsGame(u));
+  const xp0=S.xp||0, t0=Date.now();
+  openUnit(u, s.step, ()=>{ if(s.k==="scroll"){ if(rec.passed){ markStage(u,"scroll",50); setStars(u); } } else markStage(u, s.k, s.k==="source"?10:20);
+    const ni=nextStage(u); resultPanel({title:s.name, xp0, secs:(Date.now()-t0)/1000, nextLabel: ni>=0?"Next: "+STAGES[ni].name:"Back to the map", onNext: ni>=0?()=>runStage(u,ni):()=>{ closePanel(); }, onDoor:()=>openDoor(u)}); });
+}
 function openDoor(u){
-  const rec=S.U[u.id]=S.U[u.id]||{step:0,gq:{}};
+  const rec=S.U[u.id]=S.U[u.id]||{step:0,gq:{}}, ni=nextStage(u);
   openPanel(`<div class="eyebrow">${esc(u.meta.discipline)} · Door ${u.meta.unit} of ${u.meta.of}</div><h1>${esc(u.meta.title)}</h1><p class="read muted">${esc(u.meta.subtitle||"")}</p>${u.meta.anchor?`<p class="read">${rich(u.meta.anchor)}</p>`:""}
-    <div class="row">${rec.key?`<span class="pill">Key earned</span>`:""}${starsHTML(S.stars[u.id])}<button class="linkish" id="sg">Study guide</button></div>
+    <div class="row">${rec.key?`<span class="pill"><span class="ic">${ICON.key}</span> Key earned</span>`:""}${starsHTML(S.stars[u.id])}<button class="linkish" id="sg">Study guide</button></div>
+    ${ni>=0?`<button class="btn primary" id="cont">${rec.stage?"Continue":"Begin"}: ${esc(STAGES[ni].name)}</button>`:""}
     <div class="stages">${STAGES.map((s,i)=>{ const done=stageDone(u,s.k), open=stageOpen(u,i);
-      return `<button class="stage ${done?"done":""}" data-st="${i}" ${open?"":"disabled"}><span class="dot">${done?"✓":i+1}</span><span><b>${esc(s.name)}</b><span class="sub">${esc(s.sub)}</span></span><span class="small muted">${open?esc(s.xp):"locked"}</span></button>`; }).join("")}</div>
+      return `<button class="stage ${done?"done":""} ${i===ni?"next":""}" data-st="${i}" ${open?"":"disabled"}><span class="dot">${done?"✓":i+1}</span><span><b>${esc(s.name)}</b><span class="sub">${esc(s.sub)}</span></span><span class="small muted">${open?esc(s.xp):"locked"}</span></button>`; }).join("")}</div>
+    ${rec.key?`<div class="card stack"><b>Now explain this door to someone</b><p class="small">Miftāḥ can test you. Only a person can hear you explain it. Tell a friend, a sibling or your study partner what you learned behind this door, and where it comes from.</p>${rec.told?`<p class="small muted">You explained it on ${fmt(rec.told)}.</p>`:`<button class="btn" id="told">I explained it · 30 XP</button>`}</div>`:""}
     <button class="btn ghost" id="rep">Report a problem in this door</button>`, ()=>{
     $("#sg").onclick=()=>{ openStudyGuide(u); $("#bk").onclick=()=>openDoor(u); };
     $("#rep").onclick=()=>{ openReportUnit(u); $("#bk").onclick=()=>openDoor(u); };
-    panel.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>{ const s=STAGES[+b.dataset.st];
-      if(s.k==="read") return openReading(u);
-      if(s.k==="trials") return openTrials(u);
-      if(s.k==="guardian") return openGuardian(u);
-      if(s.k==="words") return openUnit(u, s.step, ()=>openWordsGame(u));
-      openUnit(u, s.step, ()=>{ if(s.k==="scroll"){ if(rec.passed){ markStage(u,"scroll",50); setStars(u); } } else markStage(u, s.k, s.k==="source"?10:20); openDoor(u); });
-    });
+    const c=$("#cont"); if(c) c.onclick=()=>runStage(u,ni);
+    const t=$("#told"); if(t) t.onclick=()=>{ rec.told=today(); addXP(30,"told"); const xp0=(S.xp||0)-30; checkMarks(); save(); resultPanel({title:"Explained to someone", xp0, onDoor:()=>openDoor(u)}); };
+    panel.querySelectorAll("[data-st]").forEach(b=>b.onclick=()=>runStage(u,+b.dataset.st));
   }, "‹ Map");
 }
 
@@ -795,88 +918,131 @@ function readingPlan(u){ const L=(u.partA||{}).lessons||[], checks=((u.quest||{}
     if(from<l.blocks.length) out.push({k, from, to:l.blocks.length-1, check:null, gq:true}); else if(out.length) out[out.length-1].gq=true; });
   return out; }
 function openReading(u, at){
-  const rec=S.U[u.id], plan=readingPlan(u); let i = at!=null ? at : Math.min(rec.readAt||0, plan.length-1);
+  const rec=S.U[u.id], plan=readingPlan(u); let i = at!=null ? at : Math.min(rec.readAt||0, plan.length-1); const xp0=S.xp||0, t0=Date.now();
   const draw=()=>{ const p=plan[i], L=u.partA.lessons[p.k];
     const head = p.from===0 ? `<h2>Lesson ${p.k+1}. ${esc(L.title)}</h2>` : `<div class="eyebrow">Lesson ${p.k+1} · ${esc(L.title)}</div>`;
     let tail="";
     if(p.check){ const ord=shuffleSeed(p.check.options.length, i*31+7);
-      tail=`<div class="card stack checkq"><div class="eyebrow">Check</div><p class="read"><b>${rich(p.check.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}">${rich(p.check.options[o])}</button>`).join("")}<p class="small" id="cw" hidden aria-live="polite"></p></div>`; }
+      tail=`<div class="card stack checkq"><div class="eyebrow">Check</div><p class="read"><b>${rich(p.check.q)}</b></p>${ord.map((o,j)=>`<button class="opt" data-o="${o}"><span class="kbd">${j+1}</span>${rich(p.check.options[o])}</button>`).join("")}<p class="small" id="cw" hidden aria-live="polite"></p></div>`; }
     if(p.gq) tail+=`<div class="card stack"><b>Guided questions</b><p class="small muted">Answer in your own words, here or in a notebook.</p>${qList(L.guidedQuestions,"l"+p.k,rec)}</div>`;
-    openPanel(`<div class="progress-dots" role="img" aria-label="Passage ${i+1} of ${plan.length}">${plan.map((x,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>${head}<div class="dars">${blocksHTML(L.blocks.slice(p.from,p.to+1))}</div>${tail}
+    openPanel(`<div class="meter" role="img" aria-label="Passage ${i+1} of ${plan.length}"><i style="width:${Math.round(100*(i+1)/plan.length)}%"></i></div>${head}<div class="dars">${blocksHTML(L.blocks.slice(p.from,p.to+1))}</div>${tail}
       <div class="row" style="justify-content:space-between">${i>0?`<button class="btn ghost" id="pv">‹ Back</button>`:"<span></span>"}<button class="btn primary" id="nx" ${p.check&&!(rec.checks||{})[p.check.id]?"disabled":""}>${i===plan.length-1?"Finish reading":"Next"}</button></div>`, ()=>{
       $("#bk").onclick=()=>openDoor(u);
       panel.querySelectorAll("[data-gq]").forEach(ta=>ta.oninput=()=>{ rec.gq=rec.gq||{}; rec.gq[ta.dataset.gq]=ta.value; save(); });
-      if(p.check){ let locked=!!(rec.checks||{})[p.check.id]; if(locked){ panel.querySelectorAll(".checkq .opt").forEach(b=>{ if(+b.dataset.o===p.check.answer){ b.classList.add("right"); b.insertAdjacentText("afterbegin","✓ "); } }); const w=$("#cw"); w.hidden=false; w.innerHTML=rich(p.check.why||""); }
+      if(p.check){ let locked=!!(rec.checks||{})[p.check.id]; if(locked){ panel.querySelectorAll(".checkq .opt").forEach(b=>{ if(+b.dataset.o===p.check.answer){ b.classList.add("right"); } }); const w=$("#cw"); w.hidden=false; w.innerHTML=rich(p.check.why||""); }
         panel.querySelectorAll(".checkq .opt").forEach(b=>b.onclick=()=>{ if(locked) return; const o=+b.dataset.o, ok=o===p.check.answer;
-          if(ok){ locked=true; b.classList.add("right"); b.insertAdjacentText("afterbegin","✓ "); rec.checks=rec.checks||{}; if(!rec.checks[p.check.id]){ rec.checks[p.check.id]=1; addXP(5,"check"); toast("+5 XP"); } $("#nx").disabled=false; const w=$("#cw"); w.hidden=false; w.innerHTML=rich(p.check.why||""); save(); }
-          else { b.classList.add("wrong"); b.disabled=true; const w=$("#cw"); w.hidden=false; w.textContent="Not quite. Read the passage above again, then choose."; } }); }
+          if(ok){ locked=true; b.classList.add("right","pulse"); beep("right"); rec.checks=rec.checks||{}; if(!rec.checks[p.check.id]){ rec.checks[p.check.id]=1; addXP(5,"check"); toast("+5 XP"); } $("#nx").disabled=false; const w=$("#cw"); w.hidden=false; w.innerHTML="✓ "+rich(p.check.why||""); save(); $("#nx").focus(); }
+          else { b.classList.add("wrong"); b.disabled=true; beep("wrong"); buzz(); const w=$("#cw"); w.hidden=false; w.textContent="✗ Not quite. Read the passage above again, then choose."; } }); }
       const pv=$("#pv"); if(pv) pv.onclick=()=>{ i--; draw(); };
-      $("#nx").onclick=()=>{ if(i===plan.length-1){ rec.readAt=0; markStage(u,"read",30); openDoor(u); return; } i++; rec.readAt=i; rec.stage="read"; logToday("study"); save(); draw(); };
+      $("#nx").onclick=()=>{ if(i===plan.length-1){ rec.readAt=0; markStage(u,"read",30); const ni=nextStage(u); resultPanel({title:"Reading complete", xp0, secs:(Date.now()-t0)/1000, nextLabel: ni>=0?"Next: "+STAGES[ni].name:"Back to the door", onNext: ni>=0?()=>runStage(u,ni):()=>openDoor(u), onDoor:()=>openDoor(u)}); return; } i++; rec.readAt=i; rec.stage="read"; logToday("study"); save(); draw(); };
     }, "‹ Door"); };
   draw();
 }
 
-/* question engine: mcq, tf, order, match */
+/* question engine: choose, then check; mcq, tf, order, match */
 function qHTML(it){
-  if(it.type==="mcq"){ const ord=shuffleSeed(it.options.length, Date.now()%991); return `<p class="read"><b>${rich(it.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}">${rich(it.options[o])}</button>`).join("")}`; }
-  if(it.type==="tf") return `<p class="small muted">True or false?</p><p class="read"><b>${rich(it.q)}</b></p><div class="grid2"><button class="opt" data-tf="true">True</button><button class="opt" data-tf="false">False</button></div>`;
-  if(it.type==="order"){ const ord=shuffleSeed(it.items.length, Date.now()%977); return `<p class="read"><b>${rich(it.q)}</b></p><p class="small muted">Tap them from first to last.</p><ol class="read" id="od" style="padding-left:22px"></ol><div class="stack" id="op">${ord.map(i=>`<button class="opt" data-s="${i}">${rich(it.items[i])}</button>`).join("")}</div>`; }
+  if(it.type==="mcq"){ const ord=shuffleSeed(it.options.length, Date.now()%991); return `<p class="read"><b>${rich(it.q)}</b></p>${ord.map((o,j)=>`<button class="opt" data-o="${o}" aria-pressed="false"><span class="kbd">${j+1}</span>${rich(it.options[o])}</button>`).join("")}`; }
+  if(it.type==="tf") return `<p class="small muted">True or false?</p><p class="read"><b>${rich(it.q)}</b></p><div class="grid2"><button class="opt" data-tf="true" aria-pressed="false"><span class="kbd">1</span>True</button><button class="opt" data-tf="false" aria-pressed="false"><span class="kbd">2</span>False</button></div>`;
+  if(it.type==="order"){ const ord=shuffleSeed(it.items.length, Date.now()%977); return `<p class="read"><b>${rich(it.q)}</b></p><p class="small muted">Tap them from first to last. Tap a placed one to take it back.</p><ol class="read" id="od" style="padding-left:22px"></ol><div class="stack" id="op">${ord.map(i=>`<button class="opt" data-s="${i}">${rich(it.items[i])}</button>`).join("")}</div>`; }
   if(it.type==="match"){ const R=shuffleSeed(it.pairs.length, Date.now()%953); return `<p class="read"><b>${rich(it.q)}</b></p><p class="small muted">Tap a left card, then its partner on the right.</p><div class="match"><div>${it.pairs.map((p,i)=>`<button class="opt" data-l="${i}">${rich(p[0])}</button>`).join("")}</div><div>${R.map(i=>`<button class="opt" data-r="${i}">${rich(it.pairs[i][1])}</button>`).join("")}</div></div>`; }
   return "";
 }
-function wireQ(it, done){
-  const fin=(ok, chosen)=>{ const why=`${!ok&&it.type==="mcq"&&it.whynot&&it.whynot[chosen]?rich(it.whynot[chosen])+" ":""}${rich(it.why||"")}${it.src?` <span class="src">${esc(it.src)}</span>`:""}`; done(ok, why); };
-  if(it.type==="mcq"){ panel.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{ if(panel.dataset.lock==="1") return; panel.dataset.lock="1"; const o=+b.dataset.o, ok=o===it.answer; panel.querySelectorAll("[data-o]").forEach(x=>{ if(+x.dataset.o===it.answer){ x.classList.add("right"); x.insertAdjacentText("afterbegin","✓ "); } else if(x===b){ x.classList.add("wrong"); x.insertAdjacentText("afterbegin","✗ "); } }); fin(ok,o); }); }
-  if(it.type==="tf"){ panel.querySelectorAll("[data-tf]").forEach(b=>b.onclick=()=>{ if(panel.dataset.lock==="1") return; panel.dataset.lock="1"; const v=b.dataset.tf==="true", ok=v===it.answer; panel.querySelectorAll("[data-tf]").forEach(x=>{ if((x.dataset.tf==="true")===it.answer){ x.classList.add("right"); x.insertAdjacentText("afterbegin","✓ "); } else if(x===b){ x.classList.add("wrong"); x.insertAdjacentText("afterbegin","✗ "); } }); fin(ok); }); }
-  if(it.type==="order"){ const picked=[]; panel.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ if(panel.dataset.lock==="1") return; picked.push(+b.dataset.s); b.remove(); $("#od").insertAdjacentHTML("beforeend",`<li>${rich(it.items[+b.dataset.s])}</li>`); if(picked.length===it.items.length){ panel.dataset.lock="1"; const ok=picked.every((v,i)=>v===i); if(!ok) $("#od").insertAdjacentHTML("afterend",`<p class="small"><b>The order:</b></p><ol class="read" style="padding-left:22px">${it.items.map(x=>`<li>${rich(x)}</li>`).join("")}</ol>`); fin(ok); } }); }
+/* wireQ(it, ready, done): ready(true) shows Check; done(ok, why) reports the verdict */
+function wireQ(it, ready, done){
+  const why=(ok,chosen)=>`${!ok&&it.type==="mcq"&&it.whynot&&it.whynot[chosen]?rich(it.whynot[chosen])+" ":""}${rich(it.why||"")}${it.src?` <span class="src">${esc(it.src)}</span>`:""}`;
+  let sel=null;
+  const mark=(sels, isRight)=>{ panel.querySelectorAll(sels).forEach(x=>{ x.disabled=true; if(isRight(x)){ x.classList.add("right"); x.insertAdjacentText("afterbegin","✓ "); } else if(x.getAttribute("aria-pressed")==="true"){ x.classList.add("wrong"); x.insertAdjacentText("afterbegin","✗ "); } }); };
+  if(it.type==="mcq"||it.type==="tf"){
+    const sels = it.type==="mcq" ? "[data-o]" : "[data-tf]";
+    panel.querySelectorAll(sels).forEach(b=>b.onclick=()=>{ panel.querySelectorAll(sels).forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); sel=b; ready(true); });
+    return { check:()=>{ if(!sel) return; const ok = it.type==="mcq" ? +sel.dataset.o===it.answer : (sel.dataset.tf==="true")===it.answer;
+      mark(sels, x=> it.type==="mcq" ? +x.dataset.o===it.answer : (x.dataset.tf==="true")===it.answer); done(ok, why(ok, sel.dataset.o!=null?+sel.dataset.o:null)); },
+      key:(n)=>{ const b=panel.querySelectorAll(sels)[n-1]; if(b&&!b.disabled) b.click(); } };
+  }
+  if(it.type==="order"){ const picked=[];
+    const redraw=()=>{ $("#od").innerHTML=picked.map((v,j)=>`<li><button class="linkish" data-back="${j}">${rich(it.items[v])}</button></li>`).join(""); panel.querySelectorAll("[data-back]").forEach(b=>b.onclick=()=>{ const v=picked.splice(+b.dataset.back,1)[0]; panel.querySelector(`[data-s="${v}"]`).hidden=false; redraw(); ready(picked.length===it.items.length); }); };
+    panel.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ picked.push(+b.dataset.s); b.hidden=true; redraw(); ready(picked.length===it.items.length); });
+    return { check:()=>{ const ok=picked.every((v,i)=>v===i); panel.querySelectorAll("[data-back]").forEach(b=>b.disabled=true); if(!ok) $("#od").insertAdjacentHTML("afterend",`<p class="small"><b>The order:</b></p><ol class="read" style="padding-left:22px">${it.items.map(x=>`<li>${rich(x)}</li>`).join("")}</ol>`); done(ok, why(ok)); }, key:()=>{} };
+  }
   if(it.type==="match"){ let L=null, right=0, wrong=0; const left=[...panel.querySelectorAll("[data-l]")];
-    left.forEach(b=>b.onclick=()=>{ if(b.disabled||panel.dataset.lock==="1") return; left.forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); L=+b.dataset.l; });
-    panel.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ if(L===null||b.disabled||panel.dataset.lock==="1") return; const lb=panel.querySelector(`[data-l="${L}"]`);
-      if(+b.dataset.r===L){ b.classList.add("right"); lb.classList.add("right"); b.disabled=true; lb.disabled=true; right++; } else { wrong++; b.classList.add("wrong"); setTimeout(()=>b.classList.remove("wrong"),500); }
-      L=null; if(right===it.pairs.length){ panel.dataset.lock="1"; fin(wrong<=1); } }); }
+    left.forEach(b=>b.onclick=()=>{ if(b.disabled) return; left.forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); L=+b.dataset.l; });
+    panel.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{ if(L===null||b.disabled) return; const lb=panel.querySelector(`[data-l="${L}"]`);
+      if(+b.dataset.r===L){ b.classList.add("right"); lb.classList.add("right"); b.disabled=true; lb.disabled=true; right++; beep("right"); } else { wrong++; b.classList.add("wrong"); buzz(); setTimeout(()=>b.classList.remove("wrong"),500); }
+      L=null; if(right===it.pairs.length) done(wrong<=1, why(wrong<=1)); });
+    return { check:()=>{}, key:()=>{} };
+  }
+  return { check:()=>{}, key:()=>{} };
 }
-function runRound({title, items, hearts, onEnd, back, xpEach}){
-  let k=0, h=hearts, right=0, combo=0, best=0; panel.dataset.lock="0";
+let ROUND_KEYS=null;
+document.addEventListener("keydown", e=>{ if(!ROUND_KEYS || panel.hidden || /input|textarea/i.test((e.target||{}).tagName||"")) return; if(/^[1-9]$/.test(e.key)) { ROUND_KEYS.num(+e.key); e.preventDefault(); } else if(e.key==="Enter"){ ROUND_KEYS.enter(); e.preventDefault(); } });
+function runRound({title, items, hearts, onEnd, back, xpEach, review, retry}){
+  let k=0, h=hearts, right=0, combo=0, best=0, firstTry=new Map(); const queue=items.map(x=>({it:x, again:false})), t0=Date.now(), xp0=S.xp||0;
+  const finish=()=>{ ROUND_KEYS=null; onEnd({right, total:items.length, hearts:h, best, secs:(Date.now()-t0)/1000, xp0}); };
   const draw=()=>{
-    if(k>=items.length || (hearts && h<=0)) return onEnd({right, total:items.length, answered:k, hearts:h, best});
-    const it=items[k]; panel.dataset.lock="0";
-    openPanel(`<div class="row" style="justify-content:space-between"><div class="eyebrow">${esc(title)} · ${k+1} of ${items.length}</div><div class="small">${hearts?`<span aria-label="${h} hearts left">${"♥".repeat(h)}<span class="muted">${"♥".repeat(hearts-h)}</span></span>`:""}${combo>=2?` <span class="pill">Combo ×${combo}</span>`:""}</div></div>${qHTML(it)}<div id="fb" aria-live="polite"></div><button class="btn primary" id="nx" hidden>Next</button>`, ()=>{
-      $("#bk").onclick=back;
-      wireQ(it, (ok, why)=>{ if(ok){ right++; combo++; best=Math.max(best,combo); const gain=xpEach+Math.min(10,Math.max(0,combo-1)*2); addXP(gain,"q"); toast("+"+gain+" XP"); } else { combo=0; if(hearts) h--; }
-        $("#fb").innerHTML=`<div class="card ${ok?"okcard":"nocard"}"><b>${ok?"Right.":"Not this time."}</b> <span class="small">${why}</span></div>`; $("#nx").hidden=false; $("#nx").focus(); save(); });
+    if(k>=queue.length || (hearts && h<=0)) return finish();
+    const {it, again}=queue[k];
+    openPanel(`<div class="meter" role="img" aria-label="Question ${Math.min(k+1,queue.length)} of ${queue.length}"><i style="width:${Math.round(100*k/queue.length)}%"></i></div>
+      <div class="row" style="justify-content:space-between"><div class="eyebrow">${esc(it.reviewOf?"Review · "+it.reviewOf:title)}${again?" · again":""} · ${k+1} of ${queue.length}</div><div class="small hearts">${hearts?`<span aria-label="${h} hearts left">${Array.from({length:hearts},(_,i)=>`<span class="${i<h?"on":""}">${ICON.heart}</span>`).join("")}</span>`:""}${combo>=2?` <span class="pill">Combo ×${combo}</span>`:""}</div></div>${qHTML(it)}
+      <div class="qfoot" id="qf"><div id="fb" aria-live="polite"></div><button class="btn primary" id="ck" ${it.type==="match"?"hidden":"disabled"}>Check</button><button class="btn primary" id="nx" hidden>Continue</button></div>`, ()=>{
+      $("#bk").onclick=()=>{ if(k===0 || confirm("Leave this round? It will not count.")){ ROUND_KEYS=null; back(); } };
+      const verdict=(ok, why)=>{
+        const qid0=it.id||it.q; const first=!firstTry.has(qid0); if(first) firstTry.set(qid0, ok);
+        if(it.reviewOf){ gradeReview(it.rid, ok); S.reviews=(S.reviews||0)+1; }
+        if(ok){ combo++; best=Math.max(best,combo); if(first && !again && !it.reviewOf) right++;
+          const seenKey=(S.seenQ=S.seenQ||{}), sk=(it.uid||"")+":"+(it.id||""); const fresh=!seenKey[sk]; seenKey[sk]=1;
+          const gain = it.reviewOf ? 0 : (fresh ? xpEach+Math.min(10,Math.max(0,combo-1)*2) : 2); if(gain){ addXP(gain,"q"); toast("+"+gain+" XP"); } beep("right"); }
+        else { combo=0; if(hearts && !again) h--; beep("wrong"); buzz(); if(retry && !again && !it.reviewOf) queue.push({it, again:true}); if(it.uid){ const r_=S.U[it.uid]; r_.miss=r_.miss||{}; r_.miss[it.id]=1; } }
+        if(ok && it.uid && S.U[it.uid] && S.U[it.uid].miss) delete S.U[it.uid].miss[it.id];
+        $("#qf").classList.add(ok?"ok":"no");
+        $("#fb").innerHTML=`<p><b>${ok?"Right.":"Not this time."}</b> <span class="small">${why}</span></p>${!ok&&retry&&!again&&!it.reviewOf?`<p class="small muted">It will come back once at the end of this round.</p>`:""}`;
+        $("#ck").hidden=true; const nx=$("#nx"); nx.hidden=false; nx.focus(); save(); };
+      const ctl=wireQ(it, (r)=>{ $("#ck").disabled=!r; }, verdict);
+      $("#ck").onclick=()=>ctl.check();
       $("#nx").onclick=()=>{ k++; draw(); };
+      ROUND_KEYS={num:n=>ctl.key(n), enter:()=>{ if(!$("#nx").hidden) $("#nx").click(); else if(!$("#ck").hidden && !$("#ck").disabled) $("#ck").click(); }};
     }, "‹ Door");
   };
   draw();
 }
-function bankOf(u, boss){ return ((u.quest||{}).bank||[]).filter(x=>!!x.boss===!!boss); }
+function bankOf(u, boss){ return ((u.quest||{}).bank||[]).filter(x=>!!x.boss===!!boss).map(x=>({...x, uid:u.id})); }
+function reviewForRound(n){ return pickReview().filter(x=>x.kind==="q").slice(0,n).map(x=>({type:"mcq", q:x.q.q, options:x.q.options, answer:x.q.answer, why:x.q.why, whynot:x.q.whynot, src:"", reviewOf:x.unitTitle||("Lesson "+x.n), rid:x.id, id:x.id})); }
 function openTrials(u){
   const rec=S.U[u.id], pool=bankOf(u,false); if(!pool.length){ toast("Trials are being written for this door."); return; }
   rec.trials=rec.trials||{rounds:0,best:0};
-  const n=Math.min(8,pool.length), start=(rec.trials.rounds*n)%pool.length, items=[...pool.slice(start),...pool.slice(0,start)].slice(0,n);
-  runRound({title:"Trial "+(rec.trials.rounds%3+1), items, hearts:3, xpEach:10, back:()=>openDoor(u), onEnd:(res)=>{
-    rec.trials.rounds++; const acc=res.right/res.total; rec.trials.best=Math.max(rec.trials.best||0, acc);
-    const passedRound = acc>=0.7; if(passedRound) rec.trials.passed=(rec.trials.passed||0)+1;
+  const miss=new Set(Object.keys(rec.miss||{})), missed=pool.filter(x=>miss.has(x.id)), rest=pool.filter(x=>!miss.has(x.id));
+  const n=Math.min(8,pool.length), start=(rec.trials.rounds*n)%Math.max(1,rest.length);
+  const items=[...missed, ...rest.slice(start), ...rest.slice(0,start)].slice(0,n);
+  const warm=reviewForRound(2);
+  runRound({title:"Trial "+(rec.trials.rounds%3+1), items:[...warm, ...items], hearts:3, xpEach:10, retry:true, back:()=>openDoor(u), onEnd:(res)=>{
+    const total=items.length, right=Math.max(0,res.right - 0); rec.trials.rounds++; const acc=Math.min(1,right/total); rec.trials.best=Math.max(rec.trials.best||0, acc);
+    const won = acc>=0.7 && res.hearts>0; if(won) rec.trials.passed=(rec.trials.passed||0)+1;
     if((rec.trials.passed||0)>=1 && !(rec.done||{}).trials) markStage(u,"trials",0); setStars(u); save();
-    openPanel(`<div class="eyebrow">Trial over</div><h1>${res.right} of ${res.total}</h1><p class="read">${res.hearts<=0?"Out of hearts. Read the lessons again where you slipped, then try another round.":passedRound?"Round won. The Guardian is open once you have won a round.":"Seventy percent wins a round. Try another: the questions change."}</p><p class="small muted">Best combo ×${res.best}.</p><div class="row"><button class="btn primary" id="again">Another round</button><button class="btn" id="door">Back to the door</button></div>`, ()=>{ $("#again").onclick=()=>openTrials(u); $("#door").onclick=()=>openDoor(u); $("#bk").onclick=()=>openDoor(u); }, "‹ Door");
+    const ni=nextStage(u);
+    resultPanel({title: won?"Round won":"Round over", right:Math.min(right,total), total, xp0:res.xp0, secs:res.secs, best:res.best,
+      extra:`<p class="read">${res.hearts<=0?"Out of hearts. Read again where you slipped, then try another round: the questions you missed come first.":won?(stageDone(u,"guardian")?"Round won.":"Round won. The Guardian is open."):"Seventy percent wins a round. The questions you missed come first next time."}</p>`,
+      nextLabel: won&&ni>=0&&STAGES[ni].k==="guardian" ? "Next: The Guardian" : "Another round", onNext: won&&ni>=0&&STAGES[ni].k==="guardian" ? ()=>openGuardian(u) : ()=>openTrials(u), onDoor:()=>openDoor(u)});
   }});
 }
 function openGuardian(u){
   const rec=S.U[u.id], pool=bankOf(u,true); if(!pool.length){ toast("The Guardian is being written for this door."); return; }
-  const items=pool.map((x,i)=>[x,(i*7919+(rec.guard||{}).tries*13+Date.now())%1000]).sort((a,b)=>a[1]-b[1]).map(x=>x[0]);
-  openPanel(`<div class="eyebrow">${esc(u.meta.discipline)} · Door ${u.meta.unit}</div><h1>The Guardian</h1><p class="read">${items.length} questions, the hardest of this door: sources, gradings, and the views of others stated fairly. No hearts: answer all, and eighty percent wins the key.</p><button class="btn primary" id="go">Face the Guardian</button>`, ()=>{ $("#bk").onclick=()=>openDoor(u); $("#go").onclick=()=>runRound({title:"The Guardian", items, hearts:0, xpEach:15, back:()=>openDoor(u), onEnd:(res)=>{
+  const items=shuffleSeed(pool.length, ((rec.guard||{}).tries||0)*13+Date.now()%997).map(i=>pool[i]);
+  openPanel(`<div class="eyebrow">${esc(u.meta.discipline)} · Door ${u.meta.unit}</div><h1>The Guardian</h1><p class="read">${items.length} questions, the hardest of this door: sources, gradings, and the views of others stated fairly. No hearts and no second tries: answer them all. Eighty percent wins the key.</p><button class="btn primary" id="go">Face the Guardian</button>`, ()=>{ $("#bk").onclick=()=>openDoor(u); $("#go").onclick=()=>runRound({title:"The Guardian", items, hearts:0, xpEach:15, retry:false, back:()=>openDoor(u), onEnd:(res)=>{
     rec.guard=rec.guard||{tries:0,best:0}; rec.guard.tries++; const acc=res.right/res.total; rec.guard.best=Math.max(rec.guard.best,acc);
-    const won=acc>=0.8; if(won && !rec.key){ rec.key=true; rec.keyOn=today(); S.keys=[...new Set([...(S.keys||[]),u.id])]; addXP(100,"key"); logToday("passed"); }
+    const won=acc>=0.8, firstWin = won && !rec.key; if(firstWin){ rec.key=true; rec.keyOn=today(); S.keys=[...new Set([...(S.keys||[]),u.id])]; addXP(100,"key"); logToday("passed"); beep("key"); }
     setStars(u); save();
-    openPanel(`<div class="eyebrow">The Guardian</div><h1>${won?"🔑 The key is yours":"Not yet"}</h1><p class="read">${res.right} of ${res.total}, ${Math.round(acc*100)} percent. ${won?"The next door is open. For the third star, write the Scroll: the assessment you mark yourself.":"Eighty percent wins the key. Play a trial round, read again where you slipped, and face the Guardian once more."}</p>${starsHTML(S.stars[u.id])}<div class="row"><button class="btn primary" id="door">Back to the door</button></div>`, ()=>{ $("#door").onclick=()=>openDoor(u); $("#bk").onclick=()=>openDoor(u); }, "‹ Door");
+    const nu=nextUnit();
+    resultPanel({title:"The Guardian", right:res.right, total:res.total, xp0:res.xp0, secs:res.secs, best:res.best,
+      extra: firstWin ? `<div class="card moment keymoment"><div class="keywrap">${ICON.keyBig}</div><h2>The key is yours</h2><p class="read">${nu?"Door "+nu.meta.unit+" of "+esc(nu.meta.discipline)+" is open: "+esc(nu.meta.title)+".":"Every door written so far is open."} For the third star, write the Scroll: the assessment you mark yourself.</p>${starsHTML(S.stars[u.id])}</div><div class="card"><b>Now explain this door to someone.</b><p class="small">Miftāḥ can test you. Only a person can hear you explain it.</p></div>`
+        : won ? `<p class="read">Won again. Your key was already earned.</p>` : `<p class="read">Eighty percent wins the key. Play a trial round, read again where you slipped, and face the Guardian once more.</p>`,
+      nextLabel: firstWin ? "Next: The Scroll" : won ? "Back to the door" : "Play a trial round", onNext: firstWin ? ()=>runStage(u, STAGES.findIndex(s=>s.k==="scroll")) : won ? ()=>openDoor(u) : ()=>openTrials(u), onDoor:()=>openDoor(u)});
   }}); });
 }
 function openWordsGame(u){
-  const T=((u.partE||{}).terms||[]); markStage(u,"words",20);
+  const T=((u.partE||{}).terms||[]); const first=markStage(u,"words",20);
   if(T.length<4) return openDoor(u);
   const pick=shuffleSeed(T.length, Date.now()%911).slice(0,5).map(i=>T[i]);
-  const it={type:"match", q:"Match each word to what it means", pairs:pick.map(t=>[t.term, t.meaning]), why:"Each word keeps its Arabic, because the English loses what the root carries.", src:"What the word carries, this door"};
-  runRound({title:"Words", items:[it], hearts:0, xpEach:10, back:()=>openDoor(u), onEnd:()=>openDoor(u)});
+  const it={type:"match", q:"Match each word to what it means", pairs:pick.map(t=>[t.term, t.meaning]), why:"Each word keeps its Arabic, because the English loses what the root carries.", src:"What the word carries, this door", id:"words", uid:u.id};
+  runRound({title:"Words", items:[it], hearts:0, xpEach:10, retry:false, back:()=>openDoor(u), onEnd:(res)=>{ const ni=nextStage(u); resultPanel({title:"Words", right:res.right, total:1, xp0:res.xp0-(first?20:0), secs:res.secs, nextLabel: ni>=0?"Next: "+STAGES[ni].name:"Back to the door", onNext: ni>=0?()=>runStage(u,ni):()=>openDoor(u), onDoor:()=>openDoor(u)}); }});
 }
 
 /* ---------- Level One: eight‑part units ---------- */
@@ -1120,6 +1286,7 @@ function renderRecord(){
     ${(()=>{ const up=unitsReady().filter(u=>unitPassed(u.id)); return `<div class="grid2"><div class="card"><div class="big-num">${up.length}</div><div class="small muted">Level One units passed of 48</div></div><div class="card"><div class="big-num">${lp.length}</div><div class="small muted">lessons of The Eleventh Chapter</div></div></div>${up.length?`<div class="card"><h3>Level One</h3><table><tbody>${up.map(u=>{ const x=S.U[u.id]; return `<tr><td>${esc(u.meta.discipline)} ${u.meta.unit}. ${esc(u.meta.title)}</td><td>${x.score??""} points</td><td class="small muted">${x.passedOn?fmtH(x.passedOn):""}</td></tr>`; }).join("")}</tbody></table></div>`:""}`; })()}
     ${S.why?`<div class="card"><div class="eyebrow">Why I am doing this</div><p class="read" style="margin-top:6px">${esc(S.why)}</p>${(S.whyHist||[]).length>1?`<details><summary class="small muted" style="cursor:pointer">Renewed ${S.whyHist.length-1} time${S.whyHist.length===2?"":"s"}</summary><ul class="small read">${S.whyHist.map(h=>`<li>${fmt(h.on)}: ${h.kept?"kept":esc(h.t)}</li>`).join("")}</ul></details>`:""}</div>`:""}
     <div class="card"><h3 style="margin-bottom:4px">Together</h3><div data-together>${togetherHTML()}</div></div>
+    <div class="card stack"><h3>Marks</h3>${MARKS.map(m=>`<div class="mark ${(S.marks||{})[m.id]?"on":""}"><span class="ic">${(S.marks||{})[m.id]?ICON.star:""}</span><span><b>${esc(m.name)}</b><br><span class="small muted">${esc(m.line)}${(S.marks||{})[m.id]?" · "+fmtH(S.marks[m.id]):""}</span></span></div>`).join("")}</div>
     ${exams.length?`<div class="card"><h3>Exams</h3><table><tbody>${exams.map(x=>`<tr><td>${esc(x.t)}</td><td>${x.e.passed?"passed, "+x.e.score+"%":"best "+x.e.best+"%"}</td><td class="small muted">${x.e.on?fmtH(x.e.on):""}</td></tr>`).join("")}</tbody></table></div>`:""}
     ${tq.length?`<details class="card"><summary style="cursor:pointer"><b>My taqrīrs (${tq.length})</b></summary><div class="stack" style="margin-top:10px">${tq.map(l=>{ const r=S.L[LK(l.n)]; return `<div><b>Lesson ${l.n}. ${esc(l.title)}</b><p class="read" style="white-space:pre-wrap;margin-top:4px">${esc(r.taqrir)}</p><p class="small muted">${r.taqrirOn?fmtH(r.taqrirOn):""}${r.score?" · "+r.score:""}</p></div>`; }).join("")}</div></details>`:""}
     ${(BOOK&&lp.length)||Object.values(S.U||{}).some(x=>x.passed)?`<button class="btn" id="print">Print my record</button>`:""}
@@ -1127,6 +1294,8 @@ function renderRecord(){
     <details class="card"><summary style="cursor:pointer"><b>Settings and backup</b></summary><div class="stack" style="margin-top:10px">
       <label class="small muted" for="lb">My name, as my study partner sees it</label><input type="text" id="lb" value="${esc(S.label)}">
       <label class="small muted" for="mo">My moment</label><input type="text" id="mo" value="${esc(S.moment||"")}">
+      <div class="stack" style="gap:6px"><span class="small muted">Daily goal</span><div class="chips" role="group" aria-label="Daily goal">${GOALS.map(([n,nm,d])=>`<button class="chip" data-goal="${n}" aria-pressed="${(S.goal||50)===n}" title="${esc(d)}">${nm} · ${n} XP</button>`).join("")}</div><span class="small muted">${esc((GOALS.find(x=>x[0]===(S.goal||50))||GOALS[1])[2])}.</span></div>
+      <div class="switch"><span class="small muted">Sounds</span><button class="toggle" role="switch" id="snd" aria-checked="${S.sound!==false}" aria-label="Sounds"></button></div>
       <div class="switch"><span class="small muted">Reading size</span><div class="chips" role="group" aria-label="Reading size">${["Smaller","Normal","Larger"].map((nm,i)=>`<button class="chip" data-sz="${i}" aria-pressed="${(S.size??1)===i}">${nm}</button>`).join("")}</div></div>
       <button class="btn primary" id="sv">Save</button>
       <p class="small muted">${DB?"Your progress is kept on this phone and saved to Miftāḥ under your private link"+(S._synced?"; last saved "+new Date(S._synced).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"")+".":"Your progress is kept on this phone only. Download a backup now and then."}</p>
@@ -1148,6 +1317,8 @@ function renderRecord(){
   const cpl=$("#cpl"); if(cpl) cpl.onclick=()=>copy(myLink(), $("#lmsg"));
   const iv2=$("#inv2"); if(iv2) iv2.onclick=openInvite;
   app.querySelectorAll("[data-sz]").forEach(b=>b.onclick=()=>{ S.size=+b.dataset.sz; applySize(); save(); renderRecord(); });
+  app.querySelectorAll("[data-goal]").forEach(b=>b.onclick=()=>{ S.goal=+b.dataset.goal; save(); renderRecord(); });
+  const snd=$("#snd"); if(snd) snd.onclick=()=>{ S.sound = S.sound===false; save(); snd.setAttribute("aria-checked", String(S.sound!==false)); if(S.sound!==false) beep("right"); };
   $("#bk1").onclick=()=>copy(JSON.stringify(S), $("#msg"));
   $("#bkf").onclick=()=>downloadBackup($("#msg"));
   $("#bk2").onclick=()=>{ const t=$("#bkt"); if(t.hidden){ t.hidden=false; t.focus(); return; } let o; try{ o=JSON.parse(t.value); if(!o.questions) throw 0; }catch(e){ $("#msg").textContent="That does not look like a progress code from Miftāḥ. Copy it again and paste the whole text."; return; }
@@ -1173,6 +1344,7 @@ function copy(txt, msgEl){
 }
 
 /* ---------- start ---------- */
+window.addEventListener("pagehide", ()=>{ try{ if(pushTimer && DB==="rest" && LINK_KEY){ clearTimeout(pushTimer); fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:LINK_KEY,state:S,summary:summary()}),keepalive:true}); } }catch(e){} });
 function applySize(){ document.documentElement.style.fontSize = ["93.75%","100%","112.5%"][S.size??1]; }
 applySize();
 render();
