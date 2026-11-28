@@ -1,7 +1,7 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1E5A4A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Miftāḥ"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><script>window.MIFTAH_API="https://miftah-study.netlify.app/api/progress";window.MIFTAH_BOOK_API="https://miftah-study.netlify.app/api/book";</script><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style></head><body><title>Miftāḥ</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Amiri+Quran&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#1E5A4A"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Miftāḥ"><meta name="apple-mobile-web-app-status-bar-style" content="default"><link rel="apple-touch-icon" href="icon-180.png"><link rel="icon" href="icon-180.png"><link rel="manifest" href="manifest.webmanifest"><script>window.MIFTAH_API="https://miftah-study.netlify.app/api/progress";window.MIFTAH_BOOK_API="https://miftah-study.netlify.app/api/book";</script><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}[hidden]{display:none!important}</style><title>Miftāḥ</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://miftah-study.netlify.app; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<link rel="stylesheet" href="fonts/fonts.css">
 <style>
 /* Layout: one column, a phone in the hand; four rooms on a bottom bar; the day's work on one card. */
 :root{
@@ -20,7 +20,7 @@
   --green:#79C7AC; --green-soft:#1C3029; --gold:#E2B55C; --gold-soft:#2C2616; --warn:#E58A79;
   --t-gr:#8E887C; --t-gn:#6BC27A; --t-bl:#7FB1EE; --t-m2:#E3B544; --t-m246:#F09553; --t-m45:#F07070; --t-m6:#D27B7B; color-scheme:dark}
 *{box-sizing:border-box}
-body{background:var(--paper);color:var(--ink);font:16px/1.5 var(--f-ui);margin:0}
+body{background:var(--paper);color:var(--ink);font:1rem/1.5 var(--f-ui);margin:0}
 body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--paper)}
 .wrap{max-width:560px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px calc(96px + env(safe-area-inset-bottom,0px))}
 h1,h2,h3{font-family:var(--f-read);font-weight:600;text-wrap:balance;margin:0}
@@ -131,6 +131,7 @@ tr.now td{background:var(--green-soft)}
 .opt[aria-pressed="true"]{border-color:var(--green);background:var(--green-soft)}
 .opt.right{border-color:var(--green);background:var(--green-soft)}
 .opt.wrong{border-color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,var(--paper))}
+button.card.wk{width:100%;text-align:left;border-radius:14px;padding:14px 18px;background:var(--surface)}
 .lesson-row{display:grid;grid-template-columns:30px 1fr auto;gap:10px;align-items:center;padding:11px 2px;border-bottom:1px solid var(--line);background:none;border-left:0;border-right:0;border-top:0;font:inherit;color:inherit;text-align:left;width:100%;cursor:pointer}
 .lesson-row[disabled]{cursor:default;opacity:.55}
 .lesson-row .n{font-variant-numeric:tabular-nums;color:var(--muted);font-size:.85rem}
@@ -140,19 +141,35 @@ tr.now td{background:var(--green-soft)}
 .spine{width:52px;height:72px;border-radius:5px 8px 8px 5px;background:var(--green);color:var(--paper);display:grid;place-items:center;font-family:var(--f-read);font-weight:600;font-size:1.2rem;box-shadow:inset 6px 0 0 color-mix(in srgb,var(--ink) 18%,transparent)}
 .spine.soon{background:var(--line);color:var(--muted)}
 .wordcount{font-size:.8rem;color:var(--muted);text-align:right}
+
+.supplied{border-left:3px solid var(--line);padding-left:10px}
+.tag{display:inline-block;font:600 .68rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 6px;vertical-align:1px}
+.tickrow{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start;font-family:var(--f-read);font-size:1rem;line-height:1.5;cursor:pointer}
+.tickrow input{width:20px;height:20px;margin-top:3px;accent-color:var(--green)}
+mark{background:var(--gold-soft);color:inherit;border-radius:3px;padding:0 2px}
+textarea,input[type=text],input[type=date],input[type=search],select{font-size:max(16px,1rem)}
+input[type=search]{width:100%;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:inherit}
+.printout{display:none}
+@media print{
+  body > *:not(.printout){display:none!important}
+  .printout{display:block!important;font-family:var(--f-read);color:#000;background:#fff;padding:0 8mm}
+  .printout h1{font-size:20pt}.printout h2{font-size:14pt;margin-top:14pt}.printout h3{font-size:11.5pt;margin-top:10pt}
+  .printout p,.printout li{font-size:10.5pt;line-height:1.45}
+}
 </style>
-<div id="app"></div>
-<nav class="tabs" id="tabs" hidden><div class="in">
-  <button data-tab="today"><span class="ar-l">الدرس</span>Today</button>
-  <button data-tab="shelf"><span class="ar-l">الكتب</span>Shelf</button>
-  <button data-tab="ask"><span class="ar-l">سؤال</span>Ask</button>
-  <button data-tab="record"><span class="ar-l">السجلّ</span>Record</button>
+</head><body><div id="app"></div>
+<nav class="tabs" id="tabs" hidden aria-label="Rooms"><div class="in">
+  <button data-tab="today"><span class="ar-l" lang="ar" dir="rtl">الدرس</span>Today</button>
+  <button data-tab="shelf"><span class="ar-l" lang="ar" dir="rtl">الكتب</span>Shelf</button>
+  <button data-tab="ask"><span class="ar-l" lang="ar" dir="rtl">سؤال</span>Questions</button>
+  <button data-tab="record"><span class="ar-l" lang="ar" dir="rtl">السجلّ</span>Record</button>
 </div></nav>
-<div id="panel" class="panel" hidden></div>
+<div id="panel" class="panel" hidden role="dialog" aria-modal="true"></div>
+<div id="printout" class="printout" hidden></div>
 
 <script>
-/* Miftāḥ, the ḥawza in English. One book open at a time; each lesson runs the ḥawza's cycle:
-   muṭālaʿa, dars, ishkāl, taqrīr, imtiḥān, mubāḥatha. */
+/* Miftāḥ, the ḥawza in English. Self taught. One book open at a time; each lesson runs the ḥawza's cycle:
+   muṭālaʿa, dars, ishkāl, taqrīr, imtiḥān, mubāḥatha; murājaʿa keeps what was learned. */
 const SHELF = [{"no": 1, "id": "bab", "title": "The Eleventh Chapter", "author": "al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)", "discipline": "Creed by proof", "year": 1, "status": "open", "spine": "١"}, {"no": 2, "title": "The Student’s Way", "author": "al‑Shahīd al‑Thānī (d. 965 AH / 1558 CE), Munyat al‑Murīd", "discipline": "Adab", "year": 1, "status": "soon", "spine": "٢"}, {"no": 3, "title": "The Rule of Thought", "author": "al‑Taftāzānī (d. 792 AH / 1390 CE), Tahdhīb al‑Manṭiq, with the Ḥāshiya of Mullā ʿAbd Allāh al‑Yazdī", "discipline": "Logic", "year": 1, "status": "soon", "spine": "٣"}, {"no": 4, "title": "The Damascene Gleam: Worship", "author": "al‑Shahīd al‑Awwal (d. 786 AH / 1384 CE), al‑Lumʿa al‑Dimashqiyya", "discipline": "Fiqh", "year": 1, "status": "soon", "spine": "٤"}, {"no": 5, "title": "The Radiant Garden", "author": "al‑Shahīd al‑Thānī, al‑Rawḍa al‑Bahiyya (Sharḥ al‑Lumʿa)", "discipline": "Fiqh with its proofs", "year": 2, "status": "soon", "spine": "٥"}, {"no": 6, "title": "The Landmarks", "author": "Ḥasan ibn Zayn al‑Dīn (d. 1011 AH / 1602 CE), Maʿālim al‑Uṣūl", "discipline": "Legal theory", "year": 2, "status": "soon", "spine": "٦"}, {"no": 7, "title": "The Care of Reports", "author": "al‑Shahīd al‑Thānī, al‑Riʿāya fī ʿIlm al‑Dirāya", "discipline": "Ḥadīth sciences", "year": 2, "status": "soon", "spine": "٧"}, {"no": 8, "title": "Unveiling the Intent", "author": "al‑ʿAllāma al‑Ḥillī, Kashf al‑Murād, on al‑Ṭūsī’s Tajrīd", "discipline": "Advanced theology", "year": 3, "status": "soon", "spine": "٨"}];
 const LINK_KEY = (() => { try{ const k=new URL(location.href).searchParams.get("k"); if(k){ localStorage.setItem("miftah.key",k); return k; } return localStorage.getItem("miftah.key"); }catch(e){ return null; } })();
 const API = window.MIFTAH_API || null;                 // progress service
@@ -162,14 +179,15 @@ const OLD_STORE = API && LINK_KEY ? "miftah.v1." + LINK_KEY : "miftah.v1";
 const $ = (s, r=document) => r.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const rich = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>").replace(/(^|[^*])\*([^*\s][^*]*?)\*(?!\*)/g,"$1<i>$2</i>");
+const AR = s => `<span lang="ar" dir="rtl">${esc(s)}</span>`;
 const app=$("#app"), tabs=$("#tabs"), panel=$("#panel");
 let TAB="today";
 
 /* ---------- state ---------- */
-const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}});
+const fresh = () => ({v:2, questions:[], L:{}, exams:{}, log:{}, calls:{}, rv:{}, mubw:{}, size:1, notes:{}, hard:{}, whyHist:[], reports:[], seenEx:{}, plan:null, paused:null});
 function migrate(o){
   if(!o) return fresh();
-  if(o.v===2) return Object.assign(fresh(), o);
+  if(o.v===2){ const n=Object.assign(fresh(), o); for(const k of ["rv","mubw","notes","hard","seenEx","exams","calls","L","log"]) n[k]=n[k]||{}; for(const k of ["whyHist","reports","questions"]) n[k]=n[k]||[]; if(n.size==null) n.size=1; return n; }
   const n = fresh();                      // carry Day One over from the first Miftāḥ
   for(const k of ["owner","label","start","why","moment","updatedAt"]) if(o[k]!=null) n[k]=o[k];
   n.questions = (o.questions||[]).map(q=>({...q}));
@@ -190,8 +208,11 @@ const iso = d => { const z=new Date(d.getTime()-d.getTimezoneOffset()*60000); re
 const today = () => iso(new Date());
 const parse = s => { const [y,m,d]=s.split("-").map(Number); return new Date(y,m-1,d); };
 const fmt = s => parse(s).toLocaleDateString("en-GB",{day:"numeric",month:"short"});
+const addDays = (s,n) => { const d=parse(s); d.setDate(d.getDate()+n); return iso(d); };
+const daysSince = s => Math.round((parse(today())-parse(s))/DAY);
 const WD=["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 const HMA=["محرّم","صفر","ربيع الأوّل","ربيع الثاني","جمادى الأولى","جمادى الآخرة","رجب","شعبان","رمضان","شوّال","ذو القعدة","ذو الحجّة"];
+const HM=["Muḥarram","Ṣafar","Rabīʿ al‑Awwal","Rabīʿ al‑Thānī","Jumādā al‑Ūlā","Jumādā al‑Ākhira","Rajab","Shaʿbān","Ramaḍān","Shawwāl","Dhū al‑Qaʿda","Dhū al‑Ḥijja"];
 function hijri(d){
   const y=d.getFullYear(), m=d.getMonth()+1, day=d.getDate();
   const a=Math.floor((14-m)/12), yy=y+4800-a, mm=m+12*a-3;
@@ -201,11 +222,13 @@ function hijri(d){
   l=l-Math.floor((30-j)/15)*Math.floor(17719*j/50)-Math.floor(j/16)*Math.floor(15238*j/43)+29;
   const hm=Math.floor(24*l/709), hd=l-Math.floor(709*hm/24), hy=30*n+j-30; return {y:hy,m:hm,d:hd};
 }
+const fmtH = s => { const h=hijri(parse(s)); return `${h.d} ${HM[h.m-1]} ${h.y} AH · ${parse(s).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})}`; };
 const toAr = n => String(n).replace(/\d/g, x => "٠١٢٣٤٥٦٧٨٩"[x]);
 const weekStart = () => { const d=new Date(); d.setDate(d.getDate()-((d.getDay()+1)%7)); return iso(d); };   // weeks run Saturday to Friday
 function logToday(k){ const t=today(); S.log[t]={...(S.log[t]||{}), [k]:(S.log[t]?.[k]||0)+1}; }
+const isPaused = () => S.paused && S.paused >= today();
 
-/* ---------- the book text (served only to personal links) ---------- */
+/* ---------- the book (served only to personal links) ---------- */
 let BOOK = null, BOOK_STATE = "loading";
 const BOOK_CACHE = id => "miftah.book." + id + "." + (LINK_KEY||"local");
 async function loadBook(id){
@@ -223,8 +246,10 @@ async function loadBook(id){
 }
 const lessonsOf = () => BOOK ? BOOK.lessons : [];
 const LK = n => BOOK.id+":"+n;
+const qid = (n,q,j) => LK(n)+":"+(q.id||("q"+(j+1)));
 const passed = n => !!(S.L[LK(n)]||{}).passed;
-const chapters = () => { const out=[]; for(const l of lessonsOf()){ let c=out.find(x=>x.title===l.chapter); if(!c){ c={title:l.chapter, n:out.length+1, lessons:[]}; out.push(c);} c.lessons.push(l.n); } return out; };
+let _chapters=null;
+const chapters = () => { if(_chapters && _chapters.book===BOOK) return _chapters.list; const out=[]; for(const l of lessonsOf()){ let c=out.find(x=>x.title===l.chapter); if(!c){ c={title:l.chapter, n:out.length+1, lessons:[]}; out.push(c);} c.lessons.push(l.n); } _chapters={book:BOOK,list:out}; return out; };
 const chapterOf = n => chapters().find(c=>c.lessons.includes(n));
 const examKey = c => BOOK.id+":s"+c.n;
 function nextThing(){
@@ -236,7 +261,53 @@ function nextThing(){
   if(!(S.exams[BOOK.id+":book"]||{}).passed) return {kind:"bookexam"};
   return {kind:"done"};
 }
-const unlockedLesson = n => n===1 || passed(n-1) && (()=>{ const prev=chapterOf(n-1), cur=chapterOf(n); return prev===cur || (S.exams[examKey(prev)]||{}).passed; })();
+const unlockedLesson = n => n===1 || (passed(n-1) && (()=>{ const prev=chapterOf(n-1), cur=chapterOf(n); return prev.n===cur.n || !!(S.exams[examKey(prev)]||{}).passed; })());
+
+/* ---------- murājaʿa: spaced review of passed lessons ---------- */
+const RV=[1,3,7,16,35,90];
+function dueReview(){
+  if(!BOOK) return [];
+  const t=today(), out=[];
+  for(const l of lessonsOf()){ const r=S.L[LK(l.n)]; if(!r||!r.passed) continue;
+    const start=addDays(r.passedOn||t,1);
+    (l.check||[]).forEach((q,j)=>{ const id=qid(l.n,q,j); const s=S.rv[id]||{box:0,due:start}; if(s.due<=t) out.push({kind:"q",id,n:l.n,q,box:s.box}); });
+    const st=(l.argument||{}).steps||[];
+    if(st.length>=3 && st.length<=12){ const id=LK(l.n)+":arg"; const s=S.rv[id]||{box:0,due:addDays(r.passedOn||t,2)}; if(s.due<=t) out.push({kind:"order",id,n:l.n,steps:st,title:l.argument.title||"The proof",box:s.box}); }
+  }
+  return out.sort((a,b)=>a.box-b.box||a.n-b.n);
+}
+function gradeReview(id, ok){ const s=S.rv[id]||{box:0}; s.box = ok ? Math.min(RV.length-1, s.box+1) : 0; s.due = addDays(today(), RV[s.box]); S.rv[id]=s; }
+function pickReview(){ const all=dueReview(); const qs=all.filter(x=>x.kind==="q").slice(0,5), ord=all.filter(x=>x.kind==="order").slice(0,1); return qs.concat(ord); }
+function openReview(then){
+  const items=pickReview(); if(!items.length){ if(then) then(); return; }
+  let k=0, right=0;
+  const done=()=>{ logToday("review"); save(); openPanel(`<div class="eyebrow">Murājaʿa</div><h1>${right} of ${items.length}</h1><p class="read">What you missed comes back tomorrow; what you knew comes back later each time.</p>${MUNYA_WIRD}<button class="btn primary" id="cl">${then?"On to the lesson":"Close"}</button>`, ()=>$("#cl").onclick=()=>{ closePanel(); if(then) then(); }); };
+  const draw=()=>{
+    if(k>=items.length) return done();
+    const it=items[k], head=`<div class="eyebrow">Murājaʿa · ${k+1} of ${items.length} · from lesson ${it.n}</div>`;
+    if(it.kind==="order"){
+      const order=shuffleSeed(it.steps.length, Date.now()%997+k), picked=[];
+      openPanel(`${head}<h2>${esc(it.title)}</h2><p class="read">Put the steps in order. Tap them from first to last.</p><ol class="read" id="ordd" style="padding-left:22px"></ol><div class="stack" id="ordp">${order.map(i=>`<button class="opt" data-s="${i}">${rich(it.steps[i].replace(/^\d+\.\s*/,""))}</button>`).join("")}</div><p class="read" id="ordr" aria-live="polite"></p><button class="btn primary" id="nx" hidden>Next</button>`, ()=>{
+        panel.querySelectorAll("[data-s]").forEach(b=>b.onclick=()=>{ picked.push(+b.dataset.s); b.remove(); $("#ordd").insertAdjacentHTML("beforeend",`<li>${rich(it.steps[+b.dataset.s].replace(/^\d+\.\s*/,""))}</li>`);
+          if(picked.length===it.steps.length){ const ok=picked.every((v,i)=>v===i); if(ok) right++; gradeReview(it.id, ok);
+            $("#ordr").innerHTML = ok ? "✓ <b>In order.</b>" : `✗ <b>Not quite.</b> The order in the lesson:<ol style="padding-left:22px">${it.steps.map(s=>`<li>${rich(s.replace(/^\d+\.\s*/,""))}</li>`).join("")}</ol>`; $("#nx").hidden=false; $("#nx").focus(); } });
+        $("#nx").onclick=()=>{ k++; draw(); };
+      }); return;
+    }
+    const ord=shuffleSeed(it.q.options.length, k*17+Date.now()%97);
+    openPanel(`${head}<p class="read"><b>${rich(it.q.q)}</b></p><p class="small muted" id="rh">Answer it in your head first.</p><button class="btn" id="show">I have my answer</button><div id="opts" hidden>${ord.map(o=>`<button class="opt" data-o="${o}">${rich(it.q.options[o])}</button>`).join("")}</div><p class="small" id="why" hidden aria-live="polite"></p><button class="btn primary" id="nx" hidden>Next</button>`, ()=>{
+      $("#show").onclick=()=>{ $("#opts").hidden=false; $("#show").remove(); $("#rh").textContent="Now choose the answer you had."; };
+      let locked=false;
+      panel.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(locked) return; locked=true; const o=+b.dataset.o, ok=o===it.q.answer;
+        panel.querySelectorAll(".opt").forEach(x=>{ if(+x.dataset.o===it.q.answer){ x.classList.add("right"); x.insertAdjacentText("afterbegin","✓ "); } else if(x===b){ x.classList.add("wrong"); x.insertAdjacentText("afterbegin","✗ "); } });
+        if(ok) right++; gradeReview(it.id, ok); const w=$("#why"); w.hidden=false;
+        w.innerHTML = (ok?"":(it.q.whynot&&it.q.whynot[o]?rich(it.q.whynot[o])+" ":""))+rich(it.q.why||""); $("#nx").hidden=false; $("#nx").focus(); });
+      $("#nx").onclick=()=>{ k++; draw(); };
+    });
+  };
+  draw();
+}
+const MUNYA_WIRD = `<p class="small muted">Al‑Shahīd al‑Thānī tells the student to keep returning to what he has learned “every day, then every few days, then every week, always”. He says it of the Qurʾān; it is how any text is kept. <span class="src">Munyat al‑Murīd, ed. al‑Mukhtārī, p. 262.</span></p>`;
 
 /* ---------- shared progress ---------- */
 let DB=null, UID=null, PEOPLE={}, SYNC="local", pushTimer=null, pushing=false, pushAgain=false;
@@ -249,12 +320,13 @@ function summary(){
     taqrir: Object.values(S.L).filter(x=>x.taqrir).length,
     exams: Object.values(S.exams).filter(x=>x.passed).length,
     now: nt && nt.kind==="lesson" ? ("Lesson "+nt.n+": "+lessonsOf()[nt.n-1].title) : nt && nt.kind==="exam" ? ("Exam: "+nt.c.title) : nt && nt.kind==="bookexam" ? "Book exam" : nt && nt.kind==="done" ? "Book finished" : "",
-    openQ:S.questions.filter(q=>!q.ans).length, active:Object.keys(S.log).sort().pop()||null};
+    paused: isPaused() ? S.paused : null, hard: S.hard[weekStart()] || "",
+    openQ:S.questions.filter(q=>!q.ans).length, reports:(S.reports||[]).length, active:Object.keys(S.log).sort().pop()||null};
 }
 function schedulePush(){ if(!DB||!UID||!S.start) return; clearTimeout(pushTimer); pushTimer=setTimeout(push,1200); }
 async function push(){
   if(pushing){ pushAgain=true; return; } pushing=true;
-  try{ const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:LINK_KEY,state:S,summary:summary()})}); if(!r.ok) throw 0; PEOPLE[UID]={summary:summary()}; SYNC="shared"; paintTogether(); }
+  try{ const r=await fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({k:LINK_KEY,state:S,summary:summary()})}); if(!r.ok) throw 0; PEOPLE[UID]={summary:summary()}; SYNC="shared"; S._synced=new Date().toISOString(); paintTogether(); }
   catch(e){}
   pushing=false; if(pushAgain){ pushAgain=false; push(); }
 }
@@ -268,7 +340,7 @@ async function connectRest(){
     if(S.owner && S.owner!==UID) S=fresh();
     S.owner=UID; if(!S.label) S.label=j.me.label;
     const rs = j.me.state ? migrate(j.me.state) : null;
-    if(rs && (!S.updatedAt || (rs.updatedAt||"")>S.updatedAt || (S.v===2 && j.me.state.v!==2 && !Object.keys(S.L).length))){
+    if(rs && (!S.updatedAt || (rs.updatedAt||"")>S.updatedAt || (j.me.state.v!==2 && !Object.keys(S.L).length))){
       S = Object.assign(rs, {owner:UID});
       try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){}
       if(panel.hidden) render();
@@ -288,11 +360,12 @@ function togetherHTML(){
 }
 function personRow(id){
   const s=PEOPLE[id].summary||{}, nm=esc(personName(id));
-  const dots=`<div class="days" aria-label="Last seven days">${(s.last7||[]).map(on=>`<i class="${on?"on":""}"></i>`).join("")}</div>`;
+  const dots=`<div class="days" role="img" aria-label="Days studied in the last seven">${(s.last7||[]).map(on=>`<i class="${on?"on":""}"></i>`).join("")}</div>`;
   if(s.v!==2) return `<div class="person"><div class="row" style="justify-content:space-between"><b>${nm}</b><span class="pill gold">${s.start?"Day One done":"Not started"}</span></div>${dots}<p class="small muted">Opens the new Miftāḥ next time.</p></div>`;
-  const quiet = s.active && s.active < iso(new Date(Date.now()-3*DAY));
-  return `<div class="person"><div class="row" style="justify-content:space-between"><b>${nm}</b>${quiet?`<span class="pill gold">Quiet since ${fmt(s.active)}</span>`:s.start?`<span class="pill">${s.passed} of ${s.total}</span>`:`<span class="pill gold">Not started</span>`}</div>
-    ${dots}<p class="small muted">${esc(s.book)} · ${s.passed} lessons passed · ${s.taqrir} taqrīrs · ${s.exams} exams · ${s.openQ} open question${s.openQ===1?"":"s"}</p>${s.now?`<p class="small">Now: ${esc(s.now)}</p>`:""}</div>`;
+  const quiet = !s.paused && s.active && s.active < iso(new Date(Date.now()-3*DAY));
+  const pill = s.paused ? `<span class="pill gold">Paused until ${fmt(s.paused)}</span>` : quiet ? `<span class="pill gold">Quiet since ${fmt(s.active)}</span>` : s.start ? `<span class="pill">${s.passed} of ${s.total}</span>` : `<span class="pill gold">Not started</span>`;
+  return `<div class="person"><div class="row" style="justify-content:space-between"><b>${nm}</b>${pill}</div>
+    ${dots}<p class="small muted">${esc(s.book)} · ${s.passed} lessons passed · ${s.taqrir} taqrīrs · ${s.exams} exams · ${s.openQ} open question${s.openQ===1?"":"s"}</p>${s.now?`<p class="small">Now: ${esc(s.now)}</p>`:""}${s.hard?`<p class="small"><span class="muted">Hard this week:</span> ${esc(s.hard)}</p>`:""}</div>`;
 }
 function paintTogether(){ document.querySelectorAll("[data-together]").forEach(el => el.innerHTML = togetherHTML()); }
 
@@ -308,112 +381,164 @@ tabs.addEventListener("click", e => { const b=e.target.closest("button"); if(!b)
 function header(eyebrow, title){
   const d=new Date(), h=hijri(d);
   return `<div class="top"><div><div class="eyebrow">${eyebrow}</div><h1>${title}</h1></div>
-  <div style="text-align:right"><div class="date-ar">${toAr(h.d)} ${HMA[h.m-1]} ${toAr(h.y)}</div><div class="small muted">${d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</div></div></div>`;
+  <div style="text-align:right"><div class="date-ar" lang="ar" dir="rtl">${toAr(h.d)} ${HMA[h.m-1]} ${toAr(h.y)}</div><div class="small muted">${d.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</div></div></div>`;
 }
-function openPanel(html, after){ panel.innerHTML=`<div class="wrap stack"><button class="back" id="bk">‹ Back</button>${html}</div>`; panel.hidden=false; panel.scrollTop=0; $("#bk").onclick=closePanel; if(after) after(); }
-function closePanel(){ panel.hidden=true; panel.innerHTML=""; render(); }
+let lastFocus=null;
+function openPanel(html, after, backLabel="‹ Back"){
+  if(panel.hidden) lastFocus=document.activeElement;
+  panel.innerHTML=`<div class="wrap stack"><button class="back" id="bk">${backLabel}</button>${html}</div>`; panel.hidden=false; panel.scrollTop=0;
+  $("#bk").onclick=closePanel; if(after) after(); try{ $("#bk").focus({preventScroll:true}); }catch(e){}
+}
+function closePanel(){ panel.hidden=true; panel.innerHTML=""; render(); try{ lastFocus&&lastFocus.focus&&lastFocus.focus(); }catch(e){} }
+document.addEventListener("keydown", e => { if(e.key==="Escape" && !panel.hidden){ const b=$("#bk"); if(b) b.click(); } });
+const FOOT = `<p class="honest">Basma Press. Translated from the Arabic. Self taught: no teacher is needed.</p>`;
 const bookMissing = () => BOOK_STATE==="loading" ? `<p class="muted">Opening the book…</p>` :
   BOOK_STATE==="nokey" ? `<div class="note">The books open from your personal link. Use the link you were sent, once, on this phone.</div>` :
   `<div class="note">The book could not be fetched. Connect to the internet once and it will stay on this phone.</div>`;
 
 /* ---------- Day One ---------- */
 function dayOne(step){
-  const dots=`<div class="progress-dots">${[0,1,2].map(i=>`<i class="${i<=step?"on":""}"></i>`).join("")}</div>`;
-  const shell=(inner,next,label="Next")=>{ app.innerHTML=`<div class="wrap stack" style="padding-top:28px">${dots}${inner}<button class="btn primary" id="nx">${label}</button><p class="honest">Basma Press. A draft, not yet read by a ḥawza teacher.</p></div>`; $("#nx").onclick=next; window.scrollTo(0,0); };
+  const dots=`<div class="progress-dots" role="img" aria-label="Step ${step+1} of 4">${[0,1,2,3].map(i=>`<i class="${i<=step?"on":""}"></i>`).join("")}</div>`;
+  const shell=(inner,next,label="Next")=>{ app.innerHTML=`<div class="wrap stack" style="padding-top:28px">${dots}${inner}<button class="btn primary" id="nx">${label}</button>${FOOT}</div>`; $("#nx").onclick=next; window.scrollTo(0,0); };
   if(step===0) return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>Before any book, the intention.</h1>
     <blockquote class="read">“That he make his intention good, and cleanse his heart of stains, so that it is fit to receive knowledge, to keep it, and to go on in it.”</blockquote>
     <p class="src">al‑Shahīd al‑Thānī (d. 965 AH / 1558 CE), Munyat al‑Murīd, the first of the student’s disciplines, ed. al‑Mukhtārī, p. 224. English ours.</p>
     <p class="read">He likens it to preparing the ground before planting. Write one sentence: why are you doing this? No one grades it.</p>
-    <label class="small muted" for="why">Why I am doing this</label><textarea id="why">${esc(S.why)}</textarea></div>`, ()=>{ S.why=$("#why").value.trim(); save(); dayOne(1); });
+    <label class="small muted" for="why">Why I am doing this</label><textarea id="why">${esc(S.why)}</textarea></div>`, ()=>{ S.why=$("#why").value.trim(); if(S.why) S.whyHist=[{t:S.why,on:today()}]; save(); dayOne(1); });
   if(step===1) return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>The key is the question.</h1>
     <blockquote class="read">“This knowledge has a lock on it, and its key is the question.”</blockquote>
     <p class="src">Imam Jaʿfar al‑Ṣādiq (ʿa), in al‑Kulaynī, al‑Kāfī, vol. 1, Kitāb Faḍl al‑ʿIlm, chapter on asking the scholar, ḥadīth 3. English ours.</p>
-    <p class="read">Write the first question you want answered. Anything at all. It waits in Ask for a teacher, a person, to answer.</p>
+    <p class="read">Write the first question you want answered. Anything at all. It goes in Questions. Most questions are answered by a lesson further on; when you find the answer, you write it down in your own words.</p>
     <textarea id="q1" placeholder="My first question"></textarea></div>`, ()=>{ const t=$("#q1").value.trim(); if(t) S.questions.push({id:Date.now(), t, date:today()}); save(); dayOne(2); });
+  if(step===2){ const days=(S.plan&&S.plan.days)||[0,2,4];
+    shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>A small plan you can keep.</h1>
+    <blockquote class="read">“The most beloved of deeds to Allah, Mighty and Majestic, is the one the servant keeps up, even if it is small.”</blockquote>
+    <p class="src">Imam al‑Bāqir (ʿa), in al‑Kāfī, vol. 2, chapter on constancy in deeds, ḥadīth 2; al‑Majlisī: ḥasan, like ṣaḥīḥ. English ours.</p>
+    <p class="read">Choose three days for your lessons, and the moment in the day when you will sit down. About 45 minutes each, and a lesson can be split.</p>
+    <div class="chips" role="group" aria-label="Lesson days">${WD.map((d,i)=>`<button class="chip" data-d="${i}" aria-pressed="${days.includes(i)}">${d.slice(0,3)}</button>`).join("")}</div>
+    <label class="small muted" for="mo">My moment</label><input type="text" id="mo" value="${esc(S.moment||"")}" placeholder="After ʿIshāʾ, at my desk">
+    <div class="note"><b>This is a plan, not a vow.</b> Nothing here is a nadhr, an ʿahd or an oath, and nothing is owed if a day is missed. Imam al‑Ṣādiq (ʿa) warned against taking on a duty and then leaving it; keep the plan small enough to keep. Missing one day does no harm. Never miss two. <span class="src">al‑Kāfī, vol. 2, the same chapter, ḥadīth 6; al‑Majlisī: muwaththaq.</span></div></div>`,
+    ()=>{ const ds=[...app.querySelectorAll("[data-d][aria-pressed=true]")].map(b=>+b.dataset.d); S.plan={days:ds.length?ds:days}; S.moment=$("#mo").value.trim(); save(); dayOne(3); });
+    app.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>b.setAttribute("aria-pressed", b.getAttribute("aria-pressed")==="true"?"false":"true")); return; }
   return shell(`<div class="stack"><div class="eyebrow">Day One</div><h1>Your first book.</h1>
-    <div class="book"><div class="spine">١١</div><div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with the commentary of al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)</p></div></div>
+    <div class="book"><div class="spine" lang="ar">١</div><div><h2>The Eleventh Chapter</h2><p class="small muted">al‑ʿAllāma al‑Ḥillī (d. 726 AH / 1325 CE), with the commentary of al‑Miqdād al‑Suyūrī (d. 826 AH / 1423 CE)</p></div></div>
     <p class="read">Al‑Ḥillī wrote it about seven hundred years ago, and the seminaries still teach it, usually with this commentary. He wrote it for everyone: “what all who are charged with duty must know of the foundations of religion”, held “by proof, not by imitation”.</p>
-    <p class="read">You will read it the way the ḥawza reads it. Each lesson: questions before you read, the text, the lesson on it, the classic objection, your own written summary, four questions, and two prompts for your study partner. Three lessons a week. About ten weeks.</p></div>`,
+    <p class="read">You will read it the way the ḥawza reads it. Each lesson: questions before you read, the text, the lesson on it, the classic objection, your own written summary, four questions, and the mubāḥatha. Three lessons a week. About ten weeks.</p></div>`,
     ()=>{ S.dayOne=true; if(!S.start) S.start=today(); logToday("dayone"); save(); TAB="today"; render(); }, "Begin");
 }
 
 /* ---------- Today ---------- */
 function renderToday(){
   if(!BOOK){ app.innerHTML=`<div class="wrap stack">${header("Miftāḥ","Today")}${bookMissing()}</div>`; return; }
-  const nt=nextThing(), ws=weekStart();
-  const weekLessons=Object.entries(S.L).filter(([k,v])=>v.passedOn && v.passedOn>=ws).length;
+  const nt=nextThing(), ws=weekStart(), dow=new Date().getDay();
+  const weekLessons=Object.values(S.L).filter(v=>v.passedOn && v.passedOn>=ws).length;
+  const due=dueReview().length, last=Object.keys(S.log).sort().pop(), gap=last?daysSince(last):0;
+  const lessonDay = S.plan && S.plan.days && S.plan.days.includes(dow);
   let main="";
-  if(nt.kind==="lesson"){ const l=lessonsOf()[nt.n-1], st=(S.L[LK(nt.n)]||{}).step||0;
-    main=`<div class="card main stack"><div class="eyebrow">${esc(l.chapter)}</div><h2>Lesson ${l.n}. ${esc(l.title)}</h2>
-      <div class="progress-dots">${STEPS.map((s,i)=>`<i class="${i<st?"on":""}"></i>`).join("")}</div>
-      <p class="small muted">${st? "You stopped at "+STEPS[st].name.toLowerCase()+"." : "About "+(l.minutes||45)+" minutes. It can be split across the day."}</p>
+  if(isPaused()) main=`<div class="card main stack"><div class="eyebrow">Paused</div><h2>New lessons wait until ${fmtH(S.paused)}.</h2><p class="read">Only murājaʿa until then, a few minutes when you can. Al‑Shahīd al‑Thānī allows “one lesson, or less”: what is possible.</p><button class="btn" id="resume">Resume now</button></div>`;
+  else if(nt.kind==="lesson"){ const l=lessonsOf()[nt.n-1], st=(S.L[LK(nt.n)]||{}).step||0;
+    main=`<div class="card main stack"><div class="eyebrow">${esc(l.chapter)}${lessonDay?" · a lesson day":""}</div><h2>Lesson ${l.n}. ${esc(l.title)}</h2>
+      <div class="progress-dots" role="img" aria-label="${st} of ${STEPS.length} steps done">${STEPS.map((s,i)=>`<i class="${i<st?"on":""}"></i>`).join("")}</div>
+      <p class="small muted">${st? "You stopped at "+STEPS[st].name.toLowerCase()+"." : "About "+(l.minutes||45)+" minutes. It can be split across the day."}${due&&!st?" Murājaʿa first, then the lesson.":""}</p>
       <button class="btn primary" id="go">${st?"Continue":"Begin the lesson"}</button></div>`; }
-  else if(nt.kind==="exam") main=`<div class="card main stack"><div class="eyebrow">Imtiḥān</div><h2>${esc(nt.c.title)}: the section exam</h2><p class="read">Every lesson of this section is passed. Before the next section, an exam on all of it. Eighty percent passes.</p><button class="btn primary" id="go">Sit the exam</button></div>`;
+  else if(nt.kind==="exam") main=`<div class="card main stack"><div class="eyebrow">Imtiḥān</div><h2>${esc(nt.c.title)}: the section exam</h2><p class="read">Every lesson of this section is passed. Before the next section, an exam with questions you have not seen, and one proof to set out in writing. Eighty percent passes.</p><button class="btn primary" id="go">Sit the exam</button></div>`;
   else if(nt.kind==="bookexam") main=`<div class="card main stack"><div class="eyebrow">Imtiḥān</div><h2>The book exam</h2><p class="read">Twenty questions from the whole book. Eighty percent closes the book.</p><button class="btn primary" id="go">Sit the book exam</button></div>`;
-  else main=`<div class="card main stack"><div class="eyebrow">Finished</div><h2>${esc(BOOK.title)} is closed.</h2><p class="read">Every lesson, every section exam and the book exam are passed. Your transcript is in Record. The next book opens when it is ready.</p></div>`;
+  else main=`<div class="card main stack"><div class="eyebrow">Finished</div><h2>${esc(BOOK.title)} is closed.</h2><p class="read">Every lesson, every section exam and the book exam are passed. Your record and taqrīrs are in Record, ready to print. Murājaʿa keeps the book with you.</p></div>`;
+  const back = !isPaused() && gap>=3 ? `<div class="note"><b>Welcome back.</b> It has been ${gap} days. Start small: the murājaʿa, then one lesson or less. Never miss two from here.</div>` : "";
   const mub = Object.entries(S.L).filter(([k,v])=>v.passedOn && v.passedOn>=ws).map(([k])=>lessonsOf()[+k.split(":")[1]-1]).filter(Boolean);
   const called = S.calls[ws];
-  app.innerHTML=`<div class="wrap stack">${header(esc(BOOK.title),"Today")}${main}
-    <div class="card stack"><div class="row" style="justify-content:space-between"><h3>This week</h3><span class="pill ${weekLessons>=3?"":"gold"}">${weekLessons>=3? weekLessons+" lessons ✓" : weekLessons+" of 3 lessons"}</span></div>
-      <p class="small muted">Weeks run Saturday to Friday. Three lessons, then one call with your study partner.</p>
-      <button class="wk ${called?"done":""}" id="call"><span class="tick"></span><span><b>Mubāḥatha</b><br><span class="when">${mub.length?mub.length+" lesson"+(mub.length===1?"":"s")+" to argue over":"After your first lesson of the week"}</span></span><span class="small muted">30 min</span></button></div>
+  const rvCard = due ? `<button class="card wk" id="rvw"><span class="tick"></span><span><b>Murājaʿa</b><br><span class="when">${Math.min(due,6)} items from earlier lessons</span></span><span class="small muted">3 min</span></button>` : "";
+  const mubCard = `<button class="wk ${called?"done":""}" id="call"><span class="tick"></span><span><b>Mubāḥatha</b><br><span class="when">${mub.length?mub.length+" lesson"+(mub.length===1?"":"s")+" to argue over, with your partner or alone":"After your first lesson of the week"}</span></span><span class="small muted">30 min</span></button>`;
+  const friday = dow===5;
+  const week = `<div class="card stack"><div class="row" style="justify-content:space-between"><h3>${friday?"Friday":"This week"}</h3><span class="pill ${weekLessons>=3?"":"gold"}">${weekLessons>=3? weekLessons+" lessons ✓" : weekLessons+" of 3 lessons"}</span></div>
+      ${friday?`<p class="small muted">Friday is for the matter of your religion: the mubāḥatha, your open questions, and one line on the week. The report in al‑Kāfī (vol. 1, chapter on asking the scholar, ḥadīth 5) is mursal, so it is held as a report, not a proof.</p>`:`<p class="small muted">Weeks run Saturday to Friday. Three lessons, then the mubāḥatha: a call with your study partner, or the prompts in writing if you study alone.</p>`}
+      ${mubCard}
+      <label class="small muted" for="hard">What was hard this week? <span class="muted">(your partner sees this line)</span></label><input type="text" id="hard" value="${esc(S.hard[ws]||"")}" placeholder="One line"></div>`;
+  app.innerHTML=`<div class="wrap stack">${header(esc(BOOK.title),"Today")}${back}${friday?week+main+rvCard:main+rvCard+week}
     <div class="card"><h3 style="margin-bottom:4px">Studying together</h3><div data-together>${togetherHTML()}</div></div>
-    <p class="honest">Basma Press. A draft, not yet read by a ḥawza teacher.</p></div>`;
-  const go=$("#go"); if(go) go.onclick=()=>{ if(nt.kind==="lesson") openLesson(nt.n); else if(nt.kind==="exam") openExam(nt.c); else openBookExam(); };
+    ${!isPaused()&&nt.kind!=="done"?`<button class="linkish" id="pause" style="align-self:center">Exams or a hard month? Pause new lessons</button>`:""}
+    ${FOOT}</div>`;
+  const go=$("#go"); if(go) go.onclick=()=>{ if(nt.kind==="lesson"){ const st=(S.L[LK(nt.n)]||{}).step||0; if(due && !st) openReview(()=>openLesson(nt.n)); else openLesson(nt.n); } else if(nt.kind==="exam") openExam(nt.c); else openBookExam(); };
   $("#call").onclick=()=>openCall(ws, mub);
+  const rv=$("#rvw"); if(rv) rv.onclick=()=>openReview();
+  $("#hard").onchange=e=>{ S.hard[ws]=e.target.value.trim(); save(); };
+  const ps=$("#pause"); if(ps) ps.onclick=openPause;
+  const rs=$("#resume"); if(rs) rs.onclick=()=>{ S.paused=null; save(); render(); };
+}
+function openPause(){
+  const def=addDays(today(),14);
+  openPanel(`<div class="eyebrow">Pause</div><h1>Pause new lessons</h1>
+    <p class="read">For exams, travel, illness or a hard month. New lessons wait; the murājaʿa stays, a few minutes when you can, so nothing is lost. Your study partner sees “Paused until” instead of “Quiet”.</p>
+    <p class="read">“If he can take several lessons a day, let him; otherwise let him keep to what is possible: one lesson, or less.” <span class="src">Munyat al‑Murīd, ed. al‑Mukhtārī, p. 262. English ours.</span></p>
+    <label class="small muted" for="pd">Resume on</label><input type="date" id="pd" value="${def}" min="${addDays(today(),1)}">
+    <button class="btn primary" id="ok">Pause until then</button>`, ()=>$("#ok").onclick=()=>{ const v=$("#pd").value; if(!v) return; S.paused=v; logToday("pause"); save(); closePanel(); });
 }
 function openCall(ws, mub){
-  openPanel(`<div class="eyebrow">Mubāḥatha · this week</div><h1>The call with your partner</h1>
-    <p class="read">Each of you explains each lesson in your own words, without notes, while the other listens for gaps. Then each asks the other the prompts below. Disagree out loud: that is the point.</p>
-    ${mub.length? mub.map(l=>`<div class="card stack"><b>Lesson ${l.n}. ${esc(l.title)}</b><ol class="read" style="margin:0;padding-left:20px">${(l.mubahatha||[]).map(p=>`<li>${rich(p)}</li>`).join("")}</ol></div>`).join("") : `<p class="muted read">Pass a lesson this week and its prompts appear here.</p>`}
-    <button class="btn primary" id="dn">${S.calls[ws]?"Done this week ✓":"We had the call"}</button>`,
-    ()=>$("#dn").onclick=()=>{ S.calls[ws]=today(); logToday("call"); save(); closePanel(); });
+  openPanel(`<div class="eyebrow">Mubāḥatha · this week</div><h1>Argue it out</h1>
+    <p class="read"><b>With a partner,</b> lesson by lesson: one of you is the muqarrir and restates the lesson without notes; the other presses the objection and listens for gaps. Then swap. Before the call, each writes a one line answer to each prompt; afterwards, compare with the lesson’s objection and answer.</p>
+    <p class="read"><b>Alone,</b> explain each lesson aloud as if to a friend, then answer the prompts in writing below. Argue against yourself.</p>
+    ${mub.length? mub.map(l=>`<div class="card stack"><b>Lesson ${l.n}. ${esc(l.title)}</b>${(l.mubahatha||[]).map((p,j)=>`<p class="read" style="margin-top:6px">${j+1}. ${rich(p)}</p><textarea data-mw="${ws}:${l.n}:${j}" placeholder="My answer">${esc(S.mubw[ws+":"+l.n+":"+j]||"")}</textarea>`).join("")}</div>`).join("") : `<p class="muted read">Pass a lesson this week and its prompts appear here.</p>`}
+    <button class="btn primary" id="dn">${S.calls[ws]?"Done this week ✓":"Done for this week"}</button>`,
+    ()=>{ panel.querySelectorAll("[data-mw]").forEach(ta=>ta.oninput=()=>{ S.mubw[ta.dataset.mw]=ta.value; save(); }); $("#dn").onclick=()=>{ S.calls[ws]=today(); logToday("call"); save(); closePanel(); }; });
 }
 
 /* ---------- a lesson ---------- */
-const STEPS=[{k:"before",name:"Before you read"},{k:"text",name:"The text"},{k:"dars",name:"The lesson"},{k:"ishkal",name:"The objection"},{k:"taqrir",name:"Your taqrīr"},{k:"check",name:"Four questions"},{k:"mub",name:"For your partner"}];
+const STEPS=[{k:"before",name:"Before you read"},{k:"text",name:"The text"},{k:"dars",name:"The lesson"},{k:"ishkal",name:"The objection"},{k:"taqrir",name:"Your taqrīr"},{k:"check",name:"Four questions"},{k:"mub",name:"Mubāḥatha"}];
 function openLesson(n, at){
   const l=lessonsOf()[n-1], rec=S.L[LK(n)]=S.L[LK(n)]||{step:0};
   let i = at!=null ? at : (rec.passed ? 0 : Math.min(rec.step||0, STEPS.length-1));
   const segs = l.segs.map(s=>BOOK.segments[s]);
+  const supplied = new Set((l.supplied||[]).map(p=>p[0]+":"+p[1]));
   const draw = () => {
     const step=STEPS[i];
-    const dots=`<div class="progress-dots" aria-label="Step ${i+1} of ${STEPS.length}">${STEPS.map((s,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>`;
+    const dots=`<div class="progress-dots" role="img" aria-label="Step ${i+1} of ${STEPS.length}">${STEPS.map((s,j)=>`<i class="${j<=i?"on":""}"></i>`).join("")}</div>`;
     let body="", nextLabel="Next", canNext=()=>true;
-    if(step.k==="before") body=`<p class="read muted">${rich(l.why||"")}</p><div class="card stack"><b>Hold these in mind while you read.</b><p class="small muted">You do not need to answer them yet. You will, by the end.</p><ol class="read" style="margin:0;padding-left:20px">${(l.before||[]).map(q=>`<li>${rich(q)}</li>`).join("")}</ol></div>`, nextLabel="Read the text";
-    if(step.k==="text") body=`<p class="small muted">Al‑Ḥillī’s words, in our English. Read them slowly, twice.</p>${segs.map(s=>`<div class="matn">${esc(s.en)}<span class="orig"><button class="linkish" data-ar="${s.i}">Show the original</button></span><p class="ar" hidden id="ar${s.i}" style="margin-top:8px;font-size:1.3rem">${esc(s.ar)}</p></div>`).join("")}`, nextLabel="The lesson";
-    if(step.k==="dars") body=`<div class="dars">${(l.dars||[]).map(b=>`<div class="seg"><div class="matn" style="font-size:1rem;margin-bottom:12px">${esc((BOOK.segments[b.seg]||{}).en||"")}</div>${b.paras.map(p=>`<p>${rich(p)}</p>`).join("")}</div>`).join("")}</div>
+    if(step.k==="before") body=`<p class="read muted">${rich(l.why||"")}</p><div class="card stack"><b>Hold these in mind while you read.</b><p class="small muted">You do not need to answer them yet. You will answer them in your taqrīr.</p><ol class="read" style="margin:0;padding-left:20px">${(l.before||[]).map(q=>`<li>${rich(q)}</li>`).join("")}</ol></div>`, nextLabel="Read the text";
+    if(step.k==="text") body=`<p class="small muted">Al‑Ḥillī’s words, in our English. Read them slowly, twice.</p>${segs.map(s=>`<div class="matn">${esc(s.en)}<span class="orig"><button class="linkish" data-ar="${s.i}" aria-expanded="false" aria-controls="ar${s.i}">Show the original</button></span><p class="ar" hidden id="ar${s.i}" lang="ar" dir="rtl" style="margin-top:8px;font-size:1.3rem">${esc(s.ar)}</p></div>`).join("")}`, nextLabel="The lesson";
+    if(step.k==="dars") body=`${(l.supplied||[]).length?`<p class="small muted">Paragraphs marked <span class="tag">Miftāḥ</span> are the publisher’s own: a position stated for fairness, or a bridge. Everything else explains al‑Ḥillī and al‑Miqdād.</p>`:""}<div class="dars">${(l.dars||[]).map((b,bi)=>`<div class="seg"><div class="matn" style="font-size:1rem;margin-bottom:12px">${esc((BOOK.segments[b.seg]||{}).en||"")}</div>${b.paras.map((p,pi)=>supplied.has(bi+":"+pi)?`<p class="supplied"><span class="tag">Miftāḥ</span> ${rich(p)}</p>`:`<p>${rich(p)}</p>`).join("")}</div>`).join("")}</div>
       ${l.argument?`<div class="card argument"><b>${esc(l.argument.title||"The proof, step by step")}</b><ol>${l.argument.steps.map(s=>`<li>${rich(s.replace(/^\d+\.\s*/,""))}</li>`).join("")}</ol></div>`:""}
-      ${(l.terms||[]).length?`<details class="card terms"><summary style="cursor:pointer"><b>Terms in this lesson (${l.terms.length})</b></summary><dl>${l.terms.map(t=>`<div><dt>${esc(t.t)}<span class="ar-s">${esc(t.ar||"")}</span></dt><dd>${esc(t.en?t.en+". ":"")}${rich(t.def||"")}</dd></div>`).join("")}</dl></details>`:""}`, nextLabel="The objection";
-    if(step.k==="ishkal") body=`<p class="read">The ḥawza learns a position by defending it. Read each objection, answer it in your head, then reveal the answer.</p>${(l.ishkal||[]).map((x,j)=>`<div class="card stack"><p class="read"><b>${rich(x.q)}</b></p><button class="btn" data-rev="${j}">I have my answer. Show it.</button><p class="read" hidden id="rev${j}">${rich(x.a)}${x.by?` <span class="src">(${esc(x.by)})</span>`:""}</p></div>`).join("")}`, nextLabel="Write your taqrīr";
-    if(step.k==="taqrir"){ body=`<p class="read">${rich(l.taqrir||"Write the lesson in your own words.")}</p><p class="small muted">Without looking back. At least forty words. This is how the ḥawza makes a lesson yours.</p><textarea id="tq" style="min-height:220px">${esc(rec.taqrir||"")}</textarea><div class="wordcount" id="wc"></div>`; nextLabel="Four questions"; canNext=()=>wc()>=40; }
+      ${(l.terms||[]).length?`<details class="card terms"><summary style="cursor:pointer"><b>Terms in this lesson (${l.terms.length})</b></summary><dl>${l.terms.map(t=>`<div><dt>${esc(t.t)}<span class="ar-s" lang="ar" dir="rtl">${esc(t.ar||"")}</span></dt><dd>${esc(t.en?t.en+". ":"")}${rich(t.def||"")}</dd></div>`).join("")}</dl></details>`:""}
+      <details class="card"><summary style="cursor:pointer"><b>My ḥāshiya</b> <span class="small muted">notes in the margin, for you</span></summary><textarea id="note" style="margin-top:10px" placeholder="What struck you, what you doubt, what links to another lesson">${esc(S.notes[LK(n)]||"")}</textarea></details>
+      ${l.pages?`<p class="src">Sources: ${esc(l.pages)}</p>`:""}`, nextLabel="The objection";
+    if(step.k==="ishkal") body=`<p class="read">The ḥawza learns a position by defending it. Read each objection, answer it in your head, then reveal the answer.</p>${(l.ishkal||[]).map((x,j)=>`<div class="card stack"><p class="read"><b>${rich(x.q)}</b></p><button class="btn" data-rev="${j}" aria-expanded="false">I have my answer. Show it.</button><p class="read" hidden id="rev${j}">${rich(x.a)}${x.by?` <span class="src">(${esc(x.by)})</span>`:""}</p></div>`).join("")}`, nextLabel="Write your taqrīr";
+    if(step.k==="taqrir"){ const keys=l.taqrir_keys||[], ticks=rec.keys||[];
+      body=`<p class="read">${rich(l.taqrir||"Write the lesson in your own words.")}</p><div class="card"><p class="small muted">Answer the questions you held in mind while you read:</p><ol class="read" style="margin:6px 0 0;padding-left:20px">${(l.before||[]).map(q=>`<li>${rich(q)}</li>`).join("")}</ol></div>
+        <p class="small muted">Without looking back. At least forty words. This is how the ḥawza makes a lesson yours.</p><textarea id="tq" style="min-height:220px">${esc(rec.taqrir||"")}</textarea><div class="wordcount" id="wc" aria-live="polite"></div>
+        ${keys.length?`<div id="kbox" ${rec.checked?"":"hidden"} class="card stack"><b>Check your own taqrīr</b><p class="small muted">Tick each point your taqrīr has. No one grades it; a missing point is a reason to read that part again, or to add a line.</p>${keys.map((k,j)=>`<label class="tickrow"><input type="checkbox" data-k="${j}" ${ticks.includes(j)?"checked":""}> <span>${rich(k)}</span></label>`).join("")}${l.taqrir_model?`<details><summary style="cursor:pointer" class="small"><b>A model taqrīr</b></summary><p class="read" style="margin-top:8px">${rich(l.taqrir_model)}</p></details>`:""}</div>`:""}`;
+      nextLabel = keys.length && !rec.checked ? "Check my taqrīr" : "Four questions"; canNext=()=>wc()>=40; }
     if(step.k==="check") body=checkHTML(l, rec), nextLabel="Next";
-    if(step.k==="mub") body=`<p class="read">Lesson passed. These two prompts are saved for this week’s call with your partner.</p><div class="card"><ol class="read" style="margin:0;padding-left:20px">${(l.mubahatha||[]).map(p=>`<li>${rich(p)}</li>`).join("")}</ol></div><p class="read">Anything still unclear? Put it in Ask for your teacher.</p><button class="btn" id="toask">Add a question</button>`, nextLabel="Finish";
+    if(step.k==="mub") body=`<p class="read">Lesson passed. These prompts are saved for this week’s mubāḥatha, with your partner or in writing on your own.</p><div class="card"><ol class="read" style="margin:0;padding-left:20px">${(l.mubahatha||[]).map(p=>`<li>${rich(p)}</li>`).join("")}</ol></div>${l.next?`<div class="card"><div class="eyebrow">Looking ahead</div><p class="read" style="margin-top:6px">${rich(l.next)}</p></div>`:""}<p class="read">Anything still unclear? Write it in Questions. A later lesson may answer it.</p><div class="row"><button class="btn" id="toask">Add a question</button><button class="btn ghost" id="rep">Report a problem in this lesson</button></div>`, nextLabel="Finish";
     panel.innerHTML=`<div class="wrap stack"><button class="back" id="bk">‹ Close</button><div class="eyebrow">Lesson ${l.n} · ${esc(step.name)}</div><h1>${esc(l.title)}</h1>${dots}${body}
       <div class="row" style="justify-content:space-between">${i>0?`<button class="btn ghost" id="pv">‹ ${esc(STEPS[i-1].name)}</button>`:"<span></span>"}${step.k==="check"&&!rec.passed?"":`<button class="btn primary" id="nx">${nextLabel}</button>`}</div></div>`;
     panel.hidden=false; panel.scrollTop=0;
-    $("#bk").onclick=()=>{ save(); closePanel(); };
+    $("#bk").onclick=()=>{ save(); closePanel(); }; try{ $("#bk").focus({preventScroll:true}); }catch(e){}
     const pv=$("#pv"); if(pv) pv.onclick=()=>{ i--; draw(); };
-    panel.querySelectorAll("[data-ar]").forEach(b=>b.onclick=()=>{ const p=$("#ar"+b.dataset.ar); p.hidden=!p.hidden; b.textContent=p.hidden?"Show the original":"Hide the original"; });
+    panel.querySelectorAll("[data-ar]").forEach(b=>b.onclick=()=>{ const p=$("#ar"+b.dataset.ar); p.hidden=!p.hidden; b.setAttribute("aria-expanded", String(!p.hidden)); b.textContent=p.hidden?"Show the original":"Hide the original"; });
     panel.querySelectorAll("[data-rev]").forEach(b=>b.onclick=()=>{ $("#rev"+b.dataset.rev).hidden=false; b.remove(); });
-    const tq=$("#tq"); function wc(){ const n=(tq.value.trim().match(/\S+/g)||[]).length; $("#wc").textContent=n+" words"+(n<40?" · "+(40-n)+" more to continue":""); const nx=$("#nx"); if(nx) nx.disabled=n<40; return n; }
-    if(tq){ tq.oninput=()=>{ rec.taqrir=tq.value; wc(); }; wc(); }
+    const note=$("#note"); if(note) note.oninput=()=>{ S.notes[LK(n)]=note.value; save(); };
+    const tq=$("#tq"); function wc(){ const c=(tq.value.trim().match(/\S+/g)||[]).length; $("#wc").textContent=c+" words"+(c<40?" · "+(40-c)+" more to continue":""); const nx=$("#nx"); if(nx) nx.disabled=c<40; return c; }
+    if(tq){ tq.oninput=()=>{ rec.taqrir=tq.value; wc(); }; wc(); panel.querySelectorAll("[data-k]").forEach(c=>c.onchange=()=>{ rec.keys=[...panel.querySelectorAll("[data-k]:checked")].map(x=>+x.dataset.k); save(); }); }
     if(step.k==="check") wireCheck(l, rec, ()=>{ draw(); });
     const ta=$("#toask"); if(ta) ta.onclick=()=>{ save(); TAB="ask"; closePanel(); };
+    const rp=$("#rep"); if(rp) rp.onclick=()=>openReport(l);
     const nx=$("#nx"); if(nx) nx.onclick=()=>{ if(!canNext()) return;
-      if(step.k==="taqrir"){ rec.taqrir=tq.value.trim(); rec.taqrirOn=today(); }
+      if(step.k==="taqrir"){ rec.taqrir=tq.value.trim(); rec.taqrirOn=today(); if((l.taqrir_keys||[]).length && !rec.checked){ rec.checked=true; save(); draw(); const kb=$("#kbox"); if(kb) kb.scrollIntoView({block:"start"}); return; } }
       if(i===STEPS.length-1){ save(); closePanel(); return; }
       i++; if(!rec.passed) rec.step=Math.max(rec.step||0,i); logToday("study"); save(); draw(); };
   };
   draw();
+}
+function openReport(l){
+  openPanel(`<div class="eyebrow">Report a problem</div><h2>Lesson ${l.n}. ${esc(l.title)}</h2><p class="read">A wrong translation, a misprint, a question with two right answers, anything that is not as it should be. It is kept with your progress, and Basma Press reads it. A difference of scholarly opinion is not an error, but tell us anyway if the lesson states a view unfairly.</p>
+    <textarea id="rt" placeholder="What is wrong, and where"></textarea><button class="btn primary" id="ok">Send with my progress</button><p class="small muted" id="msg" aria-live="polite"></p>`, ()=>$("#ok").onclick=()=>{ const t=$("#rt").value.trim(); if(!t) return; S.reports.push({lesson:l.n, t, on:today(), rev:BOOK.rev}); save(); $("#msg").textContent="Thank you. It goes with your next save."; $("#rt").value=""; });
 }
 function shuffleSeed(n, seed){ const a=[...Array(n).keys()]; let s=seed||1; for(let i=n-1;i>0;i--){ s=(s*9301+49297)%233280; const j=Math.floor(s/233280*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
 function checkHTML(l, rec){
   const tries=rec.tries||0;
   return `<p class="read">${rec.passed?"Passed. You can look again at the questions below.":"Answer all four, then check. Three right passes."}</p>` + (l.check||[]).map((q,j)=>{
     const ord=shuffleSeed(q.options.length, tries*7+j+1);
-    return `<div class="card stack" data-q="${j}"><p class="read"><b>${j+1}. ${rich(q.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}" aria-pressed="false">${rich(q.options[o])}</button>`).join("")}<p class="small" hidden data-why></p></div>`; }).join("") +
-    (rec.passed?"":`<button class="btn primary" id="chk" disabled>Check my answers</button><p class="read" id="res"></p>`);
+    return `<div class="card stack" data-q="${j}" role="group" aria-label="Question ${j+1}"><p class="read"><b>${j+1}. ${rich(q.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}" aria-pressed="false">${rich(q.options[o])}</button>`).join("")}<p class="small" hidden data-why></p></div>`; }).join("") +
+    (rec.passed?"":`<button class="btn primary" id="chk" disabled>Check my answers</button><p class="read" id="res" aria-live="polite"></p>`);
 }
 function wireCheck(l, rec, redraw){
   const pick={};
@@ -421,107 +546,210 @@ function wireCheck(l, rec, redraw){
     card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(card.dataset.locked) return; card.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); pick[j]=+b.dataset.o; const c=$("#chk"); if(c) c.disabled=Object.keys(pick).length<l.check.length; }); });
   const c=$("#chk"); if(!c) return;
   c.onclick=()=>{
-    let right=0;
-    panel.querySelectorAll("[data-q]").forEach(card=>{ const j=+card.dataset.q, q=l.check[j]; card.dataset.locked=1;
-      card.querySelectorAll(".opt").forEach(b=>{ const o=+b.dataset.o; if(o===q.answer) b.classList.add("right"); else if(o===pick[j]) b.classList.add("wrong"); });
-      if(pick[j]===q.answer) right++; const w=card.querySelector("[data-why]"); w.hidden=false; w.innerHTML=rich(q.why||""); });
+    let right=0; const results=[];
+    l.check.forEach((q,j)=>{ const ok=pick[j]===q.answer; results.push(ok); if(ok) right++; });
     const ok = right >= Math.ceil(l.check.length*0.75);
+    panel.querySelectorAll("[data-q]").forEach(card=>{ const j=+card.dataset.q, q=l.check[j]; card.dataset.locked=1; const w=card.querySelector("[data-why]");
+      card.querySelectorAll(".opt").forEach(b=>{ const o=+b.dataset.o;
+        if(ok && o===q.answer){ b.classList.add("right"); b.insertAdjacentText("afterbegin","✓ "); }
+        else if(o===pick[j] && o!==q.answer){ b.classList.add("wrong"); b.insertAdjacentText("afterbegin","✗ "); }
+        else if(!ok && o===pick[j] && o===q.answer){ b.insertAdjacentText("afterbegin","✓ "); } });
+      w.hidden=false;
+      if(results[j]) w.innerHTML = ok ? rich(q.why||"") : "Right.";
+      else w.innerHTML = (q.whynot&&q.whynot[pick[j]]) ? rich(q.whynot[pick[j]]) + (ok?" "+rich(q.why||""):"") : (ok?rich(q.why||""):"Not this one."); });
     rec.tries=(rec.tries||0)+1; rec.best=Math.max(rec.best||0, right);
-    if(ok){ rec.passed=true; rec.passedOn=today(); rec.score=right+"/"+l.check.length; rec.step=STEPS.length-1; logToday("passed"); }
+    if(ok){ rec.passed=true; rec.passedOn=today(); rec.score=right+"/"+l.check.length; rec.step=STEPS.length-1; rec.rev=BOOK.rev; logToday("passed"); }
     save();
-    $("#res").innerHTML = ok ? `<b>${right} of ${l.check.length}.</b> Passed.` : `<b>${right} of ${l.check.length}.</b> Not yet. Read the lesson again, then try once more; the answers will be in a new order.`;
+    $("#res").innerHTML = ok ? `<b>${right} of ${l.check.length}.</b> Passed.` : `<b>${right} of ${l.check.length}.</b> Not yet. The reasons are under the questions you missed; the right answers are not shown, so that your next try is your own. Read the lesson again, then try once more in a new order.`;
     c.outerHTML = ok ? `<button class="btn primary" id="nx2">Next</button>` : `<div class="row"><button class="btn" id="rd">Read the lesson again</button><button class="btn primary" id="ag">Try again</button></div>`;
-    const n2=$("#nx2"); if(n2) n2.onclick=()=>{ openLesson(l.n, STEPS.length-1); };
-    const rd=$("#rd"); if(rd) rd.onclick=()=>openLesson(l.n, 2);
+    const n2=$("#nx2"); if(n2){ n2.onclick=()=>openLesson(l.n, STEPS.length-1); n2.focus(); }
+    const rd=$("#rd"); if(rd){ rd.onclick=()=>openLesson(l.n, 2); rd.focus(); }
     const ag=$("#ag"); if(ag) ag.onclick=redraw;
   };
 }
 
 /* ---------- exams ---------- */
-function examPanel(title, intro, qs, key, onDone){
-  const ans={};
+function examPanel(title, intro, qs, written, key, onDone){
+  const ans={}, e0=S.exams[key]||{};
   openPanel(`<div class="eyebrow">Imtiḥān</div><h1>${esc(title)}</h1><p class="read">${intro}</p>
-    ${qs.map((x,j)=>{ const ord=shuffleSeed(x.q.options.length, j*13+((S.exams[key]||{}).tries||0)+3); return `<div class="card stack" data-e="${j}"><p class="small muted">From lesson ${x.n}</p><p class="read"><b>${j+1}. ${rich(x.q.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}" aria-pressed="false">${rich(x.q.options[o])}</button>`).join("")}<p class="small" hidden data-why></p></div>`; }).join("")}
-    <button class="btn primary" id="sub" disabled>Hand in</button><p class="read" id="res"></p>`, ()=>{
-    panel.querySelectorAll("[data-e]").forEach(card=>{ const j=+card.dataset.e; card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(card.dataset.locked) return; card.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); ans[j]=+b.dataset.o; $("#sub").disabled=Object.keys(ans).length<qs.length; }); });
+    ${qs.map((x,j)=>{ const ord=shuffleSeed(x.q.options.length, j*13+(e0.tries||0)+3); return `<div class="card stack" data-e="${j}" role="group" aria-label="Question ${j+1}"><p class="small muted">From lesson ${x.n}</p><p class="read"><b>${j+1}. ${rich(x.q.q)}</b></p>${ord.map(o=>`<button class="opt" data-o="${o}" aria-pressed="false">${rich(x.q.options[o])}</button>`).join("")}<p class="small" hidden data-why></p></div>`; }).join("")}
+    ${written?`<div class="card stack"><p class="read"><b>${qs.length+1}. ${rich(written.prompt)}</b></p><p class="small muted">Write it without looking back. You will check it yourself against the key points after you hand in.</p><textarea id="wr" style="min-height:200px"></textarea><div class="wordcount" id="wwc"></div></div>`:""}
+    <button class="btn primary" id="sub" disabled>Hand in</button><div id="res" aria-live="polite"></div>`, ()=>{
+    const ready=()=>{ const wn=written?(($("#wr").value.trim().match(/\S+/g)||[]).length):99; if(written) $("#wwc").textContent=wn+" words"+(wn<40?" · at least forty":""); $("#sub").disabled=Object.keys(ans).length<qs.length || wn<40; };
+    if(written) $("#wr").oninput=ready;
+    panel.querySelectorAll("[data-e]").forEach(card=>{ const j=+card.dataset.e; card.querySelectorAll(".opt").forEach(b=>b.onclick=()=>{ if(card.dataset.locked) return; card.querySelectorAll(".opt").forEach(x=>x.setAttribute("aria-pressed","false")); b.setAttribute("aria-pressed","true"); ans[j]=+b.dataset.o; ready(); }); });
     $("#sub").onclick=()=>{
-      let right=0; panel.querySelectorAll("[data-e]").forEach(card=>{ const j=+card.dataset.e, q=qs[j].q; card.dataset.locked=1;
-        card.querySelectorAll(".opt").forEach(b=>{ const o=+b.dataset.o; if(o===q.answer) b.classList.add("right"); else if(o===ans[j]) b.classList.add("wrong"); });
-        if(ans[j]===q.answer) right++; const w=card.querySelector("[data-why]"); w.hidden=false; w.innerHTML=rich(q.why||""); });
-      const pct=Math.round(100*right/qs.length), ok=pct>=80, e=S.exams[key]=S.exams[key]||{};
-      e.tries=(e.tries||0)+1; e.best=Math.max(e.best||0,pct); if(ok && !e.passed){ e.passed=true; e.on=today(); e.score=pct; }
+      let right=0; const missed=new Set();
+      qs.forEach((x,j)=>{ if(ans[j]===x.q.answer) right++; else missed.add(x.n); S.seenEx[x.q.id||("l"+x.n+"q"+j)]=1; });
+      const pct=Math.round(100*right/qs.length), ok=pct>=80;
+      panel.querySelectorAll("[data-e]").forEach(card=>{ const j=+card.dataset.e, q=qs[j].q; card.dataset.locked=1; const w=card.querySelector("[data-why]");
+        card.querySelectorAll(".opt").forEach(b=>{ const o=+b.dataset.o; if(ok && o===q.answer){ b.classList.add("right"); b.insertAdjacentText("afterbegin","✓ "); } else if(o===ans[j] && o!==q.answer){ b.classList.add("wrong"); b.insertAdjacentText("afterbegin","✗ "); } });
+        w.hidden=false; w.innerHTML = ans[j]===q.answer ? (ok?rich(q.why||""):"Right.") : ((q.whynot&&q.whynot[ans[j]])?rich(q.whynot[ans[j]]):"Not this one."); });
+      const e=S.exams[key]=S.exams[key]||{};
+      e.tries=(e.tries||0)+1; e.best=Math.max(e.best||0,pct); if(ok && !e.passed){ e.passed=true; e.on=today(); e.score=pct; e.rev=BOOK.rev; }
+      if(written){ e.written=$("#wr").value.trim(); $("#wr").readOnly=true; }
       logToday("exam"); save();
-      $("#res").innerHTML = ok ? `<b>${pct} percent.</b> Passed.` : `<b>${pct} percent.</b> Eighty passes. Look again at the lessons where you missed, then sit it again; the questions will be in a new order.`;
+      $("#res").innerHTML = `<div class="card stack"><p class="read"><b>${pct} percent on the questions.</b> ${ok?"Passed.":"Eighty passes. The reasons are under the questions you missed; the right answers stay hidden so that the next sitting is your own."}</p>
+        ${missed.size?`<p class="small muted">Read again:</p><div class="row">${[...missed].sort((a,b)=>a-b).map(n=>`<button class="btn ghost" data-go="${n}">Lesson ${n}</button>`).join("")}</div>`:""}
+        ${written?`<b>Check your written answer</b><p class="small muted">Tick each point it has. This is for you; it does not change the score.</p>${written.keys.map((k,j)=>`<label class="tickrow"><input type="checkbox" data-wk="${j}"> <span>${rich(k)}</span></label>`).join("")}`:""}</div>`;
+      panel.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>openLesson(+b.dataset.go, 2));
+      panel.querySelectorAll("[data-wk]").forEach(c=>c.onchange=()=>{ e.wkeys=[...panel.querySelectorAll("[data-wk]:checked")].map(x=>+x.dataset.wk); save(); });
       $("#sub").outerHTML=`<button class="btn primary" id="cl">${ok?"Continue":"Close"}</button>`; $("#cl").onclick=()=>{ closePanel(); if(ok&&onDone) onDone(); };
     };
   });
 }
-function examQs(ns, limit, seed){
-  let qs=[]; for(const n of ns){ const l=lessonsOf()[n-1]; (l.check||[]).forEach((q,j)=>qs.push({n, q})); }
-  const ord=shuffleSeed(qs.length, seed); qs=ord.map(i=>qs[i]); return limit? qs.slice(0,limit) : qs;
+function poolFor(c){ const s=(BOOK.exams||[]).find(x=>x.n===c.n) || (BOOK.exams||[]).find(x=>x.title===c.title); return s||null; }
+function drawFrom(list, limit){ const unseen=list.filter(x=>!S.seenEx[x.q.id]), seen=list.filter(x=>S.seenEx[x.q.id]); const t=Date.now()%991; const mix=a=>shuffleSeed(a.length,t+a.length).map(i=>a[i]); return mix(unseen).concat(mix(seen)).slice(0,limit); }
+function lessonQs(ns){ const qs=[]; for(const n of ns){ const l=lessonsOf()[n-1]; (l.check||[]).forEach((q,j)=>qs.push({n, q:{...q, id:qid(n,q,j)}})); } return qs; }
+function openExam(c){
+  const k=examKey(c), pool=poolFor(c);
+  const qs = pool ? drawFrom(pool.questions.map(q=>({n:q.lesson, q})), 10) : drawFrom(lessonQs(c.lessons), 12);
+  examPanel(c.title+": section exam", pool?`Questions you have not met in the lessons, then one proof to set out in writing. Eighty percent on the questions passes.${pool.objectives?`<br><span class="small muted">What this section asks of you: ${pool.objectives.map(esc).join("; ")}.</span>`:""}`:"Every question from this section, in a new order. Eighty percent passes.", qs, pool&&pool.written, k, ()=>renewIntention(c));
 }
-function openExam(c){ const k=examKey(c); examPanel(c.title+": section exam", "Every question from this section, in a new order. Eighty percent passes.", examQs(c.lessons, 0, 5+((S.exams[k]||{}).tries||0)), k); }
-function openBookExam(){ const k=BOOK.id+":book"; examPanel("The book exam", "Twenty questions from the whole book. Eighty percent closes the book.", examQs(lessonsOf().map(l=>l.n), 20, 11+((S.exams[k]||{}).tries||0)), k); }
+function openBookExam(){
+  const k=BOOK.id+":book"; const all=[];
+  (BOOK.exams||[]).forEach(s=>s.questions.forEach(q=>all.push({n:q.lesson,q})));
+  examPanel("The book exam", "Twenty questions from the whole book. Eighty percent closes the book.", drawFrom(all.length?all:lessonQs(lessonsOf().map(l=>l.n)), 20), null, k, ()=>renewIntention(null));
+}
+function renewIntention(c){
+  openPanel(`<div class="eyebrow">${c?esc(c.title)+" · passed":"The book is closed"}</div><h1>Renew the intention</h1>
+    <p class="read">At the end of each section the student returns to the first discipline: the intention. This is what you wrote${S.whyHist&&S.whyHist.length?" on "+fmt(S.whyHist[S.whyHist.length-1].on):""}:</p>
+    <blockquote class="read">${esc(S.why||"(nothing yet)")}</blockquote>
+    <label class="small muted" for="nw">Keep it, or write it again as it is now</label><textarea id="nw">${esc(S.why||"")}</textarea>
+    <button class="btn primary" id="ok">Keep this intention</button>`, ()=>$("#ok").onclick=()=>{ const t=$("#nw").value.trim(); if(t && t!==S.why){ S.why=t; S.whyHist.push({t,on:today()}); } else S.whyHist.push({t:S.why||"",on:today(),kept:true}); save(); closePanel(); });
+}
 
 /* ---------- Shelf ---------- */
 function renderShelf(){
-  const open = SHELF.filter(b=>b.status==="open"), soon = SHELF.filter(b=>b.status!=="open");
+  const open = SHELF.filter(b=>b.status==="open"), later = SHELF.filter(b=>b.status!=="open");
   let list="";
   if(BOOK){ list = chapters().map(c=>{ const ex=S.exams[examKey(c)]||{};
     return `<div class="chapter"><div class="row" style="justify-content:space-between"><h3>${esc(c.title)}</h3>${ex.passed?`<span class="pill">Exam ${ex.score}%</span>`:""}</div>${c.lessons.map(n=>{ const l=lessonsOf()[n-1], r=S.L[LK(n)]||{}, un=unlockedLesson(n);
-      return `<button class="lesson-row ${r.passed?"done":""}" data-l="${n}" ${un?"":"disabled"}><span class="n">${r.passed?"✓":n}</span><span>${esc(l.title)}</span><span class="small muted">${r.passed?r.score:un?"open":""}</span></button>`; }).join("")}</div>`; }).join(""); }
+      return `<button class="lesson-row ${r.passed?"done":""}" data-l="${n}" ${un?"":"disabled"} aria-label="Lesson ${n}, ${esc(l.title)}${r.passed?", passed":un?"":", locked"}"><span class="n">${r.passed?"✓":n}</span><span>${esc(l.title)}</span><span class="small muted">${r.passed?r.score:un?"open":""}</span></button>`; }).join("")}</div>`; }).join(""); }
   app.innerHTML=`<div class="wrap stack">${header("Basma Press","The shelf")}
     <p class="read muted">The books the ḥawza teaches, in the order it teaches them. One book open at a time.</p>
-    ${open.map(b=>`<div class="card stack"><div class="book"><div class="spine">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)}</div><h2>${esc(b.title)}</h2><p class="small muted">${esc(b.author)}</p></div></div>${BOOK?list:bookMissing()}</div>`).join("")}
-    <h2>In translation</h2>
-    ${soon.map(b=>`<div class="book" style="padding:6px 0"><div class="spine soon">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)} · Year ${b.year}</div><h3>${esc(b.title)}</h3><p class="small muted">${esc(b.author)}</p></div></div>`).join("")}
+    ${BOOK?`<div class="row"><button class="btn" id="srch">Search the book</button><button class="btn" id="terms">Terms (${glossary().length})</button></div>`:""}
+    ${open.map(b=>`<div class="card stack"><div class="book"><div class="spine" lang="ar">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)}</div><h2>${esc(b.title)}</h2><p class="small muted">${esc(b.author)}</p></div></div>${BOOK?list:bookMissing()}</div>`).join("")}
+    <h2>Planned</h2>
+    <p class="small muted">“Finish the book in one art before you move on. Beware moving from book to book and from art to art without cause: it is a sign of boredom and of failure.” <span class="src">Munyat al‑Murīd, ed. al‑Mukhtārī, pp. 231 to 232. English ours.</span></p>
+    ${later.map(b=>`<div class="book" style="padding:6px 0"><div class="spine soon" lang="ar">${b.spine}</div><div><div class="eyebrow">Book ${b.no} · ${esc(b.discipline)} · Year ${b.year}</div><h3>${esc(b.title)}</h3><p class="small muted">${esc(b.author)}</p></div></div>`).join("")}
     <p class="honest">Every book is a classical text, translated by Basma Press from the Arabic.</p></div>`;
   app.querySelectorAll("[data-l]").forEach(b=>b.onclick=()=>openLesson(+b.dataset.l));
+  const tm=$("#terms"); if(tm) tm.onclick=openGlossary;
+  const sr=$("#srch"); if(sr) sr.onclick=openSearch;
+}
+function glossary(){
+  const met=new Set(lessonsOf().filter(l=>unlockedLesson(l.n)).map(l=>l.n));
+  const g = BOOK.glossary && BOOK.glossary.length ? BOOK.glossary.filter(x=>met.has(x.first||1)).map(x=>({...x, n:x.first||1})) : (()=>{ const seen={}, out=[]; for(const l of lessonsOf()){ if(!met.has(l.n)) continue; for(const x of (l.terms||[])){ const k=x.t.toLowerCase(); if(seen[k]) continue; seen[k]=1; out.push({...x, n:l.n}); } } return out; })();
+  const key=s=>s.normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/^al[‑-]/i,"").replace(/[ʿʾ‘’]/g,"").toLowerCase();
+  return g.sort((a,b)=>key(a.t)<key(b.t)?-1:1);
+}
+function openGlossary(){
+  const g=glossary();
+  openPanel(`<div class="eyebrow">${esc(BOOK.title)}</div><h1>Terms</h1><p class="small muted">Every term defined in the lessons you have reached, with the lesson that first defines it. More appear as you go on.</p>
+    <label class="small muted" for="gq">Find a term</label><input type="search" id="gq"><div class="terms" id="gl"></div>`, ()=>{
+    const paint=()=>{ const q=($("#gq").value||"").toLowerCase(); $("#gl").innerHTML=`<dl>${g.filter(x=>!q||(x.t+" "+(x.en||"")+" "+(x.def||"")).toLowerCase().includes(q)).map(x=>`<div><dt>${esc(x.t)}<span class="ar-s" lang="ar" dir="rtl">${esc(x.ar||"")}</span> <button class="linkish" data-gl="${x.n}">lesson ${x.n}</button></dt><dd>${esc(x.en?x.en+". ":"")}${rich(x.def||"")}</dd></div>`).join("")}</dl>`;
+      panel.querySelectorAll("[data-gl]").forEach(b=>b.onclick=()=>openLesson(+b.dataset.gl, 2)); };
+    $("#gq").oninput=paint; paint(); });
+}
+function openSearch(){
+  const strip=s=>String(s||"").replace(/\*/g,"");
+  const docs=[];
+  for(const l of lessonsOf()){ if(!unlockedLesson(l.n)) continue;
+    l.segs.forEach(s=>docs.push({n:l.n, step:1, where:"The text", t:BOOK.segments[s].en}));
+    (l.dars||[]).forEach(b=>b.paras.forEach(p=>docs.push({n:l.n, step:2, where:"The lesson", t:strip(p)})));
+    (l.ishkal||[]).forEach(x=>docs.push({n:l.n, step:3, where:"The objection", t:strip(x.q+" "+x.a)}));
+    const r=S.L[LK(l.n)]||{}; if(r.taqrir) docs.push({n:l.n, step:4, where:"My taqrīr", t:r.taqrir});
+    if(S.notes[LK(l.n)]) docs.push({n:l.n, step:2, where:"My ḥāshiya", t:S.notes[LK(l.n)]}); }
+  openPanel(`<div class="eyebrow">${esc(BOOK.title)}</div><h1>Search</h1><p class="small muted">The text, the lessons, the objections, and your own taqrīrs and notes, in every lesson you have reached.</p>
+    <label class="small muted" for="sq">Search for</label><input type="search" id="sq"><div class="stack" id="sr" aria-live="polite"></div>`, ()=>{
+    const go=()=>{ const q=$("#sq").value.trim().toLowerCase(); if(q.length<3){ $("#sr").innerHTML=""; return; }
+      const hits=docs.filter(d=>d.t.toLowerCase().includes(q)).slice(0,40);
+      $("#sr").innerHTML = hits.length ? hits.map((d,i)=>{ const at=d.t.toLowerCase().indexOf(q), a=Math.max(0,at-70); const snip=(a?"…":"")+d.t.slice(a,at)+"<mark>"+esc(d.t.slice(at,at+q.length))+"</mark>"+esc(d.t.slice(at+q.length,at+q.length+90))+"…";
+        return `<button class="qitem" style="text-align:left;cursor:pointer;font:inherit;color:inherit" data-h="${i}"><span class="small muted">Lesson ${d.n} · ${esc(d.where)}</span><span class="read">${esc(d.t.slice(a,at)).replace(/^/, a?"…":"")}<mark>${esc(d.t.slice(at,at+q.length))}</mark>${esc(d.t.slice(at+q.length,at+q.length+90))}…</span></button>`; }).join("") : `<p class="muted read">Nothing found.</p>`;
+      $("#sr").querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{ const d=hits[+b.dataset.h]; openLesson(d.n, d.step); }); };
+    $("#sq").oninput=go; });
 }
 
-/* ---------- Ask ---------- */
+/* ---------- Questions ---------- */
 function renderAsk(){
   const open=S.questions.filter(q=>!q.ans), done=S.questions.filter(q=>q.ans);
-  app.innerHTML=`<div class="wrap stack">${header("Its key is the question","Ask")}
+  app.innerHTML=`<div class="wrap stack">${header("Its key is the question","Questions")}
     <p class="read">“People perish only because they do not ask.” <span class="src">Imam al‑Ṣādiq (ʿa), al‑Kāfī, vol. 1, chapter on asking the scholar, ḥadīth 2; al‑Majlisī: ṣaḥīḥ.</span></p>
     <div class="card stack"><label for="nq"><b>A new question</b></label><textarea id="nq" placeholder="Anything you want to understand"></textarea><button class="btn primary" id="add">Add to my list</button></div>
-    <div class="row" style="justify-content:space-between"><h2>For my teacher (${open.length})</h2>${open.length?`<button class="btn" id="cp">Copy all</button>`:""}</div><p class="small muted" id="msg"></p>
+    <div class="row" style="justify-content:space-between"><h2>Open (${open.length})</h2>${open.length?`<button class="btn" id="cp">Copy all</button>`:""}</div><p class="small muted" id="msg" aria-live="polite"></p>
     <div class="stack">${open.map(q=>`<div class="qitem"><p class="read">${esc(q.t)}</p><div class="row"><span class="small muted">${fmt(q.date)}</span><button class="btn ghost" data-ans="${q.id}">Answered</button><button class="btn ghost" data-del="${q.id}">Remove</button></div></div>`).join("") || `<p class="muted read">No open questions. Every lesson should leave you with at least one.</p>`}</div>
     ${done.length?`<h2>Answered (${done.length})</h2><div class="stack">${done.map(q=>`<div class="qitem ans"><p class="read"><b>${esc(q.t)}</b></p><p class="read">${esc(q.ans)}</p><span class="small muted">${q.by?esc(q.by)+", ":""}${q.ansDate?fmt(q.ansDate):""}</span></div>`).join("")}</div>`:""}
-    <p class="honest">Questions of belief and law are answered by a teacher, a person. Nothing in this app answers them.</p></div>`;
+    <p class="honest">When a lesson or your study partner answers one of your questions, mark it answered and write the answer in your own words. Questions of practice go to the office of your marjaʿ.</p></div>`;
   $("#add").onclick=()=>{ const t=$("#nq").value.trim(); if(!t) return; S.questions.push({id:Date.now(), t, date:today()}); save(); renderAsk(); };
   const cp=$("#cp"); if(cp) cp.onclick=()=>copy("My questions\n\n"+open.map((q,i)=>`${i+1}. ${q.t}`).join("\n"), $("#msg"));
-  app.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ S.questions=S.questions.filter(q=>q.id!=b.dataset.del); save(); renderAsk(); });
+  app.querySelectorAll("[data-del]").forEach(b=>b.onclick=()=>{ if(!confirm("Remove this question?")) return; S.questions=S.questions.filter(q=>q.id!=b.dataset.del); save(); renderAsk(); });
   app.querySelectorAll("[data-ans]").forEach(b=>b.onclick=()=>{ const q=S.questions.find(x=>x.id==b.dataset.ans);
-    openPanel(`<div class="eyebrow">Answered</div><h2>${esc(q.t)}</h2><label class="small muted" for="at">The answer, in your words</label><textarea id="at"></textarea><label class="small muted" for="ab">Who answered</label><input type="text" id="ab" placeholder="Your teacher’s name"><button class="btn primary" id="ok">Save</button>`,
+    openPanel(`<div class="eyebrow">Answered</div><h2>${esc(q.t)}</h2><label class="small muted" for="at">The answer, in your words</label><textarea id="at"></textarea><label class="small muted" for="ab">Where I found it</label><input type="text" id="ab" placeholder="Lesson 7, or my study partner"><button class="btn primary" id="ok">Save</button>`,
       ()=>$("#ok").onclick=()=>{ q.ans=$("#at").value.trim()||"(answered)"; q.by=$("#ab").value.trim(); q.ansDate=today(); save(); TAB="ask"; closePanel(); }); });
 }
 
 /* ---------- Record ---------- */
+function transcriptHTML(){
+  const lp = lessonsOf().filter(l=>passed(l.n));
+  const ex = chapters().map(c=>({t:c.title, e:S.exams[examKey(c)]})).concat([{t:"Book exam", e:S.exams[BOOK.id+":book"]}]).filter(x=>x.e&&x.e.passed);
+  return `<h1>Miftāḥ · Record of study</h1><p>${esc(S.label||"")} · ${esc(BOOK.title)}, ${esc(BOOK.author)}</p>
+    <p>Begun ${S.start?fmtH(S.start):""}. Printed ${fmtH(today())}. Edition ${esc(BOOK.rev)}.</p>
+    ${S.why?`<p><b>Intention:</b> ${esc(S.why)}</p>`:""}
+    <h2>Exams</h2>${ex.length?`<ul>${ex.map(x=>`<li>${esc(x.t)}: ${x.e.score} percent, ${fmtH(x.e.on)}</li>`).join("")}</ul>`:"<p>None yet.</p>"}
+    <h2>Lessons and taqrīrs</h2>${lp.map(l=>{ const r=S.L[LK(l.n)]; return `<h3>Lesson ${l.n}. ${esc(l.title)} <small>(${esc(r.score||"")}, ${r.passedOn?fmtH(r.passedOn):""})</small></h3><p style="white-space:pre-wrap">${esc(r.taqrir||"")}</p>`; }).join("")||"<p>None yet.</p>"}
+    <p><i>A record of private study kept by the learner. Not an ijāza, a certificate or a qualification.</i></p>`;
+}
 function renderRecord(){
   const lp = BOOK ? lessonsOf().filter(l=>passed(l.n)) : [];
   const tq = BOOK ? lessonsOf().filter(l=>(S.L[LK(l.n)]||{}).taqrir) : [];
   const exams = BOOK ? chapters().map(c=>({t:c.title, e:S.exams[examKey(c)]})).concat([{t:"Book exam", e:S.exams[BOOK.id+":book"]}]).filter(x=>x.e) : [];
+  const ch = (BOOK&&BOOK.changes)||[], emend=(BOOK&&BOOK.emendations)||[];
   app.innerHTML=`<div class="wrap stack">${header("Your record","Record")}
     <div class="grid2"><div class="card"><div class="big-num">${lp.length}</div><div class="small muted">lessons passed${BOOK?" of "+lessonsOf().length:""}</div></div><div class="card"><div class="big-num">${tq.length}</div><div class="small muted">taqrīrs written</div></div></div>
-    ${S.why?`<div class="card"><div class="eyebrow">Why I am doing this</div><p class="read" style="margin-top:6px">${esc(S.why)}</p></div>`:""}
+    ${S.why?`<div class="card"><div class="eyebrow">Why I am doing this</div><p class="read" style="margin-top:6px">${esc(S.why)}</p>${(S.whyHist||[]).length>1?`<details><summary class="small muted" style="cursor:pointer">Renewed ${S.whyHist.length-1} time${S.whyHist.length===2?"":"s"}</summary><ul class="small read">${S.whyHist.map(h=>`<li>${fmt(h.on)}: ${h.kept?"kept":esc(h.t)}</li>`).join("")}</ul></details>`:""}</div>`:""}
     <div class="card"><h3 style="margin-bottom:4px">Together</h3><div data-together>${togetherHTML()}</div></div>
-    ${exams.length?`<div class="card"><h3>Exams</h3><table><tbody>${exams.map(x=>`<tr><td>${esc(x.t)}</td><td>${x.e.passed?"passed, "+x.e.score+"%":"best "+x.e.best+"%"}</td><td class="small muted">${x.e.on?fmt(x.e.on):""}</td></tr>`).join("")}</tbody></table></div>`:""}
-    ${tq.length?`<details class="card"><summary style="cursor:pointer"><b>My taqrīrs (${tq.length})</b></summary><div class="stack" style="margin-top:10px">${tq.map(l=>{ const r=S.L[LK(l.n)]; return `<div><b>Lesson ${l.n}. ${esc(l.title)}</b><p class="read" style="white-space:pre-wrap;margin-top:4px">${esc(r.taqrir)}</p><p class="small muted">${r.taqrirOn?fmt(r.taqrirOn):""}${r.score?" · "+r.score:""}</p></div>`; }).join("")}</div></details>`:""}
+    ${exams.length?`<div class="card"><h3>Exams</h3><table><tbody>${exams.map(x=>`<tr><td>${esc(x.t)}</td><td>${x.e.passed?"passed, "+x.e.score+"%":"best "+x.e.best+"%"}</td><td class="small muted">${x.e.on?fmtH(x.e.on):""}</td></tr>`).join("")}</tbody></table></div>`:""}
+    ${tq.length?`<details class="card"><summary style="cursor:pointer"><b>My taqrīrs (${tq.length})</b></summary><div class="stack" style="margin-top:10px">${tq.map(l=>{ const r=S.L[LK(l.n)]; return `<div><b>Lesson ${l.n}. ${esc(l.title)}</b><p class="read" style="white-space:pre-wrap;margin-top:4px">${esc(r.taqrir)}</p><p class="small muted">${r.taqrirOn?fmtH(r.taqrirOn):""}${r.score?" · "+r.score:""}</p></div>`; }).join("")}</div></details>`:""}
+    ${BOOK&&lp.length?`<button class="btn" id="print">Print my record</button>`:""}
     <details class="card"><summary style="cursor:pointer"><b>Settings and backup</b></summary><div class="stack" style="margin-top:10px">
       <label class="small muted" for="lb">My name, as my study partner sees it</label><input type="text" id="lb" value="${esc(S.label)}">
-      <label class="small muted" for="wy">Why I am doing this</label><textarea id="wy">${esc(S.why)}</textarea>
+      <label class="small muted" for="mo">My moment</label><input type="text" id="mo" value="${esc(S.moment||"")}">
+      <div class="switch"><span class="small muted">Reading size</span><div class="chips" role="group" aria-label="Reading size">${["Smaller","Normal","Larger"].map((nm,i)=>`<button class="chip" data-sz="${i}" aria-pressed="${(S.size??1)===i}">${nm}</button>`).join("")}</div></div>
       <button class="btn primary" id="sv">Save</button>
-      <p class="small muted">${DB?"Your progress is kept on this phone and saved to Miftāḥ, where only the personal links can see it.":"Your progress is kept on this phone."} The progress code is a backup you can paste on a new phone.</p>
-      <div class="row"><button class="btn" id="bk1">Copy my progress code</button><button class="btn" id="bk2">Restore from a backup</button></div>
-      <textarea id="bkt" hidden placeholder="Paste a backup here, then press Restore again"></textarea><p class="small muted" id="msg"></p></div></details>
-    <details class="card"><summary style="cursor:pointer"><b>About this edition</b></summary><div class="stack small read" style="margin-top:10px">
-      <p>${BOOK?esc(BOOK.edition||""):""}</p>
-      <p>The English of the text and the lessons are by Basma Press. This is a draft: it has been checked against the Arabic, and it has not yet been read by a teacher trained in the ḥawza. Nothing here is a fatwa; in practice, follow the office of your marjaʿ.</p></div></details>
-    <p class="honest">Basma Press.</p></div>`;
-  $("#sv").onclick=()=>{ S.label=$("#lb").value.trim(); S.why=$("#wy").value.trim(); save(); $("#msg").textContent="Saved."; };
+      <p class="small muted">${DB?"Your progress is kept on this phone and saved to Miftāḥ, where only the personal links can see it"+(S._synced?"; last saved "+new Date(S._synced).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"}):"")+".":"Your progress is kept on this phone only. Download a backup now and then."}</p>
+      <div class="row"><button class="btn" id="bkf">Download a backup</button><button class="btn" id="bk1">Copy my progress code</button><button class="btn" id="bk2">Restore from a backup</button></div>
+      <textarea id="bkt" hidden placeholder="Paste a backup here, then press Restore again"></textarea><p class="small muted" id="msg" aria-live="polite"></p></div></details>
+    <details class="card"><summary style="cursor:pointer"><b>What is kept, and who sees it</b></summary><div class="stack small read" style="margin-top:10px">
+      <p>On this phone: your progress, your taqrīrs, notes and questions, and a copy of the book so that it opens offline.</p>
+      <p>On the Miftāḥ service, under your personal link only: the same progress, so that it is safe and your study partner can see your week. Your partner sees a summary (lessons, exams, open question count, last seven days and your one line on the week), never your taqrīrs, notes or questions.</p>
+      <p>Nothing else: no account, no email, no advertising, no tracking. The page loads its fonts from itself, not from any outside service.</p>
+      <button class="btn ghost" id="wipe">Remove Miftāḥ from this phone</button></div></details>
+    ${BOOK?`<details class="card"><summary style="cursor:pointer"><b>About this edition</b></summary><div class="stack small read" style="margin-top:10px">
+      <p>${esc(BOOK.edition||"")}</p>
+      <p><b>How it was made.</b> Basma Press prepared this edition with the help of AI tools. The translation was checked passage by passage against the Arabic, and every lesson against al‑Miqdād’s commentary, in separate passes. Where al‑Miqdād leaves an objection unanswered, the lesson gives al‑Ḥillī’s reply from Kashf al‑Murād and says so; where the publisher speaks in its own voice, the paragraph is marked. No scholar has signed this edition. Nothing here is a fatwa; in practice, follow the office of your marjaʿ.</p>
+      ${emend.length?`<p><b>Note on the text.</b> Where we depart from the printed Arabic:</p><ul>${emend.map(x=>`<li>${rich(x)}</li>`).join("")}</ul>`:""}
+      <p><b>Edition</b> ${esc(BOOK.rev)}${BOOK.built?", "+esc(BOOK.built):""}.</p>
+      ${ch.length?`<p><b>Changes</b></p><ul>${ch.map(x=>`<li>${rich(x)}</li>`).join("")}</ul>`:""}</div></details>`:""}
+    ${FOOT}</div>`;
+  $("#sv").onclick=()=>{ S.label=$("#lb").value.trim(); S.moment=$("#mo").value.trim(); save(); $("#msg").textContent="Saved."; };
+  app.querySelectorAll("[data-sz]").forEach(b=>b.onclick=()=>{ S.size=+b.dataset.sz; applySize(); save(); renderRecord(); });
   $("#bk1").onclick=()=>copy(JSON.stringify(S), $("#msg"));
-  $("#bk2").onclick=()=>{ const t=$("#bkt"); if(t.hidden){ t.hidden=false; t.focus(); return; } try{ const o=JSON.parse(t.value); if(!o.questions) throw 0; S=migrate(o); save(); $("#msg").textContent="Restored."; render(); }catch(e){ $("#msg").textContent="That does not look like a progress code from Miftāḥ. Copy it again and paste the whole text."; } };
+  $("#bkf").onclick=()=>downloadBackup($("#msg"));
+  $("#bk2").onclick=()=>{ const t=$("#bkt"); if(t.hidden){ t.hidden=false; t.focus(); return; } let o; try{ o=JSON.parse(t.value); if(!o.questions) throw 0; }catch(e){ $("#msg").textContent="That does not look like a progress code from Miftāḥ. Copy it again and paste the whole text."; return; }
+    const m=migrate(o), nL=Object.values(m.L).filter(x=>x.passed).length, nT=Object.values(m.L).filter(x=>x.taqrir).length;
+    if(!confirm(`This replaces everything on this phone with the backup: ${nL} lessons passed, ${nT} taqrīrs, ${m.questions.length} questions. Your current progress will be gone. Replace?`)) return;
+    S=Object.assign(m,{owner:S.owner}); save(); $("#msg").textContent="Restored."; render(); };
+  const pr=$("#print"); if(pr) pr.onclick=()=>{ const p=$("#printout"); p.innerHTML=transcriptHTML(); p.hidden=false; window.print(); setTimeout(()=>{ p.hidden=true; p.innerHTML=""; }, 500); };
+  $("#wipe").onclick=()=>{ if(!confirm("Download a backup first? Press OK to download it, or Cancel to go on without one.")){ } else downloadBackup($("#msg"));
+    setTimeout(()=>{ if(!confirm("Remove Miftāḥ’s progress, notes, taqrīrs and the book from this phone? Your progress on the Miftāḥ service stays under your link.")) return;
+      try{ Object.keys(localStorage).filter(k=>k.startsWith("miftah.")).forEach(k=>localStorage.removeItem(k)); }catch(e){}
+      try{ caches.keys().then(ks=>ks.forEach(k=>caches.delete(k))); }catch(e){}
+      app.innerHTML=`<div class="wrap stack" style="padding-top:40px"><h1>Removed.</h1><p class="read">Miftāḥ’s data is gone from this phone. Close this page. To study again, open your personal link.</p></div>`; tabs.hidden=true; }, 400); };
+}
+function downloadBackup(msgEl){
+  try{ const blob=new Blob([JSON.stringify(S)],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="miftah-backup-"+today()+".json"; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },1000); if(msgEl) msgEl.textContent="Backup downloaded."; }
+  catch(e){ if(msgEl) msgEl.textContent="This browser would not download; use Copy my progress code instead."; }
 }
 function copy(txt, msgEl){
   const fall=()=>{ const t=document.createElement("textarea"); t.value=txt; document.body.appendChild(t); t.select(); try{ document.execCommand("copy"); msgEl.textContent="Copied."; }catch(e){ msgEl.textContent="Select the text and copy it."; } t.remove(); };
@@ -529,6 +757,8 @@ function copy(txt, msgEl){
 }
 
 /* ---------- start ---------- */
+function applySize(){ document.documentElement.style.fontSize = ["93.75%","100%","112.5%"][S.size??1]; }
+applySize();
 render();
 loadBook("bab").then(()=>{ if(panel.hidden) render(); paintTogether(); });
 connectRest();
