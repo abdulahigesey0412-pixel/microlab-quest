@@ -1612,7 +1612,7 @@ function resumeList(){const out=[];
   [["mcq","quiz","MCQ round"],["tf","tf","True/false round"]].forEach(([f,tab,name])=>{const z=sess[f];if(z&&z.qs&&!z.done&&z.i<z.qs.length&&!(z.answered&&z.i+1>=z.qs.length)&&(z.i>0||z.answered||z._re))out.push({name,at:"question "+(z.i+1)+" of "+z.qs.length,go:()=>show(tab)});});
   if(SH&&SH.qs&&!SH.done&&!(SH.answered&&SH.i+1>=SH.qs.length)&&(SH.i>0||SH.answered||SH._re))out.push({name:SH.custom||"Exam sheets round",at:"question "+(SH.i+1)+" of "+SH.qs.length,go:()=>show("sheets")});
   return out;}
-function renderPath(){const el=$("#pathArea");if(!el)return;const nx=nextStep(),n=todayN(),pct=Math.min(1,n/S.goal),C=2*Math.PI*26,s=streakNow(),res=resumeList(),stars=Object.keys(S.star).length;
+function renderPathHome(){const el=$("#pathArea");if(!el)return;const nx=nextStep(),n=todayN(),pct=Math.min(1,n/S.goal),C=2*Math.PI*26,s=streakNow(),res=resumeList(),stars=Object.keys(S.star).length;
   let total=0,done=0;const lec=Object.keys(LECTURES).map(L=>{let lt=0,ld=0;const rows=LECTURES[L].topics.map(t=>{const st=topicSteps(t);lt+=st.length;ld+=st.filter(x=>x.done).length;
       const all=st.every(x=>x.done),isNext=nx.t===t;
       return `<div class="pstage ${all?"done":""} ${isNext?"next":""}"><div class="psh"><b>${esc(TOPICS[t].n)}</b>${isNext?`<span class="pill">Next</span>`:all?`<span class="pill ok">Done</span>`:""}</div>
@@ -1763,7 +1763,7 @@ BADGES.push(["streak3","Three in a row","Reach your daily goal three days runnin
 /* ---------- tabs and boot ---------- */
 const _show5=show;
 show=function(t){_show5(t);const cur=TABS.find(x=>!$("#p-"+x).hidden)||"learn";syncNav(cur);
-  if(cur==="path")renderPath();
+  if(cur==="path")renderPathHome();
   if(cur==="quiz"||cur==="tf"){const f=cur==="tf"?"tf":"mcq",z=sess[f];if(z&&z._re){delete z._re;quiz=z;renderQuiz();}}
   if(cur==="sheets"&&SH&&SH._re){delete SH._re;$("#p-sheets").classList.add("playing");renderSheet();}
   if(cur==="lookup")searchAll();renderGoal();};
